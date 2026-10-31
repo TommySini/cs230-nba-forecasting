@@ -109,12 +109,48 @@ def normalize_game(event, source):
     return game
 
 
+def sample_windows(config):
+    """Resolve season-relative windows without confusing January with season start."""
+    windows = []
+    for season in config["seasons"]:
+        year = season["start_year"]
+        specs = config.get("sample_windows", [{
+            "name": "early_season", "year_offset": 0,
+            "start_month_day": config.get("sample_start_month_day"),
+            "end_month_day": config.get("sample_end_month_day"),
+            "sample_size": season.get("sample_size"),
+        }])
+        for spec in specs:
+            calendar_year = year + spec["year_offset"]
+            start = f'{calendar_year}-{spec["start_month_day"]}'
+            end = f'{calendar_year}-{spec["end_month_day"]}'
+            if not (f"{year}-10-01" <= start <= end < f"{year + 1}-10-01"):
+                raise ValueError(f"Invalid window for season {year}: {start} through {end}")
+            if spec["sample_size"] <= 0:
+                raise ValueError("Sample sizes must be positive")
+            windows.append(dict(season=year, name=spec["name"], start=start, end=end,
+                                sample_size=spec["sample_size"]))
+    for i, left in enumerate(windows):
+        for right in windows[i + 1:]:
+            if left["season"] == right["season"] and left["start"] <= right["end"] and right["start"] <= left["end"]:
+                raise ValueError("Sample windows must not overlap")
+    return windows
+
+
+def output_paths(config):
+    name = config.get("output_name", "")
+    if name and not re.fullmatch(r"[a-z0-9][a-z0-9_-]*", name):
+        raise ValueError("output_name must be a simple lowercase directory name")
+    return ROOT / "data/processed" / name, ROOT / "reports" / name
+
+
 def collect_games(cache, config):
     games, failures = {}, []
+    windows = sample_windows(config)
     for season in config["seasons"]:
         year = season["start_year"]
         day = datetime.fromisoformat(f'{year}-{config["history_start_month_day"]}')
-        end = datetime.fromisoformat(f'{year}-{config["sample_end_month_day"]}')
+        end = datetime.fromisoformat(max(w["end"] for w in windows if w["season"] == year))
         while day <= end:
             url = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=" + day.strftime("%Y%m%d") + "&limit=100"
             body, meta = cache.get(url, "scoreboards", ".json")
@@ -128,21 +164,23 @@ def collect_games(cache, config):
             if day.day % 10 == 0:
                 print(f"Schedules through {day.date()}: {len(games)} completed regular-season games", flush=True)
             day += timedelta(days=1)
+    failure_path = output_paths(config)[1] / "schedule_failures.json"
     if failures:
-        write_json(ROOT / "reports/schedule_failures.json", failures)
-        raise RuntimeError("Incomplete schedule history; resolve reports/schedule_failures.json before deriving features")
+        write_json(failure_path, failures)
+        raise RuntimeError(f"Incomplete schedule history; resolve {failure_path} before deriving features")
+    failure_path.unlink(missing_ok=True)
     return sorted(games.values(), key=lambda x: (x["scheduled_start_utc"], x["game_id"]))
 
 
 def select_sample(games, config):
     rng = random.Random(config["seed"])
     selected = []
-    for season in config["seasons"]:
-        year = season["start_year"]
-        candidates = [g for g in games if g["season"] == year and
-                      f'{year}-{config["sample_start_month_day"]}' <= g["game_date_et"] <=
-                      f'{year}-{config["sample_end_month_day"]}']
-        selected.extend(rng.sample(candidates, season["sample_size"]))
+    for window in sample_windows(config):
+        candidates = [g for g in games if g["season"] == window["season"] and
+                      window["start"] <= g["game_date_et"] <= window["end"]]
+        if len(candidates) < window["sample_size"]:
+            raise ValueError(f"Insufficient completed games for {window}: {len(candidates)}")
+        selected.extend(rng.sample(candidates, window["sample_size"]))
     return sorted(selected, key=lambda x: (x["scheduled_start_utc"], x["game_id"]))
 
 
@@ -290,7 +328,7 @@ def get_preview(cache, game, cutoff):
     return result
 
 
-def get_notes(cache, game):
+def get_notes(cache, game, processed_dir=None):
     # One team's known dated archive pattern, explicitly not a leaguewide audit.
     if "CLE" not in (game["home_abbr"], game["away_abbr"]):
         return {"decision": "not_attempted_no_adapter", "included_in_inputs": False}
@@ -303,7 +341,7 @@ def get_notes(cache, game):
         try:
             reader = PdfReader(io.BytesIO(body))
             text = "\n\n".join(p.extract_text() or "" for p in reader.pages)
-            path = ROOT / "data/processed/narrative_candidates" / (game["espn_id"] + "-CLE.txt")
+            path = (processed_dir or ROOT / "data/processed") / "narrative_candidates" / (game["espn_id"] + "-CLE.txt")
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(text)
             result.update(decision="candidate_requires_matchup_and_publication_audit", pages=len(reader.pages),
@@ -314,10 +352,10 @@ def get_notes(cache, game):
     return result
 
 
-def write_report(summary, inputs, audit, history_count):
+def write_report(summary, inputs, audit, history_count, report_dir):
     lines = ["# NBA dataset pilot findings", "",
              "This is a feasibility audit, not a training-ready text dataset or a forecasting benchmark.", "",
-             f'- Sample: **{summary["games"]} games**, **{summary["teams"]} teams**, November 1–10 across the configured seasons.',
+             f'- Sample: **{summary["games"]} games**, **{summary["teams"]} teams**. {summary["scope"]}.',
              f'- Historical results retained for prior-game features: **{history_count}**.',
              f'- Matched injury excerpts with internal timestamps at or before the cutoff: **{summary["injury_reports_matched"]}/{summary["games"]}**.',
              f'- Matched reports containing a NOT YET SUBMITTED entry: **{summary["injury_not_yet_submitted"]}**.',
@@ -326,6 +364,9 @@ def write_report(summary, inputs, audit, history_count):
     for year in sorted(summary["seasons"]):
         subset = [a for a in audit if str(a["season"]) == year]
         lines.append(f'| {year}–{str(int(year)+1)[-2:]} | {len(subset)} | {sum(a["injury_available"] for a in subset)} |')
+    lines.extend(["", "## Coverage by window", "", "| Season | Window | Dates | Games | Matched injuries |", "| --- | --- | --- | ---: | ---: |"])
+    for window in summary["windows"]:
+        lines.append(f'| {window["season"]} | {window["name"]} | {window["start"]} to {window["end"]} | {window["games"]} | {window["injury_reports_matched"]} |')
     lines.extend(["", "## Narrative audit", "", "ESPN preview-route results:", ""])
     lines.extend(f'- `{key}`: {value}' for key, value in summary["preview_decisions"].items())
     lines.extend(["", "A preview URL is not evidence of pregame content. The responses are checked using the article's actual type, game ID, publication time and modification time. No rejected article or surrounding current-news feed enters the inputs.", "",
@@ -341,17 +382,17 @@ def write_report(summary, inputs, audit, history_count):
                   "## What the files can support now", "",
                   "The pilot provides final-outcome labels, prior-game team features, and timestamp-filtered injury text. Inputs and labels are separate JSONL files. Every injury excerpt links to raw source bytes with a checksum and retrieval metadata. This is sufficient to prototype the loader and a structured-data baseline; it does not yet establish the rich-text dataset proposed for the LLM experiment.", "",
                   "## Limits and next actions", "",
-                  "1. Audit midseason and late-season samples before expanding: this sample covers early November only.",
+                  "1. These bounded windows do not establish full-season coverage; compare the early-season and seasonal audits before expanding.",
                   "2. Expand dated team-note discovery beyond Cleveland. The unattempted teams are not counted as missing archives.",
                   "3. Verify narrative publication timing and extract relevant sections; keep unverified documents quarantined.",
                   "4. Choose the backbone and ensure the held-out games are after its training cutoff. No train/validation/test split is assigned here.",
                   "5. Injury URL probing is bounded and may not locate the latest available report. Missing candidates would not establish absence of an archive.",
                   "6. Historical scheduled starts are retrieved retrospectively; rescheduled games need a final timing audit.",
                   "7. No paid odds, player-level box scores, teacher-generated targets, or recurring future-game capture have been added.", "",
-                  "## Reproduce and validate", "", "```bash", ".venv/bin/python scripts/collect_pilot.py --offline",
-                  ".venv/bin/python scripts/validate_pilot.py", ".venv/bin/python -m unittest discover -s tests -v", "```", "",
+                  "## Reproduce and validate", "", "```bash", f'.venv/bin/python scripts/collect_pilot.py --config {summary["config_path"]} --offline',
+                  f'.venv/bin/python scripts/validate_pilot.py --config {summary["config_path"]}', ".venv/bin/python -m unittest discover -s tests -v", "```", "",
                   "See `game_audit.csv` for per-game decisions, `coverage.json` for counts, and the repository README for source and schema details.", ""])
-    (ROOT / "reports/pilot_findings.md").write_text("\n".join(lines))
+    (report_dir / "pilot_findings.md").write_text("\n".join(lines))
 
 
 def main():
@@ -359,13 +400,16 @@ def main():
     parser.add_argument("--offline", action="store_true", help="Rebuild entirely from saved source responses")
     parser.add_argument("--stage", choices=("schedules", "audit"), default="audit")
     parser.add_argument("--limit", type=int, help="Audit only the first N sampled games for debugging")
+    parser.add_argument("--config", default="config/pilot.json", help="Config path relative to repository root")
     args = parser.parse_args()
-    config = json.loads((ROOT / "config/pilot.json").read_text())
+    config = json.loads((ROOT / args.config).read_text())
+    processed_dir, report_dir = output_paths(config)
+    report_dir.mkdir(parents=True, exist_ok=True)
     cache = Cache(offline=args.offline)
     games = collect_games(cache, config)
     selected = select_sample(games, config)
-    write_jsonl(ROOT / "data/processed/game_history.jsonl", games)
-    write_jsonl(ROOT / "data/processed/sample_manifest.jsonl", selected)
+    write_jsonl(processed_dir / "game_history.jsonl", games)
+    write_jsonl(processed_dir / "sample_manifest.jsonl", selected)
     if args.stage == "schedules":
         print(f"Saved {len(selected)} sampled games and {len(games)} historical results", flush=True)
         return
@@ -376,7 +420,7 @@ def main():
         cutoff = stamp(game["scheduled_start_utc"]) - timedelta(minutes=config["cutoff_minutes"])
         injuries, attempts = get_injuries(cache, game, cutoff)
         preview = get_preview(cache, game, cutoff)
-        notes = get_notes(cache, game)
+        notes = get_notes(cache, game, processed_dir)
         record = {k: game[k] for k in ("game_id", "season", "scheduled_start_utc", "game_date_et", "home_team", "away_team", "home_abbr", "away_abbr")}
         record.update(cutoff_utc=iso(cutoff),
                       home_features=prior_features(game, games, "home"),
@@ -391,9 +435,9 @@ def main():
                       "injury_not_yet_submitted": injuries["not_yet_submitted"] if injuries else None,
                       "injury_attempts": attempts, "preview": preview, "team_notes": notes})
         # Checkpoint after every game; interrupted runs reuse all raw responses.
-        write_jsonl(ROOT / "data/processed/inputs.jsonl", inputs)
-        write_jsonl(ROOT / "data/processed/labels.jsonl", labels)
-        write_jsonl(ROOT / "data/processed/audit.jsonl", audit)
+        write_jsonl(processed_dir / "inputs.jsonl", inputs)
+        write_jsonl(processed_dir / "labels.jsonl", labels)
+        write_jsonl(processed_dir / "audit.jsonl", audit)
         print(f'[{i}/{len(selected)}] {game["game_date_et"]} {game["away_abbr"]}@{game["home_abbr"]}: injury={injuries is not None}; preview={preview["decision"]}; notes={notes["decision"]}', flush=True)
     summary = {"games": len(inputs), "seasons": dict(Counter(str(g["season"]) for g in inputs)),
                "teams": len({g[s + "_abbr"] for g in inputs for s in ("home", "away")}),
@@ -402,11 +446,15 @@ def main():
                "preview_decisions": dict(Counter(a["preview"]["decision"] for a in audit)),
                "team_note_decisions": dict(Counter(a["team_notes"]["decision"] for a in audit)),
                "narrative_inputs_approved": 0,
-               "scope": "November 1-10 in each configured season; early-season feasibility sample, not a train/test benchmark",
+               "scope": config.get("scope", "November 1-10 in each configured season; early-season feasibility sample, not a train/test benchmark"),
                "injury_selection": "Verified internal timestamp <= cutoff; bounded URL probes, not guaranteed latest snapshot",
-               "config": config}
-    write_json(ROOT / "reports/coverage.json", summary)
-    with (ROOT / "reports/game_audit.csv").open("w", newline="") as f:
+               "config": config, "config_path": args.config, "windows": []}
+    for window in sample_windows(config):
+        subset = [r for r in inputs if r["season"] == window["season"] and window["start"] <= r["game_date_et"] <= window["end"]]
+        summary["windows"].append(dict(window, games=len(subset),
+                                      injury_reports_matched=sum(r["injury_report"] is not None for r in subset)))
+    write_json(report_dir / "coverage.json", summary)
+    with (report_dir / "game_audit.csv").open("w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["game_id", "date_et", "away", "home", "cutoff_utc", "injury_report_utc",
                          "injury_not_yet_submitted", "preview_decision", "team_notes_decision"])
@@ -414,7 +462,7 @@ def main():
             writer.writerow([record["game_id"], record["game_date_et"], record["away_abbr"], record["home_abbr"],
                              record["cutoff_utc"], (record["injury_report"] or {}).get("report_time_utc"),
                              row["injury_not_yet_submitted"], row["preview"]["decision"], row["team_notes"]["decision"]])
-    write_report(summary, inputs, audit, len(games))
+    write_report(summary, inputs, audit, len(games), report_dir)
     print(json.dumps(summary, indent=2), flush=True)
 
 

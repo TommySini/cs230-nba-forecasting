@@ -1,0 +1,112 @@
+{
+  "games": 60,
+  "seasons": {
+    "2023": 20,
+    "2024": 20,
+    "2025": 20
+  },
+  "teams": 30,
+  "injury_reports_matched": 60,
+  "injury_not_yet_submitted": 0,
+  "preview_decisions": {
+    "rejected_not_preview": 60
+  },
+  "team_note_decisions": {
+    "not_attempted_no_adapter": 55,
+    "candidate_requires_matchup_and_publication_audit": 5
+  },
+  "narrative_inputs_approved": 0,
+  "scope": "January 15-24 and April 1-10 in 2024, 2025 and 2026; 10 deterministic games per window, not a train/test benchmark",
+  "injury_selection": "Verified internal timestamp <= cutoff; bounded URL probes, not guaranteed latest snapshot",
+  "config": {
+    "seed": 230,
+    "cutoff_minutes": 60,
+    "output_name": "seasonal",
+    "scope": "January 15-24 and April 1-10 in 2024, 2025 and 2026; 10 deterministic games per window, not a train/test benchmark",
+    "seasons": [
+      {
+        "start_year": 2023
+      },
+      {
+        "start_year": 2024
+      },
+      {
+        "start_year": 2025
+      }
+    ],
+    "history_start_month_day": "10-01",
+    "sample_windows": [
+      {
+        "name": "midseason",
+        "year_offset": 1,
+        "start_month_day": "01-15",
+        "end_month_day": "01-24",
+        "sample_size": 10
+      },
+      {
+        "name": "late_season",
+        "year_offset": 1,
+        "start_month_day": "04-01",
+        "end_month_day": "04-10",
+        "sample_size": 10
+      }
+    ]
+  },
+  "config_path": "config/seasonal.json",
+  "windows": [
+    {
+      "season": 2023,
+      "name": "midseason",
+      "start": "2024-01-15",
+      "end": "2024-01-24",
+      "sample_size": 10,
+      "games": 10,
+      "injury_reports_matched": 10
+    },
+    {
+      "season": 2023,
+      "name": "late_season",
+      "start": "2024-04-01",
+      "end": "2024-04-10",
+      "sample_size": 10,
+      "games": 10,
+      "injury_reports_matched": 10
+    },
+    {
+      "season": 2024,
+      "name": "midseason",
+      "start": "2025-01-15",
+      "end": "2025-01-24",
+      "sample_size": 10,
+      "games": 10,
+      "injury_reports_matched": 10
+    },
+    {
+      "season": 2024,
+      "name": "late_season",
+      "start": "2025-04-01",
+      "end": "2025-04-10",
+      "sample_size": 10,
+      "games": 10,
+      "injury_reports_matched": 10
+    },
+    {
+      "season": 2025,
+      "name": "midseason",
+      "start": "2026-01-15",
+      "end": "2026-01-24",
+      "sample_size": 10,
+      "games": 10,
+      "injury_reports_matched": 10
+    },
+    {
+      "season": 2025,
+      "name": "late_season",
+      "start": "2026-04-01",
+      "end": "2026-04-10",
+      "sample_size": 10,
+      "games": 10,
+      "injury_reports_matched": 10
+    }
+  ]
+}

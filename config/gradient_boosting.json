@@ -1,0 +1,25 @@
+{
+  "seed": 230,
+  "history_path": "data/processed/seasonal/game_history.jsonl",
+  "history_config": "config/seasonal.json",
+  "cutoff_minutes": 60,
+  "min_previous_games": 5,
+  "split_seasons": {"train": 2023, "validation": 2024, "test": 2025},
+  "selection_metric": "brier",
+  "refit_train_and_validation": true,
+  "model_parameters": {
+    "loss": "log_loss",
+    "learning_rate": 0.05,
+    "min_samples_leaf": 20,
+    "subsample": 1.0,
+    "n_iter_no_change": null
+  },
+  "candidates": [
+    {"max_depth": 1, "n_estimators": 100},
+    {"max_depth": 1, "n_estimators": 200},
+    {"max_depth": 2, "n_estimators": 100},
+    {"max_depth": 2, "n_estimators": 200}
+  ],
+  "bootstrap_replicates": 2000,
+  "calibration_bins": 10
+}

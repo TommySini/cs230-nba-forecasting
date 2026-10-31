@@ -1,0 +1,219 @@
+{
+  "config": {
+    "seed": 230,
+    "history_path": "data/processed/seasonal/game_history.jsonl",
+    "history_config": "config/seasonal.json",
+    "cutoff_minutes": 60,
+    "min_previous_games": 5,
+    "split_seasons": {
+      "train": 2023,
+      "validation": 2024,
+      "test": 2025
+    },
+    "selection_metric": "brier",
+    "refit_train_and_validation": true,
+    "model_parameters": {
+      "loss": "log_loss",
+      "learning_rate": 0.05,
+      "min_samples_leaf": 20,
+      "subsample": 1.0,
+      "n_iter_no_change": null
+    },
+    "candidates": [
+      {
+        "max_depth": 1,
+        "n_estimators": 100
+      },
+      {
+        "max_depth": 1,
+        "n_estimators": 200
+      },
+      {
+        "max_depth": 2,
+        "n_estimators": 100
+      },
+      {
+        "max_depth": 2,
+        "n_estimators": 200
+      }
+    ],
+    "bootstrap_replicates": 2000,
+    "calibration_bins": 10
+  },
+  "feature_names": [
+    "home_previous_games",
+    "home_season_win_rate",
+    "home_last_5_win_rate",
+    "home_last_5_point_differential",
+    "home_days_since_previous_game",
+    "home_back_to_back",
+    "away_previous_games",
+    "away_season_win_rate",
+    "away_last_5_win_rate",
+    "away_last_5_point_differential",
+    "away_days_since_previous_game",
+    "away_back_to_back",
+    "difference_previous_games",
+    "difference_season_win_rate",
+    "difference_last_5_win_rate",
+    "difference_last_5_point_differential",
+    "difference_days_since_previous_game",
+    "difference_back_to_back"
+  ],
+  "history_games": 3621,
+  "excluded_games": 246,
+  "selected_parameters": {
+    "loss": "log_loss",
+    "learning_rate": 0.05,
+    "min_samples_leaf": 20,
+    "subsample": 1.0,
+    "n_iter_no_change": null,
+    "max_depth": 1,
+    "n_estimators": 100,
+    "random_state": 230
+  },
+  "validation_candidates": [
+    {
+      "candidate_index": 0,
+      "max_depth": 1,
+      "n_estimators": 100,
+      "games": 1123,
+      "brier": 0.21686708830796197,
+      "log_loss": 0.622987553676152,
+      "roc_auc": 0.7030087474766894,
+      "accuracy": 0.649154051647373,
+      "mean_home_probability": 0.5525431184741189,
+      "observed_home_win_rate": 0.5503116651825467
+    },
+    {
+      "candidate_index": 1,
+      "max_depth": 1,
+      "n_estimators": 200,
+      "games": 1123,
+      "brier": 0.2174197517223313,
+      "log_loss": 0.6244092438363015,
+      "roc_auc": 0.7016709923419526,
+      "accuracy": 0.6509349955476402,
+      "mean_home_probability": 0.5569854391250945,
+      "observed_home_win_rate": 0.5503116651825467
+    },
+    {
+      "candidate_index": 2,
+      "max_depth": 2,
+      "n_estimators": 100,
+      "games": 1123,
+      "brier": 0.21736397072784672,
+      "log_loss": 0.6248691699372494,
+      "roc_auc": 0.7025040853599924,
+      "accuracy": 0.6420302760463046,
+      "mean_home_probability": 0.5570032969282269,
+      "observed_home_win_rate": 0.5503116651825467
+    },
+    {
+      "candidate_index": 3,
+      "max_depth": 2,
+      "n_estimators": 200,
+      "games": 1123,
+      "brier": 0.21870238201312267,
+      "log_loss": 0.6288299803792177,
+      "roc_auc": 0.701190361754622,
+      "accuracy": 0.6447016918967052,
+      "mean_home_probability": 0.5600118276067071,
+      "observed_home_win_rate": 0.5503116651825467
+    }
+  ],
+  "splits": {
+    "train": {
+      "season": 2023,
+      "games": 1115,
+      "first_date": "2023-11-03",
+      "last_date": "2024-04-10"
+    },
+    "validation": {
+      "season": 2024,
+      "games": 1123,
+      "first_date": "2024-11-01",
+      "last_date": "2025-04-10"
+    },
+    "test": {
+      "season": 2025,
+      "games": 1137,
+      "first_date": "2025-10-31",
+      "last_date": "2026-04-10"
+    }
+  },
+  "test": {
+    "gradient_boosting": {
+      "games": 1137,
+      "brier": 0.20986811250434456,
+      "log_loss": 0.6085068113705692,
+      "roc_auc": 0.7311984375,
+      "accuracy": 0.6728232189973615,
+      "mean_home_probability": 0.5440310963062505,
+      "observed_home_win_rate": 0.5496921723834652
+    },
+    "historical_home_rate": {
+      "games": 1137,
+      "brier": 0.24754414910510625,
+      "log_loss": 0.6882275591101399,
+      "roc_auc": 0.5,
+      "accuracy": 0.5496921723834652,
+      "mean_home_probability": 0.5460232350312779,
+      "observed_home_win_rate": 0.5496921723834652
+    },
+    "constant_50_percent": {
+      "games": 1137,
+      "brier": 0.25,
+      "log_loss": 0.6931471805599453,
+      "roc_auc": 0.5,
+      "accuracy": 0.5496921723834652,
+      "mean_home_probability": 0.5,
+      "observed_home_win_rate": 0.5496921723834652
+    }
+  },
+  "uncertainty": {
+    "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+    "replicates": 2000,
+    "days": 154,
+    "seed": 230,
+    "brier_intervals": {
+      "gradient_boosting": [
+        0.2007780395160948,
+        0.21901606233987275
+      ],
+      "historical_home_rate": [
+        0.24503414369132442,
+        0.2501666485587967
+      ],
+      "constant_50_percent": [
+        0.25,
+        0.25
+      ]
+    },
+    "gb_minus_home_rate_interval": [
+      -0.046523216695334636,
+      -0.028587230814362135
+    ],
+    "limitations": "Conditional on this fitted model and season; does not capture training uncertainty or serial dependence across days"
+  },
+  "versions": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "joblib": "1.6.0",
+    "matplotlib": "3.11.2"
+  },
+  "python_version": "3.14.6",
+  "source_sha256": {
+    "data/processed/seasonal/game_history.jsonl": "37d7535b6b7a0b8aba9795ee5d1da421fc3a509debc4ce3f533f9ac114a36f7b",
+    "config/seasonal.json": "4138d400de772030320b9dd25c5aee51cb322c5793c8deb7239e612221ccfff0",
+    "config/gradient_boosting.json": "bde7b99c6abe0c39af84115907dd4eeca71951ebb311486f2699fc36efbe4060",
+    "scripts/collect_pilot.py": "cf1c58a3aa2c2ae7a2bbd39605843ad86fdec430f2c6fe222856b9f1145a147e",
+    "scripts/run_gradient_boosting.py": "d39ba46c96317847a9b9f19527371a448acc3792cdfe1362de4a864b211c2ef1"
+  },
+  "artifact_sha256": {
+    "data/processed/gradient_boosting/excluded.jsonl": "c367bc14e7c147569d54d7b56aa73a8fda8feca9cea284fb15cd0487271311c2",
+    "data/processed/gradient_boosting/inputs.jsonl": "35658cc9ce33668de05c7d9ed5da4e6c0b16b81b2147dddc2d8efb7da2854067",
+    "data/processed/gradient_boosting/labels.jsonl": "6120dd4efe088f0a626d74c7cd0cfc5601c61482d79669c966458086026759fb"
+  }
+}

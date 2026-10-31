@@ -1,0 +1,45 @@
+{
+  "protocol_sha256": "89a80a18bcea9900538d422d5a04014e54b0036b3526b2a8f7f5db293e1298f9",
+  "selection_sha256": "42c0edda40ab5db09b853d6cc0616486ac260c42df24deffae084520551e68c4",
+  "selected_epoch": 1,
+  "test": {
+    "stats_only": {
+      "games": 18,
+      "brier": 0.23699730124213841,
+      "log_loss": 0.6660353899013787,
+      "roc_auc": 0.676923076923077,
+      "accuracy": 0.5555555555555556,
+      "mean_home_probability": 0.5069829705688689,
+      "observed_home_win_rate": 0.7222222222222222
+    },
+    "stats_plus_text": {
+      "games": 18,
+      "brier": 0.23898721141380794,
+      "log_loss": 0.671023892711315,
+      "roc_auc": 0.5230769230769231,
+      "accuracy": 0.6666666666666666,
+      "mean_home_probability": 0.5248743014203178,
+      "observed_home_win_rate": 0.7222222222222222
+    },
+    "original_boosting_reference": {
+      "games": 18,
+      "brier": 0.1748465904642643,
+      "log_loss": 0.5321681678958121,
+      "roc_auc": 0.8307692307692307,
+      "accuracy": 0.7777777777777778,
+      "mean_home_probability": 0.5723036606583897,
+      "observed_home_win_rate": 0.7222222222222222
+    }
+  },
+  "paired_comparison": {
+    "text_minus_stats": 0.0019899101716695077,
+    "paired_date_bootstrap_ci95": [
+      -0.03525847762702463,
+      0.037594191635378055
+    ],
+    "test_dates": 12,
+    "replicates": 2000,
+    "conditional_on": "fitted models and sampled dates; no training/selection uncertainty"
+  },
+  "test_predictions_sha256": "f67403244b59b80f92a7d5a4c720a1bf3a7a3a11a91d7ccc3f2b2c2940c6a495"
+}

@@ -38,5 +38,35 @@
     "history_start_month_day": "10-01",
     "sample_start_month_day": "11-01",
     "sample_end_month_day": "11-10"
-  }
+  },
+  "config_path": "config/pilot.json",
+  "windows": [
+    {
+      "season": 2023,
+      "name": "early_season",
+      "start": "2023-11-01",
+      "end": "2023-11-10",
+      "sample_size": 34,
+      "games": 34,
+      "injury_reports_matched": 34
+    },
+    {
+      "season": 2024,
+      "name": "early_season",
+      "start": "2024-11-01",
+      "end": "2024-11-10",
+      "sample_size": 33,
+      "games": 33,
+      "injury_reports_matched": 33
+    },
+    {
+      "season": 2025,
+      "name": "early_season",
+      "start": "2025-11-01",
+      "end": "2025-11-10",
+      "sample_size": 33,
+      "games": 33,
+      "injury_reports_matched": 33
+    }
+  ]
 }

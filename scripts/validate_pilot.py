@@ -1,21 +1,27 @@
 """Validate the completed pilot's joins, provenance and temporal boundaries."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
 
-from collect_pilot import ROOT, prior_features, stamp, parse_injury
+from collect_pilot import ROOT, prior_features, stamp, parse_injury, sample_windows, select_sample, output_paths
 
 
-def rows(name):
-    return [json.loads(line) for line in (ROOT / "data/processed" / name).read_text().splitlines()]
+def rows(directory, name):
+    return [json.loads(line) for line in (directory / name).read_text().splitlines()]
 
 
 def main():
-    inputs, labels, history, audit, manifest = [rows(name) for name in (
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--config", default="config/pilot.json")
+    args = parser.parse_args()
+    config = json.loads((ROOT / args.config).read_text())
+    processed_dir, _ = output_paths(config)
+    inputs, labels, history, audit, manifest = [rows(processed_dir, name) for name in (
         "inputs.jsonl", "labels.jsonl", "game_history.jsonl", "audit.jsonl", "sample_manifest.jsonl")]
-    config = json.loads((ROOT / "config/pilot.json").read_text())
-    expected = sum(s["sample_size"] for s in config["seasons"])
+    expected = sum(w["sample_size"] for w in sample_windows(config))
     assert len(inputs) == expected, (len(inputs), expected)
+    assert manifest == select_sample(history, config), "Sample differs from deterministic schedule-based selection"
     ids = [r["game_id"] for r in inputs]
     assert len(ids) == len(set(ids))
     for group in (labels, audit, manifest):

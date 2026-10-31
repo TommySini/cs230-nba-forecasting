@@ -2,11 +2,12 @@
 import copy
 import sys
 from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from collect_pilot import parse_injury_pages, prior_features, preview_decision, get_injuries, stamp
+from collect_pilot import parse_injury_pages, prior_features, preview_decision, get_injuries, stamp, sample_windows, select_sample, output_paths, collect_games
 
 
 class LeakageTests(unittest.TestCase):
@@ -32,6 +33,57 @@ class LeakageTests(unittest.TestCase):
     def test_seasons_do_not_mix(self):
         prior = dict(self.game, season=2023, game_date_et="2023-11-02")
         self.assertEqual(prior_features(self.game, [prior], "home")["previous_games"], 0)
+
+    def test_same_calendar_date_results_are_excluded(self):
+        same_day = dict(self.game, game_id="espn:2", home_score=999)
+        self.assertEqual(prior_features(self.game, [same_day, self.game], "home")["previous_games"], 0)
+
+    def test_cross_year_windows_preserve_season_and_sample_independently_of_outcomes(self):
+        config = {"seed": 230, "seasons": [{"start_year": 2024}], "sample_windows": [
+            {"name": "midseason", "year_offset": 1, "start_month_day": "01-15",
+             "end_month_day": "01-24", "sample_size": 2}]}
+        history = [dict(self.game, game_id=f"espn:{i}", game_date_et=f"2025-01-{15+i}",
+                        scheduled_start_utc=f"2025-01-{15+i}T23:00:00Z") for i in range(5)]
+        history.append(dict(history[0], game_id="wrong-season", season=2025))
+        selected = select_sample(history, config)
+        self.assertEqual(sample_windows(config)[0]["start"], "2025-01-15")
+        self.assertEqual(len(selected), 2)
+        self.assertTrue(all(g["season"] == 2024 for g in selected))
+        for game in history:
+            game["home_score"] = 999
+        self.assertEqual([g["game_id"] for g in selected], [g["game_id"] for g in select_sample(history, config)])
+
+    def test_overlapping_sample_windows_are_rejected(self):
+        window = {"name": "midseason", "year_offset": 1, "start_month_day": "01-15",
+                  "end_month_day": "01-24", "sample_size": 1}
+        with self.assertRaises(ValueError):
+            sample_windows({"seasons": [{"start_year": 2024}], "sample_windows": [window, window]})
+
+    def test_seasonal_outputs_cannot_replace_original_pilot(self):
+        self.assertNotEqual(output_paths({}), output_paths({"output_name": "seasonal"}))
+        with self.assertRaises(ValueError):
+            output_paths({"output_name": "../"})
+
+    def test_missing_schedule_day_aborts_and_successful_retry_clears_failure(self):
+        config = {"seasons": [{"start_year": 2024, "sample_size": 1}],
+                  "history_start_month_day": "10-01", "sample_start_month_day": "10-01",
+                  "sample_end_month_day": "10-01", "output_name": "seasonal"}
+
+        class FakeCache:
+            body = None
+
+            def get(self, url, kind, suffix):
+                return self.body, {"url": url, "status": "network_error" if self.body is None else 200}
+
+        cache = FakeCache()
+        with TemporaryDirectory() as directory, patch("collect_pilot.ROOT", Path(directory)):
+            with self.assertRaisesRegex(RuntimeError, "Incomplete schedule history"):
+                collect_games(cache, config)
+            failure_path = Path(directory) / "reports/seasonal/schedule_failures.json"
+            self.assertTrue(failure_path.exists())
+            cache.body = b'{"events": []}'
+            self.assertEqual(collect_games(cache, config), [])
+            self.assertFalse(failure_path.exists())
 
     def test_preview_endpoint_returning_recap_is_rejected(self):
         article = {"type": "Recap", "gameId": "3", "story": "The home team won."}
