@@ -1,0 +1,402 @@
+{
+  "config": {
+    "scope": "Polymarket NBA game moneyline markets for the 2024-25 and 2025-26 regular seasons; Polymarket listed no per-game NBA markets during 2023-24",
+    "history_path": "data/processed/seasonal/game_history.jsonl",
+    "seasons": [
+      2024,
+      2025
+    ],
+    "cutoff_minutes": 60,
+    "nba_tag_id": 745,
+    "listing_window_days": 7,
+    "listing_page_size": 100,
+    "listing_padding_days": 10,
+    "max_start_difference_minutes": 180,
+    "price_lookback_hours": 24,
+    "price_fidelity_minutes": 10,
+    "max_staleness_minutes": 60,
+    "comparison": {
+      "test_predictions": "data/processed/gradient_boosting/test_predictions.csv",
+      "validation_predictions": "data/processed/gradient_boosting/validation_predictions.csv",
+      "seed": 230,
+      "bootstrap_replicates": 2000,
+      "calibration_bins": 10,
+      "liquidity_threshold_usd": 50000
+    }
+  },
+  "splits": {
+    "validation": {
+      "season": 2024,
+      "baseline_games": 1123,
+      "matched_games": 1121,
+      "first_date": "2024-11-01",
+      "last_date": "2025-04-10",
+      "metrics": {
+        "polymarket_cutoff": {
+          "games": 1121,
+          "brier": 0.19901393844781445,
+          "log_loss": 0.581410834935129,
+          "roc_auc": 0.7552063234802295,
+          "accuracy": 0.6904549509366636,
+          "mean_home_probability": 0.5542952720785014,
+          "observed_home_win_rate": 0.5504014272970562
+        },
+        "gradient_boosting": {
+          "games": 1121,
+          "brier": 0.21635771045885277,
+          "log_loss": 0.6218841366626661,
+          "roc_auc": 0.7047139898639088,
+          "accuracy": 0.6503122212310437,
+          "mean_home_probability": 0.552552713359848,
+          "observed_home_win_rate": 0.5504014272970562
+        },
+        "historical_home_rate": {
+          "games": 1121,
+          "brier": 0.24753534074397773,
+          "log_loss": 0.6882104389446672,
+          "roc_auc": 0.5,
+          "accuracy": 0.5504014272970562,
+          "mean_home_probability": 0.5417040358744395,
+          "observed_home_win_rate": 0.5504014272970562
+        },
+        "polymarket_tipoff_reference": {
+          "games": 1121,
+          "brier": 0.19869143621766278,
+          "log_loss": 0.5807993576011361,
+          "roc_auc": 0.7557851611741401,
+          "accuracy": 0.6949152542372882,
+          "mean_home_probability": 0.5548884924174844,
+          "observed_home_win_rate": 0.5504014272970562
+        }
+      },
+      "uncertainty": {
+        "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+        "replicates": 2000,
+        "days": 150,
+        "seed": 230,
+        "brier_intervals": {
+          "polymarket_cutoff": [
+            0.18890584162801027,
+            0.2092038464539732
+          ],
+          "gradient_boosting": [
+            0.20771414493497023,
+            0.22462770383403344
+          ],
+          "historical_home_rate": [
+            0.24516580680798547,
+            0.24993938568027588
+          ],
+          "polymarket_tipoff_reference": [
+            0.1884057367813025,
+            0.2088533397825715
+          ]
+        },
+        "brier_differences": {
+          "polymarket_cutoff_minus_gradient_boosting": [
+            -0.024193774562475463,
+            -0.010264501923466385
+          ],
+          "polymarket_cutoff_minus_historical_home_rate": [
+            -0.058542806548321544,
+            -0.03858873851697194
+          ]
+        },
+        "accuracy_differences": {
+          "polymarket_cutoff_minus_gradient_boosting": [
+            0.014273700838357228,
+            0.06392685421105535
+          ],
+          "polymarket_cutoff_minus_historical_home_rate": [
+            0.10535710366236054,
+            0.17407340026395618
+          ]
+        }
+      },
+      "liquid_subset": {
+        "threshold_usd": 50000,
+        "games": 1087,
+        "metrics": {
+          "polymarket_cutoff": {
+            "games": 1087,
+            "brier": 0.2004911223551058,
+            "log_loss": 0.5848051414538522,
+            "roc_auc": 0.7518121882899501,
+            "accuracy": 0.6890524379024839,
+            "mean_home_probability": 0.5545170193192273,
+            "observed_home_win_rate": 0.547378104875805
+          },
+          "gradient_boosting": {
+            "games": 1087,
+            "brier": 0.2179317804478809,
+            "log_loss": 0.6253074180266196,
+            "roc_auc": 0.700054656008745,
+            "accuracy": 0.6467341306347746,
+            "mean_home_probability": 0.551836842276347,
+            "observed_home_win_rate": 0.547378104875805
+          },
+          "historical_home_rate": {
+            "games": 1087,
+            "brier": 0.24778751023740941,
+            "log_loss": 0.6887159523841571,
+            "roc_auc": 0.5,
+            "accuracy": 0.547378104875805,
+            "mean_home_probability": 0.5417040358744396,
+            "observed_home_win_rate": 0.547378104875805
+          },
+          "polymarket_tipoff_reference": {
+            "games": 1087,
+            "brier": 0.20001966421343148,
+            "log_loss": 0.5838662601753094,
+            "roc_auc": 0.7527037644326022,
+            "accuracy": 0.6936522539098436,
+            "mean_home_probability": 0.5549448022079116,
+            "observed_home_win_rate": 0.547378104875805
+          }
+        }
+      }
+    },
+    "test": {
+      "season": 2025,
+      "baseline_games": 1137,
+      "matched_games": 1132,
+      "first_date": "2025-10-31",
+      "last_date": "2026-04-10",
+      "metrics": {
+        "polymarket_cutoff": {
+          "games": 1132,
+          "brier": 0.19411771709363956,
+          "log_loss": 0.5689123473578788,
+          "roc_auc": 0.766929183467742,
+          "accuracy": 0.6925795053003534,
+          "mean_home_probability": 0.5502230565371025,
+          "observed_home_win_rate": 0.5477031802120141
+        },
+        "gradient_boosting": {
+          "games": 1132,
+          "brier": 0.20973168111874962,
+          "log_loss": 0.6082021356690246,
+          "roc_auc": 0.732017074092742,
+          "accuracy": 0.6731448763250883,
+          "mean_home_probability": 0.5441151782379308,
+          "observed_home_win_rate": 0.5477031802120141
+        },
+        "historical_home_rate": {
+          "games": 1132,
+          "brier": 0.24772722881347034,
+          "log_loss": 0.6885947579174271,
+          "roc_auc": 0.5,
+          "accuracy": 0.5477031802120141,
+          "mean_home_probability": 0.5460232350312779,
+          "observed_home_win_rate": 0.5477031802120141
+        },
+        "polymarket_tipoff_reference": {
+          "games": 1132,
+          "brier": 0.19361479350706715,
+          "log_loss": 0.5677687388592906,
+          "roc_auc": 0.7681687878024195,
+          "accuracy": 0.6969964664310954,
+          "mean_home_probability": 0.5494209363957597,
+          "observed_home_win_rate": 0.5477031802120141
+        }
+      },
+      "uncertainty": {
+        "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+        "replicates": 2000,
+        "days": 154,
+        "seed": 230,
+        "brier_intervals": {
+          "polymarket_cutoff": [
+            0.18204263321599828,
+            0.20556554416716238
+          ],
+          "gradient_boosting": [
+            0.20034157144928597,
+            0.2190822742944014
+          ],
+          "historical_home_rate": [
+            0.24521253666582044,
+            0.2503215646893083
+          ],
+          "polymarket_tipoff_reference": [
+            0.1817031556541082,
+            0.20495480443321024
+          ]
+        },
+        "brier_differences": {
+          "polymarket_cutoff_minus_gradient_boosting": [
+            -0.022124038681949735,
+            -0.00937273078916147
+          ],
+          "polymarket_cutoff_minus_historical_home_rate": [
+            -0.06547962446195782,
+            -0.042280532360886525
+          ]
+        },
+        "accuracy_differences": {
+          "polymarket_cutoff_minus_gradient_boosting": [
+            -0.0008996850240954173,
+            0.04185228293834685
+          ],
+          "polymarket_cutoff_minus_historical_home_rate": [
+            0.1093041737215996,
+            0.18220670964315025
+          ]
+        }
+      },
+      "liquid_subset": {
+        "threshold_usd": 50000,
+        "games": 971,
+        "metrics": {
+          "polymarket_cutoff": {
+            "games": 971,
+            "brier": 0.20076393383110194,
+            "log_loss": 0.584768634222219,
+            "roc_auc": 0.7518096148593281,
+            "accuracy": 0.6817713697219362,
+            "mean_home_probability": 0.5474443872296602,
+            "observed_home_win_rate": 0.5386199794026777
+          },
+          "gradient_boosting": {
+            "games": 971,
+            "brier": 0.214434196975377,
+            "log_loss": 0.6183262993408312,
+            "roc_auc": 0.7177939770554493,
+            "accuracy": 0.6580844490216272,
+            "mean_home_probability": 0.5437294889841935,
+            "observed_home_win_rate": 0.5386199794026777
+          },
+          "historical_home_rate": {
+            "games": 971,
+            "brier": 0.24856330538483912,
+            "log_loss": 0.6902716576817459,
+            "roc_auc": 0.5,
+            "accuracy": 0.5386199794026777,
+            "mean_home_probability": 0.5460232350312779,
+            "observed_home_win_rate": 0.5386199794026777
+          },
+          "polymarket_tipoff_reference": {
+            "games": 971,
+            "brier": 0.2003513735839341,
+            "log_loss": 0.5838866519794469,
+            "roc_auc": 0.7525309000273149,
+            "accuracy": 0.685890834191555,
+            "mean_home_probability": 0.5465700308959835,
+            "observed_home_win_rate": 0.5386199794026777
+          }
+        }
+      }
+    }
+  },
+  "stack": {
+    "fit_on": "validation season (boosting model trained on 2023-24 only)",
+    "coefficients": {
+      "intercept": -0.011789938590648846,
+      "market_logit": 1.0354575068896523,
+      "boosting_logit": -0.07817323625278841
+    },
+    "test_metrics": {
+      "games": 1132,
+      "brier": 0.19413871395313703,
+      "log_loss": 0.5689099167502737,
+      "roc_auc": 0.7669512348790323,
+      "accuracy": 0.6925795053003534,
+      "mean_home_probability": 0.5467022178565683,
+      "observed_home_win_rate": 0.5477031802120141
+    },
+    "uncertainty": {
+      "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+      "replicates": 2000,
+      "days": 154,
+      "seed": 230,
+      "brier_intervals": {
+        "polymarket_cutoff": [
+          0.18204263321599828,
+          0.20556554416716238
+        ],
+        "market_plus_boosting_stack": [
+          0.1823088944731125,
+          0.20546189768817574
+        ]
+      },
+      "brier_differences": {
+        "market_plus_boosting_stack_minus_polymarket_cutoff": [
+          -0.00038988005448797257,
+          0.00042259293687624456
+        ]
+      },
+      "accuracy_differences": {
+        "market_plus_boosting_stack_minus_polymarket_cutoff": [
+          -0.004374837254210654,
+          0.00425921655801698
+        ]
+      }
+    }
+  },
+  "resolution_consistency": {
+    "agree": 2410,
+    "disagree": [],
+    "unresolved": 0
+  },
+  "coverage": {
+    "scope": "Polymarket NBA game moneyline markets for the 2024-25 and 2025-26 regular seasons; Polymarket listed no per-game NBA markets during 2023-24",
+    "games": 2424,
+    "markets_with_price": 2410,
+    "decisions": {
+      "matched_price_at_cutoff": 2410,
+      "no_matching_market": 13,
+      "no_price_before_cutoff": 1
+    },
+    "by_season": {
+      "2024": {
+        "games": 1204,
+        "decisions": {
+          "matched_price_at_cutoff": 1199,
+          "no_matching_market": 5
+        }
+      },
+      "2025": {
+        "games": 1220,
+        "decisions": {
+          "matched_price_at_cutoff": 1211,
+          "no_matching_market": 8,
+          "no_price_before_cutoff": 1
+        }
+      }
+    },
+    "listing_failures": 0,
+    "median_minutes_before_cutoff": 9.916666666666666,
+    "max_minutes_before_cutoff": 49.11666666666667,
+    "matched_market_lifetime_volume_usd": {
+      "median": 579191.509738,
+      "p10": 56124.19996,
+      "note": "Lifetime volume includes post-cutoff and in-game trading; descriptive only"
+    },
+    "price_definition": "Last Polymarket CLOB price-history point for the home outcome token at or before the cutoff",
+    "config": {
+      "scope": "Polymarket NBA game moneyline markets for the 2024-25 and 2025-26 regular seasons; Polymarket listed no per-game NBA markets during 2023-24",
+      "history_path": "data/processed/seasonal/game_history.jsonl",
+      "seasons": [
+        2024,
+        2025
+      ],
+      "cutoff_minutes": 60,
+      "nba_tag_id": 745,
+      "listing_window_days": 7,
+      "listing_page_size": 100,
+      "listing_padding_days": 10,
+      "max_start_difference_minutes": 180,
+      "price_lookback_hours": 24,
+      "price_fidelity_minutes": 10,
+      "max_staleness_minutes": 60,
+      "comparison": {
+        "test_predictions": "data/processed/gradient_boosting/test_predictions.csv",
+        "validation_predictions": "data/processed/gradient_boosting/validation_predictions.csv",
+        "seed": 230,
+        "bootstrap_replicates": 2000,
+        "calibration_bins": 10,
+        "liquidity_threshold_usd": 50000
+      }
+    }
+  }
+}
