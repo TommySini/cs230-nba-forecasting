@@ -32,7 +32,7 @@ class PageParser(HTMLParser):
             self.current = None
 
 
-def parse_article(body):
+def parse_article(body, *, article_types=("NewsArticle",)):
     parser = PageParser()
     parser.feed(body.decode("utf-8"))
     ld_articles, pages = [], []
@@ -42,9 +42,9 @@ def parse_article(body):
         elif script["type"] == "application/ld+json":
             value = json.loads(script["text"])
             nodes = value if isinstance(value, list) else value.get("@graph", [value])
-            ld_articles.extend(node for node in nodes if node.get("@type") == "NewsArticle")
+            ld_articles.extend(node for node in nodes if node.get("@type") in article_types)
     if len(ld_articles) != 1 or len(pages) != 1 or pages[0].get("type") != "article":
-        raise ValueError("Expected one NewsArticle and one article pageObject")
+        raise ValueError("Expected one allowed article schema and one article pageObject")
     ld, page = ld_articles[0], pages[0]
     # Use only the article's own blocks. Never flatten navigation, related news,
     # page layout, or the entire hydration object into a model-ready document.

@@ -1,0 +1,8 @@
+{
+  "games": 107,
+  "boosting_folds": 7,
+  "source_and_chronology": "passed",
+  "data_only": false,
+  "prediction_replay": "passed within absolute tolerance 1e-6",
+  "selected_epoch": 2
+}

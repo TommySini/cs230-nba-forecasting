@@ -1,0 +1,35 @@
+{
+  "active_source_refs": 390,
+  "errors": [],
+  "immutable_initial_manifest_sha256": "add6c3e90efcf7b75c4c80f7b773d9c70441c2e9ac2298120159651d2becaf30",
+  "initial_games_retained": 256,
+  "initial_probabilities_max_absolute_delta": 0.0,
+  "initial_source_hashes_retained": true,
+  "initial_split_membership_unchanged": true,
+  "preview2_manifest_sha256": "1bc5ea61676cecb00130c3e916a666cd721e7c9dc3e019fb765f2ba98a2fa101",
+  "provisional_not_final_corpus": true,
+  "status": "pass",
+  "validation": {
+    "forecast_eligible": {
+      "dev": 17,
+      "test": 34,
+      "train": 249
+    },
+    "games": 371,
+    "html_pagination": "Numbered article sections, not physical PDF pages; source_kind and pagination are explicit.",
+    "research_only": 71,
+    "source_kinds": {
+      "html": 20,
+      "pdf": 382
+    },
+    "source_quality": "Timing/content identity approved; not full factual certification of every source assertion.",
+    "sources": 402,
+    "splits": {
+      "dev": 17,
+      "test": 34,
+      "train": 320
+    },
+    "test_status": "exploratory_historical_prior_pilot_stats_market_exposure"
+  },
+  "whole_date_membership": true
+}

@@ -1,7 +1,8 @@
 # Project working instructions
 
 - This is Tommaso Sini and Anthony Viverito's Stanford CS230 NBA forecasting project.
-- Read `HANDOFF.md` and `README.md` before continuing.
+- Read `HANDOFF.md`, `README.md`, and `docs/experiments.md` before continuing.
+  Long agent chronology lives in `docs/archive/` — do not treat it as current status.
 - Use the repository's `.venv` for all Python work: `.venv/bin/python` and
   `uv pip install --python .venv/bin/python -r requirements.txt` (or the venv's pip).
   Do not install packages into system Python or the global Conda environment.

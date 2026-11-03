@@ -1,0 +1,31 @@
+{
+  "benchmark_hash": "908915ea0a93b078b0c537d6099e6ad88b35c70b2fce2283ee2eb206c290b974",
+  "models": [
+    {
+      "model": "Qwen/Qwen2.5-14B-Instruct@cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8",
+      "cases": 40,
+      "valid_responses": 39,
+      "binary_support_accuracy": 0.775,
+      "false_accept_count": 8,
+      "false_exclusion_count": 0,
+      "exact_three_way_accuracy": 0.8928571428571429,
+      "missing_or_invalid_responses": 1,
+      "measured_response_seconds": null,
+      "responses_with_runtime": 0
+    },
+    {
+      "model": "Qwen/Qwen2.5-72B-Instruct-AWQ@035adeffb861e8ee98344e2c7d8f50fe585e373d",
+      "cases": 40,
+      "valid_responses": 12,
+      "binary_support_accuracy": 0.275,
+      "false_accept_count": 1,
+      "false_exclusion_count": 17,
+      "exact_three_way_accuracy": 0.32142857142857145,
+      "missing_or_invalid_responses": 28,
+      "measured_response_seconds": null,
+      "responses_with_runtime": 0
+    }
+  ],
+  "all_responses_valid": false,
+  "selection_caveat": "Do not select by parameter count or this small accuracy result alone. Inspect false acceptances, exclusions, full-game coverage and interpretation quality; human review remains separate."
+}

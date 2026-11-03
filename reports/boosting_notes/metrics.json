@@ -1,0 +1,36 @@
+{
+  "protocol_sha256": "56d7df163840d9332c6ee71048aa020f0894f8cabc5c565a957d57b38004e9f2",
+  "selection_sha256": "90b8c0fc41968e6721c12c42f3f719b3677b654cb79e36b92a43199d562beb2c",
+  "selected_epoch": 2,
+  "test": {
+    "original_boosting": {
+      "games": 14,
+      "brier": 0.18629603963635866,
+      "log_loss": 0.5589201713504642,
+      "roc_auc": 0.836734693877551,
+      "accuracy": 0.7857142857142857,
+      "mean_home_probability": 0.4770781128570256,
+      "observed_home_win_rate": 0.5
+    },
+    "boosting_plus_notes": {
+      "games": 14,
+      "brier": 0.26322497607290046,
+      "log_loss": 0.7754606524421808,
+      "roc_auc": 0.7346938775510204,
+      "accuracy": 0.5714285714285714,
+      "mean_home_probability": 0.24967194321964467,
+      "observed_home_win_rate": 0.5
+    }
+  },
+  "paired_comparison": {
+    "paired_date_bootstrap_ci95": [
+      -0.036184777655606466,
+      0.18663209646543877
+    ],
+    "test_dates": 14,
+    "replicates": 2000,
+    "conditional_on": "fitted models and sampled dates; no training/selection uncertainty",
+    "hybrid_minus_boosting": 0.07692893643654178
+  },
+  "test_predictions_sha256": "d85b2653693da763f57ab9bddd97e113138806687f6ee4aabc2f640910bb1e20"
+}

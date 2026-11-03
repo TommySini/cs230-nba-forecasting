@@ -1,0 +1,9 @@
+# Dedicated Linux/CUDA worker (Python 3.12); do not install into the local MLX environment.
+torch==2.6.0
+transformers==4.51.3
+peft==0.15.2
+accelerate==1.6.0
+bitsandbytes==0.45.5
+safetensors==0.5.3
+numpy==2.2.5
+scipy==1.15.2

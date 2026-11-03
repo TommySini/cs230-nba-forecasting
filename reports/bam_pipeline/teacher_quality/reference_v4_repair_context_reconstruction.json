@@ -1,0 +1,61 @@
+{
+  "status": "offline_diagnostic_not_resume",
+  "cases": [
+    {
+      "game_id": "espn:401705416",
+      "parent_artifact": "239ed13fdb33533ac5dc302948d0950b06f2f28f3fe68f9b748af0e4fbbbba8d",
+      "attempt": 2,
+      "old_input_tokens": 32266,
+      "new_input_tokens": 13857,
+      "max_tokens": 3500,
+      "new_total": 17357,
+      "original_source_messages_equal": true,
+      "reconstructed_v4_request_id": "a4d3fbebf766f70f9bd958d9bf6ecab8c7901aa27dc60ed8f64822dd698dc9ee"
+    },
+    {
+      "game_id": "espn:401704990",
+      "parent_artifact": "a206fea98b956655ed8df00feba4ee439922933aed6abc8455aec8b2ec775463",
+      "attempt": 1,
+      "old_input_tokens": 19439,
+      "new_input_tokens": 13879,
+      "max_tokens": 3500,
+      "new_total": 17379,
+      "original_source_messages_equal": true,
+      "reconstructed_v4_request_id": "30387e6b39291ee26ade3ecb3206fb6f9178104d808a23edaf904ab4f21304f6"
+    },
+    {
+      "game_id": "espn:401705416",
+      "parent_artifact": "ae829ab9f0c8a788d9c31d2973efd687c9f7cdeabf5b586e61df4ea15b9c0df8",
+      "attempt": 1,
+      "old_input_tokens": 20996,
+      "new_input_tokens": 13808,
+      "max_tokens": 3500,
+      "new_total": 17308,
+      "original_source_messages_equal": true,
+      "reconstructed_v4_request_id": "d9b04c101ea246f2976c06b186da9f3037a478033fbc52784af525ee5b2ba7f2"
+    },
+    {
+      "game_id": "espn:401585272",
+      "parent_artifact": "5d2693c896826d01c872c851794637965d841144471b3c9db20f572e15776f34",
+      "attempt": 1,
+      "old_input_tokens": 14381,
+      "new_input_tokens": 10422,
+      "max_tokens": 3500,
+      "new_total": 13922,
+      "original_source_messages_equal": true,
+      "reconstructed_v4_request_id": "4d81e794e9e7066918793e829239dc5d144e4d1a46f6f8cd6eb8a236368b8a63"
+    },
+    {
+      "game_id": "espn:401704990",
+      "parent_artifact": "82b3e9c9565b6f44fa459f61c533321524b0d4907cee888e6428be172e2866db",
+      "attempt": 1,
+      "old_input_tokens": 18234,
+      "new_input_tokens": 13309,
+      "max_tokens": 3500,
+      "new_total": 16809,
+      "original_source_messages_equal": true,
+      "reconstructed_v4_request_id": "44a09dde43ef498248a27eeb1e8917fa75e127cf2823de3f86d5722984938a7d"
+    }
+  ],
+  "limitation": "Reconstruction reloads artifacts whose object keys were serialized in sorted order; semantically identical v4 repair payloads can therefore have different token ordering and request hashes from original in-memory construction. Not an exact blocked-request hash reproduction."
+}

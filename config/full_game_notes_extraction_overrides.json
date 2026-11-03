@@ -1,0 +1,11 @@
+{
+  "pages": {
+    "c1a64d29954322eef4c4547bad040bcf93180b3227fbd36028b95b9e286ebb9a:21": {
+      "text": "CLEVELAND CAVALIERS 2025-26 PLAYER PAGES\n02/24/26 VS. NEW YORK\n#30 Darius Brown\nGuard • 6-2 • 192lbs • 07/28/1999 • Utah State/USA\nRookie\nPERSONAL: Son of Darius Sr. and Leah Brown... Has two brothers, Davian and Drew... Earned a bachelor's degree in communications from CSUN...\nNOTES:\n2025-26 Notes:\n• Made his NBA debut on Feb. 24 vs. the Knicks.\n• Signed a Two-Way contract with the Cavaliers on Feb. 20th.\n• Prior to signing his Two-Way with the Cavaliers, Brown appeared in 34 games (30 starts) with the Cleveland Charge in the NBA G League, averaging 12.4 PPG, 9.7 APG, 3.8 RPG and 2.2 SPG in 33.5 MPG.\n• On Jan. 9th vs. Texas Legends, Brown broke the Cleveland Charge record for assists in a game with 22 and was one AST shy of tying the G League's all-time of 23.\nCAVS\nPrinted footer page: 4\n",
+      "method": "Assistant visual transcription of all text on physical PDF page 21; raw extraction retained. Bullets normalized.",
+      "image_path": "data/processed/full_game_notes/visual_checks/cle_2026-03-03_page_21.png",
+      "image_sha256": "ac02e6af59f52122b121cd12bc0c91771a6b2df495577efb5aefaa9246de61db",
+      "note": "The source header says February 24 although the packet is for March 3; retained literally, not silently corrected."
+    }
+  }
+}

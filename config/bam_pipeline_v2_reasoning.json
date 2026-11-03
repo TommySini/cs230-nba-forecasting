@@ -1,0 +1,93 @@
+{
+  "experiment": "bam_research_supervision_v2_reasoning",
+  "seed": 230,
+  "notes_paths": [
+    "data/processed/game_notes_collection/approved_excerpts.jsonl"
+  ],
+  "baseline_config": "config/gradient_boosting.json",
+  "minimum_oof_fit_games": 200,
+  "boosting_parameters": {
+    "n_estimators": 100,
+    "max_depth": 1
+  },
+  "split_policy": {
+    "prediction_model_cutoff_date": "2025-05-21",
+    "dev_start_date": "2025-12-04",
+    "test_start_date": "2026-02-01",
+    "minimum_split_games": {
+      "train": 30,
+      "dev": 8,
+      "test": 8
+    }
+  },
+  "model_id": "Qwen/Qwen2.5-14B-Instruct",
+  "model_revision": "cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8",
+  "model_revision_date": "2024-09-25",
+  "minimum_eval_date": "2025-05-22",
+  "cache_dir": "/models/bam/hf_cache",
+  "teacher": {
+    "model_id": "Qwen/Qwen3-32B-AWQ",
+    "model_revision": "0499c3ac83fdef8810b907a23894ba91e95eddd8",
+    "model_revision_date": "2025-05-21",
+    "quality_status": "candidate_pending_training_source_audit",
+    "quantization": "awq"
+  },
+  "generation": {
+    "max_model_len": 32768,
+    "max_num_seqs": 12,
+    "max_num_batched_tokens": 8192,
+    "gpu_memory_utilization": 0.88,
+    "temperature": 0.0,
+    "max_attempts": 3,
+    "request_chunk_size": 64
+  },
+  "research": {
+    "epochs": 3,
+    "folds": 3,
+    "learning_rate": 0.0001,
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "gradient_accumulation_steps": 8,
+    "max_seq_length": 16384,
+    "max_new_tokens": 4096,
+    "generation_batch_size": 2
+  },
+  "forecast": {
+    "epochs": 3,
+    "learning_rate": 5e-05,
+    "head_learning_rate": 0.001,
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "gradient_accumulation_steps": 8,
+    "max_seq_length": 16384,
+    "explanation_loss_weight": 1.0,
+    "brier_loss_weight": 1.0,
+    "include_zero_correction": true,
+    "refit_on_dev": false
+  },
+  "evaluation": {
+    "primary_metric": "brier",
+    "bootstrap_replicates": 2000,
+    "bootstrap_seed": 230,
+    "status": "Exploratory historical comparison; existing test games were inspected in earlier pilots. Fresh final evaluation remains separate."
+  },
+  "generation_by_model": {
+    "Qwen/Qwen3-32B-AWQ": {
+      "temperature": 0.6,
+      "top_p": 0.95,
+      "top_k": 20,
+      "min_p": 0.0,
+      "expects_reasoning": true,
+      "reasoning_token_reserve": 4096
+    }
+  },
+  "gold_reviewer": {
+    "model_id": "Qwen/Qwen2.5-72B-Instruct-AWQ",
+    "model_revision": "035adeffb861e8ee98344e2c7d8f50fe585e373d",
+    "model_revision_date": "2024-09-19",
+    "quantization": "awq",
+    "quality_status": "candidate_cross_model_source_review"
+  }
+}

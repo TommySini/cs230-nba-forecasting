@@ -1,0 +1,33 @@
+{
+  "archive": "data/probes/cloud_research_transfer/20261101T094350Z.tar.gz",
+  "archive_sha256": "ad08c3248a92f12730c9650098124c3551255e82d603103f8929465d9c5df420",
+  "bytes": 8163544,
+  "files": 1879,
+  "source_documents": 107,
+  "research_page_units": 3858,
+  "publisher_domains": {
+    "cdn.nba.com": 46,
+    "www.nba.com": 61
+  },
+  "all_sources": "Public publisher PDFs captured at web.archive.org before each game cutoff; provenance URLs preserved.",
+  "payload_classes": [
+    "Public NBA game-note extracted text and provenance",
+    "Model-generated research about those public notes",
+    "Research Python code and nonsecret numerical configuration",
+    "Runtime and file-checksum manifests"
+  ],
+  "excluded": [
+    "Target game labels",
+    "Boosting probabilities/features",
+    "Raw ESPN responses",
+    "Account credentials/authentication files",
+    "User messages or personal documents",
+    "Model weight files"
+  ],
+  "strict_member_allowlist": "passed",
+  "every_transferred_file_sha256": "passed",
+  "unit_schema_and_request_hashes": "passed",
+  "credential_pattern_scan": "no matches",
+  "destination": "Existing authenticated user-selected Modal tsini workspace, private task volumes",
+  "authorization_context": "User asked to continue the full game-note research/forecaster work, asked about cloud offload, then explicitly selected lets use modal."
+}

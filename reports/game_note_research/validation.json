@@ -1,0 +1,31 @@
+{
+  "games": 107,
+  "pages": 3783,
+  "research_units": 3858,
+  "support_check_requests": 2091,
+  "raw_claims": 17100,
+  "verdicts": {
+    "unclear": 7763,
+    "supported": 8112,
+    "unsupported": 1225
+  },
+  "accepted_categories": {
+    "availability": 683,
+    "workload": 838,
+    "transaction": 397,
+    "form": 4619,
+    "rotation": 734,
+    "historical": 653,
+    "other": 14,
+    "matchup": 161,
+    "rest_travel": 13
+  },
+  "accepted_origins": {
+    "language_model": 8061,
+    "deterministic_table": 51
+  },
+  "source_and_response_provenance": "passed",
+  "complete_page_and_line_coverage": "passed",
+  "all_retained_claims_checked_and_cited": "passed",
+  "semantic_limit": "Same-model support checking can retain factual errors; selected training reports were manually audited, not all claims."
+}

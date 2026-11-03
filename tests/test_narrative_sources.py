@@ -55,6 +55,11 @@ class NarrativeSourceTests(unittest.TestCase):
         article = parse_article(body)
         self.assertEqual(article["text"], "Pregame text.\n\nOne. Two.")
         self.assertNotIn("Target team", article["text"])
+        archived_body = body.replace(b'"@type": "NewsArticle"', b'"@type": "Article"')
+        with self.assertRaises(ValueError):
+            parse_article(archived_body)
+        archived_article = parse_article(archived_body, article_types=("NewsArticle", "Article"))
+        self.assertEqual(archived_article["text"], article["text"])
 
 
 if __name__ == "__main__":

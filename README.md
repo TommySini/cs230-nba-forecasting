@@ -57,17 +57,24 @@ boosting (paired Brier difference [−0.022, −0.009]), and a market-plus-boost
 gives boosting no weight. That 0.016 gap is the room text has to fill.
 Reports: [market](reports/polymarket/findings.md), [boosting](reports/gradient_boosting/findings.md).
 
-**2. Does text help? Not measurably yet.** Pilots with Qwen2.5-0.5B, LoRA and a probability head.
-Both test sets are tiny and were inspected in earlier experiments, so neither is conclusive.
+**2. Does text help? Not measurably yet.** Three pilots, all on tiny test sets that were
+inspected in earlier experiments, so none is conclusive (Brier, lower is better):
 
 | Comparison | Test games | Without text | With text |
 | --- | ---: | ---: | ---: |
-| Stats features vs stats plus injury text ([report](reports/text_ablation/findings.md)) | 18 | 0.237 | 0.239 |
-| Boosting vs boosting corrected from first-page game notes ([report](reports/boosting_notes/findings.md)) | 14 | 0.186 | 0.263 |
+| Stats features vs stats plus injury text; Qwen2.5-0.5B + LoRA ([report](reports/text_ablation/findings.md)) | 18 | 0.237 | 0.239 |
+| Boosting vs boosting corrected from first-page game notes; Qwen2.5-0.5B + LoRA ([report](reports/boosting_notes/findings.md)) | 14 | 0.186 | 0.263 |
+| Boosting vs boosting corrected from full-packet research; frozen Qwen2.5-14B + linear head ([report](reports/researched_forecaster/findings.md)) | 14 | 0.186 | 0.193 |
 
-**In progress:** a research stage that reads every page of the verified game-note packets
-before forecasting ([protocol](reports/full_game_notes/research_protocol.md)). Answering the
-question needs far more verified text than these pilots had (see next steps).
+The latest pilot reads every page of 107 archived game-note packets (3,783 pages). Because
+the 14B model's own summaries contained factual errors, the forecaster receives verbatim
+source passages and code-checked table facts, not generated paraphrases
+([quality audit](reports/game_note_research/quality_audit.md)). A frozen 14B encoder turns
+that evidence into one vector per game, and a 5,121-parameter linear head corrects the
+boosting log-odds. The dev set chose a small correction (L2 = 0.001). On the same 14 test
+games, both systems score 78.6% accuracy. The Brier difference is +0.007, with a paired 95%
+interval of [−0.012, +0.029], so there is no measurable benefit. Eleven of the 14 test packets are
+Cleveland's. Answering the question needs far more verified text and a fresh test set (see next steps).
 
 ## Data
 
@@ -75,7 +82,7 @@ question needs far more verified text than these pilots had (see next steps).
 | --- | --- | --- |
 | ESPN scoreboard | Results and prior-game team stats | 3,621 regular-season games, 2023–24 to 2025–26 (through April 10) |
 | Official NBA injury reports | Injury text, report time checked against the cutoff | 160 audited games, all matched |
-| Team game-note PDFs | Narrative and player context from archived pregame versions | 404 games verified, 256 approved ([audit](reports/game_notes_collection/findings.md)) |
+| Team game-note PDFs | Narrative and player context from archived pregame versions | 404 games verified, 256 approved ([audit](reports/game_notes_collection/findings.md)); 107 used in full (3,783 pages) |
 | Polymarket | Market probability at the cutoff | 2,410 games, 2024–25 onward |
 
 Ground rules, enforced by the validators and leakage tests:
@@ -99,21 +106,39 @@ uv pip install --python .venv/bin/python -r requirements-baseline.txt   # add re
 .venv/bin/python scripts/evaluate_polymarket.py          # market vs boosting
 ```
 
+The full-packet research pilot (requires `requirements-research.txt`; research runs on a Modal H100):
+
+To inspect every game's exact Inputs, Research audit and additional Tables, run
+`.venv/bin/python scripts/browse_evidence.py` and open
+[the local evidence viewer](http://127.0.0.1:8765/). It supports team/date/split
+search, rendered reports and original-file downloads without changing experiment artifacts.
+
+```bash
+.venv/bin/python scripts/run_research_experiment.py --stage all     # research, encode, fit head, evaluate
+.venv/bin/modal deploy --env main scripts/modal_research_vllm.py    # only when cloud code changes
+.venv/bin/python scripts/modal_research_vllm.py --check-deployment  # submit jobs this way, not `modal run`
+```
+
 Validators (`scripts/validate_*.py`) re-check datasets and results from cached sources. Data collection
 (`collect_pilot.py`, `collect_game_notes.py`) and the language-model experiments
-(`run_text_ablation.py`, `run_boosting_notes.py`) are documented in their reports and in
-[`HANDOFF.md`](HANDOFF.md).
+(`run_text_ablation.py`, `run_boosting_notes.py`, `run_researched_forecaster.py`) are documented in
+their reports, [docs/experiments.md](docs/experiments.md),
+[compute options](reports/game_note_research/compute_options.md), and [`HANDOFF.md`](HANDOFF.md).
 
 ## Layout
 
 ```
-config/    experiment and collection settings
-scripts/   collectors, models, evaluators and validators
-tests/     leakage and correctness tests
-reports/   findings, metrics and audits (committed)
-data/      raw sources, processed datasets, models (local, git-ignored)
-docs/      project proposal
+config/            experiment and collection settings
+scripts/           collectors, models, evaluators and validators
+scripts/archive/   superseded drivers (do not run for new work)
+tests/             leakage and correctness tests
+reports/           findings, metrics and audits (committed)
+data/              raw sources, processed datasets, models (local, git-ignored)
+docs/              proposal, experiment map, archived handoff log
+HANDOFF.md         short current status for the next session
 ```
+
+See [`docs/experiments.md`](docs/experiments.md) for which scripts are active vs historical.
 
 ## Next steps
 

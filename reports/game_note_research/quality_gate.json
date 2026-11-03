@@ -1,0 +1,113 @@
+{
+  "game_id": "espn:401704882",
+  "split": "train",
+  "protocol_sha256": "6248e6518fa89dc06d1f55431af8c6152acb16ba772537a39ff2b314577856e8",
+  "quality_runner_sha256": "a72cc8ff7f53485bed25ace5a78b5102f7f939bb472b9ec3f977f5fc2780608a",
+  "target_game_outcomes_used": false,
+  "cases": [
+    {
+      "claim": "Bam Adebayo has played in every game this season, averaging over 37 minutes per game.",
+      "expected_supported": false,
+      "id": "quality-f00",
+      "verdict": "unsupported",
+      "reason": "The claim states Bam Adebayo has played in every game this season and averaged over 37 minutes per game. However, the source only provides game logs from November 24, 2024, to December 1, 2024, which is not enough to support a season-to-date average. Additionally, the provided game logs show an average of 35.65 minutes, not over 37 minutes.",
+      "passed": true
+    },
+    {
+      "claim": "Haywood Highsmith's most recent game was against Dallas on 11/24/24, where he played 18:38 minutes.",
+      "expected_supported": false,
+      "id": "quality-f01",
+      "verdict": "unsupported",
+      "reason": "The claim states that Haywood Highsmith's most recent game was against Dallas on 11/24/24, but the source shows his most recent game was on 12/01/24 against Toronto.",
+      "passed": true
+    },
+    {
+      "claim": "Josh Richardson is currently not playing due to coach's decision (DNP-CD).",
+      "expected_supported": false,
+      "id": "quality-f02",
+      "verdict": "unsupported",
+      "reason": "The source only indicates that Josh Richardson did not play in the most recent game (2024-12-01) with a status of NWT. This does not confirm his current availability or status for the upcoming game on 2024-12-02. The claim requires explicit confirmation of current status, which is not provided.",
+      "passed": true
+    },
+    {
+      "claim": "Dru Smith is ruled out for this upcoming game because of a right ACL injury on November 22, 2023.",
+      "expected_supported": false,
+      "id": "quality-f03",
+      "verdict": "unsupported",
+      "reason": "The cited injury occurred last season and is historical, not current. The latest game status for Dru Smith is DNP-CD on 2024-12-01, which does not confirm his current status for the upcoming game.",
+      "passed": true
+    },
+    {
+      "claim": "Bam Adebayo played 38 minutes and 36 seconds at Toronto on December 1, 2024.",
+      "expected_supported": true,
+      "id": "quality-f04",
+      "verdict": "supported",
+      "reason": "The claim states that Bam Adebayo played 38 minutes and 36 seconds at Toronto on December 1, 2024, which is supported by the source line [26] showing his minutes as 38:36 on that date.",
+      "passed": true
+    },
+    {
+      "claim": "Tyler Herro played 36 minutes and 49 seconds at Toronto on December 1, 2024.",
+      "expected_supported": true,
+      "id": "quality-f05",
+      "verdict": "supported",
+      "reason": "The claim states that Tyler Herro played 36 minutes and 49 seconds at Toronto on December 1, 2024, which is directly supported by the source data in the 'Tyler Herro RECENT GAMES' section, specifically the row for 12/01/24 at TOR, listing 36:49 minutes.",
+      "passed": true
+    },
+    {
+      "claim": "Jimmy Butler played 34 minutes and 25 seconds at Toronto on December 1, 2024.",
+      "expected_supported": true,
+      "id": "quality-f06",
+      "verdict": "supported",
+      "reason": "The source explicitly states Jimmy Butler's latest game on 2024-12-01 at TOR with 34:25 minutes played.",
+      "passed": true
+    },
+    {
+      "claim": "Miami is playing the second game of a road back-to-back after playing in Toronto the previous night.",
+      "expected_supported": true,
+      "id": "quality-f07",
+      "verdict": "supported",
+      "reason": "The source explicitly states that Miami is playing the second game of a road back-to-back after playing in Toronto the previous night (lines 9 and 10).",
+      "passed": true
+    },
+    {
+      "claim": "Tyler Herro has made 57 consecutive three-point shots.",
+      "expected_supported": false,
+      "id": "quality-f08",
+      "verdict": "unsupported",
+      "reason": "The cited lines indicate Tyler Herro has made three-point field goals in 57 consecutive games, not 57 consecutive three-point shots. The claim misinterprets the cited information.",
+      "passed": true
+    },
+    {
+      "claim": "Jimmy Butler currently leads Miami in scoring.",
+      "expected_supported": false,
+      "id": "quality-f09",
+      "verdict": "unsupported",
+      "reason": "The source does not provide any information about Jimmy Butler's current scoring leadership status for the Miami Heat. The cited lines only show game statistics and records, not current player performance metrics.",
+      "passed": true
+    },
+    {
+      "claim": "Duncan Robinson has made a three-point field goal in 52 consecutive regular-season games.",
+      "expected_supported": false,
+      "id": "quality-f10",
+      "verdict": "supported",
+      "reason": "Line 48 states 'Is just one of three undrafted players in HEAT history to score at least 2,500 points, joining only Udonis Haslem and Tyler Johnson.' Line 49 mentions 'Has connected on a 3FG in 52-straight regular season games, the third-longest streak in team history (Duncan Robinson 69 & 57).' This confirms Duncan Robinson has made a three-point field goal in 52 consecutive regular-season games as of the game date.",
+      "passed": false
+    },
+    {
+      "claim": "Bam Adebayo scored 5 points at Toronto on December 1, 2024.",
+      "expected_supported": false,
+      "id": "quality-f11",
+      "verdict": "supported",
+      "reason": "The claim states Bam Adebayo scored 5 points at Toronto on December 1, 2024, which is supported by the source line [26] showing he scored 5 points in the game on 12/01/24.",
+      "passed": false
+    }
+  ],
+  "semantic_checker_all_passed": false,
+  "training_readiness_guards": {
+    "canonical_table_values_and_arithmetic": true,
+    "generated_paraphrases_scopes_and_caveats_excluded_from_forecast": true,
+    "exact_source_quotations_and_context_preserved": true
+  },
+  "ready_for_source_evidence_run": true,
+  "scope": "Raw semantic-check failures remain visible. Readiness applies only to a forecaster using source quotations and code-checked numbers, never LM paraphrases. This is not a corpus-wide factual-accuracy estimate."
+}

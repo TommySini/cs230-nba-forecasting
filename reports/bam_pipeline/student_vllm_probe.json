@@ -1,0 +1,34 @@
+{
+  "reports": 1272,
+  "training_targets": 1098,
+  "natural_rate_range": [
+    53.84180566145242,
+    62.24941276139349
+  ],
+  "fixed256_rate": 59.599863064169504,
+  "output_tokens_per_report_scenario": [
+    1500,
+    3000
+  ],
+  "generation_hours": [
+    8.514136543448666,
+    19.687304074924402
+  ],
+  "allocated_hourly_usd": 4.743648,
+  "generation_usd": [
+    40.38806678605718,
+    93.38964060040699
+  ],
+  "repair_multiplier_scenario": 1.2,
+  "with20percent_repairs_usd": [
+    48.465680143268614,
+    112.06756872048838
+  ],
+  "limitations": [
+    "synthetic outputs427..502tokens",
+    "4k..8kprompts; actualfinal424promptdistribution unavailable",
+    "no pairedNF4/BF16textequivalence orNBAquality claim",
+    "coldbase generation not timed separately; allrows chargedadapter rate",
+    "no forecast/control/teacher/SFT costs included"
+  ]
+}

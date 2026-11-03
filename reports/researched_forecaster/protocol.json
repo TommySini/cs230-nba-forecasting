@@ -1,0 +1,119 @@
+{
+  "config": {
+    "model_id": "mlx-community/Qwen2.5-14B-Instruct-4bit",
+    "model_revision": "dad510143ae5cdb1466778bde3161460f9e9f604",
+    "model_revision_date": "2024-09-18",
+    "model_path": "data/models/qwen2.5-14b-instruct-4bit-20240918",
+    "source_token_budget": 6000,
+    "max_prompt_tokens": 11000,
+    "extraction_max_tokens": 2048,
+    "verification_max_tokens": 1800,
+    "verification_batch_facts": 10,
+    "completion_batch_size": 8,
+    "prefill_batch_size": 4,
+    "prefill_step_size": 512,
+    "temperature": 0.0,
+    "seed": 230,
+    "max_attempts": 3,
+    "memory_limit_gb": 28,
+    "embedding_token_budget": 6000,
+    "forecaster": {
+      "architecture": "Frozen 14B report encoder and learned scalar residual log-odds head",
+      "feature_pooling": "Mean of contextual final-token vectors over all complete report chunks, then L2 normalize",
+      "l2_candidates": [
+        0.001,
+        0.01,
+        0.1,
+        1.0,
+        10.0
+      ],
+      "include_zero_correction": true,
+      "selection": "minimum dev Brier; ties favor zero or stronger regularization",
+      "loss": "mean binary log loss plus L2 penalty on all correction weights and intercept",
+      "refit_on_dev": false,
+      "threshold": 0.5,
+      "bootstrap_replicates": 2000,
+      "bootstrap_seed": 230
+    },
+    "evaluation_status": "Repeated historical pilot, not a fresh final test. No test-driven configuration changes."
+  },
+  "runner_sha256": "7423d0ee76ce7536809223b39d35de0fcc75a9d96e052ccc27a23665c37731a6",
+  "config_sha256": "5b04dc76da54f4701748f66f8546aa5e20a8b49602985a8d08ff654f1ef5e866",
+  "research_manifest_sha256": "e88a391ecbf10565b64e3bf852929bdab7c11759f80ef828ce28efe9ffde2a21",
+  "research_protocol_sha256": "6248e6518fa89dc06d1f55431af8c6152acb16ba772537a39ff2b314577856e8",
+  "quality_gate_sha256": "0a21cb7b684839f92a3393100c3d4d394eaf47a11b9d2e4216f407db61b69dab",
+  "pipeline_runner_sha256": "06738e1a2ae1171e7779694f82e2be5a48868e54492f72f024c214cb7a6b7231",
+  "additional_table_parser_sha256": "963a4cbdd4c0e5ae0baffe82332fe9e60c4da603063442b2ca6c583065a4ea59",
+  "table_coverage_sha256": "adf68752e08caea9c7a6e59501edaf0a2da56c88d48883975be4954697eb8012",
+  "original_protocol_sha256": "56d7df163840d9332c6ee71048aa020f0894f8cabc5c565a957d57b38004e9f2",
+  "inputs_sha256": "1f737045d851f5f2b4e350ea5222c190707c70f9b5f554090d088003e1fe73bc",
+  "splits": {
+    "train": {
+      "games": 80,
+      "first_date": "2024-11-04",
+      "last_date": "2025-12-01",
+      "note_publishers": {
+        "CLE": 37,
+        "DEN": 6,
+        "CHI": 3,
+        "HOU": 3,
+        "CHA": 3,
+        "LAC": 1,
+        "MEM": 4,
+        "NOP": 2,
+        "MIA": 1,
+        "DAL": 4,
+        "BOS": 4,
+        "ATL": 1,
+        "BKN": 2,
+        "TOR": 1,
+        "IND": 2,
+        "LAL": 4,
+        "DET": 1,
+        "MIN": 1
+      }
+    },
+    "dev": {
+      "games": 13,
+      "first_date": "2025-12-04",
+      "last_date": "2026-01-31",
+      "note_publishers": {
+        "UTA": 1,
+        "CLE": 1,
+        "IND": 3,
+        "LAL": 2,
+        "TOR": 1,
+        "HOU": 1,
+        "DEN": 2,
+        "BKN": 1,
+        "MIA": 1
+      }
+    },
+    "test": {
+      "games": 14,
+      "first_date": "2026-02-01",
+      "last_date": "2026-04-10",
+      "note_publishers": {
+        "CLE": 11,
+        "BKN": 1,
+        "BOS": 1,
+        "MEM": 1
+      }
+    }
+  },
+  "architecture": "p_hybrid = sigmoid(logit(p_boost) + w dot frozen_report_embedding + b)",
+  "trainable": "5120 report-vector weights and one intercept; frozen 14B language model; no LoRA",
+  "research_inputs": "Every packet page processed. Every retained evidence item is encoded across complete chunks. LM paraphrases/scopes/caveats are not forecast inputs: their source quotations plus two surrounding lines are used. Validated code-derived table facts are included directly. No first-page or first-N-fact truncation.",
+  "selection": "Train on 80 training games, choose regularization on 13 dev games, then evaluate both systems on the same 14 previously inspected test games.",
+  "evaluation_status": "Repeated historical pilot, not a fresh final test. No test-driven configuration changes.",
+  "remote_research_files": {
+    "reports/game_note_research/cloud_execution_plan.json": "01e4f72dbb9b9e6e3717f82d015147346101ee0bc0452c5ac0d53e883d27e644",
+    "data/processed/game_note_research/remote_import.json": "e88ebdd4c9d68031c33d251bf186abfbddaa11b3b1d02c9a390d2a77892be782"
+  },
+  "encoder_backend": "mlx_cuda",
+  "encoder_source_files": {
+    "reports/researched_forecaster/encoder_execution_plan.json": "aa24df2a7ebfde99deba997eb9112589186dc8015e47170a4a5c9970cb091eb6",
+    "scripts/run_modal_encoder.py": "9c27e4c230fbf37235eacb306a42cc0dcf5a79a336e4d92aeef895dfbe70513b",
+    "scripts/encode_research_mlx.py": "5a570188712d5a846ae2a59913a0723aeb88b95860328417bc10c7dc997a5907"
+  }
+}

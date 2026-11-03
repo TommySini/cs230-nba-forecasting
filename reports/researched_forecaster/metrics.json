@@ -1,0 +1,37 @@
+{
+  "protocol_sha256": "b8ee822da56d935e92ead3fa55f15a879ea7bdcd4cdea7d658ac2ff3cc17d769",
+  "selection_sha256": "0b5d67093171198431b8358510b2539a08a483532fa4123191131d7a1cc267fd",
+  "selected_candidate": "l2_0.001",
+  "evaluation_status": "Repeated historical pilot, not a fresh final test. No test-driven configuration changes.",
+  "test": {
+    "original_boosting": {
+      "games": 14,
+      "brier": 0.18629603963635866,
+      "log_loss": 0.5589201713504642,
+      "roc_auc": 0.836734693877551,
+      "accuracy": 0.7857142857142857,
+      "mean_home_probability": 0.4770781128570256,
+      "observed_home_win_rate": 0.5
+    },
+    "researched_hybrid": {
+      "games": 14,
+      "brier": 0.19320646259186877,
+      "log_loss": 0.5753849374905545,
+      "roc_auc": 0.836734693877551,
+      "accuracy": 0.7857142857142857,
+      "mean_home_probability": 0.444606809901554,
+      "observed_home_win_rate": 0.5
+    }
+  },
+  "paired_comparison": {
+    "paired_date_bootstrap_ci95": [
+      -0.011765788935868264,
+      0.029195763578169193
+    ],
+    "test_dates": 14,
+    "replicates": 2000,
+    "conditional_on": "fitted models and sampled dates; no training/selection uncertainty",
+    "hybrid_minus_boosting": 0.006910422955510115
+  },
+  "test_predictions_sha256": "bf8649785b7f77ce4cf34c4b8ab322cfa5a57e1713238fc99080c09c4c65cc6a"
+}

@@ -1,0 +1,56 @@
+{
+  "scope": "Literal arithmetic only, unique approved v4 findings. Frozen v4 artifacts unchanged. No semantic entailment certification.",
+  "implementation_sha256": {
+    "scripts/bam_claim_guards.py": "462318a2c13fdff04d1e8e544a46ee388463763720e878558a4c4bafc44bc614",
+    "scripts/bam_research.py": "c063a7bcef80ca1fc376a7ff8f6f71bf11578aa111f12abb614ff6fd2bae96ec"
+  },
+  "unique_approved_findings": 225,
+  "findings_with_comparisons": 1,
+  "findings_with_inconsistency": 1,
+  "rows": [
+    {
+      "artifact_hash": "87c749ed87ca9d767ca9556a65662c4ab091f9d5b9bb858d91b729f1c429b2f9",
+      "game_id": "espn:401704882",
+      "finding_id": "matchup-f6",
+      "checks": {
+        "fact": {
+          "consistent": false,
+          "checks": [
+            {
+              "text": "lower points per game (111.3) compared to the opponent's (120.7)",
+              "metric": "points per game",
+              "left": "111.3",
+              "right": "120.7",
+              "operator": "lower",
+              "consistent": true
+            },
+            {
+              "text": "higher opponent points per game (109.9) compared to the opponent's (110.8)",
+              "metric": "points per game",
+              "left": "109.9",
+              "right": "110.8",
+              "operator": "higher",
+              "consistent": false
+            }
+          ],
+          "limitation": "Literal arithmetic only; source support and ambiguous comparisons require semantic review."
+        },
+        "interpretation": {
+          "consistent": true,
+          "checks": [],
+          "limitation": "Literal arithmetic only; source support and ambiguous comparisons require semantic review."
+        },
+        "counterevidence": {
+          "consistent": true,
+          "checks": [],
+          "limitation": "Literal arithmetic only; source support and ambiguous comparisons require semantic review."
+        },
+        "uncertainty": {
+          "consistent": true,
+          "checks": [],
+          "limitation": "Literal arithmetic only; source support and ambiguous comparisons require semantic review."
+        }
+      }
+    }
+  ]
+}

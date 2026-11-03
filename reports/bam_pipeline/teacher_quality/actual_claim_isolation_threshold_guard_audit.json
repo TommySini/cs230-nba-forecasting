@@ -1,0 +1,414 @@
+{
+  "scope": "Offline literal lower-bound precision guard; frozen request objects unchanged. This does not score source entailment or ranks.",
+  "implementation_sha256": "de86c9bdf6e1312617258b623fa4c419f90b82fcec2bbdd1782884e746732d4b",
+  "flagged_request_ids": [
+    "2b382af1bfd20bc1362e527e05e0e222c182c25d51957157d1e64dd745c72fc3"
+  ],
+  "rows": [
+    {
+      "request_id": "03a76d37c1e002182f4a0f5e6b6010922e17892bdab3b6bf5fd6094dc39c1c46",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "1290968f4c46d24f2333f19d67d6170b0dad3d3e234ee9aaeaed9ce7397b76ed",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "2b382af1bfd20bc1362e527e05e0e222c182c25d51957157d1e64dd745c72fc3",
+      "checks": {
+        "fact": {
+          "supported_precision": false,
+          "flags": [
+            {
+              "candidate": "averages 20 points, six rebounds, and eight assists",
+              "reason": "Cited matching statistics are lower bounds, not exact averages; retain at least or cite independent exact averages."
+            }
+          ],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "35d779523ac336318ad9ef86ec8eca175c3d156f3e1ce348076aa954d2cc7e36",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "3863fc31ab317eed89afe85ceb5e21b8a87e44afd06087f446a87f14d55e3730",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "39cb851c88fa25ef5d6267b3151e9c9a00c640fb61ba0f3864a8c9dec2a4dd8a",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "49a115df832bb8cb69b5537bc05322702f7f6da7ca1260d366625693143eeb26",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "7b347de00c74a15dfd140681f2482e2a14ae1b93641a59b02733d6c00afdb785",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "8522a130b9fd16d92acbab26ed9383b7c708b3a6317a2c2ff2e143d075e74bab",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "852f03be21fc69657c3c94a2e50311acef7f99135c7f8865d731c538927bb784",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "a274597dbb4945ddf4db2646495286e38e8af5b39b73b0c9fe4aeb489940c80f",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "b09e6036f12a6b4edf919be5ba3c9849efc6569206bacc4d94e82f1915188b45",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "d44a0b2e2042a82710d5bb0d84b87fffe0e6a2f19be724df22eddcb3e152f46d",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "ec27433cfff81b1e70773a9727471c3d79c43913313055ecf94103bea9e7f3e3",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "f4667a50aa681feb1c25a8fdba2a6e9a7948823de918c7d900e7772767372885",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    },
+    {
+      "request_id": "f9fe58a21b5760c078b2bb5340373d84d1791347625e7870818c3c3d6a1cab57",
+      "checks": {
+        "fact": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "interpretation": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "counterevidence": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        },
+        "uncertainty": {
+          "supported_precision": true,
+          "flags": [],
+          "limitation": "Literal qualifier consistency only; entities, statistical scope and source entailment still require semantic review."
+        }
+      }
+    }
+  ]
+}

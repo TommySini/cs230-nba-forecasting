@@ -1,0 +1,11 @@
+{
+  "active_html_sources": 25,
+  "base_protocol_workers_unchanged": {
+    "bam_data.py": "3599137e108a9fcefdab8918ffa745565612b912fe7b16b02be27d1146c9fc48",
+    "bam_postgame.py": "86e9dda381bab479233b1310c6034a6d5908cb0b0975df95a67748dec9bc37be"
+  },
+  "canonical_context_section_references_checked": 956,
+  "checks": "Every active HTML game passed existing bam_research.validate_game. Every context section maps to original page/section and identical canonical lines. No model inference or labels inspected.",
+  "status": "pass",
+  "tests": "72 data, collector, HTML, PDF adapter, postgame, fold-audit and leakage tests passed; pilot validator passed100 games."
+}

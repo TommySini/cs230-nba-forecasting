@@ -1,0 +1,93 @@
+{
+  "status": "diagnostic_not_pipeline_completion_or_approval",
+  "bam_research_sha256": "1f56ef1f19c072836ad577476747f43059dcb43514f1f8a7bf63776ded76b3ff",
+  "result_path": "data/probes/bam_cloud/20261101_reference_aborted/selection_result.json",
+  "result_sha256": "9cc657a248b5381a5482968f7765bab32e6ee8d4df80b469e8048ab21e21efb8",
+  "request_directory": "data/processed/bam_runs/bam_reference_v2_20261101",
+  "model": "Qwen/Qwen2.5-14B-Instruct@cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8",
+  "games": [
+    {
+      "game_id": "espn:401585272",
+      "counts": {
+        "requests": 23,
+        "mechanically_valid": 23,
+        "finish_stop": 23,
+        "retained_findings": 27,
+        "rejected_findings": 60,
+        "retained_decoded_tables": 2
+      },
+      "rejection_reasons": {
+        "Code-decoded fact must remain exact": 5,
+        "Unknown code-decoded table ID": 1,
+        "Current availability lacks explicit source status": 11,
+        "Numerical fact absent from citations; arithmetic requires code": 4,
+        "Duplicate selection finding ID": 10,
+        "unconverted data remains:  through 2024-01-25": 1,
+        "unconverted data remains: ; 2023-11-01; 2023-12-08 through 2023-12-14; 2023-12-22; 2023-12-28 through 2024-01-01; 2024-01-21 through 2024-01-25": 1,
+        "unconverted data remains:  through 2023-12-01; 2023-12-22; 2023-12-28 through 2023-12-29": 1,
+        "Dense tables require code-decoded fact; cited prose does not independently supply the claim": 26
+      },
+      "artifact_file": "data/probes/bam_diagnostics/reference_v2_selection_compact_validator/espn_401585272_artifacts.jsonl",
+      "findings_file": "data/probes/bam_diagnostics/reference_v2_selection_compact_validator/espn_401585272_findings.jsonl",
+      "request_sha256": "8f9c98542f436a10e06b4af8b53fe69aa6e66829664386e122c5eb23ea35567b"
+    },
+    {
+      "game_id": "espn:401704990",
+      "counts": {
+        "requests": 52,
+        "mechanically_valid": 51,
+        "finish_stop": 51,
+        "retained_findings": 47,
+        "rejected_findings": 107,
+        "retained_decoded_tables": 0,
+        "rejected": 1,
+        "finish_length": 1
+      },
+      "rejection_reasons": {
+        "Code-decoded fact must remain exact": 11,
+        "Numerical fact absent from citations; arithmetic requires code": 10,
+        "Incomplete generation must be retried": 1,
+        "Duplicate selection finding ID": 18,
+        "Current availability lacks explicit source status": 23,
+        "Dense tables require code-decoded fact; cited prose does not independently supply the claim": 37,
+        "Missing booster overlap": 3,
+        "Unknown citation source": 2,
+        "Invalid module/time scope": 3
+      },
+      "artifact_file": "data/probes/bam_diagnostics/reference_v2_selection_compact_validator/espn_401704990_artifacts.jsonl",
+      "findings_file": "data/probes/bam_diagnostics/reference_v2_selection_compact_validator/espn_401704990_findings.jsonl",
+      "request_sha256": "995554fc245379e55055107b4cb3bf4ce24b816d90c147ffcf545cf4dce2d55e"
+    },
+    {
+      "game_id": "espn:401705416",
+      "counts": {
+        "requests": 46,
+        "mechanically_valid": 46,
+        "finish_stop": 46,
+        "retained_findings": 39,
+        "rejected_findings": 103,
+        "retained_decoded_tables": 0
+      },
+      "rejection_reasons": {
+        "Code-decoded fact must remain exact": 5,
+        "Current availability lacks explicit source status": 18,
+        "Citation page/lines malformed": 1,
+        "Numerical fact absent from citations; arithmetic requires code": 8,
+        "Duplicate selection finding ID": 17,
+        "Dense tables require code-decoded fact; cited prose does not independently supply the claim": 37,
+        "Citation line absent from source": 1,
+        "Missing booster overlap": 9,
+        "unconverted data remains: , 2024-11-27, 2024-11-30, 2025-02-07": 1,
+        "unconverted data remains: , 2024-12-16, 2024-12-19, 2025-01-03 through 2025-02-26": 1,
+        "unconverted data remains:  through 2024-12-12": 1,
+        "unconverted data remains:  through 2024-12-26": 1,
+        "unconverted data remains:  through 2024-11-6, 2024-11-12 through 2024-11-21, 2024-11-8 through 2024-11-10, 2024-12-4, 2024-12-7, 2025-01-6 through 2025-01-8": 1,
+        "unconverted data remains: , 2025-01-04": 1,
+        "unconverted data remains: , 2025-02-26": 1
+      },
+      "artifact_file": "data/probes/bam_diagnostics/reference_v2_selection_compact_validator/espn_401705416_artifacts.jsonl",
+      "findings_file": "data/probes/bam_diagnostics/reference_v2_selection_compact_validator/espn_401705416_findings.jsonl",
+      "request_sha256": "7c2c15114d095d9a242b9f6d69d2924d509ffb19646c6f1e10b43e5cba7b6d20"
+    }
+  ]
+}

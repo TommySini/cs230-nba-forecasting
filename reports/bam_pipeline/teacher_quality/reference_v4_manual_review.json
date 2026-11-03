@@ -1,0 +1,1107 @@
+{
+  "run_id": "bam_reference_v4_20261102",
+  "status": "blocked_before_gold_quality_gate_failed",
+  "checklist_sha256": "91f3ed65f8653a668342bae04d406a657dd7ed06aeccf15a8a99b4b9e9c7e20c",
+  "protocol_sha256": "fcf5e0a417f14123f21ed8c68973fca62a6a96871a3e873898a298a0d046a248",
+  "scope": "Source-based manual review; checklist is targeted and not exhaustive. No generated output approved by this initialization.",
+  "games": [
+    {
+      "game_id": "espn:401704990",
+      "checks": [
+        {
+          "id": "espn:401704990-check-01",
+          "expectation": "Strus returned Dec20 after missing 27 games; he played again Dec23. Avoid treating the older absence as current out.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Partial: Strus Dec20 debut after27missed retained; Dec23return not explicit in selected fact. Repairs pending.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704990-check-01",
+            "visible_reference_lines": 5,
+            "reference_lines": 8,
+            "missing": [
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                26,
+                20
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                26,
+                21
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                26,
+                22
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401704990-check-02",
+          "expectation": "Okoro missed Dec20\u201323 with right shoulder AC joint sprain. This prior-game history does not itself confirm Dec27 status.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Partial: last-three-game injury absence retained as prior-game history; exact AC-joint detail not selected.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704990-check-02",
+            "visible_reference_lines": 7,
+            "reference_lines": 9,
+            "missing": [
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                33,
+                70
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                33,
+                71
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401704990-check-03",
+          "expectation": "Merrill was the last-game starter and scored 20 in his second start Dec23; do not assert a confirmed next-game starting lineup.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Pending: season2starts canonical table retained, but latest-game starting role/20points not yet retained; first-page finding repair pending.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704990-check-03",
+            "visible_reference_lines": 3,
+            "reference_lines": 5,
+            "missing": [
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                90
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                92
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401704990-check-04",
+          "expectation": "Current injury section links to an external injury report but does not include its contents; current injury certainty is limited.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Not explicit in initial retained findings; first-page finding repair pending.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704990-check-04",
+            "visible_reference_lines": 0,
+            "reference_lines": 2,
+            "missing": [
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                104
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                105
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401704990-check-05",
+          "expectation": "This starts a four-game road trip; latest listed game was Dec23. Dec30\u201331 is an upcoming back-to-back, not tonight.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Partial: Dec23lastgame/Dec27next game retained; four-game roadtrip and future back-to-back distinction not explicit.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704990-check-05",
+            "visible_reference_lines": 0,
+            "reference_lines": 7,
+            "missing": [
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                36
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                38
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                39
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                43
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                44
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                45
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                46
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401704990-check-06",
+          "expectation": "CLE won the earlier Denver matchup Dec5, but one earlier matchup cannot certify a repeat result.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Not explicit in initial retained findings; season matchup tables retained.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704990-check-06",
+            "visible_reference_lines": 0,
+            "reference_lines": 4,
+            "missing": [
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                36
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                38
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                2,
+                26
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                2,
+                28
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401704990-check-07",
+          "expectation": "Recent shooting is salient: three straight games with 20+ threes, .443 over the last four. Distinguish this short stretch from season .406.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Partial:20-plus-three shooting generality retained; specific three-game/four-game windows not yet retained.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704990-check-07",
+            "visible_reference_lines": 0,
+            "reference_lines": 6,
+            "missing": [
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                42
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                44
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                47
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                48
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                50
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                51
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401704990-check-08",
+          "expectation": "Both teams score heavily in season averages; CLE121.8/110.2 opponent PPG and DEN119.1/116.1 are season rates, not tonight predictions. Table claims require decoder support.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present: canonicalCLE121.8/110.2,DEN119.1/116.1table facts retain season scope.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704990-check-08",
+            "visible_reference_lines": 4,
+            "reference_lines": 4,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401704990-check-09",
+          "expectation": "LeVert double-figure scoring in 8 of last10 and Jerome shooting/bench contribution add rotation depth; qualified rankings are not causal effects.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Partial: Jerome qualified50/40/90fact retained; LeVert8of10 not yet retained; first-page finding repair pending.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704990-check-09",
+            "visible_reference_lines": 0,
+            "reference_lines": 4,
+            "missing": [
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                95
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                97
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                98
+              ],
+              [
+                "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+                1,
+                99
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401704990-check-10",
+          "expectation": "Page3 concerns Golden State, the next opponent, and must not be attributed to Denver.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Canonical next-opponent table explicitly labels Warriors, separate from Nuggets; final synthesis must retain distinction.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704990-check-10",
+            "visible_reference_lines": 4,
+            "reference_lines": 4,
+            "missing": []
+          }
+        }
+      ],
+      "additional_findings": []
+    },
+    {
+      "game_id": "espn:401585272",
+      "checks": [
+        {
+          "id": "espn:401585272-check-01",
+          "expectation": "Gordon played29 minutes Jan25; Dec28 missing-injury recap is stale and cannot establish Jan27 out.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Current Gordon season baseline present, but Jan25played29minutes not explicit in retained findings.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401585272-check-01",
+            "visible_reference_lines": 2,
+            "reference_lines": 5,
+            "missing": [
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                4,
+                47
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                4,
+                48
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                4,
+                49
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401585272-check-02",
+          "expectation": "Updated injury status is only an external link, not captured contents. Do not assert current Embiid or Denver availability from historical performances.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "External injury-report evidence limitation not explicit in retained findings.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401585272-check-02",
+            "visible_reference_lines": 1,
+            "reference_lines": 3,
+            "missing": [
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                1,
+                61
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                1,
+                62
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401585272-check-03",
+          "expectation": "Denver returns after a five-game road stretch and Jan25 Knicks loss; dates distinguish prior workload from tonight.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present:Jan25Knicks loss ending five-game roadtrip3-2 retained.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401585272-check-03",
+            "visible_reference_lines": 3,
+            "reference_lines": 8,
+            "missing": [
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                1,
+                51
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                1,
+                52
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                1,
+                53
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                1,
+                54
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                1,
+                55
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401585272-check-04",
+          "expectation": "Murray9points/29minutes Jan25 follows31points/37minutes Jan23. Porter5points in each of those games contrasts with15.9seasonaverage; retain windows.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Not explicit: Jan25/Jan23Murray andPorter recent comparison omitted from initial retained findings.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401585272-check-04",
+            "visible_reference_lines": 8,
+            "reference_lines": 8,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401585272-check-05",
+          "expectation": "Jokic had31points Jan25 and31/13/10 Jan23; this provides current offensive context without asserting future production.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Partial:JokicJan23high scoring retained indirectly; exactJan25/Jan23comparison omitted.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401585272-check-05",
+            "visible_reference_lines": 4,
+            "reference_lines": 4,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401585272-check-06",
+          "expectation": "Prior Philadelphia meeting Jan16 was a Denver121\u2013126loss; Embiid41 is historical and does not confirm current participation.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Not explicit in retained findings:Jan16PHIresult/Embiidhistoricalscope.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401585272-check-06",
+            "visible_reference_lines": 5,
+            "reference_lines": 8,
+            "missing": [
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                3,
+                13
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                3,
+                14
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                3,
+                19
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401585272-check-07",
+          "expectation": "Tonight opponent is Philadelphia, with Milwaukee next. Distinguish their season averages and do not swap the tables.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present: canonical76ers vsNuggets tables separated from Bucks vsNuggets.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401585272-check-07",
+            "visible_reference_lines": 8,
+            "reference_lines": 8,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401585272-check-08",
+          "expectation": "14-game made-three streak lives in New Years Day subsection, not Jan27 current streak.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "No current14-game overallstreak claimed; selectedJan25fact instead refers14gamesagainstNewYork. HistoricalJan1streak not explicit.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401585272-check-08",
+            "visible_reference_lines": 0,
+            "reference_lines": 7,
+            "missing": [
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                4,
+                39
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                4,
+                40
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                4,
+                41
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                4,
+                42
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                4,
+                43
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                4,
+                44
+              ],
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                4,
+                45
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401585272-check-09",
+          "expectation": "Boston recap says Jan20 while schedule says Jan19; flag source date inconsistency rather than silently asserting one exact recap date.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Unresolved:Boston prior performance retained without date-conflict flag; schedule comparison not explicit.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401585272-check-09",
+            "visible_reference_lines": 5,
+            "reference_lines": 6,
+            "missing": [
+              [
+                "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+                1,
+                51
+              ]
+            ]
+          }
+        }
+      ],
+      "additional_findings": []
+    },
+    {
+      "game_id": "espn:401705416",
+      "checks": [
+        {
+          "id": "espn:401705416-check-01",
+          "expectation": "Ivey explicitly OUT with left fibula fracture in current injury/status report. Publisher typo Jadey should be noted or linked to roster Jaden Ivey.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present: currentOUTleftfibula fact retained with publisher spellingJadey; identity spelling resolution remains.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401705416-check-01",
+            "visible_reference_lines": 3,
+            "reference_lines": 3,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401705416-check-02",
+          "expectation": "Fontecchio missedFeb24/26 with right finger dislocation. Current report only namesIvey; prior absences alone do not establish Fontecchio outFeb28.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present as recent-history: Fontecchio inactive lasttwo; no explicit currentout assertion.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401705416-check-02",
+            "visible_reference_lines": 6,
+            "reference_lines": 9,
+            "missing": [
+              [
+                "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+                17,
+                8
+              ],
+              [
+                "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+                17,
+                24
+              ],
+              [
+                "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+                17,
+                25
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401705416-check-03",
+          "expectation": "Eight-game winning streak sinceFeb7; recent105.9defensive rating/124.1PPG must retain window and avoid guaranteed continuation.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present: eight-game streak and scoped124.1/105.9figures retained.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401705416-check-03",
+            "visible_reference_lines": 7,
+            "reference_lines": 7,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401705416-check-04",
+          "expectation": "Paint scoring is salient against Denver, but source conflicts on14vs15games; broad directional observation or explicit inconsistency is safer than a precise unqualified sample.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Partial: paint strength retained broadly;14vs15sample conflict not explicit.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401705416-check-04",
+            "visible_reference_lines": 7,
+            "reference_lines": 13,
+            "missing": [
+              [
+                "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+                5,
+                30
+              ],
+              [
+                "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+                5,
+                31
+              ],
+              [
+                "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+                5,
+                32
+              ],
+              [
+                "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+                5,
+                33
+              ],
+              [
+                "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+                5,
+                34
+              ],
+              [
+                "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+                6,
+                12
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401705416-check-05",
+          "expectation": "Beasley hit six threes and26benchpoints againstBostonFeb26; season235threes is not the same metric/window.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Partial: strongBeasleythree-point role retained; latest26points/sixthrees not explicit, stale229seasonvalue appears and must be reconciled.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401705416-check-05",
+            "visible_reference_lines": 5,
+            "reference_lines": 5,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401705416-check-06",
+          "expectation": "Boston win came with Brown and Kornet inactive; preserve this countercontext if using that result as strength evidence.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Not explicit in initial retained findings:BostonBrown/Kornetcountercontext omitted.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401705416-check-06",
+            "visible_reference_lines": 2,
+            "reference_lines": 2,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401705416-check-07",
+          "expectation": "Cunningham recent28.3/9.5/5.7 over24games vs season25.7/6.3/9.5; distinguish rate, statistic order and window.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Partial: canonical season25.7/6.3/9.5retained; initial prose erroneously converts20/6/8threshold into averages. Recent24gamewindow not explicit.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401705416-check-07",
+            "visible_reference_lines": 6,
+            "reference_lines": 6,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401705416-check-08",
+          "expectation": "Latest gameFeb26; Feb28 starts a home back-to-back withMar1Brooklyn, not the second night.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Not explicit in retained findings: current first-night back-to-back distinction.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401705416-check-08",
+            "visible_reference_lines": 4,
+            "reference_lines": 4,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401705416-check-09",
+          "expectation": "Denver inactive names on Dec28 recap are prior opponent history, not current Denver status.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "No retained claim of currentDenverabsence fromDec28recap identified.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401705416-check-09",
+            "visible_reference_lines": 0,
+            "reference_lines": 2,
+            "missing": [
+              [
+                "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+                3,
+                61
+              ],
+              [
+                "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+                3,
+                62
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401705416-check-10",
+          "expectation": "Stewart rim-defense and bench role deserve consideration, but individual defensive percentages are descriptive and lineup/context dependent.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Partial:Stewartblocks and benchminutes retained; rim-defense percentage context needs final review.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401705416-check-10",
+            "visible_reference_lines": 7,
+            "reference_lines": 7,
+            "missing": []
+          }
+        }
+      ],
+      "additional_findings": []
+    },
+    {
+      "game_id": "espn:401704882",
+      "checks": [
+        {
+          "id": "espn:401704882-check-01",
+          "expectation": "The 52 regular-season made-three streak belongs to Tyler Herro, not Duncan Robinson. Page1 card #14 and page4 explicit prose resolve the neighboring-name ambiguity.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present: explicit p4Herro52/57prose correctly attributed; neighboringRobinsoncard not used.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704882-check-01",
+            "visible_reference_lines": 3,
+            "reference_lines": 11,
+            "missing": [
+              [
+                "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+                1,
+                43
+              ],
+              [
+                "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+                1,
+                44
+              ],
+              [
+                "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+                1,
+                46
+              ],
+              [
+                "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+                1,
+                48
+              ],
+              [
+                "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+                1,
+                49
+              ],
+              [
+                "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+                1,
+                50
+              ],
+              [
+                "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+                1,
+                51
+              ],
+              [
+                "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+                1,
+                52
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401704882-check-02",
+          "expectation": "Herro57 includes regular season and postseason;52 is regular-season only. These are consecutive games with a make, not57consecutive successful shot attempts. Cite continuation lines.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present:52regularseason versus57combined distinct, citedp4L22\u201330.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704882-check-02",
+            "visible_reference_lines": 6,
+            "reference_lines": 6,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401704882-check-03",
+          "expectation": "Miami is on the second game of a road back-to-back after TorontoDec1. This is explicit current workload context.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present: explicit currentsecondnightroadback-to-back selected.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704882-check-03",
+            "visible_reference_lines": 3,
+            "reference_lines": 3,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401704882-check-04",
+          "expectation": "Adebayo played38:36Dec1Toronto and scored13points; the5in the FG column is madefieldgoals, notpoints. Complete table-header/player citations and code decoding required.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present: canonical Adebayo Dec1 table gives38:36 and13PTS. Cited line20 names Adebayo in the RECENT GAMES heading; the separate card header is redundant for identity.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704882-check-04",
+            "visible_reference_lines": 5,
+            "reference_lines": 5,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401704882-check-05",
+          "expectation": "Herro36:49 and Butler34:25 onDec1 are recent workload context; retain names and MINheaders and avoid joining the two player sections.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present: canonical Herro36:49 and Butler34:25 facts cite distinct named RECENT GAMES headings and column/row lines. Omitted Herro card headerL52 does not remove identity because citedL67 explicitly names him.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704882-check-05",
+            "visible_reference_lines": 8,
+            "reference_lines": 9,
+            "missing": [
+              [
+                "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+                11,
+                52
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401704882-check-06",
+          "expectation": "Richardson has older DNP-CD rows but latestDec1 NWT; neither old coachdecisionDNP nor NWT proves currentDec2 absence/status.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present: canonicalRichardsonDec1NWT explicitly priorgame. No currentabsence assertion.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704882-check-06",
+            "visible_reference_lines": 9,
+            "reference_lines": 9,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401704882-check-07",
+          "expectation": "DruSmith ACL statement explicitly says last season11/22/23. Do not label him currently out forDec2based on it.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "No false currentACLabsence retained; canonicallatestDruSmithDNP-CD is priorgame. Explicit oldACLwarning not retained.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704882-check-07",
+            "visible_reference_lines": 3,
+            "reference_lines": 3,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401704882-check-08",
+          "expectation": "Highsmith latest listed game isDec1Toronto27:01; Nov24Dallas18:38 is older. Do not select an older row as most recent.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Present: canonicalHighsmithlatestDec1TOR27:01, no older-row recency confusion.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704882-check-08",
+            "visible_reference_lines": 6,
+            "reference_lines": 6,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401704882-check-09",
+          "expectation": "Current Boston matchup is first of four thisregularseason; 2023-24results below are historical. Cite the split sentence onpages3lines7\u20138 when using the recent visit record.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Partial: firstoffour/current and previousseason results retained;4-3visit record citation omitsL8Boston continuation.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704882-check-09",
+            "visible_reference_lines": 7,
+            "reference_lines": 7,
+            "missing": []
+          }
+        },
+        {
+          "id": "espn:401704882-check-10",
+          "expectation": "Rozier recent fourth-quarter role spans four games with dated examples; distinguish8.5fourth-quarterpoints from full-game scoring and do not extrapolate causal win effects.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Not explicit in initial retained findings:fourth-quarter8.5/four-game role omitted.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704882-check-10",
+            "visible_reference_lines": 2,
+            "reference_lines": 4,
+            "missing": [
+              [
+                "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+                4,
+                17
+              ],
+              [
+                "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+                4,
+                18
+              ]
+            ]
+          }
+        },
+        {
+          "id": "espn:401704882-check-11",
+          "expectation": "Miami held opponents under100five times, all wins: conditional historical record, not proof opponent will scoreunder100 or a causal guaranteed-win rule.",
+          "selection_review": {
+            "stage": "initial_pass_repairs_pending",
+            "assessment": "Factpresent but interpretation overstates directionaldefensivecontrol from conditionalrecord; independentreview required.",
+            "approved": false
+          },
+          "module_review": null,
+          "gold_review": null,
+          "final_selection_source_context": {
+            "id": "espn:401704882-check-11",
+            "visible_reference_lines": 3,
+            "reference_lines": 3,
+            "missing": []
+          }
+        }
+      ],
+      "additional_findings": []
+    }
+  ],
+  "selection_limitation": "Initial finding assessments remain a historical first-pass review. Final selection line coverage is provided separately per check; line presence is not entailment or semantic completeness. All eight documented initial issues remain in selected evidence.",
+  "pipeline_failure": {
+    "error": "Complete research request exceeds fixed context: ac700202397753237c56e141665c77bfb75cf0519e8dc79683902c490f8c2fe6",
+    "stage": "modules",
+    "started_utc": "2026-11-02T00:29:23.899111+00:00",
+    "status": "failed",
+    "traceback": "Traceback (most recent call last):\n  File \"/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/read-then-continue-dataset-09962af6/scripts/run_bam_pipeline.py\", line 700, in run\n    paths=methods[name]()\n  File \"/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/read-then-continue-dataset-09962af6/scripts/run_bam_pipeline.py\", line 399, in modules\n    resolved=self.resolve(requests,self.student,reviewer=self.teacher)\n  File \"/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/read-then-continue-dataset-09962af6/scripts/run_bam_pipeline.py\", line 323, in resolve\n    responses=self.raw([item['current'] for item in active],model)\n  File \"/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/read-then-continue-dataset-09962af6/scripts/run_bam_pipeline.py\", line 280, in raw\n    self.save_requests(requests,model)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/read-then-continue-dataset-09962af6/scripts/run_bam_pipeline.py\", line 276, in save_requests\n    raise PipelineBlocked('Complete research request exceeds fixed context: '+request['request_id'])\nrun_bam_pipeline.PipelineBlocked: Complete research request exceeds fixed context: ac700202397753237c56e141665c77bfb75cf0519e8dc79683902c490f8c2fe6\n"
+  },
+  "manual_quality_conclusion": "Seven original sentinel errors and six unsupported2023milestone date fields occur in automatically approved artifacts. No gold/export completed; source checklist module/gold assessments remain incomplete."
+}

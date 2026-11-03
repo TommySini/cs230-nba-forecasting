@@ -1,0 +1,202 @@
+{
+  "review_date_local": "2026-10-30",
+  "reviewed_publisher_templates": [
+    "ATL",
+    "BKN",
+    "BOS",
+    "CHA",
+    "CHI",
+    "CLE",
+    "DAL",
+    "DEN",
+    "DET",
+    "HOU",
+    "IND",
+    "LAC",
+    "LAL",
+    "MEM",
+    "MIA",
+    "MIN",
+    "NOP",
+    "TOR",
+    "UTA"
+  ],
+  "scope": "Front-page publisher templates visually inspected; per-document timestamp, matchup, date, season and prior-record/game-number checks are mandatory. This is not manual fact-checking of every sentence or approval of entire packets.",
+  "selection": "One passing archived front-page packet per game; prefer more extractable words, then publisher and source hash. Never use outcomes or model scores for document selection.",
+  "visual_spot_checks": [
+    {
+      "team": "BOS",
+      "game_id": "espn:401584131",
+      "archive_sha256": "26c47f272d0531ee7633b8247cd77ee60cf0e673717d73595fa2135b7c1f34d9",
+      "pages": [
+        1
+      ],
+      "note": "November 24 2023 Boston at Orlando; date, matchup, prior records, last-game player statistics and quick notes; schedule column excluded by line rule."
+    },
+    {
+      "team": "CLE",
+      "game_id": "espn:401705363",
+      "archive_sha256": "8203a0782d269826018cc69a83af45b3f99c6019874047ecb7243a2ec4ae6b84",
+      "pages": [
+        1
+      ],
+      "note": "February 21 2025 New York at Cleveland; independently reviewed and prior records checked in earlier source audit."
+    },
+    {
+      "team": "DEN",
+      "game_id": "espn:401584880",
+      "archive_sha256": "41ca9713d986baf2979a8045adc0eea4a66f7874cf6bb7c7285e3741fb600b0a",
+      "pages": [
+        1
+      ],
+      "note": "November 26 2023 San Antonio at Denver; prior records, player form and previous-game notes; schedule has target tipoff, no target score."
+    },
+    {
+      "team": "DET",
+      "game_id": "espn:401584135",
+      "archive_sha256": "cc066d38448cb8a9a095b1825f5dc41a315620295999bbd601cb082b3b855756",
+      "pages": [
+        1
+      ],
+      "note": "November 24 2023 Detroit at Indiana; previous-game player lines, injury/status and quick facts; schedule column separated."
+    },
+    {
+      "team": "HOU",
+      "game_id": "espn:401584724",
+      "archive_sha256": "5f18533c74b031c9326d1bcd8b58fc34f4cbfc9299bce1b858caf61d7580f46d",
+      "pages": [
+        1
+      ],
+      "note": "October 29 2023 Golden State at Houston; dated header, prior records and player form/status; opening-week example is model warmup-excluded."
+    },
+    {
+      "team": "MEM",
+      "game_id": "espn:401584859",
+      "archive_sha256": "c1f88cce16418d8fae1e0d7cf405618452887c229bd2323267566d679f240b53",
+      "pages": [
+        1
+      ],
+      "note": "November 22 2023 Memphis at Houston; header/game count, previous starters and Bear Necessities narrative; historical anniversary section is not a target recap."
+    },
+    {
+      "team": "ATL",
+      "game_id": "espn:401704961",
+      "archive_sha256": "844769ac50c1ef464d2e8097e7d82add94590b8bd69beed6d5c1f4e1688b271e",
+      "pages": [
+        1
+      ],
+      "note": "Front-page template visually reviewed against matchup/date and pregame layout; all selected documents require the per-document mechanical checks."
+    },
+    {
+      "team": "BKN",
+      "game_id": "espn:401810589",
+      "archive_sha256": "47b77338c89f4b5ed33998524a3b7b36422f30763737739b69f3fb06a50a6b9c",
+      "pages": [
+        1
+      ],
+      "note": "Front-page template visually reviewed against matchup/date and pregame layout; all selected documents require the per-document mechanical checks."
+    },
+    {
+      "team": "CHA",
+      "game_id": "espn:401704826",
+      "archive_sha256": "c6a49880b7be2c1685faa5c537efce05d7610851cb0b348af0adc151eeaad18b",
+      "pages": [
+        1
+      ],
+      "note": "Front-page template visually reviewed against matchup/date and pregame layout; all selected documents require the per-document mechanical checks."
+    },
+    {
+      "team": "CHI",
+      "game_id": "espn:401810239",
+      "archive_sha256": "8e5f04e018951398cfb61f4ac207416237f7837e4f7622de4e8d2e4df9f42fd3",
+      "pages": [
+        1
+      ],
+      "note": "Visually reviewed. The December 19 2025 packet names United Center even though Chicago is visiting Cleveland. This specific version is excluded; template review does not override the exclusion."
+    },
+    {
+      "team": "DAL",
+      "game_id": "espn:401704967",
+      "archive_sha256": "9dd9fd040b03ef92b096d3e3bb08472b63ad642d8d85c161510916125b7c4bfd",
+      "pages": [
+        1
+      ],
+      "note": "Front-page template visually reviewed against matchup/date and pregame layout; all selected documents require the per-document mechanical checks."
+    },
+    {
+      "team": "IND",
+      "game_id": "espn:401810496",
+      "archive_sha256": "d150261d51ab00e17c59b39ccd5df8f9d5350c11a0254fb973f9037bf01f7fcb",
+      "pages": [
+        1
+      ],
+      "note": "Front-page template visually reviewed against matchup/date and pregame layout; all selected documents require the per-document mechanical checks."
+    },
+    {
+      "team": "LAC",
+      "game_id": "espn:401704840",
+      "archive_sha256": "e850f30df57047606a07f9c7553e8bb7c695542a17251079a5bf8326e11b8761",
+      "pages": [
+        1
+      ],
+      "note": "Front-page template visually reviewed against matchup/date and pregame layout; all selected documents require the per-document mechanical checks."
+    },
+    {
+      "team": "LAL",
+      "game_id": "espn:401810273",
+      "archive_sha256": "0de83eba00324f863b394355c9f8e17aefdce47be0aed41d2a3d4b2fa8801b87",
+      "pages": [
+        1
+      ],
+      "note": "Front-page template visually reviewed against matchup/date and pregame layout; all selected documents require the per-document mechanical checks."
+    },
+    {
+      "team": "MIA",
+      "game_id": "espn:401810547",
+      "archive_sha256": "45057a7e1f4105f4b945925b2383f96e74d452dc618dc08cbe2e62e2d9513ea7",
+      "pages": [
+        1
+      ],
+      "note": "Front-page template visually reviewed against matchup/date and pregame layout; all selected documents require the per-document mechanical checks."
+    },
+    {
+      "team": "MIN",
+      "game_id": "espn:401704961",
+      "archive_sha256": "7dd3bc9d27512c2ebdd50e1261ba44e1f5205831407e333ecd732cbf3296a3b1",
+      "pages": [
+        1
+      ],
+      "note": "Front-page template visually reviewed against matchup/date and pregame layout; all selected documents require the per-document mechanical checks."
+    },
+    {
+      "team": "NOP",
+      "game_id": "espn:401704874",
+      "archive_sha256": "0fc8754da516c02599cfc6ac6ba33713a0ac35afdec9df4b874ddb81e67efee3",
+      "pages": [
+        1
+      ],
+      "note": "Front-page template visually reviewed against matchup/date and pregame layout; all selected documents require the per-document mechanical checks."
+    },
+    {
+      "team": "TOR",
+      "game_id": "espn:401810306",
+      "archive_sha256": "8115d8a243c792bccd41ac44cca2ccebc4c0afa0ed7a42cb04e3cf9964f06fa3",
+      "pages": [
+        1
+      ],
+      "note": "Front-page template visually reviewed against matchup/date and pregame layout; all selected documents require the per-document mechanical checks."
+    },
+    {
+      "team": "UTA",
+      "game_id": "espn:401810190",
+      "archive_sha256": "f70417ebbdf3251483067df13d93175cc94b1dde1aa07f7ea4af6c19bc09ee30",
+      "pages": [
+        1
+      ],
+      "note": "Front-page template visually reviewed against matchup/date and pregame layout; all selected documents require the per-document mechanical checks."
+    }
+  ],
+  "excluded_source_hashes": {
+    "8e5f04e018951398cfb61f4ac207416237f7837e4f7622de4e8d2e4df9f42fd3": "manual_review_wrong_venue_United_Center_for_Chicago_at_Cleveland"
+  }
+}

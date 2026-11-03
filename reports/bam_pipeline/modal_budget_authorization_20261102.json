@@ -1,0 +1,13 @@
+{
+  "cap_usd": 150,
+  "interpretation": "Remaining Modal compute from explicit user answer; active diagnostic counted at full maximum reservation. Earlier completed work is outside this remaining cap.",
+  "answer_received_utc": "2026-11-02T02:03:00Z",
+  "ledger_path": "/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/read-then-continue-dataset-09962af6/data/processed/bam_budget/remaining_150_20261102.json",
+  "existing_call": {
+    "call_id": "fc-01M6CZD7SD90HHEGRKFR4NNP9P",
+    "scope": "active235Bdiagnostic at usercap answer",
+    "run_id": "bam_actual_claim_teacher235_nccl_20261102"
+  },
+  "rate_source": "https://modal.com/pricing",
+  "estimate_not_invoice": true
+}

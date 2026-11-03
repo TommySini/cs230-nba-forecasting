@@ -1,0 +1,1067 @@
+{
+  "status": "eligibility_screen_only",
+  "scope": "Existing source approvals and numerical inputs; no new forecasts, note processing, or model fitting performed.",
+  "policy": {
+    "minimum_oof_fit_games": 200,
+    "fitting_history": "Strictly before target calendar month",
+    "feature_warmup": "Both teams have at least five previous games"
+  },
+  "counts": {
+    "baseline_feature_warmup": 13,
+    "insufficient_earlier_monthly_fit_history": 45,
+    "eligible_for_preparation": 91
+  },
+  "original_train_games": 80,
+  "potential_train_games": 171,
+  "source_sha256": {
+    "data/processed/game_notes_collection/approved_excerpts.jsonl": "fc3cccb4b60460c822369d140ad549c5e0dbf626de89dd5d02296090d65b76c9",
+    "data/processed/gradient_boosting/inputs.jsonl": "35658cc9ce33668de05c7d9ed5da4e6c0b16b81b2147dddc2d8efb7da2854067",
+    "config/boosting_notes.json": "155831d7dbad076576e20f592aa34443d1283b9b4b75339bbc0752f1e6e031e9",
+    "config/gradient_boosting.json": "bde7b99c6abe0c39af84115907dd4eeca71951ebb311486f2699fc36efbe4060"
+  },
+  "games": [
+    {
+      "game_id": "espn:401584689",
+      "game_date_et": "2023-10-24",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584696",
+      "game_date_et": "2023-10-25",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584699",
+      "game_date_et": "2023-10-25",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584705",
+      "game_date_et": "2023-10-27",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584706",
+      "game_date_et": "2023-10-27",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584708",
+      "game_date_et": "2023-10-27",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584723",
+      "game_date_et": "2023-10-29",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584724",
+      "game_date_et": "2023-10-29",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584731",
+      "game_date_et": "2023-10-30",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584737",
+      "game_date_et": "2023-10-30",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584743",
+      "game_date_et": "2023-11-01",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584751",
+      "game_date_et": "2023-11-01",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584094",
+      "game_date_et": "2023-11-03",
+      "status": "baseline_feature_warmup",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584095",
+      "game_date_et": "2023-11-03",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584768",
+      "game_date_et": "2023-11-05",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584772",
+      "game_date_et": "2023-11-05",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584773",
+      "game_date_et": "2023-11-06",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584782",
+      "game_date_et": "2023-11-06",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584784",
+      "game_date_et": "2023-11-06",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584787",
+      "game_date_et": "2023-11-08",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584792",
+      "game_date_et": "2023-11-08",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584793",
+      "game_date_et": "2023-11-08",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584797",
+      "game_date_et": "2023-11-08",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584096",
+      "game_date_et": "2023-11-10",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584098",
+      "game_date_et": "2023-11-10",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584106",
+      "game_date_et": "2023-11-14",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584112",
+      "game_date_et": "2023-11-14",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584119",
+      "game_date_et": "2023-11-17",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584834",
+      "game_date_et": "2023-11-18",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584856",
+      "game_date_et": "2023-11-22",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584859",
+      "game_date_et": "2023-11-22",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584131",
+      "game_date_et": "2023-11-24",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584135",
+      "game_date_et": "2023-11-24",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584136",
+      "game_date_et": "2023-11-24",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584877",
+      "game_date_et": "2023-11-26",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584880",
+      "game_date_et": "2023-11-26",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584886",
+      "game_date_et": "2023-11-29",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 0,
+      "latest_fitting_date": null
+    },
+    {
+      "game_id": "espn:401584903",
+      "game_date_et": "2023-12-01",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401584905",
+      "game_date_et": "2023-12-01",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401584907",
+      "game_date_et": "2023-12-01",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401584911",
+      "game_date_et": "2023-12-02",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401584916",
+      "game_date_et": "2023-12-02",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401616475",
+      "game_date_et": "2023-12-08",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401616478",
+      "game_date_et": "2023-12-08",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401584927",
+      "game_date_et": "2023-12-11",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401584935",
+      "game_date_et": "2023-12-12",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401584938",
+      "game_date_et": "2023-12-13",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401584947",
+      "game_date_et": "2023-12-14",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401584955",
+      "game_date_et": "2023-12-15",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401584960",
+      "game_date_et": "2023-12-15",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401584984",
+      "game_date_et": "2023-12-18",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401585030",
+      "game_date_et": "2023-12-25",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401585034",
+      "game_date_et": "2023-12-26",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401585049",
+      "game_date_et": "2023-12-28",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401585053",
+      "game_date_et": "2023-12-28",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401585060",
+      "game_date_et": "2023-12-29",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401585066",
+      "game_date_et": "2023-12-29",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401585077",
+      "game_date_et": "2023-12-31",
+      "status": "insufficient_earlier_monthly_fit_history",
+      "prior_month_fit_games": 192,
+      "latest_fitting_date": "2023-11-30"
+    },
+    {
+      "game_id": "espn:401585081",
+      "game_date_et": "2024-01-01",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585083",
+      "game_date_et": "2024-01-01",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585088",
+      "game_date_et": "2024-01-02",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585090",
+      "game_date_et": "2024-01-02",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585098",
+      "game_date_et": "2024-01-03",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585102",
+      "game_date_et": "2024-01-03",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585106",
+      "game_date_et": "2024-01-04",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585107",
+      "game_date_et": "2024-01-05",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585116",
+      "game_date_et": "2024-01-05",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585118",
+      "game_date_et": "2024-01-05",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585119",
+      "game_date_et": "2024-01-05",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585130",
+      "game_date_et": "2024-01-07",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585140",
+      "game_date_et": "2024-01-09",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585143",
+      "game_date_et": "2024-01-09",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585152",
+      "game_date_et": "2024-01-10",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585162",
+      "game_date_et": "2024-01-12",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585165",
+      "game_date_et": "2024-01-12",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585167",
+      "game_date_et": "2024-01-12",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585186",
+      "game_date_et": "2024-01-15",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585188",
+      "game_date_et": "2024-01-15",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585191",
+      "game_date_et": "2024-01-15",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585199",
+      "game_date_et": "2024-01-17",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585202",
+      "game_date_et": "2024-01-17",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585210",
+      "game_date_et": "2024-01-18",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585214",
+      "game_date_et": "2024-01-19",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585220",
+      "game_date_et": "2024-01-20",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585234",
+      "game_date_et": "2024-01-22",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585237",
+      "game_date_et": "2024-01-22",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585247",
+      "game_date_et": "2024-01-24",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585249",
+      "game_date_et": "2024-01-24",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585259",
+      "game_date_et": "2024-01-25",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585266",
+      "game_date_et": "2024-01-26",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585272",
+      "game_date_et": "2024-01-27",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585280",
+      "game_date_et": "2024-01-28",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585282",
+      "game_date_et": "2024-01-28",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585287",
+      "game_date_et": "2024-01-29",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585295",
+      "game_date_et": "2024-01-29",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585303",
+      "game_date_et": "2024-01-31",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585310",
+      "game_date_et": "2024-01-31",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 400,
+      "latest_fitting_date": "2023-12-31"
+    },
+    {
+      "game_id": "espn:401585315",
+      "game_date_et": "2024-02-01",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585316",
+      "game_date_et": "2024-02-02",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585325",
+      "game_date_et": "2024-02-02",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585332",
+      "game_date_et": "2024-02-04",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585338",
+      "game_date_et": "2024-02-04",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585340",
+      "game_date_et": "2024-02-04",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585360",
+      "game_date_et": "2024-02-07",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585371",
+      "game_date_et": "2024-02-09",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585377",
+      "game_date_et": "2024-02-10",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585384",
+      "game_date_et": "2024-02-10",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585387",
+      "game_date_et": "2024-02-11",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585394",
+      "game_date_et": "2024-02-12",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585395",
+      "game_date_et": "2024-02-12",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585464",
+      "game_date_et": "2024-02-27",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585475",
+      "game_date_et": "2024-02-28",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 631,
+      "latest_fitting_date": "2024-01-31"
+    },
+    {
+      "game_id": "espn:401585574",
+      "game_date_et": "2024-03-13",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585590",
+      "game_date_et": "2024-03-15",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585593",
+      "game_date_et": "2024-03-15",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585600",
+      "game_date_et": "2024-03-16",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585605",
+      "game_date_et": "2024-03-17",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585606",
+      "game_date_et": "2024-03-17",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585617",
+      "game_date_et": "2024-03-18",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585626",
+      "game_date_et": "2024-03-20",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585629",
+      "game_date_et": "2024-03-20",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585637",
+      "game_date_et": "2024-03-21",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585639",
+      "game_date_et": "2024-03-22",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585643",
+      "game_date_et": "2024-03-22",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585651",
+      "game_date_et": "2024-03-23",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585662",
+      "game_date_et": "2024-03-25",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585663",
+      "game_date_et": "2024-03-25",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585668",
+      "game_date_et": "2024-03-25",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585683",
+      "game_date_et": "2024-03-27",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585684",
+      "game_date_et": "2024-03-27",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585687",
+      "game_date_et": "2024-03-27",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585703",
+      "game_date_et": "2024-03-30",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585705",
+      "game_date_et": "2024-03-31",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 805,
+      "latest_fitting_date": "2024-02-29"
+    },
+    {
+      "game_id": "espn:401585715",
+      "game_date_et": "2024-04-01",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585716",
+      "game_date_et": "2024-04-01",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585727",
+      "game_date_et": "2024-04-02",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585732",
+      "game_date_et": "2024-04-03",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585733",
+      "game_date_et": "2024-04-03",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585735",
+      "game_date_et": "2024-04-03",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585739",
+      "game_date_et": "2024-04-04",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585742",
+      "game_date_et": "2024-04-04",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585752",
+      "game_date_et": "2024-04-04",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585746",
+      "game_date_et": "2024-04-05",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585749",
+      "game_date_et": "2024-04-05",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585758",
+      "game_date_et": "2024-04-06",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585762",
+      "game_date_et": "2024-04-07",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585772",
+      "game_date_et": "2024-04-09",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585776",
+      "game_date_et": "2024-04-09",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    },
+    {
+      "game_id": "espn:401585782",
+      "game_date_et": "2024-04-09",
+      "status": "eligible_for_preparation",
+      "prior_month_fit_games": 1035,
+      "latest_fitting_date": "2024-03-31"
+    }
+  ]
+}

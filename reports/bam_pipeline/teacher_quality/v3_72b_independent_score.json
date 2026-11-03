@@ -1,0 +1,4475 @@
+{
+  "model": "Qwen/Qwen2.5-72B-Instruct-AWQ@035adeffb861e8ee98344e2c7d8f50fe585e373d",
+  "benchmark_hash": "7058d7bc02b7b0bc27b8b4aa9cb750d93c7fa8dc446b55d053f054451b0eae4a",
+  "cases": 40,
+  "valid_responses": 40,
+  "binary_support_accuracy": 0.725,
+  "false_accept_count": 1,
+  "attempted_false_accept_count": 1,
+  "false_accept_rate": 0.0625,
+  "false_exclusion_count": 10,
+  "false_exclusion_rate": 0.4166666666666667,
+  "exact_three_way_cases": 28,
+  "exact_three_way_accuracy": 0.75,
+  "missing_or_invalid_responses": 0,
+  "measured_response_seconds": null,
+  "responses_with_runtime": 0,
+  "measured_batch_seconds": 126.567400346,
+  "complete_timed_batches": 1,
+  "batch_runtime_note": "Each complete reported batch counted once; excludes unreported startup/model loading. Incomplete or unidentified timing groups are not summed.",
+  "runtime_note": "Sum of reported per-response durations, not wall clock for concurrent batching. Absent runtimes remain unknown.",
+  "cases_detail": [
+    {
+      "case_id": "legacy-00",
+      "request_id": "45f96d9f7503ec1f2d1f509d35464bb36c16215f1265385e916c734ed4581946",
+      "category": "legacy_table_date_scope",
+      "expected_supported": false,
+      "expected_verdict": null,
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 10,
+          "lines": [
+            3,
+            7,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "quotations": [
+            {
+              "line": 3,
+              "text": "# 13     BAM ADEBAYO                                                      CENTER/FORWARD                        6’ 9”           260 LBS               7/18/97                   KENTUCKY                       7 YRS\n"
+            },
+            {
+              "line": 7,
+              "text": "Playing in 8th season with the HEAT, and 8th in the NBA.\n"
+            },
+            {
+              "line": 20,
+              "text": "                  BAM ADEBAYO RECENT GAMES\n"
+            },
+            {
+              "line": 21,
+              "text": "         DATE            OPP.            MIN              FG       FGA        3FG        3FGA         FT      FTA        OR       DR       TOT         A       PF      ST       TO       BS        +/-      PTS\n"
+            },
+            {
+              "line": 22,
+              "text": "         11/24/24        vs DAL          37:33              8        20         3           6          0         0         3        8        11        5        2        0       2        0        +4         19\n"
+            },
+            {
+              "line": 23,
+              "text": "         11/26/24        vs MIL          31:26              6         9         1           2          3         4         1        4         5        5        5        1       1        0        -14        16\n"
+            },
+            {
+              "line": 24,
+              "text": "         11/27/24        at CHA          36:03              3         8         0           2          2         2         1        9        10        10       1        2       3        0        +5          8\n"
+            },
+            {
+              "line": 25,
+              "text": "         11/29/24        vs TOR          34:36              6        16         2           6          0         1         2        8        10        10       2        3       1        0         0         14\n"
+            },
+            {
+              "line": 26,
+              "text": "         12/01/24        at TOR          38:36              5        13         1           2          2         2         4       16        20        7        3        1       5        0       +15         13\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "Bam Adebayo, 2024-25 season, 8th season with the HEAT, 8th in the NBA, recent games: 11/24/24 vs DAL 37:33, 11/26/24 vs MIL 31:26, 11/27/24 at CHA 36:03, 11/29/24 vs TOR 34:36, 12/01/24 at TOR 38:36"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Bam Adebayo",
+          "source_value": "Bam Adebayo",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2024-25 season",
+          "source_value": "2024-25 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "37 minutes per game",
+          "source_value": "37:33, 31:26, 36:03, 34:36, 38:36 minutes per game",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "season_to_date",
+          "source_value": "recent games from 11/24/24 to 12/01/24",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "has played in every game this season",
+          "source_value": "not established",
+          "assessment": "not_established"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 1, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26, 29, 33, 34, 35, 36, 37, 38, 39, 40, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 79",
+          "source_value": "lines 3, 7, 20, 21, 22, 23, 24, 25, 26",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [
+        "The claim asserts that Bam Adebayo has played in every game this season, but the source does not provide a complete list of games played or confirm that he has played in every game."
+      ],
+      "reason": "The source provides recent game data for Bam Adebayo, showing he has played in several games with minutes close to 37 per game. However, it does not confirm that he has played in every game this season, and the original citation is incomplete.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 10,
+          "lines": [
+            3,
+            7,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "quotations": [
+            {
+              "line": 3,
+              "text": "# 13     BAM ADEBAYO                                                      CENTER/FORWARD                        6’ 9”           260 LBS               7/18/97                   KENTUCKY                       7 YRS\n"
+            },
+            {
+              "line": 7,
+              "text": "Playing in 8th season with the HEAT, and 8th in the NBA.\n"
+            },
+            {
+              "line": 20,
+              "text": "                  BAM ADEBAYO RECENT GAMES\n"
+            },
+            {
+              "line": 21,
+              "text": "         DATE            OPP.            MIN              FG       FGA        3FG        3FGA         FT      FTA        OR       DR       TOT         A       PF      ST       TO       BS        +/-      PTS\n"
+            },
+            {
+              "line": 22,
+              "text": "         11/24/24        vs DAL          37:33              8        20         3           6          0         0         3        8        11        5        2        0       2        0        +4         19\n"
+            },
+            {
+              "line": 23,
+              "text": "         11/26/24        vs MIL          31:26              6         9         1           2          3         4         1        4         5        5        5        1       1        0        -14        16\n"
+            },
+            {
+              "line": 24,
+              "text": "         11/27/24        at CHA          36:03              3         8         0           2          2         2         1        9        10        10       1        2       3        0        +5          8\n"
+            },
+            {
+              "line": 25,
+              "text": "         11/29/24        vs TOR          34:36              6        16         2           6          0         1         2        8        10        10       2        3       1        0         0         14\n"
+            },
+            {
+              "line": 26,
+              "text": "         12/01/24        at TOR          38:36              5        13         1           2          2         2         4       16        20        7        3        1       5        0       +15         13\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "legacy-01",
+      "request_id": "2c88f934dc590dcd9947baa422715f98bb9fbac62a5cededcde96f35ec517175",
+      "category": "legacy_table_date_scope",
+      "expected_supported": false,
+      "expected_verdict": null,
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 12,
+          "lines": [
+            19,
+            20,
+            21
+          ],
+          "quotations": [
+            {
+              "line": 19,
+              "text": "            HAYWOOD HIGHSMITH RECENT GAMES\n"
+            },
+            {
+              "line": 20,
+              "text": "         DATE           OPP.            MIN              FG       FGA        3FG        3FGA         FT      FTA       OR       DR       TOT         A       PF      ST       TO      BS        +/-      PTS\n"
+            },
+            {
+              "line": 21,
+              "text": "         11/24/24       vs DAL          18:38              0         2         0           2          0        0         1        4         5        3        4       1        0        2        -7         0\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "HAYWOOD HIGHSMITH RECENT GAMES\nDATE           OPP.            MIN              FG       FGA        3FG        3FGA         FT      FTA       OR       DR       TOT         A       PF      ST       TO      BS        +/-      PTS\n11/24/24       vs DAL          18:38              0         2         0           2          0        0         1        4         5        3        4       1        0        2        -7         0"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Haywood Highsmith",
+          "source_value": "Haywood Highsmith",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "11/24/24",
+          "source_value": "11/24/24",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "18:38 minutes",
+          "source_value": "18:38",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "most recent game",
+          "source_value": "11/24/24",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [1, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 28, 32, 33, 34, 35, 36, 37, 38, 39, 40, 42, 43, 44, 45, 46, 47, 48, 49, 50, 53, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 69, 70, 71, 72, 73, 74, 75, 80]",
+          "source_value": "lines [19, 20, 21]",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim is supported by the source evidence, but the original citation is incomplete. The necessary lines to establish the claim are lines 19, 20, and 21.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 12,
+          "lines": [
+            19,
+            20,
+            21
+          ],
+          "quotations": [
+            {
+              "line": 19,
+              "text": "            HAYWOOD HIGHSMITH RECENT GAMES\n"
+            },
+            {
+              "line": 20,
+              "text": "         DATE           OPP.            MIN              FG       FGA        3FG        3FGA         FT      FTA       OR       DR       TOT         A       PF      ST       TO      BS        +/-      PTS\n"
+            },
+            {
+              "line": 21,
+              "text": "         11/24/24       vs DAL          18:38              0         2         0           2          0        0         1        4         5        3        4       1        0        2        -7         0\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "legacy-02",
+      "request_id": "cdd659ab8bd3d2e739a50396a200e36453484f3d99b3e2ed0dcf90709bc20a7a",
+      "category": "legacy_table_date_scope",
+      "expected_supported": false,
+      "expected_verdict": null,
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unsupported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 14,
+          "lines": [
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "quotations": [
+            {
+              "line": 19,
+              "text": "               JOSH RICHARDSON RECENT GAMES\n"
+            },
+            {
+              "line": 20,
+              "text": "         DATE            OPP.            MIN              FG       FGA        3FG        3FGA         FT       FTA       OR       DR        TOT        A       PF       ST      TO       BS        +/-       PTS\n"
+            },
+            {
+              "line": 21,
+              "text": "         11/24/24        vs DAL          DNP-CD\n"
+            },
+            {
+              "line": 22,
+              "text": "         11/26/24        vs MIL          DNP-CD\n"
+            },
+            {
+              "line": 23,
+              "text": "         11/27/24        at CHA          DNP-CD\n"
+            },
+            {
+              "line": 24,
+              "text": "         11/29/24        vs TOR          DNP-CD\n"
+            },
+            {
+              "line": 25,
+              "text": "         12/01/24        at TOR          NWT\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "JOSH RICHARDSON RECENT GAMES\nDATE            OPP.            MIN              FG       FGA        3FG        3FGA         FT       FTA       OR       DR        TOT        A       PF       ST      TO       BS        +/-       PTS\n11/24/24        vs DAL          DNP-CD\n11/26/24        vs MIL          DNP-CD\n11/27/24        at CHA          DNP-CD\n11/29/24        vs TOR          DNP-CD\n12/01/24        at TOR          NWT"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Josh Richardson",
+          "source_value": "Josh Richardson",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2024-12-02",
+          "source_value": "12/01/24 (latest date in the source)",
+          "assessment": "contradiction"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "not playing due to coach's decision (DNP-CD)",
+          "source_value": "DNP-CD",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "12/01/24 (latest date in the source)",
+          "assessment": "contradiction"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not playing due to coach's decision (DNP-CD)",
+          "source_value": "DNP-CD",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [1, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 28, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 52, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 79]",
+          "source_value": "lines [19, 20, 21, 22, 23, 24, 25]",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [
+        "The claim asserts the status on 2024-12-02, but the latest date in the source is 12/01/24.",
+        "The claim asserts the status is current, but the latest date in the source is 12/01/24."
+      ],
+      "reason": "The claim asserts that Josh Richardson is not playing due to coach's decision (DNP-CD) on 2024-12-02, but the latest date in the source is 12/01/24, and the source does not provide information for the game on 2024-12-02. The citation is also incomplete as it includes lines that are not necessary for the claim.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 14,
+          "lines": [
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "quotations": [
+            {
+              "line": 19,
+              "text": "               JOSH RICHARDSON RECENT GAMES\n"
+            },
+            {
+              "line": 20,
+              "text": "         DATE            OPP.            MIN              FG       FGA        3FG        3FGA         FT       FTA       OR       DR        TOT        A       PF       ST      TO       BS        +/-       PTS\n"
+            },
+            {
+              "line": 21,
+              "text": "         11/24/24        vs DAL          DNP-CD\n"
+            },
+            {
+              "line": 22,
+              "text": "         11/26/24        vs MIL          DNP-CD\n"
+            },
+            {
+              "line": 23,
+              "text": "         11/27/24        at CHA          DNP-CD\n"
+            },
+            {
+              "line": 24,
+              "text": "         11/29/24        vs TOR          DNP-CD\n"
+            },
+            {
+              "line": 25,
+              "text": "         12/01/24        at TOR          NWT\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unsupported"
+    },
+    {
+      "case_id": "legacy-03",
+      "request_id": "724a79a7ae834a8b13f977b1395346470a43105f93f9b12fb7b16d9fadfad95f",
+      "category": "legacy_table_date_scope",
+      "expected_supported": false,
+      "expected_verdict": null,
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 15,
+          "lines": [
+            14
+          ],
+          "quotations": [
+            {
+              "line": 14,
+              "text": "                              INJURY: Suffered a season-ending right ACL injury last season at CLE on 11/22/23.                                        4, vs. PHI 11/18        FG MADE              7, at MIL 3/9/23\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "INJURY: Suffered a season-ending right ACL injury last season at CLE on 11/22/23."
+        },
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 15,
+          "lines": [
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "quotations": [
+            {
+              "line": 21,
+              "text": "         11/24/24        vs DAL          Inactive\n"
+            },
+            {
+              "line": 22,
+              "text": "         11/26/24        vs MIL          Inactive\n"
+            },
+            {
+              "line": 23,
+              "text": "         11/27/24        at CHA          DNP-CD\n"
+            },
+            {
+              "line": 24,
+              "text": "         11/29/24        vs TOR          DNP-CD\n"
+            },
+            {
+              "line": 25,
+              "text": "         12/01/24        at TOR          DNP-CD\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "DATE            OPP.            MIN              FG       FGA        3FG        3FGA         FT      FTA        OR       DR       TOT         A      PF       ST       TO      BS        +/-       PTS\n11/24/24        vs DAL          Inactive\n11/26/24        vs MIL          Inactive\n11/27/24        at CHA          DNP-CD\n11/29/24        vs TOR          DNP-CD\n12/01/24        at TOR          DNP-CD"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Dru Smith",
+          "source_value": "Dru Smith",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2024-12-02",
+          "source_value": "2024-25 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "right ACL injury on November 22, 2023",
+          "source_value": "right ACL injury on 11/22/23",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "Inactive in recent games (11/24/24, 11/26/24, 11/27/24, 11/29/24, 12/01/24)",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "ruled out for this upcoming game",
+          "source_value": "Inactive in recent games (11/24/24, 11/26/24, 11/27/24, 11/29/24, 12/01/24)",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [1, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 28, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 94]",
+          "source_value": "lines [14, 21, 22, 23, 24, 25]",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim is supported by the source evidence, which confirms Dru Smith's right ACL injury on November 22, 2023, and his inactivity in recent games. However, the original citation is incomplete as it includes unnecessary lines and omits the essential lines that establish the current status.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 15,
+          "lines": [
+            14,
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "quotations": [
+            {
+              "line": 14,
+              "text": "                              INJURY: Suffered a season-ending right ACL injury last season at CLE on 11/22/23.                                        4, vs. PHI 11/18        FG MADE              7, at MIL 3/9/23\n"
+            },
+            {
+              "line": 21,
+              "text": "         11/24/24        vs DAL          Inactive\n"
+            },
+            {
+              "line": 22,
+              "text": "         11/26/24        vs MIL          Inactive\n"
+            },
+            {
+              "line": 23,
+              "text": "         11/27/24        at CHA          DNP-CD\n"
+            },
+            {
+              "line": 24,
+              "text": "         11/29/24        vs TOR          DNP-CD\n"
+            },
+            {
+              "line": 25,
+              "text": "         12/01/24        at TOR          DNP-CD\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "legacy-04",
+      "request_id": "c9a95b6df8af3a351bd769161e9ebe37bf3e403ae22f1d132fc60cfe745d351c",
+      "category": "legacy_table_date_scope",
+      "expected_supported": true,
+      "expected_verdict": null,
+      "valid": true,
+      "passed_binary": false,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 10,
+          "lines": [
+            26
+          ],
+          "quotations": [
+            {
+              "line": 26,
+              "text": "         12/01/24        at TOR          38:36              5        13         1           2          2         2         4       16        20        7        3        1       5        0       +15         13\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "Bam Adebayo played 38:36 minutes at Toronto on December 1, 2024."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Bam Adebayo",
+          "source_value": "Bam Adebayo",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "December 1, 2024",
+          "source_value": "December 1, 2024",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "38 minutes and 36 seconds",
+          "source_value": "38:36 minutes",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "prior_game",
+          "source_value": "prior_game",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [1, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26, 29, 33, 34, 35, 36, 37, 38, 39, 40, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 79]",
+          "source_value": "lines [26]",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim is supported by the source evidence, but the original citation is incomplete. The necessary line (26) is not included in the original citation.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 10,
+          "lines": [
+            26
+          ],
+          "quotations": [
+            {
+              "line": 26,
+              "text": "         12/01/24        at TOR          38:36              5        13         1           2          2         2         4       16        20        7        3        1       5        0       +15         13\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "legacy-05",
+      "request_id": "6eb3c4acc4e051778314d79bfb3ca9a2037838be4ac8d854a0840e7365160b26",
+      "category": "legacy_table_date_scope",
+      "expected_supported": true,
+      "expected_verdict": null,
+      "valid": true,
+      "passed_binary": false,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 11,
+          "lines": [
+            73
+          ],
+          "quotations": [
+            {
+              "line": 73,
+              "text": "         12/01/24        at TOR         36:49              9        16          6         12          7        7         0        4         4        3        1        2       1        0       -11        31\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "12/01/24 at TOR 36:49 9 16 6 12 7 7 0 4 4 3 1 2 1 0 -11 31"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Tyler Herro",
+          "source_value": "Tyler Herro",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "December 1, 2024",
+          "source_value": "12/01/24",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "36 minutes and 49 seconds",
+          "source_value": "36:49",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "prior_game",
+          "source_value": "12/01/24",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [1, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 27, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 43, 44, 45, 46, 47, 48, 49, 52, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 78]",
+          "source_value": "lines [73]",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim is supported by the source evidence, but the original citation is incomplete. The necessary line (73) is included, but the claim cites many unnecessary lines.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 11,
+          "lines": [
+            73
+          ],
+          "quotations": [
+            {
+              "line": 73,
+              "text": "         12/01/24        at TOR         36:49              9        16          6         12          7        7         0        4         4        3        1        2       1        0       -11        31\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "legacy-06",
+      "request_id": "a7ef0513d63a8865f9073a457775d786feb19b1949c55f5eaef1abd79718d2cb",
+      "category": "legacy_table_date_scope",
+      "expected_supported": true,
+      "expected_verdict": null,
+      "valid": true,
+      "passed_binary": false,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 11,
+          "lines": [
+            24
+          ],
+          "quotations": [
+            {
+              "line": 24,
+              "text": "         12/01/24        at TOR         34:25              6         9          0          0          5        6         2        3         5        3        1        1       0        0        -9        17\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "12/01/24 at TOR 34:25 6 9 0 0 5 6 2 3 5 3 1 1 0 0 -9 17"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Jimmy Butler",
+          "source_value": "Jimmy Butler",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "December 1, 2024",
+          "source_value": "12/01/24",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "34 minutes and 25 seconds",
+          "source_value": "34:25",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "prior_game",
+          "source_value": "12/01/24",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [1, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 27, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 43, 44, 45, 46, 47, 48, 49, 52, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 78]",
+          "source_value": "line 24",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim is supported by the source evidence, but the original citation is incomplete. The necessary line (24) is included, but the claim cites many unnecessary lines.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 11,
+          "lines": [
+            24
+          ],
+          "quotations": [
+            {
+              "line": 24,
+              "text": "         12/01/24        at TOR         34:25              6         9          0          0          5        6         2        3         5        3        1        1       0        0        -9        17\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "legacy-07",
+      "request_id": "7f639e4aaa6a536572c53cc978c8ca413e1fc8c241f37423bd73920e1f9844e3",
+      "category": "legacy_table_date_scope",
+      "expected_supported": true,
+      "expected_verdict": null,
+      "valid": true,
+      "passed_binary": false,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 4,
+          "lines": [
+            9,
+            10
+          ],
+          "quotations": [
+            {
+              "line": 9,
+              "text": "BACK-TO-BACK: Tonight marks the second of a road back-to-back after just playing in Toronto last night. It marks Miami’s third of 15 back-to-backs\n"
+            },
+            {
+              "line": 10,
+              "text": "this season, which is two more than last season. Additionally, the HEAT will play a season-high four back-to-backs in December.\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "BACK-TO-BACK: Tonight marks the second of a road back-to-back after just playing in Toronto last night. It marks Miami’s third of 15 back-to-backs this season, which is two more than last season. Additionally, the HEAT will play a season-high four back-to-backs in December."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Miami",
+          "source_value": "Miami",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2024-12-02",
+          "source_value": "2024-25 season, December 2024",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "current",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 1, 3, 4, 5, 6, 7, 9, 10, 12, 13, 14, 15, 17, 18, 19, 20, 22, 23, 24, 26, 27, 28, 29, 31, 32, 34, 35, 36, 37, 38, 40, 41, 43, 44, 45, 46, 47, 48, 50, 51, 53, 54, 55, 56, 57, 58, 60, 61, 63, 64, 65, 66, 67, 73",
+          "source_value": "lines 9, 10",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim is supported by the source evidence, but the original citation is incomplete as it includes unnecessary lines and omits the necessary lines 9 and 10.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 4,
+          "lines": [
+            9,
+            10
+          ],
+          "quotations": [
+            {
+              "line": 9,
+              "text": "BACK-TO-BACK: Tonight marks the second of a road back-to-back after just playing in Toronto last night. It marks Miami’s third of 15 back-to-backs\n"
+            },
+            {
+              "line": 10,
+              "text": "this season, which is two more than last season. Additionally, the HEAT will play a season-high four back-to-backs in December.\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "legacy-08",
+      "request_id": "63c76b965abc79acbd27ebdbc89cdf91915ecfbe66ed9b9dd62ed9d28406d7ad",
+      "category": "legacy_table_date_scope",
+      "expected_supported": false,
+      "expected_verdict": null,
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unsupported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 4,
+          "lines": [
+            22,
+            23,
+            24,
+            26,
+            27,
+            28,
+            29
+          ],
+          "quotations": [
+            {
+              "line": 22,
+              "text": "TYLER FROM DEEP: Tyler Herro has now connected on a three-point field goal in 57-straight games, the longest overall streak of his career when\n"
+            },
+            {
+              "line": 23,
+              "text": "including the regular season and postseason. Additionally, Herro has made 52-straight when counting just the regular season, the third-longest such\n"
+            },
+            {
+              "line": 24,
+              "text": "streak in team history. Below are both Herro’s longest overall three-point made streaks and the longest regular season streaks in HEAT history.\n"
+            },
+            {
+              "line": 26,
+              "text": "         HERRO CONSEC 3FGM STREAKS                      DATES                  HEAT REG SEASON 3FGM STREAKS                        PLAYER                      DATES\n"
+            },
+            {
+              "line": 27,
+              "text": "                          57                      12/18/23 – present                              69                           Duncan Robinson            2/11/21 – 11/29/21\n"
+            },
+            {
+              "line": 28,
+              "text": "                          53                         8/1/20 – 3/2/21                              57                           Duncan Robinson            11/25/19 – 8/12/20\n"
+            },
+            {
+              "line": 29,
+              "text": "                          28                        1/29/23 – 4/6/23                              52                              Tyler Herro            12/18/23 – present\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "Tyler Herro has now connected on a three-point field goal in 57-straight games, the longest overall streak of his career when including the regular season and postseason. Additionally, Herro has made 52-straight when counting just the regular season, the third-longest such streak in team history. Below are both Herro’s longest overall three-point made streaks and the longest regular season streaks in HEAT history. HERRO CONSEC 3FGM STREAKS DATES HEAT REG SEASON 3FGM STREAKS PLAYER DATES 57 12/18/23 – present 69 Duncan Robinson 2/11/21 – 11/29/21 53 8/1/20 – 3/2/21 57 Duncan Robinson 11/25/19 – 8/12/20 28 1/29/23 – 4/6/23 52 Tyler Herro 12/18/23 – present"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Tyler Herro",
+          "source_value": "Tyler Herro",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "current",
+          "source_value": "12/18/23 – present",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "57 consecutive three-point shots",
+          "source_value": "57-straight games",
+          "assessment": "contradiction"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "12/18/23 – present",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 1, 3, 4, 5, 6, 7, 9, 10, 12, 13, 14, 15, 17, 18, 19, 20, 22, 23, 24, 26, 27, 28, 29, 31, 32, 34, 35, 36, 37, 38, 40, 41, 43, 44, 45, 46, 47, 48, 50, 51, 53, 54, 55, 56, 57, 58, 60, 61, 63, 64, 65, 66, 67, 73",
+          "source_value": "lines 22, 23, 24, 26, 27, 28, 29",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [
+        "The claim states '57 consecutive three-point shots' while the source states '57-straight games'."
+      ],
+      "reason": "The claim asserts that Tyler Herro has made 57 consecutive three-point shots, but the source only confirms that he has made a three-point field goal in 57-straight games, not that he has made 57 consecutive three-point shots. The original citation is also incomplete.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 4,
+          "lines": [
+            22,
+            23,
+            24,
+            26,
+            27,
+            28,
+            29
+          ],
+          "quotations": [
+            {
+              "line": 22,
+              "text": "TYLER FROM DEEP: Tyler Herro has now connected on a three-point field goal in 57-straight games, the longest overall streak of his career when\n"
+            },
+            {
+              "line": 23,
+              "text": "including the regular season and postseason. Additionally, Herro has made 52-straight when counting just the regular season, the third-longest such\n"
+            },
+            {
+              "line": 24,
+              "text": "streak in team history. Below are both Herro’s longest overall three-point made streaks and the longest regular season streaks in HEAT history.\n"
+            },
+            {
+              "line": 26,
+              "text": "         HERRO CONSEC 3FGM STREAKS                      DATES                  HEAT REG SEASON 3FGM STREAKS                        PLAYER                      DATES\n"
+            },
+            {
+              "line": 27,
+              "text": "                          57                      12/18/23 – present                              69                           Duncan Robinson            2/11/21 – 11/29/21\n"
+            },
+            {
+              "line": 28,
+              "text": "                          53                         8/1/20 – 3/2/21                              57                           Duncan Robinson            11/25/19 – 8/12/20\n"
+            },
+            {
+              "line": 29,
+              "text": "                          28                        1/29/23 – 4/6/23                              52                              Tyler Herro            12/18/23 – present\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unsupported"
+    },
+    {
+      "case_id": "legacy-09",
+      "request_id": "2356923561640ce9752c94e8669fdc577a166ff769ad40c073fa6dc9f65e951f",
+      "category": "legacy_table_date_scope",
+      "expected_supported": false,
+      "expected_verdict": null,
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unsupported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 7,
+          "lines": [
+            58
+          ],
+          "quotations": [
+            {
+              "line": 58,
+              "text": "Forward           Forward           Center            Guard              Guard                        When Jimmy Butler leads the HEAT in scoring                         5-2\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "When Jimmy Butler leads the HEAT in scoring 5-2"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Jimmy Butler",
+          "source_value": "Jimmy Butler",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2024-25",
+          "source_value": "2024-25",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "leads in scoring",
+          "source_value": "leads the HEAT in scoring",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "not established",
+          "assessment": "not_established"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [1, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 29, 30, 31, 32, 35, 36, 37, 38, 40, 41, 42, 43, 45, 46, 47, 48, 51, 52, 53, 54, 57, 58, 59, 60, 61, 85, 86, 88, 89, 90, 91, 92, 93, 102]",
+          "source_value": "line 58",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim that Jimmy Butler currently leads Miami in scoring is not supported by the provided evidence. The source only shows a record of when Jimmy Butler has led the team in scoring, but it does not indicate that he is currently leading in scoring. The citation is also incomplete as it includes many lines that are not relevant to the claim.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 7,
+          "lines": [
+            58
+          ],
+          "quotations": [
+            {
+              "line": 58,
+              "text": "Forward           Forward           Center            Guard              Guard                        When Jimmy Butler leads the HEAT in scoring                         5-2\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unsupported"
+    },
+    {
+      "case_id": "legacy-10",
+      "request_id": "d8eb45aebe5e2481c093d2d26002bdcdf065e6bc73236f8c71a2c26d7fc8c36b",
+      "category": "legacy_table_date_scope",
+      "expected_supported": false,
+      "expected_verdict": null,
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 1,
+          "lines": [
+            48,
+            49,
+            50
+          ],
+          "quotations": [
+            {
+              "line": 48,
+              "text": "TBD           NBA Cup Knockout Round                     FDSN                      #14                                                                                  Has connected on a 3FG in 52-\n"
+            },
+            {
+              "line": 49,
+              "text": "1 2/20        OKLAHOMA CITY       8:00PM                 FDSN                                                                                                           straight regular season games, the\n"
+            },
+            {
+              "line": 50,
+              "text": "12/21         @ Orlando           7:00PM                 FDSN             G        TYLER HERRO                       6-5       205        24.0       5.2       4.9      third-longest streak in team history\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "DUNCAN ROBINSON, 2024 season, 52 consecutive regular-season games, 3FG made"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Duncan Robinson",
+          "source_value": "DUNCAN ROBINSON",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2024",
+          "source_value": "2024 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "52 consecutive regular-season games",
+          "source_value": "52 consecutive regular-season games",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "current",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "has made a three-point field goal",
+          "source_value": "has connected on a 3FG",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [1, 2, 5, 6, 12, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 115]",
+          "source_value": "lines [48, 49, 50]",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim is supported by the source evidence, but the original citation is incomplete as it includes unnecessary lines and omits the specific lines that establish the claim.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 1,
+          "lines": [
+            48,
+            49,
+            50
+          ],
+          "quotations": [
+            {
+              "line": 48,
+              "text": "TBD           NBA Cup Knockout Round                     FDSN                      #14                                                                                  Has connected on a 3FG in 52-\n"
+            },
+            {
+              "line": 49,
+              "text": "1 2/20        OKLAHOMA CITY       8:00PM                 FDSN                                                                                                           straight regular season games, the\n"
+            },
+            {
+              "line": 50,
+              "text": "12/21         @ Orlando           7:00PM                 FDSN             G        TYLER HERRO                       6-5       205        24.0       5.2       4.9      third-longest streak in team history\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "legacy-11",
+      "request_id": "96126387c8ec09fa928499fce02a535546c90ea5286534bfd48df6c408a1ccde",
+      "category": "legacy_table_date_scope",
+      "expected_supported": false,
+      "expected_verdict": null,
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unsupported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 10,
+          "lines": [
+            26
+          ],
+          "quotations": [
+            {
+              "line": 26,
+              "text": "         12/01/24        at TOR          38:36              5        13         1           2          2         2         4       16        20        7        3        1       5        0       +15         13\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "Bam Adebayo, 12/01/24, at TOR, 38:36, 5, 13, 1, 2, 2, 2, 4, 16, 20, 7, 3, 1, 5, 0, +15, 13"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Bam Adebayo",
+          "source_value": "Bam Adebayo",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "December 1, 2024",
+          "source_value": "12/01/24",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "5 points",
+          "source_value": "13 points",
+          "assessment": "contradiction"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "prior_game",
+          "source_value": "12/01/24",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [1, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26, 29, 33, 34, 35, 36, 37, 38, 39, 40, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 79]",
+          "source_value": "lines [26]",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [
+        "The claim states Bam Adebayo scored 5 points, but the source shows he scored 13 points."
+      ],
+      "reason": "The claim is contradicted by the source, which shows Bam Adebayo scored 13 points instead of 5 points. The original citation is also incomplete.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 10,
+          "lines": [
+            26
+          ],
+          "quotations": [
+            {
+              "line": 26,
+              "text": "         12/01/24        at TOR          38:36              5        13         1           2          2         2         4       16        20        7        3        1       5        0       +15         13\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unsupported"
+    },
+    {
+      "case_id": "diverse-01",
+      "request_id": "df84baf0932818a70b8e748422e527584698527b42a364af1987989ff785bc6b",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": false,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:a1072d27b1971221a5a488e2c04cb284e1efbab266c468b79d00e3c1f21a36a5",
+          "page": 1,
+          "lines": [
+            15,
+            19,
+            20,
+            24
+          ],
+          "quotations": [
+            {
+              "line": 15,
+              "text": " 11/5      vs. Suns               3:00 pm                             --         #9      Ausar Thompson                                                                             LAST GAME: Nine points, 11 rebounds (five offensive) in 25\n"
+            },
+            {
+              "line": 19,
+              "text": " 11/12    @ Bulls                 7:00 pm                             --            GP/GS      PPG      RPG     APG     SPG     BPG      MPG\n"
+            },
+            {
+              "line": 20,
+              "text": " 11/14    vs. Hawks             7:00 pm                             --                 4/4          11.8       9.3        2.8        0.8        1.0        29.1                     Draft...Named back-to-back Overtime Elite Finals MVP and\n"
+            },
+            {
+              "line": 24,
+              "text": " 11/24    @ Pacers             8:00 pm                             --                                                                                                               send the game to OT in the preseason opener against\n"
+            }
+          ],
+          "publisher": "DET",
+          "url": "https://www.nba.com/gamenotes/pistons.pdf",
+          "sha256": "a1072d27b1971221a5a488e2c04cb284e1efbab266c468b79d00e3c1f21a36a5",
+          "archive_time": "2023-10-25T17:18:14Z",
+          "source_reading": "Ausar Thompson, 2023-24 PRESEASON AVERAGES, 4/4, 11.8 PPG, 9.3 RPG, 2.8 APG, 0.8 SPG, 1.0 BPG, 29.1 MPG"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Ausar Thompson",
+          "source_value": "Ausar Thompson",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2023-24 preseason",
+          "source_value": "2023-24 PRESEASON",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "11.8 points and 9.3 rebounds per game",
+          "source_value": "11.8 PPG, 9.3 RPG",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "over four preseason games",
+          "source_value": "4/4",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not established",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 13, 15, 19, 20, 24",
+          "source_value": "lines 15, 19, 20, 24",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim is supported by the provided source evidence, but the original citation is incomplete as it includes an unnecessary line (line 13).",
+      "citations": [
+        {
+          "source_id": "sha256:a1072d27b1971221a5a488e2c04cb284e1efbab266c468b79d00e3c1f21a36a5",
+          "page": 1,
+          "lines": [
+            15,
+            19,
+            20,
+            24
+          ],
+          "quotations": [
+            {
+              "line": 15,
+              "text": " 11/5      vs. Suns               3:00 pm                             --         #9      Ausar Thompson                                                                             LAST GAME: Nine points, 11 rebounds (five offensive) in 25\n"
+            },
+            {
+              "line": 19,
+              "text": " 11/12    @ Bulls                 7:00 pm                             --            GP/GS      PPG      RPG     APG     SPG     BPG      MPG\n"
+            },
+            {
+              "line": 20,
+              "text": " 11/14    vs. Hawks             7:00 pm                             --                 4/4          11.8       9.3        2.8        0.8        1.0        29.1                     Draft...Named back-to-back Overtime Elite Finals MVP and\n"
+            },
+            {
+              "line": 24,
+              "text": " 11/24    @ Pacers             8:00 pm                             --                                                                                                               send the game to OT in the preseason opener against\n"
+            }
+          ],
+          "publisher": "DET",
+          "url": "https://www.nba.com/gamenotes/pistons.pdf",
+          "sha256": "a1072d27b1971221a5a488e2c04cb284e1efbab266c468b79d00e3c1f21a36a5",
+          "archive_time": "2023-10-25T17:18:14Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "diverse-02",
+      "request_id": "0441f577eb3e7d545f0dd9290a18cb90967c82b174a4e9962fe5e7adb1c34378",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:0bc8286358f626144a5ac00b6bea3bd82cc02f4da7313792b7a424e714dbd1f9",
+          "page": 1,
+          "lines": [
+            3
+          ],
+          "quotations": [
+            {
+              "line": 3,
+              "text": " 10/25  @ Heat          102-103    L           0-1                                                       Detroit Pistons (3-33) vs. Sacramento Kings (21-14)\n"
+            }
+          ],
+          "publisher": "DET",
+          "url": "https://www.nba.com/gamenotes/pistons.pdf",
+          "sha256": "0bc8286358f626144a5ac00b6bea3bd82cc02f4da7313792b7a424e714dbd1f9",
+          "archive_time": "2024-01-09T00:19:37Z",
+          "source_reading": "Detroit Pistons (3-33) vs. Sacramento Kings (21-14)"
+        },
+        {
+          "source_id": "sha256:0bc8286358f626144a5ac00b6bea3bd82cc02f4da7313792b7a424e714dbd1f9",
+          "page": 1,
+          "lines": [
+            8
+          ],
+          "quotations": [
+            {
+              "line": 8,
+              "text": " 11/2   @ Pelicans      116-125    L           2-4                          Regular Season Game #37 / Home Game #27  •  TV: Bally Sports Detroit, Radio: 97.1 FM\n"
+            }
+          ],
+          "publisher": "DET",
+          "url": "https://www.nba.com/gamenotes/pistons.pdf",
+          "sha256": "0bc8286358f626144a5ac00b6bea3bd82cc02f4da7313792b7a424e714dbd1f9",
+          "archive_time": "2024-01-09T00:19:37Z",
+          "source_reading": "Regular Season Game #37 / Home Game #27  •  TV: Bally Sports Detroit, Radio: 97.1 FM"
+        },
+        {
+          "source_id": "sha256:0bc8286358f626144a5ac00b6bea3bd82cc02f4da7313792b7a424e714dbd1f9",
+          "page": 1,
+          "lines": [
+            10
+          ],
+          "quotations": [
+            {
+              "line": 10,
+              "text": " 11/6   vs. Warriors    109-120    L           2-6                                               Little Caesars Arena  •  Tuesday, January 9, 2024, 7 pm EST\n"
+            }
+          ],
+          "publisher": "DET",
+          "url": "https://www.nba.com/gamenotes/pistons.pdf",
+          "sha256": "0bc8286358f626144a5ac00b6bea3bd82cc02f4da7313792b7a424e714dbd1f9",
+          "archive_time": "2024-01-09T00:19:37Z",
+          "source_reading": "Little Caesars Arena  •  Tuesday, January 9, 2024, 7 pm EST"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Detroit Pistons, Sacramento Kings",
+          "source_value": "Detroit Pistons, Sacramento Kings",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2023-24 season, January 9, 2024",
+          "source_value": "2023-24 season, January 9, 2024",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "3-33, 21-14",
+          "source_value": "3-33, 21-14",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "season_to_date",
+          "source_value": "season_to_date",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [3, 8, 10]",
+          "source_value": "lines [3, 8, 10]",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The candidate's claim is fully supported by the provided source evidence. The pregame header lists Detroit at 3-33 and Sacramento at 21-14 for the January 9 matchup, and the cited lines are complete and accurate.",
+      "citations": [
+        {
+          "source_id": "sha256:0bc8286358f626144a5ac00b6bea3bd82cc02f4da7313792b7a424e714dbd1f9",
+          "page": 1,
+          "lines": [
+            3,
+            8,
+            10
+          ],
+          "quotations": [
+            {
+              "line": 3,
+              "text": " 10/25  @ Heat          102-103    L           0-1                                                       Detroit Pistons (3-33) vs. Sacramento Kings (21-14)\n"
+            },
+            {
+              "line": 8,
+              "text": " 11/2   @ Pelicans      116-125    L           2-4                          Regular Season Game #37 / Home Game #27  •  TV: Bally Sports Detroit, Radio: 97.1 FM\n"
+            },
+            {
+              "line": 10,
+              "text": " 11/6   vs. Warriors    109-120    L           2-6                                               Little Caesars Arena  •  Tuesday, January 9, 2024, 7 pm EST\n"
+            }
+          ],
+          "publisher": "DET",
+          "url": "https://www.nba.com/gamenotes/pistons.pdf",
+          "sha256": "0bc8286358f626144a5ac00b6bea3bd82cc02f4da7313792b7a424e714dbd1f9",
+          "archive_time": "2024-01-09T00:19:37Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-03",
+      "request_id": "50b841f75de51bed99c34ba19a200b924471cb516cb08b8b03320c44a377f125",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+          "page": 3,
+          "lines": [
+            21
+          ],
+          "quotations": [
+            {
+              "line": 21,
+              "text": "         Since Jan. 15, the Pistons are 2nd in the NBA with 59.1 points in the paint per game and the Nuggets are 1st with 62.0.\n"
+            }
+          ],
+          "publisher": "DET",
+          "url": "https://www.nba.com/gamenotes/pistons.pdf",
+          "sha256": "860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+          "archive_time": "2025-02-28T22:32:55Z",
+          "source_reading": "Since Jan. 15, the Pistons are 2nd in the NBA with 59.1 points in the paint per game and the Nuggets are 1st with 62.0."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Detroit, Denver",
+          "source_value": "Pistons, Nuggets",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "Since January 15",
+          "source_value": "Since Jan. 15",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "59.1 points per game, 62.0 points per game",
+          "source_value": "59.1 points in the paint per game, 62.0 points in the paint per game",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "recent_games",
+          "source_value": "Since Jan. 15",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7, page 3, line 21",
+          "source_value": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7, page 3, line 21",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The candidate's claim is fully supported by the provided source evidence. The source confirms the paint scoring statistics for Detroit and Denver since January 15, 2025.",
+      "citations": [
+        {
+          "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+          "page": 3,
+          "lines": [
+            21
+          ],
+          "quotations": [
+            {
+              "line": 21,
+              "text": "         Since Jan. 15, the Pistons are 2nd in the NBA with 59.1 points in the paint per game and the Nuggets are 1st with 62.0.\n"
+            }
+          ],
+          "publisher": "DET",
+          "url": "https://www.nba.com/gamenotes/pistons.pdf",
+          "sha256": "860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+          "archive_time": "2025-02-28T22:32:55Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-04",
+      "request_id": "de43dea637ddb05c3fc2004b79cc6fb2e67ccaf25214d4c88fd6726cf5a185c5",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:2c00a479ff9d0e238786bda2c13a52521a5be80e2ae903f95f1d912590dd319e",
+          "page": 1,
+          "lines": [
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "quotations": [
+            {
+              "line": 21,
+              "text": "  #15       Nikola Jokic                                                               Registered 25 points (9-15 FG), 14 rebounds, eight assists, and one steal in 28                           10/24   vs. Lakers        5:30 pm                    --\n"
+            },
+            {
+              "line": 22,
+              "text": "                                                                                       minutes of play at LAC on 10/19 ... Jokic averaged 16.5 points, 8.0 rebounds,                             10/27   @ Grizzlies       5:00 pm                    --\n"
+            },
+            {
+              "line": 23,
+              "text": "            C • 7-0 • 284 • KK Mega Vizura/Serbia • 8th Season                         4.8 assists, and 1.5 steals a game in 21.9 minutes in four preseason games                                10/29   @ Thunder         1:30 pm                    --\n"
+            },
+            {
+              "line": 24,
+              "text": "      GP/GS          PPG        RPG        APG        SPG        BPG        MPG                                                                                                                  10/30   vs. Jazz          7:00 pm                    --\n"
+            },
+            {
+              "line": 25,
+              "text": "        0/0            0          0          0          0          0          0        (all starts).                                                                                             11/1    @ Timberwolves    6:00 pm                    --\n"
+            }
+          ],
+          "publisher": "DEN",
+          "url": "https://www.nba.com/gamenotes/nuggets.pdf",
+          "sha256": "2c00a479ff9d0e238786bda2c13a52521a5be80e2ae903f95f1d912590dd319e",
+          "archive_time": "2023-10-24T16:57:41Z",
+          "source_reading": "Nikola Jokic, C • 7-0 • 284 • KK Mega Vizura/Serbia • 8th Season, Registered 25 points (9-15 FG), 14 rebounds, eight assists, and one steal in 28 minutes of play at LAC on 10/19 ... Jokic averaged 16.5 points, 8.0 rebounds, 4.8 assists, and 1.5 steals a game in 21.9 minutes in four preseason games (all starts)."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Nikola Jokic",
+          "source_value": "Nikola Jokic",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "preseason",
+          "source_value": "preseason",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "16.5 points, 8.0 rebounds, 4.8 assists",
+          "source_value": "16.5 points, 8.0 rebounds, 4.8 assists",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "over four preseason games",
+          "source_value": "in four preseason games",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "all starts",
+          "source_value": "all starts",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 21, 22, 23, 24, 25",
+          "source_value": "lines 21, 22, 23, 24, 25",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The candidate's claim is fully supported by the provided source evidence. All numerical values, units, and conditions match the source, and the citation is complete.",
+      "citations": [
+        {
+          "source_id": "sha256:2c00a479ff9d0e238786bda2c13a52521a5be80e2ae903f95f1d912590dd319e",
+          "page": 1,
+          "lines": [
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "quotations": [
+            {
+              "line": 21,
+              "text": "  #15       Nikola Jokic                                                               Registered 25 points (9-15 FG), 14 rebounds, eight assists, and one steal in 28                           10/24   vs. Lakers        5:30 pm                    --\n"
+            },
+            {
+              "line": 22,
+              "text": "                                                                                       minutes of play at LAC on 10/19 ... Jokic averaged 16.5 points, 8.0 rebounds,                             10/27   @ Grizzlies       5:00 pm                    --\n"
+            },
+            {
+              "line": 23,
+              "text": "            C • 7-0 • 284 • KK Mega Vizura/Serbia • 8th Season                         4.8 assists, and 1.5 steals a game in 21.9 minutes in four preseason games                                10/29   @ Thunder         1:30 pm                    --\n"
+            },
+            {
+              "line": 24,
+              "text": "      GP/GS          PPG        RPG        APG        SPG        BPG        MPG                                                                                                                  10/30   vs. Jazz          7:00 pm                    --\n"
+            },
+            {
+              "line": 25,
+              "text": "        0/0            0          0          0          0          0          0        (all starts).                                                                                             11/1    @ Timberwolves    6:00 pm                    --\n"
+            }
+          ],
+          "publisher": "DEN",
+          "url": "https://www.nba.com/gamenotes/nuggets.pdf",
+          "sha256": "2c00a479ff9d0e238786bda2c13a52521a5be80e2ae903f95f1d912590dd319e",
+          "archive_time": "2023-10-24T16:57:41Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-05",
+      "request_id": "56152980d67ef2a0c27984c96e8b110679500403324531288d47b2c8df48a146",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+          "page": 1,
+          "lines": [
+            19,
+            21,
+            22,
+            23
+          ],
+          "quotations": [
+            {
+              "line": 19,
+              "text": "  #1        Michael Porter Jr.                                                        Posted five points and six rebounds in 21 minutes at NYK on 1/25 ... In                                 11/14   vs. Clippers      111-108     W            9-2\n"
+            },
+            {
+              "line": 21,
+              "text": "            F • 6-10 • 218 • Missouri/USA • 4th Season                                the game prior, he tallied five points, four rebounds, one assist, and one                              11/19   @ Cavaliers       109-121     L            9-4\n"
+            },
+            {
+              "line": 22,
+              "text": "     GP/GS          PPG        RPG        APG        SPG       BPG        MPG         block in 30 minutes at IND on 1/23 ... Porter Jr. is averaging 15.9 points                              11/20   @ Pistons         107-103     W           10-4\n"
+            },
+            {
+              "line": 23,
+              "text": "      46/46          15.9       7.0        1.3        0.5       0.8        31.1       and seven rebounds this season.                                                                         11/22   @ Magic           119-124     L           10-5\n"
+            }
+          ],
+          "publisher": "DEN",
+          "url": "https://www.nba.com/gamenotes/nuggets.pdf",
+          "sha256": "bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+          "archive_time": "2024-01-27T09:19:05Z",
+          "source_reading": "Michael Porter Jr. is listed as averaging 15.9 points and 7.0 rebounds this season. The adjacent notes distinguish his January 25 and January 23 games, with five points and six rebounds in 21 minutes at NYK on 1/25, and five points, four rebounds, one assist, and one block in 30 minutes at IND on 1/23."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Michael Porter Jr.",
+          "source_value": "Michael Porter Jr.",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2023-24 season",
+          "source_value": "2023-24 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "15.9 points and seven rebounds",
+          "source_value": "15.9 points and 7.0 rebounds",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "season_to_date",
+          "source_value": "season_to_date",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "the adjacent notes distinguish his January 25 and January 23 games",
+          "source_value": "the adjacent notes distinguish his January 25 and January 23 games, with five points and six rebounds in 21 minutes at NYK on 1/25, and five points, four rebounds, one assist, and one block in 30 minutes at IND on 1/23",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 19, 21, 22, 23",
+          "source_value": "lines 19, 21, 22, 23",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The provided source evidence fully supports the claim. The source confirms Michael Porter Jr.'s season averages of 15.9 points and 7.0 rebounds, and the specific notes for his January 25 and January 23 games.",
+      "citations": [
+        {
+          "source_id": "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+          "page": 1,
+          "lines": [
+            19,
+            21,
+            22,
+            23
+          ],
+          "quotations": [
+            {
+              "line": 19,
+              "text": "  #1        Michael Porter Jr.                                                        Posted five points and six rebounds in 21 minutes at NYK on 1/25 ... In                                 11/14   vs. Clippers      111-108     W            9-2\n"
+            },
+            {
+              "line": 21,
+              "text": "            F • 6-10 • 218 • Missouri/USA • 4th Season                                the game prior, he tallied five points, four rebounds, one assist, and one                              11/19   @ Cavaliers       109-121     L            9-4\n"
+            },
+            {
+              "line": 22,
+              "text": "     GP/GS          PPG        RPG        APG        SPG       BPG        MPG         block in 30 minutes at IND on 1/23 ... Porter Jr. is averaging 15.9 points                              11/20   @ Pistons         107-103     W           10-4\n"
+            },
+            {
+              "line": 23,
+              "text": "      46/46          15.9       7.0        1.3        0.5       0.8        31.1       and seven rebounds this season.                                                                         11/22   @ Magic           119-124     L           10-5\n"
+            }
+          ],
+          "publisher": "DEN",
+          "url": "https://www.nba.com/gamenotes/nuggets.pdf",
+          "sha256": "bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+          "archive_time": "2024-01-27T09:19:05Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-06",
+      "request_id": "fbe5b481647193a41a680b9179c26e030d66404177a20248f43f40996a4defa9",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": false,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:f3065623a4516431106c2dd1c373612b9a00768ecc35b3482eb6aaa33d3cdbdd",
+          "page": 3,
+          "lines": [
+            6,
+            7
+          ],
+          "quotations": [
+            {
+              "line": 6,
+              "text": "  2025-26 REGULAR SEASON                       PPG         OPP. PPG          FG%            3FG%           FT%            RPG            APG           SPG             TO            BPG\n"
+            },
+            {
+              "line": 7,
+              "text": "  Mavericks                                    110.2          115.9           .444          .322           .757           44.8           24.0           8.52          16.2           6.00\n"
+            }
+          ],
+          "publisher": "DEN",
+          "url": "https://www.nba.com/gamenotes/nuggets.pdf",
+          "sha256": "f3065623a4516431106c2dd1c373612b9a00768ecc35b3482eb6aaa33d3cdbdd",
+          "archive_time": "2025-11-30T23:23:14Z",
+          "source_reading": "2025-26 REGULAR SEASON, PPG 110.2, OPP. PPG 115.9, 3FG% .322"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Dallas",
+          "source_value": "Mavericks",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2025-26 regular-season",
+          "source_value": "2025-26 REGULAR SEASON",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "110.2 points scored, 115.9 points allowed, .322 three-point shooting",
+          "source_value": "PPG 110.2, OPP. PPG 115.9, 3FG% .322",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "season_to_date",
+          "source_value": "2025-26 REGULAR SEASON",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not established",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 5, 6, 7",
+          "source_value": "lines 6, 7",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim is supported by the source evidence, but the original citation is incomplete as it includes an unnecessary line (line 5) and omits the necessary line (line 7).",
+      "citations": [
+        {
+          "source_id": "sha256:f3065623a4516431106c2dd1c373612b9a00768ecc35b3482eb6aaa33d3cdbdd",
+          "page": 3,
+          "lines": [
+            6,
+            7
+          ],
+          "quotations": [
+            {
+              "line": 6,
+              "text": "  2025-26 REGULAR SEASON                       PPG         OPP. PPG          FG%            3FG%           FT%            RPG            APG           SPG             TO            BPG\n"
+            },
+            {
+              "line": 7,
+              "text": "  Mavericks                                    110.2          115.9           .444          .322           .757           44.8           24.0           8.52          16.2           6.00\n"
+            }
+          ],
+          "publisher": "DEN",
+          "url": "https://www.nba.com/gamenotes/nuggets.pdf",
+          "sha256": "f3065623a4516431106c2dd1c373612b9a00768ecc35b3482eb6aaa33d3cdbdd",
+          "archive_time": "2025-11-30T23:23:14Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "diverse-07",
+      "request_id": "b4ef822f555250b053088d3c4ad1a924faeb5b58439c106ed2006240f6160b43",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:f9318f44666cb16731929fb07a4db947f069936d55ca26cd5823306fdc031b1e",
+          "page": 7,
+          "lines": [
+            1,
+            16,
+            30
+          ],
+          "quotations": [
+            {
+              "line": 1,
+              "text": "                                                                      #4   STEVEN ADAMS                                                                                                                                                         Twitter/X: @RealStevenAdams\n"
+            },
+            {
+              "line": 16,
+              "text": "  2023-24 SEASON:                                                                                                                                                                                                                                   HIGHS                        2023-24 SEASON                                                    CAREER\n"
+            },
+            {
+              "line": 30,
+              "text": "                                                                                                                                                                                                                                                    NOTE: Will undergo season-ending surgery on his right PCL.\n"
+            }
+          ],
+          "publisher": "MEM",
+          "url": "https://www.nba.com/gamenotes/grizzlies.pdf",
+          "sha256": "f9318f44666cb16731929fb07a4db947f069936d55ca26cd5823306fdc031b1e",
+          "archive_time": "2023-10-25T18:53:34Z",
+          "source_reading": "Steven Adams, 2023-24 SEASON, NOTE: Will undergo season-ending surgery on his right PCL."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Steven Adams",
+          "source_value": "Steven Adams",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "current",
+          "source_value": "2023-24 SEASON",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "2023-24 SEASON",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "season-ending surgery on his right PCL",
+          "source_value": "Will undergo season-ending surgery on his right PCL",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [1, 16, 30]",
+          "source_value": "lines [1, 16, 30]",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The provided source evidence matches the claim in all aspects, including the entity, date/season, and the specific note about season-ending surgery on the right PCL.",
+      "citations": [
+        {
+          "source_id": "sha256:f9318f44666cb16731929fb07a4db947f069936d55ca26cd5823306fdc031b1e",
+          "page": 7,
+          "lines": [
+            1,
+            16,
+            30
+          ],
+          "quotations": [
+            {
+              "line": 1,
+              "text": "                                                                      #4   STEVEN ADAMS                                                                                                                                                         Twitter/X: @RealStevenAdams\n"
+            },
+            {
+              "line": 16,
+              "text": "  2023-24 SEASON:                                                                                                                                                                                                                                   HIGHS                        2023-24 SEASON                                                    CAREER\n"
+            },
+            {
+              "line": 30,
+              "text": "                                                                                                                                                                                                                                                    NOTE: Will undergo season-ending surgery on his right PCL.\n"
+            }
+          ],
+          "publisher": "MEM",
+          "url": "https://www.nba.com/gamenotes/grizzlies.pdf",
+          "sha256": "f9318f44666cb16731929fb07a4db947f069936d55ca26cd5823306fdc031b1e",
+          "archive_time": "2023-10-25T18:53:34Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-08",
+      "request_id": "01fffc230b56ba3c2c6274a6f18891be003ae031892b8ce360bdbe82e74c318e",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:d7e953f5d2bc63d353e52891264af859c21b0c5c6f26143f4321919ca1f6b5bd",
+          "page": 3,
+          "lines": [
+            64,
+            65,
+            66
+          ],
+          "quotations": [
+            {
+              "line": 64,
+              "text": "  GRIZZLIES 120, MAVERICKS 103 | JANUARY 9, 2024 | AMERICAN AIRLINES CENTER | DALLAS, TX\n"
+            },
+            {
+              "line": 65,
+              "text": "  RECAP: Despite playing without Jaren Jackson Jr. (right knee contusion) for the first time this season and playing their first game since announcing Ja Morant (right shoulder labral tear) would miss the\n"
+            },
+            {
+              "line": 66,
+              "text": "  remainder of the season, the Memphis Grizzlies defeated the Dallas Mavericks to finish their three-game road trip with a perfect 3-0 record… Desmond Bane scored 32 points, including 13 of the Grizzlies’\n"
+            }
+          ],
+          "publisher": "MEM",
+          "url": "https://www.nba.com/gamenotes/grizzlies.pdf",
+          "sha256": "d7e953f5d2bc63d353e52891264af859c21b0c5c6f26143f4321919ca1f6b5bd",
+          "archive_time": "2024-01-15T06:12:22Z",
+          "source_reading": "GRIZZLIES 120, MAVERICKS 103 | JANUARY 9, 2024 | AMERICAN AIRLINES CENTER | DALLAS, TX\nRECAP: Despite playing without Jaren Jackson Jr. (right knee contusion) for the first time this season and playing their first game since announcing Ja Morant (right shoulder labral tear) would miss the\nremainder of the season, the Memphis Grizzlies defeated the Dallas Mavericks to finish their three-game road trip with a perfect 3-0 record…"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Ja Morant",
+          "source_value": "Ja Morant",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "January 9, 2024",
+          "source_value": "January 9, 2024",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "right shoulder labral tear",
+          "source_value": "right shoulder labral tear",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "current",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "would miss the remainder of the season",
+          "source_value": "would miss the remainder of the season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 64, 65, 66",
+          "source_value": "lines 64, 65, 66",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The provided source evidence explicitly states that Ja Morant would miss the remainder of the season with a right shoulder labral tear, as claimed. The date, condition, and citation are all accurately supported by the source.",
+      "citations": [
+        {
+          "source_id": "sha256:d7e953f5d2bc63d353e52891264af859c21b0c5c6f26143f4321919ca1f6b5bd",
+          "page": 3,
+          "lines": [
+            64,
+            65,
+            66
+          ],
+          "quotations": [
+            {
+              "line": 64,
+              "text": "  GRIZZLIES 120, MAVERICKS 103 | JANUARY 9, 2024 | AMERICAN AIRLINES CENTER | DALLAS, TX\n"
+            },
+            {
+              "line": 65,
+              "text": "  RECAP: Despite playing without Jaren Jackson Jr. (right knee contusion) for the first time this season and playing their first game since announcing Ja Morant (right shoulder labral tear) would miss the\n"
+            },
+            {
+              "line": 66,
+              "text": "  remainder of the season, the Memphis Grizzlies defeated the Dallas Mavericks to finish their three-game road trip with a perfect 3-0 record… Desmond Bane scored 32 points, including 13 of the Grizzlies’\n"
+            }
+          ],
+          "publisher": "MEM",
+          "url": "https://www.nba.com/gamenotes/grizzlies.pdf",
+          "sha256": "d7e953f5d2bc63d353e52891264af859c21b0c5c6f26143f4321919ca1f6b5bd",
+          "archive_time": "2024-01-15T06:12:22Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-09",
+      "request_id": "5f2ea5b74e69ec9d9d775c4ab025ffa73367df4a827a8ceb746d13c3ddf236cb",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:ade217cef8f29e10e8e78377100e14c2afe6c7431690581bb28bd9571d787c0c",
+          "page": 5,
+          "lines": [
+            1,
+            9
+          ],
+          "quotations": [
+            {
+              "line": 1,
+              "text": "                           INTERIM HEAD COACH                                     TUOMAS IISALO                          ( t u o-m a s   E E-za-low)\n"
+            },
+            {
+              "line": 9,
+              "text": "Tuomas Iisalo was named interim head coach of the Grizzlies on March 28, 2025, after joining the team as lead assistant coach at the start of the 2024-25 season.\n"
+            }
+          ],
+          "publisher": "MEM",
+          "url": "https://www.nba.com/gamenotes/grizzlies.pdf",
+          "sha256": "ade217cef8f29e10e8e78377100e14c2afe6c7431690581bb28bd9571d787c0c",
+          "archive_time": "2025-04-03T13:38:37Z",
+          "source_reading": "INTERIM HEAD COACH Tuomas Iisalo ( t u o-m a s E E-za-low) Tuomas Iisalo was named interim head coach of the Grizzlies on March 28, 2025, after joining the team as lead assistant coach at the start of the 2024-25 season."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Tuomas Iisalo",
+          "source_value": "Tuomas Iisalo",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "March 28, 2025, 2024-25 season",
+          "source_value": "March 28, 2025, 2024-25 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "recent_games",
+          "source_value": "March 28, 2025, 2024-25 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 1, 9 on page 5",
+          "source_value": "lines 1, 9 on page 5",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The provided source evidence fully supports the claim that Tuomas Iisalo was named interim head coach of the Grizzlies on March 28, 2025, after joining as lead assistant at the start of the 2024-25 season. The cited lines and page are complete and accurate.",
+      "citations": [
+        {
+          "source_id": "sha256:ade217cef8f29e10e8e78377100e14c2afe6c7431690581bb28bd9571d787c0c",
+          "page": 5,
+          "lines": [
+            1,
+            9
+          ],
+          "quotations": [
+            {
+              "line": 1,
+              "text": "                           INTERIM HEAD COACH                                     TUOMAS IISALO                          ( t u o-m a s   E E-za-low)\n"
+            },
+            {
+              "line": 9,
+              "text": "Tuomas Iisalo was named interim head coach of the Grizzlies on March 28, 2025, after joining the team as lead assistant coach at the start of the 2024-25 season.\n"
+            }
+          ],
+          "publisher": "MEM",
+          "url": "https://www.nba.com/gamenotes/grizzlies.pdf",
+          "sha256": "ade217cef8f29e10e8e78377100e14c2afe6c7431690581bb28bd9571d787c0c",
+          "archive_time": "2025-04-03T13:38:37Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-10",
+      "request_id": "04f9c6a3f3d2878ac0d2d032af016fa960401aedc30878e9468fc4bae7521518",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": false,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:403bf61b4cdb0799f89c6df3f61a0d15fb39ae20175af8c69279412aec209e0d",
+          "page": 1,
+          "lines": [
+            14,
+            16,
+            17
+          ],
+          "quotations": [
+            {
+              "line": 14,
+              "text": " 11/11    vs. Raptors         7:00 pm                   --           #0                    Jayson Tatum                                                                                                    F • 6-8 • 210 • Duke/USA • 7th Season\n"
+            },
+            {
+              "line": 16,
+              "text": " 11/15    @ 76ers             7:30 pm                   --                      GP/GS                         PPG                        RPG                      APG                     SPG                     BPG                       MPG\n"
+            },
+            {
+              "line": 17,
+              "text": " 11/17    @ Raptors           7:30 pm                   --                        1/1                         34.0                       11.0                      4.0                     2.0                     1.0                      38.7\n"
+            }
+          ],
+          "publisher": "BOS",
+          "url": "https://www.nba.com/gamenotes/celtics.pdf",
+          "sha256": "403bf61b4cdb0799f89c6df3f61a0d15fb39ae20175af8c69279412aec209e0d",
+          "archive_time": "2023-10-26T19:09:17Z",
+          "source_reading": "Jayson Tatum, F • 6-8 • 210 • Duke/USA • 7th Season, GP/GS: 1/1, PPG: 34.0, RPG: 11.0, APG: 4.0, SPG: 2.0, BPG: 1.0, MPG: 38.7"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Jayson Tatum",
+          "source_value": "Jayson Tatum",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2023-24 season",
+          "source_value": "2023-24 REG. SEASON",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "34.0 points and 11.0 rebounds per game",
+          "source_value": "34.0 PPG, 11.0 RPG",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "after one regular-season game",
+          "source_value": "GP/GS: 1/1",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "the one-game sample matters",
+          "source_value": "not established",
+          "assessment": "not_established"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 12, 14, 16, 17",
+          "source_value": "lines 14, 16, 17",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim asserts that Jayson Tatum is listed at 34.0 points and 11.0 rebounds per game after one regular-season game, which is supported by the source. However, the claim includes a conditional statement ('the one-game sample matters') that is not established by the source. Additionally, the original citation includes an unnecessary line (line 12) and omits necessary lines (lines 14, 16, 17).",
+      "citations": [
+        {
+          "source_id": "sha256:403bf61b4cdb0799f89c6df3f61a0d15fb39ae20175af8c69279412aec209e0d",
+          "page": 1,
+          "lines": [
+            14,
+            16,
+            17
+          ],
+          "quotations": [
+            {
+              "line": 14,
+              "text": " 11/11    vs. Raptors         7:00 pm                   --           #0                    Jayson Tatum                                                                                                    F • 6-8 • 210 • Duke/USA • 7th Season\n"
+            },
+            {
+              "line": 16,
+              "text": " 11/15    @ 76ers             7:30 pm                   --                      GP/GS                         PPG                        RPG                      APG                     SPG                     BPG                       MPG\n"
+            },
+            {
+              "line": 17,
+              "text": " 11/17    @ Raptors           7:30 pm                   --                        1/1                         34.0                       11.0                      4.0                     2.0                     1.0                      38.7\n"
+            }
+          ],
+          "publisher": "BOS",
+          "url": "https://www.nba.com/gamenotes/celtics.pdf",
+          "sha256": "403bf61b4cdb0799f89c6df3f61a0d15fb39ae20175af8c69279412aec209e0d",
+          "archive_time": "2023-10-26T19:09:17Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "diverse-11",
+      "request_id": "d904779f01994daa25b7d1459cc87b9c35d980e4fc0c671c5a61a6bff8f4571b",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": false,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:3b6f7efc758a39ee1a54f7e6375d1563e5882240d5f42d07cef11f55007c3255",
+          "page": 1,
+          "lines": [
+            14,
+            15,
+            17
+          ],
+          "quotations": [
+            {
+              "line": 14,
+              "text": " 11/11   vs. Raptors         117-94       W           7-2           #0                    Jayson Tatum                                                                                                  F • 6-8 • 210 • Duke/USA • 7th Season\n"
+            },
+            {
+              "line": 15,
+              "text": " 11/13   vs. Knicks          114-98       W           8-2                        GP/GS                            PPG                     RPG                    APG                     SPG                    BPG                      MPG\n"
+            },
+            {
+              "line": 17,
+              "text": " 11/17   @ Raptors           108-105      W           10-2                        43/43                           26.8                     8.4                     4.3                    1.0                    0.5                     35.7\n"
+            }
+          ],
+          "publisher": "BOS",
+          "url": "https://www.nba.com/gamenotes/celtics.pdf",
+          "sha256": "3b6f7efc758a39ee1a54f7e6375d1563e5882240d5f42d07cef11f55007c3255",
+          "archive_time": "2024-01-29T09:45:32Z",
+          "source_reading": "Jayson Tatum, F • 6-8 • 210 • Duke/USA • 7th Season, 43/43, 26.8 PPG, 8.4 RPG, 4.3 APG, 1.0 SPG, 0.5 BPG, 35.7 MPG"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Jayson Tatum",
+          "source_value": "Jayson Tatum",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2023-24",
+          "source_value": "2023-24",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "26.8 points, 8.4 rebounds and 4.3 assists per game",
+          "source_value": "26.8 PPG, 8.4 RPG, 4.3 APG",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "across 43 appearances",
+          "source_value": "43/43",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not established",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [12, 14, 15, 17]",
+          "source_value": "lines [14, 15, 17]",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim is supported by the source evidence, but the original citation is incomplete as it includes an unnecessary line (line 12) and omits the necessary lines (14, 15, 17).",
+      "citations": [
+        {
+          "source_id": "sha256:3b6f7efc758a39ee1a54f7e6375d1563e5882240d5f42d07cef11f55007c3255",
+          "page": 1,
+          "lines": [
+            14,
+            15,
+            17
+          ],
+          "quotations": [
+            {
+              "line": 14,
+              "text": " 11/11   vs. Raptors         117-94       W           7-2           #0                    Jayson Tatum                                                                                                  F • 6-8 • 210 • Duke/USA • 7th Season\n"
+            },
+            {
+              "line": 15,
+              "text": " 11/13   vs. Knicks          114-98       W           8-2                        GP/GS                            PPG                     RPG                    APG                     SPG                    BPG                      MPG\n"
+            },
+            {
+              "line": 17,
+              "text": " 11/17   @ Raptors           108-105      W           10-2                        43/43                           26.8                     8.4                     4.3                    1.0                    0.5                     35.7\n"
+            }
+          ],
+          "publisher": "BOS",
+          "url": "https://www.nba.com/gamenotes/celtics.pdf",
+          "sha256": "3b6f7efc758a39ee1a54f7e6375d1563e5882240d5f42d07cef11f55007c3255",
+          "archive_time": "2024-01-29T09:45:32Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "diverse-12",
+      "request_id": "957ea9c08473f558cf454dbd294e5ffef79eda34ce36091c32748609c688b08f",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": false,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:7730ca52bb0ae3fdda2b31c718b08ea0556a2b0d7ccbae9cb6f70659ecb41d52",
+          "page": 1,
+          "lines": [
+            14,
+            15,
+            16
+          ],
+          "quotations": [
+            {
+              "line": 14,
+              "text": " 11/8    vs. Nets           108-104*    W          8-2          #0                  Jayson Tatum                                                                                            F • 6-8 • 224 • Duke/USA • 8th Season\n"
+            },
+            {
+              "line": 15,
+              "text": " 11/10   @ Bucks            113-107     W          9-2                      GP/GS                          PPG                    RPG                   APG                   SPG                  BPG                     MPG\n"
+            },
+            {
+              "line": 16,
+              "text": " 11/12   vs. Hawks          116-117     L          9-3                       50/50                         26.8                    8.6                   5.6                  1.2                   0.5                    36.3\n"
+            }
+          ],
+          "publisher": "BOS",
+          "url": "https://www.nba.com/gamenotes/celtics.pdf",
+          "sha256": "7730ca52bb0ae3fdda2b31c718b08ea0556a2b0d7ccbae9cb6f70659ecb41d52",
+          "archive_time": "2025-02-09T20:50:14Z",
+          "source_reading": "Jayson Tatum, F • 6-8 • 224 • Duke/USA • 8th Season, GP/GS: 50/50, PPG: 26.8, RPG: 8.6, APG: 5.6, SPG: 1.2, BPG: 0.5, MPG: 36.3"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Jayson Tatum",
+          "source_value": "Jayson Tatum",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2024-25 season",
+          "source_value": "2024-25 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "26.8 points, 8.6 rebounds, 5.6 assists per game",
+          "source_value": "26.8 PPG, 8.6 RPG, 5.6 APG",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "season_to_date",
+          "source_value": "season_to_date",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "in 50 appearances",
+          "source_value": "50/50 GP/GS",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 12, 14, 15, 16",
+          "source_value": "lines 14, 15, 16",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim is supported by the provided source evidence, but the original citation is incomplete as it includes an unnecessary line (line 12) and omits the necessary lines (14, 15, 16).",
+      "citations": [
+        {
+          "source_id": "sha256:7730ca52bb0ae3fdda2b31c718b08ea0556a2b0d7ccbae9cb6f70659ecb41d52",
+          "page": 1,
+          "lines": [
+            14,
+            15,
+            16
+          ],
+          "quotations": [
+            {
+              "line": 14,
+              "text": " 11/8    vs. Nets           108-104*    W          8-2          #0                  Jayson Tatum                                                                                            F • 6-8 • 224 • Duke/USA • 8th Season\n"
+            },
+            {
+              "line": 15,
+              "text": " 11/10   @ Bucks            113-107     W          9-2                      GP/GS                          PPG                    RPG                   APG                   SPG                  BPG                     MPG\n"
+            },
+            {
+              "line": 16,
+              "text": " 11/12   vs. Hawks          116-117     L          9-3                       50/50                         26.8                    8.6                   5.6                  1.2                   0.5                    36.3\n"
+            }
+          ],
+          "publisher": "BOS",
+          "url": "https://www.nba.com/gamenotes/celtics.pdf",
+          "sha256": "7730ca52bb0ae3fdda2b31c718b08ea0556a2b0d7ccbae9cb6f70659ecb41d52",
+          "archive_time": "2025-02-09T20:50:14Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "diverse-13",
+      "request_id": "62e736866b88707767c998f195dd6a3b50cec5ff112ebc526d4d2003dc3db6c3",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:3ce1894fcd93204408ce07c7011edcd53a231e514cc35750bab00cbdb35b2b11",
+          "page": 2,
+          "lines": [
+            5,
+            6
+          ],
+          "quotations": [
+            {
+              "line": 5,
+              "text": "  2023-24 REGULAR SEASON                               PPG           OPP. PPG             FG%             3FG%               FT%              RPG              APG              SPG               TO              BPG\n"
+            },
+            {
+              "line": 6,
+              "text": "  Cavaliers                                           114.8             109.3             .482              .362             .772             45.1             26.9             7.74              13.6             4.76\n"
+            }
+          ],
+          "publisher": "CLE",
+          "url": "https://www.nba.com/gamenotes/cavaliers.pdf",
+          "sha256": "3ce1894fcd93204408ce07c7011edcd53a231e514cc35750bab00cbdb35b2b11",
+          "archive_time": "2024-02-10T20:04:25Z",
+          "source_reading": "2023-24 REGULAR SEASON PPG 114.8 OPP. PPG 109.3"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Cleveland",
+          "source_value": "Cavaliers",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2023-24 regular-season",
+          "source_value": "2023-24 REGULAR SEASON",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "114.8 points scored and 109.3 allowed per game",
+          "source_value": "114.8 PPG 109.3 OPP. PPG",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "season_to_date",
+          "source_value": "2023-24 REGULAR SEASON",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not established",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "sha256:3ce1894fcd93204408ce07c7011edcd53a231e514cc35750bab00cbdb35b2b11 page 2 lines 5, 6",
+          "source_value": "sha256:3ce1894fcd93204408ce07c7011edcd53a231e514cc35750bab00cbdb35b2b11 page 2 lines 5, 6",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The candidate's claim is fully supported by the provided source evidence. The source confirms the 2023-24 regular-season points per game (114.8) and points allowed per game (109.3) for the Cleveland Cavaliers.",
+      "citations": [
+        {
+          "source_id": "sha256:3ce1894fcd93204408ce07c7011edcd53a231e514cc35750bab00cbdb35b2b11",
+          "page": 2,
+          "lines": [
+            5,
+            6
+          ],
+          "quotations": [
+            {
+              "line": 5,
+              "text": "  2023-24 REGULAR SEASON                               PPG           OPP. PPG             FG%             3FG%               FT%              RPG              APG              SPG               TO              BPG\n"
+            },
+            {
+              "line": 6,
+              "text": "  Cavaliers                                           114.8             109.3             .482              .362             .772             45.1             26.9             7.74              13.6             4.76\n"
+            }
+          ],
+          "publisher": "CLE",
+          "url": "https://www.nba.com/gamenotes/cavaliers.pdf",
+          "sha256": "3ce1894fcd93204408ce07c7011edcd53a231e514cc35750bab00cbdb35b2b11",
+          "archive_time": "2024-02-10T20:04:25Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-14",
+      "request_id": "1a8b3d41c38d4c13aa179cf0d3acf49a89ece54276f513b41bd78dbd58360560",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+          "page": 2,
+          "lines": [
+            5,
+            6
+          ],
+          "quotations": [
+            {
+              "line": 5,
+              "text": "  2024-25 REGULAR SEASON                            PPG           OPP. PPG           FG%             3FG%             FT%              RPG             APG             SPG              TO              BPG\n"
+            },
+            {
+              "line": 6,
+              "text": "  Cavaliers                                        121.8            110.2             .504            .406            .775             43.5            28.5            9.13             13.2            4.43\n"
+            }
+          ],
+          "publisher": "CLE",
+          "url": "https://cdn.nba.com/teams/uploads/sites/1610612739/2024/12/241227-cleden-notes.pdf",
+          "sha256": "21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+          "archive_time": "2024-12-27T16:49:29Z",
+          "source_reading": "2024-25 REGULAR SEASON, Cavaliers: 121.8 PPG, 110.2 OPP. PPG, .504 FG%, .406 3FG%, .775 FT%, 43.5 RPG, 28.5 APG, 9.13 SPG, 13.2 TO, 4.43 BPG"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Cleveland",
+          "source_value": "Cavaliers",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2024-25",
+          "source_value": "2024-25",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "121.8 points scored, 110.2 allowed, .406 three-point percentage",
+          "source_value": "121.8 PPG, 110.2 OPP. PPG, .406 3FG%",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "season_to_date",
+          "source_value": "2024-25 REGULAR SEASON",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "page 2, lines 5, 6",
+          "source_value": "page 2, lines 5, 6",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The candidate's claim is fully supported by the provided source evidence. All numerical values, units, and the season scope match the source.",
+      "citations": [
+        {
+          "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+          "page": 2,
+          "lines": [
+            5,
+            6
+          ],
+          "quotations": [
+            {
+              "line": 5,
+              "text": "  2024-25 REGULAR SEASON                            PPG           OPP. PPG           FG%             3FG%             FT%              RPG             APG             SPG              TO              BPG\n"
+            },
+            {
+              "line": 6,
+              "text": "  Cavaliers                                        121.8            110.2             .504            .406            .775             43.5            28.5            9.13             13.2            4.43\n"
+            }
+          ],
+          "publisher": "CLE",
+          "url": "https://cdn.nba.com/teams/uploads/sites/1610612739/2024/12/241227-cleden-notes.pdf",
+          "sha256": "21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+          "archive_time": "2024-12-27T16:49:29Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-15",
+      "request_id": "9b2afd0dcfb8d4e0ac6398b8b1f22e5819b725d13a4ed950a016e50293df03a5",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:8352a8e013d5748377f6e72b4fd74c9d99a3c47036a9066716fe5c7e9d0d23f8",
+          "page": 3,
+          "lines": [
+            7,
+            8
+          ],
+          "quotations": [
+            {
+              "line": 7,
+              "text": "      •     Miami is allowing just 108.4 points per game this season, the fourth-least in the NBA, and have now held opponents to under their season\n"
+            },
+            {
+              "line": 8,
+              "text": "            scoring averages in 15-straight games, including 27 of 28 overall, doing so by an average of -12.4 points per game over that span.\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "8352a8e013d5748377f6e72b4fd74c9d99a3c47036a9066716fe5c7e9d0d23f8",
+          "archive_time": "2024-04-04T22:28:44Z",
+          "source_reading": "Miami is allowing just 108.4 points per game this season, the fourth-least in the NBA, and have now held opponents to under their season scoring averages in 15-straight games, including 27 of 28 overall, doing so by an average of -12.4 points per game over that span."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Miami",
+          "source_value": "Miami",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "this season",
+          "source_value": "2023-24",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "108.4 points per game",
+          "source_value": "108.4 points per game",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "recent_games",
+          "source_value": "15-straight games, including 27 of 28 overall",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "holding opponents below their own season scoring averages",
+          "source_value": "holding opponents to under their season scoring averages",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 7, 8 on page 3",
+          "source_value": "lines 7, 8 on page 3",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The candidate's claim is fully supported by the provided source evidence. The source confirms that Miami is allowing 108.4 points per game this season and has held opponents below their season scoring averages in 15 straight games.",
+      "citations": [
+        {
+          "source_id": "sha256:8352a8e013d5748377f6e72b4fd74c9d99a3c47036a9066716fe5c7e9d0d23f8",
+          "page": 3,
+          "lines": [
+            7,
+            8
+          ],
+          "quotations": [
+            {
+              "line": 7,
+              "text": "      •     Miami is allowing just 108.4 points per game this season, the fourth-least in the NBA, and have now held opponents to under their season\n"
+            },
+            {
+              "line": 8,
+              "text": "            scoring averages in 15-straight games, including 27 of 28 overall, doing so by an average of -12.4 points per game over that span.\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "8352a8e013d5748377f6e72b4fd74c9d99a3c47036a9066716fe5c7e9d0d23f8",
+          "archive_time": "2024-04-04T22:28:44Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-16",
+      "request_id": "e6b29778575f4a71604e6e56fda2e2268c8ebc1624b63e056785bc7a7b30b5dc",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 4,
+          "lines": [
+            9,
+            10
+          ],
+          "quotations": [
+            {
+              "line": 9,
+              "text": "BACK-TO-BACK: Tonight marks the second of a road back-to-back after just playing in Toronto last night. It marks Miami’s third of 15 back-to-backs\n"
+            },
+            {
+              "line": 10,
+              "text": "this season, which is two more than last season. Additionally, the HEAT will play a season-high four back-to-backs in December.\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "BACK-TO-BACK: Tonight marks the second of a road back-to-back after just playing in Toronto last night. It marks Miami’s third of 15 back-to-backs this season, which is two more than last season. Additionally, the HEAT will play a season-high four back-to-backs in December."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Miami",
+          "source_value": "Miami",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2024-12-02",
+          "source_value": "2024-25 season, December 2024",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "current",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 9, 10",
+          "source_value": "lines 9, 10",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The provided source evidence fully supports the claim that Miami is playing the second game of a road back-to-back after playing in Toronto the previous night. The source explicitly states this information for the current game on December 2, 2024.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 4,
+          "lines": [
+            9,
+            10
+          ],
+          "quotations": [
+            {
+              "line": 9,
+              "text": "BACK-TO-BACK: Tonight marks the second of a road back-to-back after just playing in Toronto last night. It marks Miami’s third of 15 back-to-backs\n"
+            },
+            {
+              "line": 10,
+              "text": "this season, which is two more than last season. Additionally, the HEAT will play a season-high four back-to-backs in December.\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-17",
+      "request_id": "679ece2f4761da8d5c51f83dac20418db0dd7ff738860646bfc6ef522b940d34",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": false,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:8675d1b6359940a70224ec54ecedaa26c682e40ebaba43c4d5e7dc205992713f",
+          "page": 1,
+          "lines": [
+            8,
+            12,
+            13
+          ],
+          "quotations": [
+            {
+              "line": 8,
+              "text": "Missed the past two games due to personal reasons; Rockets averaged                                        GP        14      PPG      24.6      RPG        4.8       APG          3.3\n"
+            },
+            {
+              "line": 12,
+              "text": "Last Game OPPONENT  RESULT            MIN     FG/FGA      3FG/3FGA      FT/FTA        OR        DR      TR        A      PF      ST     TO      BS      +/-      PTS\n"
+            },
+            {
+              "line": 13,
+              "text": "11/26             at GS             W104-         100                                                        INACTIVE – PERSONAL REASONS\n"
+            }
+          ],
+          "publisher": "HOU",
+          "url": "https://www.nba.com/gamenotes/rockets.pdf",
+          "sha256": "8675d1b6359940a70224ec54ecedaa26c682e40ebaba43c4d5e7dc205992713f",
+          "archive_time": "2025-11-29T22:16:54Z",
+          "source_reading": "Kevin Durant, 6-10/240, 9/29/88, Texas/USA, 19th season (1st w/HOU), Missed the past two games due to personal reasons; Rockets averaged 109.0 ppg in those games (122.9 ppg first 14 games)… Last Game 11/26 at GS W104-100 INACTIVE – PERSONAL REASONS"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Kevin Durant",
+          "source_value": "Kevin Durant",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "November 26",
+          "source_value": "11/26",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "missed the past two games for personal reasons",
+          "source_value": "Missed the past two games due to personal reasons",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "This does not establish tonight’s status",
+          "source_value": "not established",
+          "assessment": "not_established"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "inactive for personal reasons",
+          "source_value": "INACTIVE – PERSONAL REASONS",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [6, 7, 8, 9, 12, 13]",
+          "source_value": "lines [8, 12, 13]",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The source confirms that Kevin Durant missed the past two games for personal reasons and was inactive for personal reasons on November 26. However, the claim that this does not establish tonight’s status is not supported by the source, as the source does not provide any information about his status for the upcoming game.",
+      "citations": [
+        {
+          "source_id": "sha256:8675d1b6359940a70224ec54ecedaa26c682e40ebaba43c4d5e7dc205992713f",
+          "page": 1,
+          "lines": [
+            8,
+            12,
+            13
+          ],
+          "quotations": [
+            {
+              "line": 8,
+              "text": "Missed the past two games due to personal reasons; Rockets averaged                                        GP        14      PPG      24.6      RPG        4.8       APG          3.3\n"
+            },
+            {
+              "line": 12,
+              "text": "Last Game OPPONENT  RESULT            MIN     FG/FGA      3FG/3FGA      FT/FTA        OR        DR      TR        A      PF      ST     TO      BS      +/-      PTS\n"
+            },
+            {
+              "line": 13,
+              "text": "11/26             at GS             W104-         100                                                        INACTIVE – PERSONAL REASONS\n"
+            }
+          ],
+          "publisher": "HOU",
+          "url": "https://www.nba.com/gamenotes/rockets.pdf",
+          "sha256": "8675d1b6359940a70224ec54ecedaa26c682e40ebaba43c4d5e7dc205992713f",
+          "archive_time": "2025-11-29T22:16:54Z"
+        }
+      ],
+      "verdict": "unclear"
+    },
+    {
+      "case_id": "diverse-18",
+      "request_id": "e2c7b43c636616170d410ea0c9af917c2a11a968845e5eb6151b746cfc16257d",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:0b840478fe01b12de195b409bb7dcc2a4a4abb053a069bf309e68dbafff55b54",
+          "page": 5,
+          "lines": [
+            1,
+            2,
+            4,
+            7,
+            8
+          ],
+          "quotations": [
+            {
+              "line": 1,
+              "text": "  2024-25 SEASON...\n"
+            },
+            {
+              "line": 2,
+              "text": "                                                                                                         INJURY REPORT\n"
+            },
+            {
+              "line": 4,
+              "text": "                              PLAYER                          GAMES MISSED                                  DATES                                     INJURY                                      STATUS\n"
+            },
+            {
+              "line": 7,
+              "text": "                              RJ Barrett                                           3                        Oct. 23-26                                          Right AC Joint; Sprain\n"
+            },
+            {
+              "line": 8,
+              "text": "                                                                         2                        Dec. 19-22                                          Illness                                                    QUESTIONABLE\n"
+            }
+          ],
+          "publisher": "TOR",
+          "url": "https://www.nba.com/gamenotes/raptors.pdf",
+          "sha256": "0b840478fe01b12de195b409bb7dcc2a4a4abb053a069bf309e68dbafff55b54",
+          "archive_time": "2024-12-23T23:21:34Z",
+          "source_reading": "2024-25 SEASON... INJURY REPORT PLAYER GAMES MISSED DATES INJURY STATUS RJ Barrett 3 Oct. 23-26 Right AC Joint; Sprain RJ Barrett 2 Dec. 19-22 Illness QUESTIONABLE"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "RJ Barrett",
+          "source_value": "RJ Barrett",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2024-12-23",
+          "source_value": "2024-25 SEASON",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "3 games, 2 games",
+          "source_value": "3 games, 2 games",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "QUESTIONABLE",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "adjacent to an illness absence covering December 19-22; the shoulder absence is a separate October entry",
+          "source_value": "Illness (Dec. 19-22), Right AC Joint; Sprain (Oct. 23-26)",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 1, 2, 4, 7, 8",
+          "source_value": "lines 1, 2, 4, 7, 8",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The provided source evidence fully supports the claim. RJ Barrett is listed as QUESTIONABLE due to an illness absence covering December 19-22, and a separate shoulder injury from October 23-26 is also noted.",
+      "citations": [
+        {
+          "source_id": "sha256:0b840478fe01b12de195b409bb7dcc2a4a4abb053a069bf309e68dbafff55b54",
+          "page": 5,
+          "lines": [
+            1,
+            2,
+            4,
+            7,
+            8
+          ],
+          "quotations": [
+            {
+              "line": 1,
+              "text": "  2024-25 SEASON...\n"
+            },
+            {
+              "line": 2,
+              "text": "                                                                                                         INJURY REPORT\n"
+            },
+            {
+              "line": 4,
+              "text": "                              PLAYER                          GAMES MISSED                                  DATES                                     INJURY                                      STATUS\n"
+            },
+            {
+              "line": 7,
+              "text": "                              RJ Barrett                                           3                        Oct. 23-26                                          Right AC Joint; Sprain\n"
+            },
+            {
+              "line": 8,
+              "text": "                                                                         2                        Dec. 19-22                                          Illness                                                    QUESTIONABLE\n"
+            }
+          ],
+          "publisher": "TOR",
+          "url": "https://www.nba.com/gamenotes/raptors.pdf",
+          "sha256": "0b840478fe01b12de195b409bb7dcc2a4a4abb053a069bf309e68dbafff55b54",
+          "archive_time": "2024-12-23T23:21:34Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-19",
+      "request_id": "4ba32771cd874ee5cee20d6b5e3b5821247f7370adea626a5b3834d4669712ef",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:e850f30df57047606a07f9c7553e8bb7c695542a17251079a5bf8326e11b8761",
+          "page": 3,
+          "lines": [
+            14,
+            15
+          ],
+          "quotations": [
+            {
+              "line": 14,
+              "text": "• POW POW POWELL: From 10/26 - 11/11, Norman Powell recorded 20-point performances in a career-high 10 straight games. Powell is averaging a team-\n"
+            },
+            {
+              "line": 15,
+              "text": "leading and a career-high 23.3 points this season, while shooting .490 (121-247) from the field and a career-best .487 (58-119) from three-point range.\n"
+            }
+          ],
+          "publisher": "LAC",
+          "url": "https://www.nba.com/gamenotes/clippers.pdf",
+          "sha256": "e850f30df57047606a07f9c7553e8bb7c695542a17251079a5bf8326e11b8761",
+          "archive_time": "2024-11-24T03:03:06Z",
+          "source_reading": "Norman Powell recorded 20-point performances in a career-high 10 straight games from 10/26 - 11/11. Powell is averaging a team-leading and a career-high 23.3 points this season, while shooting .490 (121-247) from the field and a career-best .487 (58-119) from three-point range."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Norman Powell",
+          "source_value": "Norman Powell",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "season_to_date",
+          "source_value": "2024-25 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "23.3 points, .487 three-point shooting on 58-of-119",
+          "source_value": "23.3 points, .487 (58-119) from three-point range",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "season_to_date",
+          "source_value": "2024-25 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "team-leading and career-high",
+          "source_value": "team-leading and a career-high 23.3 points, career-best .487 from three-point range",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 14, 15 on page 3",
+          "source_value": "lines 14, 15 on page 3",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The candidate's claim is fully supported by the provided source evidence. All numerical values, units, and conditions match the source text, and the citation is complete.",
+      "citations": [
+        {
+          "source_id": "sha256:e850f30df57047606a07f9c7553e8bb7c695542a17251079a5bf8326e11b8761",
+          "page": 3,
+          "lines": [
+            14,
+            15
+          ],
+          "quotations": [
+            {
+              "line": 14,
+              "text": "• POW POW POWELL: From 10/26 - 11/11, Norman Powell recorded 20-point performances in a career-high 10 straight games. Powell is averaging a team-\n"
+            },
+            {
+              "line": 15,
+              "text": "leading and a career-high 23.3 points this season, while shooting .490 (121-247) from the field and a career-best .487 (58-119) from three-point range.\n"
+            }
+          ],
+          "publisher": "LAC",
+          "url": "https://www.nba.com/gamenotes/clippers.pdf",
+          "sha256": "e850f30df57047606a07f9c7553e8bb7c695542a17251079a5bf8326e11b8761",
+          "archive_time": "2024-11-24T03:03:06Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "diverse-20",
+      "request_id": "c313b10744b3b1fc1bea1cdc8b6c9f927f7ebcf994669b23695d2b9e284aeb24",
+      "category": "diverse_source_fact",
+      "expected_supported": true,
+      "expected_verdict": "supported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:17e075194028bd67e3b4638e9379c645aeff73448ba612d8e551a69add81acf8",
+          "page": 7,
+          "lines": [
+            1,
+            2,
+            4,
+            5
+          ],
+          "quotations": [
+            {
+              "line": 1,
+              "text": "➢ FROM DEEP VS. OKC: Brooklyn drained a season-high 23 triples on Wednesday night against the Thunder. This was the most makes from beyond \n"
+            },
+            {
+              "line": 2,
+              "text": "the arc since draining 25 on 3/29/24 against Chicago, and it was the fifth-most 3-pointers made in a game in team history. \n"
+            },
+            {
+              "line": 4,
+              "text": "▪ The 61 attempts matched the most attempts for any team in a game this season (also: Boston \n"
+            },
+            {
+              "line": 5,
+              "text": "attempted 61 threes in the first game of the NBA season on 10/22/24 vs. New York).  \n"
+            }
+          ],
+          "publisher": "BKN",
+          "url": "https://www.nba.com/gamenotes/nets.pdf",
+          "sha256": "17e075194028bd67e3b4638e9379c645aeff73448ba612d8e551a69add81acf8",
+          "archive_time": "2025-02-28T22:34:07Z",
+          "source_reading": "Brooklyn drained a season-high 23 triples on Wednesday night against the Thunder. This was the most makes from beyond the arc since draining 25 on 3/29/24 against Chicago, and it was the fifth-most 3-pointers made in a game in team history. The 61 attempts matched the most attempts for any team in a game this season (also: Boston attempted 61 threes in the first game of the NBA season on 10/22/24 vs. New York)."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Brooklyn",
+          "source_value": "Brooklyn",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "prior Wednesday game",
+          "source_value": "Wednesday night against the Thunder",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "23 threes on 61 attempts",
+          "source_value": "23 triples on 61 attempts",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "prior_game",
+          "source_value": "Wednesday night against the Thunder",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "the note compares that one-game result with historical records",
+          "source_value": "This was the most makes from beyond the arc since draining 25 on 3/29/24 against Chicago, and it was the fifth-most 3-pointers made in a game in team history.",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [1, 2, 4, 5]",
+          "source_value": "lines [1, 2, 4, 5]",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The candidate's claim is fully supported by the provided source evidence. The source confirms that Brooklyn made 23 threes on 61 attempts in its prior Wednesday game against Oklahoma City, and it compares this result with historical records.",
+      "citations": [
+        {
+          "source_id": "sha256:17e075194028bd67e3b4638e9379c645aeff73448ba612d8e551a69add81acf8",
+          "page": 7,
+          "lines": [
+            1,
+            2,
+            4,
+            5
+          ],
+          "quotations": [
+            {
+              "line": 1,
+              "text": "➢ FROM DEEP VS. OKC: Brooklyn drained a season-high 23 triples on Wednesday night against the Thunder. This was the most makes from beyond \n"
+            },
+            {
+              "line": 2,
+              "text": "the arc since draining 25 on 3/29/24 against Chicago, and it was the fifth-most 3-pointers made in a game in team history. \n"
+            },
+            {
+              "line": 4,
+              "text": "▪ The 61 attempts matched the most attempts for any team in a game this season (also: Boston \n"
+            },
+            {
+              "line": 5,
+              "text": "attempted 61 threes in the first game of the NBA season on 10/22/24 vs. New York).  \n"
+            }
+          ],
+          "publisher": "BKN",
+          "url": "https://www.nba.com/gamenotes/nets.pdf",
+          "sha256": "17e075194028bd67e3b4638e9379c645aeff73448ba612d8e551a69add81acf8",
+          "archive_time": "2025-02-28T22:34:07Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "contrast-01",
+      "request_id": "426c8759915be5c95458c59782c942bdb584a9d144471d04c57a8bb9f777b443",
+      "category": "preseason_vs_regular",
+      "expected_supported": false,
+      "expected_verdict": "unsupported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unsupported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:a1072d27b1971221a5a488e2c04cb284e1efbab266c468b79d00e3c1f21a36a5",
+          "page": 1,
+          "lines": [
+            15,
+            19,
+            20,
+            24
+          ],
+          "quotations": [
+            {
+              "line": 15,
+              "text": " 11/5      vs. Suns               3:00 pm                             --         #9      Ausar Thompson                                                                             LAST GAME: Nine points, 11 rebounds (five offensive) in 25\n"
+            },
+            {
+              "line": 19,
+              "text": " 11/12    @ Bulls                 7:00 pm                             --            GP/GS      PPG      RPG     APG     SPG     BPG      MPG\n"
+            },
+            {
+              "line": 20,
+              "text": " 11/14    vs. Hawks             7:00 pm                             --                 4/4          11.8       9.3        2.8        0.8        1.0        29.1                     Draft...Named back-to-back Overtime Elite Finals MVP and\n"
+            },
+            {
+              "line": 24,
+              "text": " 11/24    @ Pacers             8:00 pm                             --                                                                                                               send the game to OT in the preseason opener against\n"
+            }
+          ],
+          "publisher": "DET",
+          "url": "https://www.nba.com/gamenotes/pistons.pdf",
+          "sha256": "a1072d27b1971221a5a488e2c04cb284e1efbab266c468b79d00e3c1f21a36a5",
+          "archive_time": "2023-10-25T17:18:14Z",
+          "source_reading": "Ausar Thompson, 4/4, 11.8 PPG, 9.3 RPG, 2.8 APG, 0.8 SPG, 1.0 BPG, 29.1 MPG, 2023-24 PRESEASON AVERAGES"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Ausar Thompson",
+          "source_value": "Ausar Thompson",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "current regular season",
+          "source_value": "2023-24 PRESEASON",
+          "assessment": "contradiction"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "11.8 points, 9.3 rebounds",
+          "source_value": "11.8 PPG, 9.3 RPG",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "over four regular-season games",
+          "source_value": "over four preseason games",
+          "assessment": "contradiction"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 13, 15, 19, 20, 24",
+          "source_value": "lines 15, 19, 20, 24",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [
+        "The claim states the current regular season, but the source evidence shows the 2023-24 PRESEASON.",
+        "The claim states over four regular-season games, but the source evidence shows over four preseason games."
+      ],
+      "reason": "The claim asserts statistics for the current regular season, but the source evidence only provides preseason averages. The time scope and the nature of the games (regular vs. preseason) are contradictory.",
+      "citations": [
+        {
+          "source_id": "sha256:a1072d27b1971221a5a488e2c04cb284e1efbab266c468b79d00e3c1f21a36a5",
+          "page": 1,
+          "lines": [
+            15,
+            19,
+            20,
+            24
+          ],
+          "quotations": [
+            {
+              "line": 15,
+              "text": " 11/5      vs. Suns               3:00 pm                             --         #9      Ausar Thompson                                                                             LAST GAME: Nine points, 11 rebounds (five offensive) in 25\n"
+            },
+            {
+              "line": 19,
+              "text": " 11/12    @ Bulls                 7:00 pm                             --            GP/GS      PPG      RPG     APG     SPG     BPG      MPG\n"
+            },
+            {
+              "line": 20,
+              "text": " 11/14    vs. Hawks             7:00 pm                             --                 4/4          11.8       9.3        2.8        0.8        1.0        29.1                     Draft...Named back-to-back Overtime Elite Finals MVP and\n"
+            },
+            {
+              "line": 24,
+              "text": " 11/24    @ Pacers             8:00 pm                             --                                                                                                               send the game to OT in the preseason opener against\n"
+            }
+          ],
+          "publisher": "DET",
+          "url": "https://www.nba.com/gamenotes/pistons.pdf",
+          "sha256": "a1072d27b1971221a5a488e2c04cb284e1efbab266c468b79d00e3c1f21a36a5",
+          "archive_time": "2023-10-25T17:18:14Z"
+        }
+      ],
+      "verdict": "unsupported"
+    },
+    {
+      "case_id": "contrast-02",
+      "request_id": "01e3bc1cb64dba871f0d03a50b6a2324f734ee3e551aaddb290657ec5bdc793c",
+      "category": "misassigned_player",
+      "expected_supported": false,
+      "expected_verdict": "unsupported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unsupported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:17e075194028bd67e3b4638e9379c645aeff73448ba612d8e551a69add81acf8",
+          "page": 8,
+          "lines": [
+            1,
+            7,
+            8
+          ],
+          "quotations": [
+            {
+              "line": 1,
+              "text": "➢ KEON: Keon Johnson finished with 16 points (4-of-11 3FG, 4-of-4 FT), three boards, four assists, three steals and \n"
+            },
+            {
+              "line": 7,
+              "text": "➢ STEALS: Johnson has posted 14 steals across his last five games (2.8 spg), including three or more steals in each \n"
+            },
+            {
+              "line": 8,
+              "text": "of the last three games. \n"
+            }
+          ],
+          "publisher": "BKN",
+          "url": "https://www.nba.com/gamenotes/nets.pdf",
+          "sha256": "17e075194028bd67e3b4638e9379c645aeff73448ba612d8e551a69add81acf8",
+          "archive_time": "2025-02-28T22:34:07Z",
+          "source_reading": "Keon Johnson finished with 16 points (4-of-11 3FG, 4-of-4 FT), three boards, four assists, three steals and in 29 minutes (+9) against Oklahoma City on Wednesday. Johnson has posted 14 steals across his last five games (2.8 spg), including three or more steals in each of the last three games."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Cam Johnson",
+          "source_value": "Keon Johnson",
+          "assessment": "contradiction"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "recent_games",
+          "source_value": "2025",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "14 steals across his last five games, including at least three steals in each of his last three games",
+          "source_value": "14 steals across his last five games (2.8 spg), including three or more steals in each of the last three games",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "recent_games",
+          "source_value": "last five games",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "including at least three steals in each of his last three games",
+          "source_value": "including three or more steals in each of the last three games",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines [1, 7, 8]",
+          "source_value": "lines [1, 7, 8]",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [
+        "The claim asserts 'Cam Johnson' while the source evidence refers to 'Keon Johnson'."
+      ],
+      "reason": "The claim is contradicted by the source evidence, which refers to Keon Johnson instead of Cam Johnson.",
+      "citations": [
+        {
+          "source_id": "sha256:17e075194028bd67e3b4638e9379c645aeff73448ba612d8e551a69add81acf8",
+          "page": 8,
+          "lines": [
+            1,
+            7,
+            8
+          ],
+          "quotations": [
+            {
+              "line": 1,
+              "text": "➢ KEON: Keon Johnson finished with 16 points (4-of-11 3FG, 4-of-4 FT), three boards, four assists, three steals and \n"
+            },
+            {
+              "line": 7,
+              "text": "➢ STEALS: Johnson has posted 14 steals across his last five games (2.8 spg), including three or more steals in each \n"
+            },
+            {
+              "line": 8,
+              "text": "of the last three games. \n"
+            }
+          ],
+          "publisher": "BKN",
+          "url": "https://www.nba.com/gamenotes/nets.pdf",
+          "sha256": "17e075194028bd67e3b4638e9379c645aeff73448ba612d8e551a69add81acf8",
+          "archive_time": "2025-02-28T22:34:07Z"
+        }
+      ],
+      "verdict": "unsupported"
+    },
+    {
+      "case_id": "contrast-03",
+      "request_id": "fab03f29f40cc0e57c088c8504cfddfd22ac3a344fc634d137c7981cc0db4e6e",
+      "category": "ended_streak",
+      "expected_supported": false,
+      "expected_verdict": "unsupported",
+      "valid": true,
+      "passed_binary": false,
+      "raw_verdict": "supported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:3b6f7efc758a39ee1a54f7e6375d1563e5882240d5f42d07cef11f55007c3255",
+          "page": 6,
+          "lines": [
+            67
+          ],
+          "quotations": [
+            {
+              "line": 67,
+              "text": "  The 2023-24 Boston Celtics own the franchise record for most consecutive home wins to start a season with 20 straight wins at TD Garden after dropping a narrow 102-100 loss to the Denver Nuggets on Jan. 19…\n"
+            }
+          ],
+          "publisher": "BOS",
+          "url": "https://www.nba.com/gamenotes/celtics.pdf",
+          "sha256": "3b6f7efc758a39ee1a54f7e6375d1563e5882240d5f42d07cef11f55007c3255",
+          "archive_time": "2024-01-29T09:45:32Z",
+          "source_reading": "The 2023-24 Boston Celtics own the franchise record for most consecutive home wins to start a season with 20 straight wins at TD Garden after dropping a narrow 102-100 loss to the Denver Nuggets on Jan. 19…"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Boston",
+          "source_value": "Boston Celtics",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2024-01-29",
+          "source_value": "2023-24 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "20-game home winning streak",
+          "source_value": "20 straight wins at TD Garden",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "2023-24 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "remains unbeaten at home this season",
+          "source_value": "own the franchise record for most consecutive home wins to start a season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "page 6, line 67",
+          "source_value": "page 6, line 67",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The provided source evidence fully supports the claim that Boston remains unbeaten at home this season with an active 20-game home winning streak as of the January 29 game.",
+      "citations": [
+        {
+          "source_id": "sha256:3b6f7efc758a39ee1a54f7e6375d1563e5882240d5f42d07cef11f55007c3255",
+          "page": 6,
+          "lines": [
+            67
+          ],
+          "quotations": [
+            {
+              "line": 67,
+              "text": "  The 2023-24 Boston Celtics own the franchise record for most consecutive home wins to start a season with 20 straight wins at TD Garden after dropping a narrow 102-100 loss to the Denver Nuggets on Jan. 19…\n"
+            }
+          ],
+          "publisher": "BOS",
+          "url": "https://www.nba.com/gamenotes/celtics.pdf",
+          "sha256": "3b6f7efc758a39ee1a54f7e6375d1563e5882240d5f42d07cef11f55007c3255",
+          "archive_time": "2024-01-29T09:45:32Z"
+        }
+      ],
+      "verdict": "supported"
+    },
+    {
+      "case_id": "contrast-04",
+      "request_id": "5fadf050124c1bd9f009c2afb79b8a7a8f1777a2214c7b10996d19198e4bd80d",
+      "category": "historical_season_header",
+      "expected_supported": false,
+      "expected_verdict": "unsupported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unsupported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:7730ca52bb0ae3fdda2b31c718b08ea0556a2b0d7ccbae9cb6f70659ecb41d52",
+          "page": 5,
+          "lines": [
+            54,
+            60,
+            61
+          ],
+          "quotations": [
+            {
+              "line": 54,
+              "text": "                                     CELTICS 117, SPURS 98 – JANUARY 17, 2024 – TD GARDEN – BOSTON, MA – GAME #41 (32-9, 20-0 HOME)\n"
+            },
+            {
+              "line": 60,
+              "text": "The Celtics remain undefeated at home this season after posting a 117-98 win over the San Antonio Spurs on Jan. 17… The Celtics have swept the season series against the Spurs in two consecutive seasons for the\n"
+            },
+            {
+              "line": 61,
+              "text": "first time since recording 20-straight wins against San Antonio from 1981-1989…The Celtics' franchise record 20 consecutive wins at the TD Garden is tied with the 1952-53 Syracuse Nationals and 1985-86 Houston\n"
+            }
+          ],
+          "publisher": "BOS",
+          "url": "https://www.nba.com/gamenotes/celtics.pdf",
+          "sha256": "7730ca52bb0ae3fdda2b31c718b08ea0556a2b0d7ccbae9cb6f70659ecb41d52",
+          "archive_time": "2025-02-09T20:50:14Z",
+          "source_reading": "CELTS 117, SPURS 98 – JANUARY 17, 2024 – TD GARDEN – BOSTON, MA – GAME #41 (32-9, 20-0 HOME) The Celtics remain undefeated at home this season after posting a 117-98 win over the San Antonio Spurs on Jan. 17… The Celtics have swept the season series against the Spurs in two consecutive seasons for the first time since recording 20-straight wins against San Antonio from 1981-1989…The Celtics' franchise record 20 consecutive wins at the TD Garden is tied with the 1952-53 Syracuse Nationals and 1985-86 Houston Rockets for the 11th-best home start in NBA history…"
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Boston",
+          "source_value": "Boston",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "February 10, 2025",
+          "source_value": "January 17, 2024",
+          "assessment": "contradiction"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "not established",
+          "assessment": "not_established"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "remains undefeated at home this season",
+          "source_value": "remains undefeated at home this season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 54, 60, 61",
+          "source_value": "lines 54, 60, 61",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [
+        "The claim asserts the status as of February 10, 2025, but the source evidence only confirms the status as of January 17, 2024."
+      ],
+      "reason": "The source evidence confirms that Boston was undefeated at home as of January 17, 2024, but does not provide information about their home record as of February 10, 2025. The claim's date is not supported by the provided evidence.",
+      "citations": [
+        {
+          "source_id": "sha256:7730ca52bb0ae3fdda2b31c718b08ea0556a2b0d7ccbae9cb6f70659ecb41d52",
+          "page": 5,
+          "lines": [
+            54,
+            60,
+            61
+          ],
+          "quotations": [
+            {
+              "line": 54,
+              "text": "                                     CELTICS 117, SPURS 98 – JANUARY 17, 2024 – TD GARDEN – BOSTON, MA – GAME #41 (32-9, 20-0 HOME)\n"
+            },
+            {
+              "line": 60,
+              "text": "The Celtics remain undefeated at home this season after posting a 117-98 win over the San Antonio Spurs on Jan. 17… The Celtics have swept the season series against the Spurs in two consecutive seasons for the\n"
+            },
+            {
+              "line": 61,
+              "text": "first time since recording 20-straight wins against San Antonio from 1981-1989…The Celtics' franchise record 20 consecutive wins at the TD Garden is tied with the 1952-53 Syracuse Nationals and 1985-86 Houston\n"
+            }
+          ],
+          "publisher": "BOS",
+          "url": "https://www.nba.com/gamenotes/celtics.pdf",
+          "sha256": "7730ca52bb0ae3fdda2b31c718b08ea0556a2b0d7ccbae9cb6f70659ecb41d52",
+          "archive_time": "2025-02-09T20:50:14Z"
+        }
+      ],
+      "verdict": "unsupported"
+    },
+    {
+      "case_id": "contrast-05",
+      "request_id": "77b74474bfef1c28692065393e8d4f1d62ccfb51f8f5e5e2a47744106e4d175c",
+      "category": "conditional_record_causality",
+      "expected_supported": false,
+      "expected_verdict": "unsupported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unsupported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:8352a8e013d5748377f6e72b4fd74c9d99a3c47036a9066716fe5c7e9d0d23f8",
+          "page": 3,
+          "lines": [
+            5
+          ],
+          "quotations": [
+            {
+              "line": 5,
+              "text": "      •     The HEAT are a perfect 11-0 this season when Duncan Robinson scores at least 20 points.\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "8352a8e013d5748377f6e72b4fd74c9d99a3c47036a9066716fe5c7e9d0d23f8",
+          "archive_time": "2024-04-04T22:28:44Z",
+          "source_reading": "The HEAT are a perfect 11-0 this season when Duncan Robinson scores at least 20 points."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Miami",
+          "source_value": "The HEAT",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2023-24",
+          "source_value": "this season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "11-0 record when Duncan Robinson scores at least 20 points",
+          "source_value": "11-0 this season when Duncan Robinson scores at least 20 points",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "this season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "when Duncan Robinson scores at least 20 points",
+          "source_value": "when Duncan Robinson scores at least 20 points",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "page 3, line 5",
+          "source_value": "page 3, line 5",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [
+        "The claim asserts a causal relationship ('his scoring causes wins') which is not established by the source evidence."
+      ],
+      "reason": "The source evidence confirms the 11-0 record when Duncan Robinson scores at least 20 points, but it does not establish a causal relationship between his scoring and the team's wins. The claim's assertion of causality is not supported by the provided evidence.",
+      "citations": [
+        {
+          "source_id": "sha256:8352a8e013d5748377f6e72b4fd74c9d99a3c47036a9066716fe5c7e9d0d23f8",
+          "page": 3,
+          "lines": [
+            5
+          ],
+          "quotations": [
+            {
+              "line": 5,
+              "text": "      •     The HEAT are a perfect 11-0 this season when Duncan Robinson scores at least 20 points.\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "8352a8e013d5748377f6e72b4fd74c9d99a3c47036a9066716fe5c7e9d0d23f8",
+          "archive_time": "2024-04-04T22:28:44Z"
+        }
+      ],
+      "verdict": "unsupported"
+    },
+    {
+      "case_id": "contrast-06",
+      "request_id": "96d54cf7531381845778c8fe950b8d06fc5f89a0f37f83b17e280eb63810d8fd",
+      "category": "stale_injury",
+      "expected_supported": false,
+      "expected_verdict": "unsupported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unsupported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+          "page": 4,
+          "lines": [
+            47,
+            48,
+            49
+          ],
+          "quotations": [
+            {
+              "line": 47,
+              "text": "WATSON SHINES AS STARTER \n"
+            },
+            {
+              "line": 48,
+              "text": "With the Nuggets missing Aaron Gordon due to injury, it was the next man up mentality and Peyton Watson delivered. The Nuggets used an efficient attack to blow \n"
+            },
+            {
+              "line": 49,
+              "text": "out the Grizzlies 142-105 at home on 12/28. Denver finished with a season-high in points (142), field goals made (55), three-pointers (20), rebounds (53), and assists \n"
+            }
+          ],
+          "publisher": "DEN",
+          "url": "https://www.nba.com/gamenotes/nuggets.pdf",
+          "sha256": "bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+          "archive_time": "2024-01-27T09:19:05Z",
+          "source_reading": "WATSON SHINES AS STARTER With the Nuggets missing Aaron Gordon due to injury, it was the next man up mentality and Peyton Watson delivered. The Nuggets used an efficient attack to blow out the Grizzlies 142-105 at home on 12/28. Denver finished with a season-high in points (142), field goals made (55), three-pointers (20), rebounds (53), and assists (43). The 43 assists tie the 10th most assists in team history. It’s the third time since 1990 with that many assists in a game and the second time in the 2023 calendar year."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Aaron Gordon",
+          "source_value": "Aaron Gordon",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "January 27, 2024",
+          "source_value": "12/28/2023",
+          "assessment": "contradiction"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "not applicable",
+          "source_value": "not established",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "not established",
+          "assessment": "not_established"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "ruled out through injury",
+          "source_value": "missing Aaron Gordon due to injury",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 47, 48, 49",
+          "source_value": "lines 47, 48, 49",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [
+        "The date in the claim (January 27, 2024) does not match the date in the source (12/28/2023)."
+      ],
+      "reason": "The source confirms that Aaron Gordon was missing due to injury, but the date in the source (12/28/2023) does not match the date in the claim (January 27, 2024). The claim is therefore unsupported.",
+      "citations": [
+        {
+          "source_id": "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+          "page": 4,
+          "lines": [
+            47,
+            48,
+            49
+          ],
+          "quotations": [
+            {
+              "line": 47,
+              "text": "WATSON SHINES AS STARTER \n"
+            },
+            {
+              "line": 48,
+              "text": "With the Nuggets missing Aaron Gordon due to injury, it was the next man up mentality and Peyton Watson delivered. The Nuggets used an efficient attack to blow \n"
+            },
+            {
+              "line": 49,
+              "text": "out the Grizzlies 142-105 at home on 12/28. Denver finished with a season-high in points (142), field goals made (55), three-pointers (20), rebounds (53), and assists \n"
+            }
+          ],
+          "publisher": "DEN",
+          "url": "https://www.nba.com/gamenotes/nuggets.pdf",
+          "sha256": "bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+          "archive_time": "2024-01-27T09:19:05Z"
+        }
+      ],
+      "verdict": "unsupported"
+    },
+    {
+      "case_id": "contrast-07",
+      "request_id": "5a27c52917931e75d0daa234fdffa43787574f9f0dcc8922fa045588dc8a6009",
+      "category": "wrong_team",
+      "expected_supported": false,
+      "expected_verdict": "unsupported",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unsupported",
+      "source_evidence": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 4,
+          "lines": [
+            9,
+            10
+          ],
+          "quotations": [
+            {
+              "line": 9,
+              "text": "BACK-TO-BACK: Tonight marks the second of a road back-to-back after just playing in Toronto last night. It marks Miami’s third of 15 back-to-backs\n"
+            },
+            {
+              "line": 10,
+              "text": "this season, which is two more than last season. Additionally, the HEAT will play a season-high four back-to-backs in December.\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z",
+          "source_reading": "BACK-TO-BACK: Tonight marks the second of a road back-to-back after just playing in Toronto last night. It marks Miami’s third of 15 back-to-backs this season, which is two more than last season. Additionally, the HEAT will play a season-high four back-to-backs in December."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Boston",
+          "source_value": "Miami",
+          "assessment": "contradiction"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2024-12-02",
+          "source_value": "2024-25 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "current",
+          "source_value": "current",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "not applicable",
+          "source_value": "not applicable",
+          "assessment": "not_applicable"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "lines 9, 10",
+          "source_value": "lines 9, 10",
+          "assessment": "match"
+        }
+      ],
+      "contradictions": [
+        "The claim states that Boston is playing the second game of a road back-to-back, but the source evidence states that Miami is playing the second game of a road back-to-back."
+      ],
+      "reason": "The claim is contradicted by the source evidence, which states that Miami, not Boston, is playing the second game of a road back-to-back after playing in Toronto last night.",
+      "citations": [
+        {
+          "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "page": 4,
+          "lines": [
+            9,
+            10
+          ],
+          "quotations": [
+            {
+              "line": 9,
+              "text": "BACK-TO-BACK: Tonight marks the second of a road back-to-back after just playing in Toronto last night. It marks Miami’s third of 15 back-to-backs\n"
+            },
+            {
+              "line": 10,
+              "text": "this season, which is two more than last season. Additionally, the HEAT will play a season-high four back-to-backs in December.\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+          "archive_time": "2024-12-02T09:26:08Z"
+        }
+      ],
+      "verdict": "unsupported"
+    },
+    {
+      "case_id": "contrast-08",
+      "request_id": "bf6480e94e7a323ddc2f483382378966982aa78383272b90d68d99a33e7aedf6",
+      "category": "incomplete_sentence_citation",
+      "expected_supported": false,
+      "expected_verdict": "unclear",
+      "valid": true,
+      "passed_binary": true,
+      "raw_verdict": "unclear",
+      "source_evidence": [
+        {
+          "source_id": "sha256:8352a8e013d5748377f6e72b4fd74c9d99a3c47036a9066716fe5c7e9d0d23f8",
+          "page": 3,
+          "lines": [
+            7,
+            8
+          ],
+          "quotations": [
+            {
+              "line": 7,
+              "text": "      •     Miami is allowing just 108.4 points per game this season, the fourth-least in the NBA, and have now held opponents to under their season\n"
+            },
+            {
+              "line": 8,
+              "text": "            scoring averages in 15-straight games, including 27 of 28 overall, doing so by an average of -12.4 points per game over that span.\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "8352a8e013d5748377f6e72b4fd74c9d99a3c47036a9066716fe5c7e9d0d23f8",
+          "archive_time": "2024-04-04T22:28:44Z",
+          "source_reading": "Miami is allowing just 108.4 points per game this season, the fourth-least in the NBA, and have now held opponents to under their season scoring averages in 15-straight games, including 27 of 28 overall, doing so by an average of -12.4 points per game over that span."
+        }
+      ],
+      "attribute_checks": [
+        {
+          "attribute": "entity",
+          "claim_value": "Miami",
+          "source_value": "Miami",
+          "assessment": "match"
+        },
+        {
+          "attribute": "date_season",
+          "claim_value": "2023-24 season",
+          "source_value": "2023-24 season",
+          "assessment": "match"
+        },
+        {
+          "attribute": "measurement_units",
+          "claim_value": "108.4 points per game",
+          "source_value": "108.4 points per game",
+          "assessment": "match"
+        },
+        {
+          "attribute": "latest_current_scope",
+          "claim_value": "season_to_date",
+          "source_value": "season_to_date",
+          "assessment": "match"
+        },
+        {
+          "attribute": "conditionality",
+          "claim_value": "has held opponents below their own season scoring averages for 15 straight games",
+          "source_value": "have now held opponents to under their season scoring averages in 15-straight games, including 27 of 28 overall, doing so by an average of -12.4 points per game over that span",
+          "assessment": "match"
+        },
+        {
+          "attribute": "citation_completeness",
+          "claim_value": "page 3, line 7",
+          "source_value": "page 3, lines 7, 8",
+          "assessment": "incomplete_citation"
+        }
+      ],
+      "contradictions": [],
+      "reason": "The claim is supported by the source evidence, but the original citation is incomplete as it omits line 8 which is necessary to fully establish the conditionality.",
+      "citations": [
+        {
+          "source_id": "sha256:8352a8e013d5748377f6e72b4fd74c9d99a3c47036a9066716fe5c7e9d0d23f8",
+          "page": 3,
+          "lines": [
+            7,
+            8
+          ],
+          "quotations": [
+            {
+              "line": 7,
+              "text": "      •     Miami is allowing just 108.4 points per game this season, the fourth-least in the NBA, and have now held opponents to under their season\n"
+            },
+            {
+              "line": 8,
+              "text": "            scoring averages in 15-straight games, including 27 of 28 overall, doing so by an average of -12.4 points per game over that span.\n"
+            }
+          ],
+          "publisher": "MIA",
+          "url": "https://www.nba.com/gamenotes/heat.pdf",
+          "sha256": "8352a8e013d5748377f6e72b4fd74c9d99a3c47036a9066716fe5c7e9d0d23f8",
+          "archive_time": "2024-04-04T22:28:44Z"
+        }
+      ],
+      "verdict": "unclear"
+    }
+  ],
+  "limitations": "Fixed purposive training challenge, not a corpus factual-error estimate. Incomplete/invalid responses never count as a correct rejection."
+}

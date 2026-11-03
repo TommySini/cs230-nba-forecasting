@@ -1,0 +1,19 @@
+{
+  "history_path": "data/processed/seasonal/game_history.jsonl",
+  "cutoff_minutes": 60,
+  "archive_from": "20231001",
+  "archive_to": "20260410",
+  "rolling_max_age_hours": 36,
+  "workers": 3,
+  "dated_teams": ["CLE"],
+  "rolling_teams": {
+    "ATL": "hawks", "BOS": "celtics", "BKN": "nets", "CHA": "hornets",
+    "CHI": "bulls", "CLE": "cavaliers", "DAL": "mavericks", "DEN": "nuggets",
+    "DET": "pistons", "GSW": "warriors", "HOU": "rockets", "IND": "pacers",
+    "LAC": "clippers", "LAL": "lakers", "MEM": "grizzlies", "MIA": "heat",
+    "MIL": "bucks", "MIN": "timberwolves", "NOP": "pelicans", "NYK": "knicks",
+    "OKC": "thunder", "ORL": "magic", "PHI": "sixers", "PHX": "suns",
+    "POR": "blazers", "SAC": "kings", "SAS": "spurs", "TOR": "raptors",
+    "UTA": "jazz", "WAS": "wizards"
+  }
+}

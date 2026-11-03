@@ -1,0 +1,51 @@
+{
+  "attempted_packet_versions": 804,
+  "verified_archived_versions": 482,
+  "approved_packet_versions": 278,
+  "approved_unique_games": 256,
+  "by_publisher": {
+    "DEN": 44,
+    "DET": 37,
+    "MEM": 44,
+    "BOS": 35,
+    "HOU": 5,
+    "TOR": 4,
+    "CLE": 51,
+    "MIA": 3,
+    "ATL": 2,
+    "DAL": 5,
+    "CHI": 3,
+    "CHA": 3,
+    "LAC": 1,
+    "NOP": 2,
+    "BKN": 4,
+    "IND": 5,
+    "LAL": 6,
+    "MIN": 1,
+    "UTA": 1
+  },
+  "by_season": {
+    "2023": 149,
+    "2024": 76,
+    "2025": 31
+  },
+  "rejection_reasons": {
+    "no_verified_pre_cutoff_archive": 321,
+    "insufficient_extractable_text": 72,
+    "header_date_mismatch_or_missing": 135,
+    "season_mismatch_or_missing": 77,
+    "home_team_missing_from_header": 111,
+    "away_team_missing_from_header": 109,
+    "missing_independent_prior_record_or_game_number_check": 101,
+    "publisher_template_not_reviewed": 99,
+    "header_home_away_mismatch": 32,
+    "away_record_disagrees_with_prior_history": 41,
+    "publisher_game_number_disagrees_with_history": 45,
+    "home_record_disagrees_with_prior_history": 48,
+    "archive_replay_parse_failed": 1,
+    "manual_review_wrong_venue_United_Center_for_Chicago_at_Cleveland": 1,
+    "header_year_mismatch": 4
+  },
+  "review_method": "template review plus per-document mechanical checks, not every sentence manually reviewed",
+  "scope": "Schedule-defined discovery; archive/template availability creates selective coverage, not leaguewide representativeness"
+}

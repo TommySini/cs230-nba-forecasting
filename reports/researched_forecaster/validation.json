@@ -1,0 +1,16 @@
+{
+  "games": 107,
+  "splits": {
+    "train": 80,
+    "dev": 13,
+    "test": 14
+  },
+  "source_and_model_locks": "passed",
+  "all_supported_facts_encoded": "passed",
+  "train_only_center_and_head_fit_replay": "passed",
+  "dev_only_selection": "passed",
+  "dev_and_test_probability_replay": "passed",
+  "metrics_and_paired_interval_replay": "passed",
+  "source_to_forecast_prompt_replay": "passed",
+  "old_baseline_and_pilot_locks": "passed"
+}

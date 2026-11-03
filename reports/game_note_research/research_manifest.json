@@ -1,0 +1,968 @@
+{
+  "protocol_sha256": "6248e6518fa89dc06d1f55431af8c6152acb16ba772537a39ff2b314577856e8",
+  "reports": [
+    {
+      "game_id": "espn:401704720",
+      "split": "train",
+      "pages": 33,
+      "facts": 47,
+      "rejected": 74,
+      "report_path": "data/processed/game_note_research/reports/espn-401704720.json",
+      "sha256": "25756a058216e9346bc68361ee5a72ff705abd2e8e7cf0eee7d5177d163aa1be"
+    },
+    {
+      "game_id": "espn:401704741",
+      "split": "train",
+      "pages": 34,
+      "facts": 64,
+      "rejected": 93,
+      "report_path": "data/processed/game_note_research/reports/espn-401704741.json",
+      "sha256": "7798113cf168bbed1df41ea7f39dd413824d948186762fd51d98d71c5c916792"
+    },
+    {
+      "game_id": "espn:401704754",
+      "split": "train",
+      "pages": 36,
+      "facts": 52,
+      "rejected": 84,
+      "report_path": "data/processed/game_note_research/reports/espn-401704754.json",
+      "sha256": "6bd4fd19cfddc6cc688e4e783987ec3d977c810457a57956a0b65d88ea21801e"
+    },
+    {
+      "game_id": "espn:401704765",
+      "split": "train",
+      "pages": 37,
+      "facts": 48,
+      "rejected": 87,
+      "report_path": "data/processed/game_note_research/reports/espn-401704765.json",
+      "sha256": "3c9c7b356a61aa857ea4fce78ae4a626bbe1a1778f33759e099b21f1a06202c2"
+    },
+    {
+      "game_id": "espn:401704778",
+      "split": "train",
+      "pages": 37,
+      "facts": 70,
+      "rejected": 77,
+      "report_path": "data/processed/game_note_research/reports/espn-401704778.json",
+      "sha256": "5bbc0b797a7de301d4c779c3b9962e06a001c27471c7d1b614c192532e2b68b8"
+    },
+    {
+      "game_id": "espn:401704786",
+      "split": "train",
+      "pages": 37,
+      "facts": 58,
+      "rejected": 75,
+      "report_path": "data/processed/game_note_research/reports/espn-401704786.json",
+      "sha256": "ae0a3dfedf00e905c4ae8fba426d3555e619ca5f5cfc4edc7f38f80112bee279"
+    },
+    {
+      "game_id": "espn:401703382",
+      "split": "train",
+      "pages": 37,
+      "facts": 58,
+      "rejected": 81,
+      "report_path": "data/processed/game_note_research/reports/espn-401703382.json",
+      "sha256": "898e662e5775590afa4a5c666b59a7a53efa239b690636cd15d559545afe3f2b"
+    },
+    {
+      "game_id": "espn:401703386",
+      "split": "train",
+      "pages": 21,
+      "facts": 39,
+      "rejected": 69,
+      "report_path": "data/processed/game_note_research/reports/espn-401703386.json",
+      "sha256": "7a44e4fc122f6e2bf2174d48234c6c8045f08bf80c7384698df5cfe87a92bc51"
+    },
+    {
+      "game_id": "espn:401704802",
+      "split": "train",
+      "pages": 39,
+      "facts": 56,
+      "rejected": 84,
+      "report_path": "data/processed/game_note_research/reports/espn-401704802.json",
+      "sha256": "c7b2a715876e98a92c67680bf7d3d8815b5f343e9d2c6473fb991230bebca793"
+    },
+    {
+      "game_id": "espn:401704804",
+      "split": "train",
+      "pages": 21,
+      "facts": 35,
+      "rejected": 66,
+      "report_path": "data/processed/game_note_research/reports/espn-401704804.json",
+      "sha256": "770c30179b0006d724a6bd6bbfbdf1531f24ad1e20bb9560c6e28a8a36403db1"
+    },
+    {
+      "game_id": "espn:401704807",
+      "split": "train",
+      "pages": 31,
+      "facts": 84,
+      "rejected": 87,
+      "report_path": "data/processed/game_note_research/reports/espn-401704807.json",
+      "sha256": "7fd401abf7ed248361021ec9e99d1f01b0fbac6cd5cc11cea1dc5a32845df102"
+    },
+    {
+      "game_id": "espn:401703390",
+      "split": "train",
+      "pages": 39,
+      "facts": 86,
+      "rejected": 83,
+      "report_path": "data/processed/game_note_research/reports/espn-401703390.json",
+      "sha256": "19483013d8569878ad2400dc700901f07f88635f5a3e37811edbffe5cd6d1325"
+    },
+    {
+      "game_id": "espn:401704818",
+      "split": "train",
+      "pages": 39,
+      "facts": 72,
+      "rejected": 105,
+      "report_path": "data/processed/game_note_research/reports/espn-401704818.json",
+      "sha256": "7d1006fec0cb9c8fcdd2317a8a713c81e5785728f6f9d6076e289e8ba444ac35"
+    },
+    {
+      "game_id": "espn:401704820",
+      "split": "train",
+      "pages": 25,
+      "facts": 60,
+      "rejected": 121,
+      "report_path": "data/processed/game_note_research/reports/espn-401704820.json",
+      "sha256": "ac500f1d04991b4c9d7badd9e16b8dacc74bb761e510d864cf26da145b222b34"
+    },
+    {
+      "game_id": "espn:401704826",
+      "split": "train",
+      "pages": 31,
+      "facts": 67,
+      "rejected": 98,
+      "report_path": "data/processed/game_note_research/reports/espn-401704826.json",
+      "sha256": "60fcdc32fd40548ff3b1019a572c9b43d5a1c04f31ee0a0085257c1905504d4d"
+    },
+    {
+      "game_id": "espn:401703402",
+      "split": "train",
+      "pages": 21,
+      "facts": 41,
+      "rejected": 63,
+      "report_path": "data/processed/game_note_research/reports/espn-401703402.json",
+      "sha256": "679bb36ec62efa6aa947299d284123c772ec021a06e1865006ef8a90878029dc"
+    },
+    {
+      "game_id": "espn:401704840",
+      "split": "train",
+      "pages": 20,
+      "facts": 45,
+      "rejected": 46,
+      "report_path": "data/processed/game_note_research/reports/espn-401704840.json",
+      "sha256": "86eac88050ca55ed1761487d0bfa98ede7d9a926a47b98c3bba3dcca43905782"
+    },
+    {
+      "game_id": "espn:401704841",
+      "split": "train",
+      "pages": 41,
+      "facts": 79,
+      "rejected": 100,
+      "report_path": "data/processed/game_note_research/reports/espn-401704841.json",
+      "sha256": "67aed7482b381325be7aaf0732840c371884cf2a52aaca1c9cb5688686c292cc"
+    },
+    {
+      "game_id": "espn:401704849",
+      "split": "train",
+      "pages": 21,
+      "facts": 36,
+      "rejected": 75,
+      "report_path": "data/processed/game_note_research/reports/espn-401704849.json",
+      "sha256": "dd9dc5e3a08e3e11d04be5ff8d0dcec1f8f0664c26ecb44d5a121b712f8fb8d7"
+    },
+    {
+      "game_id": "espn:401703410",
+      "split": "train",
+      "pages": 41,
+      "facts": 77,
+      "rejected": 102,
+      "report_path": "data/processed/game_note_research/reports/espn-401703410.json",
+      "sha256": "ff482a59b6b01c6e4e4e6de7c91db78dae56ba1a6d9c98d76dc55bf796984c71"
+    },
+    {
+      "game_id": "espn:401704872",
+      "split": "train",
+      "pages": 23,
+      "facts": 59,
+      "rejected": 65,
+      "report_path": "data/processed/game_note_research/reports/espn-401704872.json",
+      "sha256": "1df1cc88afb1d75947c27a00c4f2698c107242751b581a794e1efe25bdc02a62"
+    },
+    {
+      "game_id": "espn:401704873",
+      "split": "train",
+      "pages": 41,
+      "facts": 80,
+      "rejected": 84,
+      "report_path": "data/processed/game_note_research/reports/espn-401704873.json",
+      "sha256": "299ae351a192c496ce20b6be429aba498f99248669c2aefe76c70456d6f55a13"
+    },
+    {
+      "game_id": "espn:401704874",
+      "split": "train",
+      "pages": 25,
+      "facts": 54,
+      "rejected": 43,
+      "report_path": "data/processed/game_note_research/reports/espn-401704874.json",
+      "sha256": "b39e798ec9e77b648c6ffe2c318ed6228c28109d71d9c4ae76245cba51e54f4a"
+    },
+    {
+      "game_id": "espn:401704882",
+      "split": "train",
+      "pages": 15,
+      "facts": 53,
+      "rejected": 34,
+      "report_path": "data/processed/game_note_research/reports/espn-401704882.json",
+      "sha256": "41b5f60fae264fc7db309da2cd1d0b9230bd96e627f835c80b36457ec7aa3c40"
+    },
+    {
+      "game_id": "espn:401704883",
+      "split": "train",
+      "pages": 32,
+      "facts": 105,
+      "rejected": 84,
+      "report_path": "data/processed/game_note_research/reports/espn-401704883.json",
+      "sha256": "eb30ccfce0369155cf193e74ab134fd92a40851d1ff6e767497d0b612d98ce2e"
+    },
+    {
+      "game_id": "espn:401703425",
+      "split": "train",
+      "pages": 35,
+      "facts": 112,
+      "rejected": 105,
+      "report_path": "data/processed/game_note_research/reports/espn-401703425.json",
+      "sha256": "f73501d4ba63d7b30b17ddd77bf056bc400c05c186ef031cb2b84e2a63054e06"
+    },
+    {
+      "game_id": "espn:401704906",
+      "split": "train",
+      "pages": 33,
+      "facts": 78,
+      "rejected": 77,
+      "report_path": "data/processed/game_note_research/reports/espn-401704906.json",
+      "sha256": "f55428eb01ee597fac9d71aaa0d0ce3e24f25949a0b03e7017578bc3b98f83bc"
+    },
+    {
+      "game_id": "espn:401704917",
+      "split": "train",
+      "pages": 42,
+      "facts": 67,
+      "rejected": 112,
+      "report_path": "data/processed/game_note_research/reports/espn-401704917.json",
+      "sha256": "89e80c6391b75b82de55e3d40b021c5ef549c032a2d0c26cd0ad9049c7604e55"
+    },
+    {
+      "game_id": "espn:401736818",
+      "split": "train",
+      "pages": 42,
+      "facts": 69,
+      "rejected": 105,
+      "report_path": "data/processed/game_note_research/reports/espn-401736818.json",
+      "sha256": "32a6e932ea73c2d295e510eddf7aa58fd01184d1e56e5c846e4d8d6735aab37e"
+    },
+    {
+      "game_id": "espn:401704946",
+      "split": "train",
+      "pages": 42,
+      "facts": 102,
+      "rejected": 91,
+      "report_path": "data/processed/game_note_research/reports/espn-401704946.json",
+      "sha256": "b05cc517fe12d9193bde0cf2f5e876f0022e436240a9e1c5e64994cff3e8d162"
+    },
+    {
+      "game_id": "espn:401704958",
+      "split": "train",
+      "pages": 42,
+      "facts": 66,
+      "rejected": 67,
+      "report_path": "data/processed/game_note_research/reports/espn-401704958.json",
+      "sha256": "39b02aeaefa4ad58a1cf3b9e4467bd0421c8bd6e3d353ec500cd172a73471ebd"
+    },
+    {
+      "game_id": "espn:401704959",
+      "split": "train",
+      "pages": 30,
+      "facts": 73,
+      "rejected": 94,
+      "report_path": "data/processed/game_note_research/reports/espn-401704959.json",
+      "sha256": "9c5d2a2baa8dfb8fd49a62c46dccd33386fe24833e158940e1843b7f797ec182"
+    },
+    {
+      "game_id": "espn:401704961",
+      "split": "train",
+      "pages": 40,
+      "facts": 104,
+      "rejected": 93,
+      "report_path": "data/processed/game_note_research/reports/espn-401704961.json",
+      "sha256": "d05393e4ef9d6768e315b4af35e5854ed9fb3665bbdcfe3353e135598fd144b5"
+    },
+    {
+      "game_id": "espn:401704962",
+      "split": "train",
+      "pages": 37,
+      "facts": 105,
+      "rejected": 72,
+      "report_path": "data/processed/game_note_research/reports/espn-401704962.json",
+      "sha256": "46d41175ca3917e471df5d943265d8bc03d2a87e635e57808af1c26635559f1a"
+    },
+    {
+      "game_id": "espn:401704963",
+      "split": "train",
+      "pages": 16,
+      "facts": 58,
+      "rejected": 39,
+      "report_path": "data/processed/game_note_research/reports/espn-401704963.json",
+      "sha256": "4799078b45d931663a98c6b70d822277275c60f40f39ce4dcb61f54b2ca586fa"
+    },
+    {
+      "game_id": "espn:401704965",
+      "split": "train",
+      "pages": 24,
+      "facts": 60,
+      "rejected": 50,
+      "report_path": "data/processed/game_note_research/reports/espn-401704965.json",
+      "sha256": "7364b9fc19f990227c70bc022747d5c17dc123ac21a3b8b083b428de4c8eca88"
+    },
+    {
+      "game_id": "espn:401704967",
+      "split": "train",
+      "pages": 37,
+      "facts": 117,
+      "rejected": 102,
+      "report_path": "data/processed/game_note_research/reports/espn-401704967.json",
+      "sha256": "821442804eb5b19a9cf10e6ac863f160094a15aab199ce4f3edf7efddf6c2e32"
+    },
+    {
+      "game_id": "espn:401704969",
+      "split": "train",
+      "pages": 25,
+      "facts": 49,
+      "rejected": 106,
+      "report_path": "data/processed/game_note_research/reports/espn-401704969.json",
+      "sha256": "eaf975fe53ac7340833cd5e0317086c6b95028e3cc5157fedc6d23ead15e50e4"
+    },
+    {
+      "game_id": "espn:401704970",
+      "split": "train",
+      "pages": 29,
+      "facts": 75,
+      "rejected": 82,
+      "report_path": "data/processed/game_note_research/reports/espn-401704970.json",
+      "sha256": "5b26e8293452469c3f29fa1caafa1239798f0da2ddba9c39b5d871cbfee780ec"
+    },
+    {
+      "game_id": "espn:401704974",
+      "split": "train",
+      "pages": 30,
+      "facts": 87,
+      "rejected": 75,
+      "report_path": "data/processed/game_note_research/reports/espn-401704974.json",
+      "sha256": "ad62d7f4e5239010c378e1aa1503d6f67db5e601997ce982e90f9fd6592ac1bc"
+    },
+    {
+      "game_id": "espn:401704990",
+      "split": "train",
+      "pages": 42,
+      "facts": 73,
+      "rejected": 75,
+      "report_path": "data/processed/game_note_research/reports/espn-401704990.json",
+      "sha256": "b946d43e1e58c1c6ec67e668f307e570e59abad920a407b7e90ebf6adac661c8"
+    },
+    {
+      "game_id": "espn:401705003",
+      "split": "train",
+      "pages": 30,
+      "facts": 58,
+      "rejected": 112,
+      "report_path": "data/processed/game_note_research/reports/espn-401705003.json",
+      "sha256": "7d2e6d22751eb97f197df8856c4460f408e485cf3caca56593d5d0d80d158d8d"
+    },
+    {
+      "game_id": "espn:401705120",
+      "split": "train",
+      "pages": 43,
+      "facts": 87,
+      "rejected": 88,
+      "report_path": "data/processed/game_note_research/reports/espn-401705120.json",
+      "sha256": "0d4db8f99a474057bb9447ac33f12e1ab6f579b75f799d8ae2da787fbf99384e"
+    },
+    {
+      "game_id": "espn:401705156",
+      "split": "train",
+      "pages": 43,
+      "facts": 97,
+      "rejected": 83,
+      "report_path": "data/processed/game_note_research/reports/espn-401705156.json",
+      "sha256": "bfc2e6335ca875696cc318285f78806e1913007bed0a8f6bd0a9eceb6efa4808"
+    },
+    {
+      "game_id": "espn:401705169",
+      "split": "train",
+      "pages": 43,
+      "facts": 91,
+      "rejected": 81,
+      "report_path": "data/processed/game_note_research/reports/espn-401705169.json",
+      "sha256": "cb456d60586afb6486ed6fdc097fda85e63acb610ac74adde8d8468b6868bdae"
+    },
+    {
+      "game_id": "espn:401705181",
+      "split": "train",
+      "pages": 43,
+      "facts": 96,
+      "rejected": 68,
+      "report_path": "data/processed/game_note_research/reports/espn-401705181.json",
+      "sha256": "dd131641a7c9419ef106adbf02aad7596b4154b818a502ff9a06dac90466dc7a"
+    },
+    {
+      "game_id": "espn:401705197",
+      "split": "train",
+      "pages": 43,
+      "facts": 86,
+      "rejected": 74,
+      "report_path": "data/processed/game_note_research/reports/espn-401705197.json",
+      "sha256": "ec907d6de13af80e86cd09c02539732cb5be258099b28abf4a6d52fc458a7609"
+    },
+    {
+      "game_id": "espn:401705216",
+      "split": "train",
+      "pages": 32,
+      "facts": 57,
+      "rejected": 112,
+      "report_path": "data/processed/game_note_research/reports/espn-401705216.json",
+      "sha256": "3e23c7a0df6c4190c954dc45ef29d9fd31c324bdcd22779d3c321759abf8a71a"
+    },
+    {
+      "game_id": "espn:401705233",
+      "split": "train",
+      "pages": 43,
+      "facts": 88,
+      "rejected": 89,
+      "report_path": "data/processed/game_note_research/reports/espn-401705233.json",
+      "sha256": "c6288174b687a1134b4934518fc9603ec93b7c03aeb2dd7f491695accfbebd55"
+    },
+    {
+      "game_id": "espn:401705255",
+      "split": "train",
+      "pages": 28,
+      "facts": 75,
+      "rejected": 76,
+      "report_path": "data/processed/game_note_research/reports/espn-401705255.json",
+      "sha256": "2a0153e8f60fae5c73c018afc9c7559ac3e26ac5f89a2423a4a5378c088f4ea8"
+    },
+    {
+      "game_id": "espn:401705325",
+      "split": "train",
+      "pages": 33,
+      "facts": 93,
+      "rejected": 87,
+      "report_path": "data/processed/game_note_research/reports/espn-401705325.json",
+      "sha256": "ed166a4ebf4f25ddb8030e7d39d4733a5cf9825d33c965f6dfdf82e54218b6c1"
+    },
+    {
+      "game_id": "espn:401705357",
+      "split": "train",
+      "pages": 44,
+      "facts": 86,
+      "rejected": 80,
+      "report_path": "data/processed/game_note_research/reports/espn-401705357.json",
+      "sha256": "bb5cbb3ea7b417e4f86add6f4f6b50332820682a92b86b99bdf0efb15bd2e819"
+    },
+    {
+      "game_id": "espn:401705363",
+      "split": "train",
+      "pages": 44,
+      "facts": 103,
+      "rejected": 80,
+      "report_path": "data/processed/game_note_research/reports/espn-401705363.json",
+      "sha256": "be54225588c5580f1b906c7396cd474a43e961eba5527d4e7b8ee153bc4a10de"
+    },
+    {
+      "game_id": "espn:401705385",
+      "split": "train",
+      "pages": 43,
+      "facts": 103,
+      "rejected": 81,
+      "report_path": "data/processed/game_note_research/reports/espn-401705385.json",
+      "sha256": "2ec9c840e668fdee42c1332793ab514bd7767591b53dc18e7ea074b131093b91"
+    },
+    {
+      "game_id": "espn:401705396",
+      "split": "train",
+      "pages": 43,
+      "facts": 94,
+      "rejected": 83,
+      "report_path": "data/processed/game_note_research/reports/espn-401705396.json",
+      "sha256": "a3df0557a5aa3c3337855a2e4950acaa415f9398a6093dd2433576f40af41396"
+    },
+    {
+      "game_id": "espn:401705416",
+      "split": "train",
+      "pages": 40,
+      "facts": 97,
+      "rejected": 107,
+      "report_path": "data/processed/game_note_research/reports/espn-401705416.json",
+      "sha256": "4886d68b50af1bc92fa13bda90a6a9ec279d3f13d872bf7921473272bace0e3e"
+    },
+    {
+      "game_id": "espn:401705418",
+      "split": "train",
+      "pages": 43,
+      "facts": 87,
+      "rejected": 77,
+      "report_path": "data/processed/game_note_research/reports/espn-401705418.json",
+      "sha256": "b3f8f96a10c9dae8ceb2bdb0ff652ac73b5a914edf2d9a18e921e6e09d63c844"
+    },
+    {
+      "game_id": "espn:401705419",
+      "split": "train",
+      "pages": 39,
+      "facts": 107,
+      "rejected": 91,
+      "report_path": "data/processed/game_note_research/reports/espn-401705419.json",
+      "sha256": "b5e2584cc6d5ee9c23eda2ab8bb19b69756a99f489be1628aea58c5b8003e44f"
+    },
+    {
+      "game_id": "espn:401705420",
+      "split": "train",
+      "pages": 24,
+      "facts": 49,
+      "rejected": 87,
+      "report_path": "data/processed/game_note_research/reports/espn-401705420.json",
+      "sha256": "57c6775274188de3718c90deeaaf912ceb02c2d63a21814be7d8bc2c8d5a3eda"
+    },
+    {
+      "game_id": "espn:401705421",
+      "split": "train",
+      "pages": 37,
+      "facts": 122,
+      "rejected": 123,
+      "report_path": "data/processed/game_note_research/reports/espn-401705421.json",
+      "sha256": "c42e63d8bfe9b44d1a1b57bc8f6641b8d233d56743fb5514bbde0d5586ac70a8"
+    },
+    {
+      "game_id": "espn:401705422",
+      "split": "train",
+      "pages": 28,
+      "facts": 60,
+      "rejected": 79,
+      "report_path": "data/processed/game_note_research/reports/espn-401705422.json",
+      "sha256": "8d742ddc31c505338590fd0a04e7a1c4de76ddce4d2ebf108e066a9978343187"
+    },
+    {
+      "game_id": "espn:401705423",
+      "split": "train",
+      "pages": 27,
+      "facts": 58,
+      "rejected": 51,
+      "report_path": "data/processed/game_note_research/reports/espn-401705423.json",
+      "sha256": "a1bd8cdf5945e633fd5f7c0ffbb3c945b7f612a135e7dce3bb5163ddc20a9c50"
+    },
+    {
+      "game_id": "espn:401705424",
+      "split": "train",
+      "pages": 30,
+      "facts": 102,
+      "rejected": 101,
+      "report_path": "data/processed/game_note_research/reports/espn-401705424.json",
+      "sha256": "6c202d7fd4fe120dfbfb36b4b466cd32ab62b5c3983ccfa20203cdfad32a15af"
+    },
+    {
+      "game_id": "espn:401705425",
+      "split": "train",
+      "pages": 29,
+      "facts": 69,
+      "rejected": 63,
+      "report_path": "data/processed/game_note_research/reports/espn-401705425.json",
+      "sha256": "79854b0fa6a708b6096a630cfa5134db25c4cd8b6886f6420dac44565b418af2"
+    },
+    {
+      "game_id": "espn:401705426",
+      "split": "train",
+      "pages": 35,
+      "facts": 97,
+      "rejected": 79,
+      "report_path": "data/processed/game_note_research/reports/espn-401705426.json",
+      "sha256": "3296a9f2875a3af2d836f242b76fb0c21fba753efac34c6f660536dd666c6892"
+    },
+    {
+      "game_id": "espn:401705487",
+      "split": "train",
+      "pages": 29,
+      "facts": 69,
+      "rejected": 102,
+      "report_path": "data/processed/game_note_research/reports/espn-401705487.json",
+      "sha256": "66346e043f6e7550245e72e8c6f2682833b26c35a4f720eae51ec2a7fb4f3eb5"
+    },
+    {
+      "game_id": "espn:401705517",
+      "split": "train",
+      "pages": 33,
+      "facts": 94,
+      "rejected": 91,
+      "report_path": "data/processed/game_note_research/reports/espn-401705517.json",
+      "sha256": "046b0481c637a78743a58f692379f0d3d2cc66a85306af4fc714b19444709c71"
+    },
+    {
+      "game_id": "espn:401705572",
+      "split": "train",
+      "pages": 29,
+      "facts": 56,
+      "rejected": 80,
+      "report_path": "data/processed/game_note_research/reports/espn-401705572.json",
+      "sha256": "cd25a3124ec228a14c7110c11e556184c5fca865228c7d6d7a6d88de2eb920b5"
+    },
+    {
+      "game_id": "espn:401705644",
+      "split": "train",
+      "pages": 28,
+      "facts": 47,
+      "rejected": 58,
+      "report_path": "data/processed/game_note_research/reports/espn-401705644.json",
+      "sha256": "62231fd2a3e9436e640824046f0b72bf7b8788af3f5f7ec807c43806c35682ac"
+    },
+    {
+      "game_id": "espn:401705647",
+      "split": "train",
+      "pages": 45,
+      "facts": 106,
+      "rejected": 78,
+      "report_path": "data/processed/game_note_research/reports/espn-401705647.json",
+      "sha256": "e8d99a6f2b6eaebf4cf03e3e364c17ef411efe77d17f6ab0d0d299b70cf32628"
+    },
+    {
+      "game_id": "espn:401705669",
+      "split": "train",
+      "pages": 45,
+      "facts": 80,
+      "rejected": 98,
+      "report_path": "data/processed/game_note_research/reports/espn-401705669.json",
+      "sha256": "1e997098b9f9d34fc02285db6375d51ddcc72f6fd050e8e422c86059238f9627"
+    },
+    {
+      "game_id": "espn:401705680",
+      "split": "train",
+      "pages": 28,
+      "facts": 47,
+      "rejected": 63,
+      "report_path": "data/processed/game_note_research/reports/espn-401705680.json",
+      "sha256": "d2f7c4c532254d35789f2ce516ed417f341567c869d4cf5c1d0b0fc1ce09f592"
+    },
+    {
+      "game_id": "espn:401705690",
+      "split": "train",
+      "pages": 45,
+      "facts": 89,
+      "rejected": 98,
+      "report_path": "data/processed/game_note_research/reports/espn-401705690.json",
+      "sha256": "91aa01170a6dd062f95fe91c5e9148ac5657b42bb9d77dcaf35ee6f23a8fb981"
+    },
+    {
+      "game_id": "espn:401705704",
+      "split": "train",
+      "pages": 45,
+      "facts": 108,
+      "rejected": 101,
+      "report_path": "data/processed/game_note_research/reports/espn-401705704.json",
+      "sha256": "fbd0f34d2de02250dbf5f9e1ebd42949dbfa01498eba4e8922c9e67e9ebaaf6b"
+    },
+    {
+      "game_id": "espn:401705713",
+      "split": "train",
+      "pages": 45,
+      "facts": 120,
+      "rejected": 110,
+      "report_path": "data/processed/game_note_research/reports/espn-401705713.json",
+      "sha256": "011dabd70996f9e56d06c693ef7552fd06bd6b1193720869b525df40cd309703"
+    },
+    {
+      "game_id": "espn:401705734",
+      "split": "train",
+      "pages": 46,
+      "facts": 120,
+      "rejected": 99,
+      "report_path": "data/processed/game_note_research/reports/espn-401705734.json",
+      "sha256": "27be297d7fe14d2fe086a677b61488f51601a67df1fede7696b93f8e5e471053"
+    },
+    {
+      "game_id": "espn:401809504",
+      "split": "train",
+      "pages": 51,
+      "facts": 78,
+      "rejected": 68,
+      "report_path": "data/processed/game_note_research/reports/espn-401809504.json",
+      "sha256": "48fd37a37f247c93d08b9d08c71e4f61b1bf63b6f996ff34b7f615e91c0286ac"
+    },
+    {
+      "game_id": "espn:401809511",
+      "split": "train",
+      "pages": 37,
+      "facts": 44,
+      "rejected": 69,
+      "report_path": "data/processed/game_note_research/reports/espn-401809511.json",
+      "sha256": "8b5f069b6d6275ca1c6e517c1b158500c82357e7dbfe149feb87719dc8976d38"
+    },
+    {
+      "game_id": "espn:401810156",
+      "split": "train",
+      "pages": 24,
+      "facts": 56,
+      "rejected": 98,
+      "report_path": "data/processed/game_note_research/reports/espn-401810156.json",
+      "sha256": "aded62c1cd5ded3eb4bcd3d52fac3ea8033cfbb103a53551ca400b6308502c8a"
+    },
+    {
+      "game_id": "espn:401810170",
+      "split": "train",
+      "pages": 23,
+      "facts": 34,
+      "rejected": 84,
+      "report_path": "data/processed/game_note_research/reports/espn-401810170.json",
+      "sha256": "ad10b30bbcde00fb1fa669374638fd708b9d05aa561aaee84f02cfa3496a5e3b"
+    },
+    {
+      "game_id": "espn:401810190",
+      "split": "dev",
+      "pages": 25,
+      "facts": 41,
+      "rejected": 68,
+      "report_path": "data/processed/game_note_research/reports/espn-401810190.json",
+      "sha256": "d5dfaadc877b063f5929cdb34917458880126b4eef2d335d29bf019546f36a50"
+    },
+    {
+      "game_id": "espn:401810196",
+      "split": "dev",
+      "pages": 42,
+      "facts": 71,
+      "rejected": 77,
+      "report_path": "data/processed/game_note_research/reports/espn-401810196.json",
+      "sha256": "9bd489ff95dee9d98f98df5ab6f453e544cb44260e97b096b30bcfc32f2c75ae"
+    },
+    {
+      "game_id": "espn:401810200",
+      "split": "dev",
+      "pages": 24,
+      "facts": 35,
+      "rejected": 79,
+      "report_path": "data/processed/game_note_research/reports/espn-401810200.json",
+      "sha256": "43cf53cdf92e93645e0997fe868a35e2e0f27dc6ca322290e69861b72f7fc877"
+    },
+    {
+      "game_id": "espn:401810250",
+      "split": "dev",
+      "pages": 27,
+      "facts": 56,
+      "rejected": 44,
+      "report_path": "data/processed/game_note_research/reports/espn-401810250.json",
+      "sha256": "4414ee6b86699c1dbfa1362e789b827fc169fc52c41bdaa5e5aa0a177f17180b"
+    },
+    {
+      "game_id": "espn:401810273",
+      "split": "dev",
+      "pages": 27,
+      "facts": 47,
+      "rejected": 45,
+      "report_path": "data/processed/game_note_research/reports/espn-401810273.json",
+      "sha256": "0e061c3c644aa434cee6cde9af1fcc1b7c37f65340d71d0fc8b5061da77beb22"
+    },
+    {
+      "game_id": "espn:401810306",
+      "split": "dev",
+      "pages": 23,
+      "facts": 57,
+      "rejected": 71,
+      "report_path": "data/processed/game_note_research/reports/espn-401810306.json",
+      "sha256": "8f36ad206309c97b2f3259d5fa3f0d0ccc161d589ab7f75c27e43114e0402148"
+    },
+    {
+      "game_id": "espn:401810326",
+      "split": "dev",
+      "pages": 26,
+      "facts": 61,
+      "rejected": 99,
+      "report_path": "data/processed/game_note_research/reports/espn-401810326.json",
+      "sha256": "e276a3fdfe488a2cb3b12e8afc412e447acfd78bab96cbebe454df93e552ac45"
+    },
+    {
+      "game_id": "espn:401810375",
+      "split": "dev",
+      "pages": 22,
+      "facts": 30,
+      "rejected": 97,
+      "report_path": "data/processed/game_note_research/reports/espn-401810375.json",
+      "sha256": "44d7a7099eaad88ecd03d531ab64e600a7a52b04ed19636f751128733dac6253"
+    },
+    {
+      "game_id": "espn:401810390",
+      "split": "dev",
+      "pages": 41,
+      "facts": 150,
+      "rejected": 180,
+      "report_path": "data/processed/game_note_research/reports/espn-401810390.json",
+      "sha256": "6e5262cc2d8d4020ceedcdf42386a650841a8e5991d5456ecbb502850839b697"
+    },
+    {
+      "game_id": "espn:401810392",
+      "split": "dev",
+      "pages": 21,
+      "facts": 34,
+      "rejected": 85,
+      "report_path": "data/processed/game_note_research/reports/espn-401810392.json",
+      "sha256": "361517e3abb9560a2cafbfae1c7832f87f44d3ecd4a878a6aeb76889538078ad"
+    },
+    {
+      "game_id": "espn:401810443",
+      "split": "dev",
+      "pages": 26,
+      "facts": 52,
+      "rejected": 111,
+      "report_path": "data/processed/game_note_research/reports/espn-401810443.json",
+      "sha256": "635642606e3531cef6c25ac346bc4fba9bae820e1b94a3164758975fdd5ced42"
+    },
+    {
+      "game_id": "espn:401810496",
+      "split": "dev",
+      "pages": 26,
+      "facts": 51,
+      "rejected": 111,
+      "report_path": "data/processed/game_note_research/reports/espn-401810496.json",
+      "sha256": "1cbe3cd8efa0ffc9b376ecc286dae54546575dcc7a8fdddf1c6e0535812deda5"
+    },
+    {
+      "game_id": "espn:401810547",
+      "split": "dev",
+      "pages": 19,
+      "facts": 71,
+      "rejected": 31,
+      "report_path": "data/processed/game_note_research/reports/espn-401810547.json",
+      "sha256": "984b6d053f75fedc52f461bb99c46c04f2da5bdaba6029fb9e8d768a2cf07d4d"
+    },
+    {
+      "game_id": "espn:401810565",
+      "split": "test",
+      "pages": 50,
+      "facts": 84,
+      "rejected": 66,
+      "report_path": "data/processed/game_note_research/reports/espn-401810565.json",
+      "sha256": "bd7750884a257189f8d914cdabd498d68f2f7e71b54230e34b21edfb384b5dbb"
+    },
+    {
+      "game_id": "espn:401810589",
+      "split": "test",
+      "pages": 42,
+      "facts": 145,
+      "rejected": 180,
+      "report_path": "data/processed/game_note_research/reports/espn-401810589.json",
+      "sha256": "f10908a28c8f5ac1f5ea8a5cc21e8b9775b277ffff6b539a8772de6b96f3a549"
+    },
+    {
+      "game_id": "espn:401810633",
+      "split": "test",
+      "pages": 53,
+      "facts": 84,
+      "rejected": 194,
+      "report_path": "data/processed/game_note_research/reports/espn-401810633.json",
+      "sha256": "8cc537de48c719b10f536a87c5821e23c5117b7e7c980094f8dab9bbccb60abf"
+    },
+    {
+      "game_id": "espn:401810657",
+      "split": "test",
+      "pages": 50,
+      "facts": 84,
+      "rejected": 101,
+      "report_path": "data/processed/game_note_research/reports/espn-401810657.json",
+      "sha256": "2e08b5120e156a969465980f46731d42b1e02a3cdd79d8235c71a5bf0446c7ec"
+    },
+    {
+      "game_id": "espn:401810672",
+      "split": "test",
+      "pages": 49,
+      "facts": 102,
+      "rejected": 68,
+      "report_path": "data/processed/game_note_research/reports/espn-401810672.json",
+      "sha256": "c415f80c229fd75aaf8be1e4203868ed20878c40ea74183b05be6a0b9e1c376c"
+    },
+    {
+      "game_id": "espn:401810724",
+      "split": "test",
+      "pages": 49,
+      "facts": 79,
+      "rejected": 49,
+      "report_path": "data/processed/game_note_research/reports/espn-401810724.json",
+      "sha256": "485e26c2469a19742a2c3d0c23ac53b0dbf8905500f4d225bc25a437f62eedf0"
+    },
+    {
+      "game_id": "espn:401810739",
+      "split": "test",
+      "pages": 50,
+      "facts": 72,
+      "rejected": 70,
+      "report_path": "data/processed/game_note_research/reports/espn-401810739.json",
+      "sha256": "3728f5a1a26be59c52627365273d4273eff7a0b85f4c27f1abb372904947771d"
+    },
+    {
+      "game_id": "espn:401810776",
+      "split": "test",
+      "pages": 49,
+      "facts": 90,
+      "rejected": 68,
+      "report_path": "data/processed/game_note_research/reports/espn-401810776.json",
+      "sha256": "f6de0dc5bb11aefa87d35c84df6da6fce1fa5d3582b7407364833e6b36b5573c"
+    },
+    {
+      "game_id": "espn:401810787",
+      "split": "test",
+      "pages": 28,
+      "facts": 41,
+      "rejected": 48,
+      "report_path": "data/processed/game_note_research/reports/espn-401810787.json",
+      "sha256": "26461c61045298a657a310e498596ef5b6a8ba028c484495fd111eedff6f8ba9"
+    },
+    {
+      "game_id": "espn:401810820",
+      "split": "test",
+      "pages": 49,
+      "facts": 109,
+      "rejected": 65,
+      "report_path": "data/processed/game_note_research/reports/espn-401810820.json",
+      "sha256": "4e3ec9adb6eac3414a3091cc13a73fc4e7631fb89eab14386c7ea62d8c9b162c"
+    },
+    {
+      "game_id": "espn:401810866",
+      "split": "test",
+      "pages": 50,
+      "facts": 95,
+      "rejected": 65,
+      "report_path": "data/processed/game_note_research/reports/espn-401810866.json",
+      "sha256": "b3f171d609b79849c49ad9d51ca217c61359a9cf0077f524fdde396b896a5785"
+    },
+    {
+      "game_id": "espn:401810972",
+      "split": "test",
+      "pages": 51,
+      "facts": 115,
+      "rejected": 64,
+      "report_path": "data/processed/game_note_research/reports/espn-401810972.json",
+      "sha256": "12f874a2d286aa9dc99ca1d3c7d750b269523e84262c93f58971b133bef124d4"
+    },
+    {
+      "game_id": "espn:401811013",
+      "split": "test",
+      "pages": 50,
+      "facts": 105,
+      "rejected": 98,
+      "report_path": "data/processed/game_note_research/reports/espn-401811013.json",
+      "sha256": "69bc6c8871652cb892adb0db2f916b8d87a4ac6789ec348722d593627c9477e8"
+    },
+    {
+      "game_id": "espn:401811028",
+      "split": "test",
+      "pages": 51,
+      "facts": 101,
+      "rejected": 80,
+      "report_path": "data/processed/game_note_research/reports/espn-401811028.json",
+      "sha256": "43f128155df6fa955b0a26816276c9dd9c85c770a17557531b5e68e5fdaf5402"
+    }
+  ]
+}

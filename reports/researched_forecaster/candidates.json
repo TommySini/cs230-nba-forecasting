@@ -1,0 +1,162 @@
+[
+  {
+    "name": "zero_correction",
+    "penalty": 0.0,
+    "fit": {
+      "iterations": 0
+    },
+    "train": {
+      "games": 80,
+      "brier": 0.21377282366522446,
+      "log_loss": 0.6179238257034415,
+      "roc_auc": 0.7250157133878063,
+      "accuracy": 0.675,
+      "mean_home_probability": 0.5721619997985592,
+      "observed_home_win_rate": 0.5375
+    },
+    "dev": {
+      "games": 13,
+      "brier": 0.3475347815132376,
+      "log_loss": 0.9114710520191018,
+      "roc_auc": 0.25,
+      "accuracy": 0.38461538461538464,
+      "mean_home_probability": 0.5335762237966587,
+      "observed_home_win_rate": 0.38461538461538464
+    }
+  },
+  {
+    "name": "l2_0.001",
+    "penalty": 0.001,
+    "fit": {
+      "iterations": 27,
+      "loss": 0.6031919354588247,
+      "gradient_max": 7.785327393606536e-08
+    },
+    "train": {
+      "games": 80,
+      "brier": 0.20299929829443322,
+      "log_loss": 0.5931631572012832,
+      "roc_auc": 0.7680703959773727,
+      "accuracy": 0.7125,
+      "mean_home_probability": 0.5376504917331687,
+      "observed_home_win_rate": 0.5375
+    },
+    "dev": {
+      "games": 13,
+      "brier": 0.33285136558984757,
+      "log_loss": 0.87595555563009,
+      "roc_auc": 0.25,
+      "accuracy": 0.23076923076923078,
+      "mean_home_probability": 0.4743051264448971,
+      "observed_home_win_rate": 0.38461538461538464
+    }
+  },
+  {
+    "name": "l2_0.01",
+    "penalty": 0.01,
+    "fit": {
+      "iterations": 9,
+      "loss": 0.6137915628033093,
+      "gradient_max": 5.269775297796035e-08
+    },
+    "train": {
+      "games": 80,
+      "brier": 0.21154332487655453,
+      "log_loss": 0.6122738843269299,
+      "roc_auc": 0.7335009428032685,
+      "accuracy": 0.6875,
+      "mean_home_probability": 0.5390363150358045,
+      "observed_home_win_rate": 0.5375
+    },
+    "dev": {
+      "games": 13,
+      "brier": 0.33888037493860124,
+      "log_loss": 0.8888162225201435,
+      "roc_auc": 0.25,
+      "accuracy": 0.23076923076923078,
+      "mean_home_probability": 0.4950225373068004,
+      "observed_home_win_rate": 0.38461538461538464
+    }
+  },
+  {
+    "name": "l2_0.1",
+    "penalty": 0.1,
+    "fit": {
+      "iterations": 4,
+      "loss": 0.6158543698460848,
+      "gradient_max": 6.6111196152934815e-09
+    },
+    "train": {
+      "games": 80,
+      "brier": 0.21272212887902012,
+      "log_loss": 0.6150942601650664,
+      "roc_auc": 0.7247014456316782,
+      "accuracy": 0.7,
+      "mean_home_probability": 0.5485568486335003,
+      "observed_home_win_rate": 0.5375
+    },
+    "dev": {
+      "games": 13,
+      "brier": 0.34182910027151503,
+      "log_loss": 0.8961099241011478,
+      "roc_auc": 0.25,
+      "accuracy": 0.38461538461538464,
+      "mean_home_probability": 0.5081129575657004,
+      "observed_home_win_rate": 0.38461538461538464
+    }
+  },
+  {
+    "name": "l2_1",
+    "penalty": 1.0,
+    "fit": {
+      "iterations": 3,
+      "loss": 0.6174130316636552,
+      "gradient_max": 9.55885460021677e-09
+    },
+    "train": {
+      "games": 80,
+      "brier": 0.21341026025437282,
+      "log_loss": 0.6169891949964205,
+      "roc_auc": 0.7247014456316782,
+      "accuracy": 0.675,
+      "mean_home_probability": 0.5660850292486012,
+      "observed_home_win_rate": 0.5375
+    },
+    "dev": {
+      "games": 13,
+      "brier": 0.34600812406947706,
+      "log_loss": 0.9072745208910787,
+      "roc_auc": 0.25,
+      "accuracy": 0.38461538461538464,
+      "mean_home_probability": 0.5270626920085555,
+      "observed_home_win_rate": 0.38461538461538464
+    }
+  },
+  {
+    "name": "l2_10",
+    "penalty": 10.0,
+    "fit": {
+      "iterations": 3,
+      "loss": 0.6178634611562671,
+      "gradient_max": 6.085597303862045e-12
+    },
+    "train": {
+      "games": 80,
+      "brier": 0.21372596847102768,
+      "log_loss": 0.6178043204591305,
+      "roc_auc": 0.7247014456316782,
+      "accuracy": 0.675,
+      "mean_home_probability": 0.5714413404033198,
+      "observed_home_win_rate": 0.5375
+    },
+    "dev": {
+      "games": 13,
+      "brier": 0.34735120309930473,
+      "log_loss": 0.9109635641769634,
+      "roc_auc": 0.25,
+      "accuracy": 0.38461538461538464,
+      "mean_home_probability": 0.532803966191847,
+      "observed_home_win_rate": 0.38461538461538464
+    }
+  }
+]

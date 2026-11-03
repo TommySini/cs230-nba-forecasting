@@ -1,0 +1,20 @@
+{
+  "canonical_numeric_admission": false,
+  "expanded_visual20": {
+    "image_headshot_roster_untranscribed": 1,
+    "image_only_numeric_pages_untranscribed": 2,
+    "intentional_blank_or_branding_only": 6,
+    "substantive_numeric_pages_with_extracted_text_present": 11
+  },
+  "initial15": {
+    "image_only_numeric_pages": 0,
+    "intentional_blank_or_branding_only": 4,
+    "substantive_numeric_pages_with_extracted_text_present": 11
+  },
+  "sidecar_path": "reports/bam_pipeline/bam_v2_20261102_expanded/page_quality_sidecar_v1.json",
+  "sidecar_sha256": "1cba9d977f8bb03d8fc6f7651c2c9df80aa4100dbeae401ec1715c0411643200",
+  "snapshot_manifest_sha256": "b0e6d0265871448580683cb6dcf4c439751857c1e0dc4493a3108a67a68f27b8",
+  "snapshot_modified": false,
+  "transcription_attempted": false,
+  "transcription_feasible_with_complete_independent_check_under15min": false
+}

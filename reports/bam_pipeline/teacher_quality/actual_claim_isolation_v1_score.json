@@ -1,0 +1,1125 @@
+{
+  "cases": 16,
+  "correct": 14,
+  "false_accepts": 2,
+  "false_exclusions": 0,
+  "manifest_sha256": "f39ec6410ad9281ca7235d21d8a384ce8ffe090e5f7152c5786295f5cec8c133",
+  "result_sha256": "229bb3a28d0e9024cb19bf11f0fdeaddadb01049ac7b8aba12befcff4ce20f62",
+  "rows": [
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 36,
+            "page": 38,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "                             TOTALS                               3,044                         870                         1,106                        2,280                        1,118\n"
+          }
+        ],
+        "id": "matchup-f2",
+        "missing_original_citations": [],
+        "model_verdict": "unsupported",
+        "reason": "The source lists 1,106 as the total fast-break points for the season, not an average. The candidate incorrectly labels this as an 'average' without evidence of division by games played. The table header 'TOTALS' confirms this is cumulative data. The counterevidence about opponents is separate and does not negate the misrepresentation of the statistic.",
+        "required_citations": [
+          {
+            "lines": [
+              36
+            ],
+            "page": 38,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7"
+          }
+        ],
+        "source_reading": "The source provides a table of Detroit Pistons game data with a 'TOTALS' line showing 1,106 under the 'FB PTS' column. This represents the season's total fast-break points, not an average. The opponent's total is 908. The table includes game-by-game data from January to February 2025.",
+        "verdict": "unsupported"
+      },
+      "expected": "unsupported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 1042,
+        "prompt_token_ids_sha256": "0ca25494cf957e44a98f27422bf6f1c78ac3d139dc7b3ff38a88474a107e6aca",
+        "prompt_tokens": 3959,
+        "raw_text": "<think>\nOkay, let's start by looking at the candidate finding. The fact is that the Pistons average 1,106 fast-break points (FB PTS) over the season. The citation points to a PDF from the Pistons' game notes, specifically line 36 on page 38. The line shows \"TOTALS\" with 1,106 under the FB PTS column. \n\nFirst, I need to confirm that this line is indeed summarizing the season's totals. The header on line 1 mentions \"DATE\", \"GAME\", and columns like \"PITP\", \"2ND PTS\", \"FB PTS\", etc. The totals line at the end would logically sum up the season's data. The opponent's average is also listed as 908, which is mentioned in the counterevidence. \n\nThe fact date is null, but the time scope is \"season_to_date,\" which aligns with the totals line. The source is from the Pistons' official game notes, so it's a credible source. The candidate's interpretation about being proficient in fast-break opportunities is a reasonable take on the data. The uncertainty mentions that effectiveness can vary based on matchups, which is a valid point since team performance can fluctuate against different opponents.\n\nThere's no direct contradiction in the provided evidence. The opponent's average is given, but the finding is about the Pistons' own average. The counterevidence is presented as a note but doesn't directly refute the fact. The source lines show the Pistons' total FB PTS as 1,106, so the average is correctly derived. The page and line numbers match the citation. \n\nI should check if the 1,106 is a total or an average. The header says \"TOTALS,\" so it's the total for the season. To get an average, we'd need to know the number of games. However, the candidate's fact states \"average,\" but the source might present it as a total. Wait, the line says \"TOTALS\" with 1,106 under FB PTS. If that's the total for the season, then the average would require dividing by the number of games. But the candidate's fact says \"average 1,106,\" which might be incorrect if 1,106 is the total. \n\nWait, looking at the lines, the \"TOTALS\" line is the sum of all the previous games. For example, the first column after \"TOTALS\" is 3,044, which seems to be the total for PITP. If that's the case, then 1,106 is the total fast-break points for the season, not the average. The candidate's fact states \"average 1,106,\" which would be incorrect unless the source explicitly states it as an average. \n\nLooking at the lines, the header on line 1 includes \"FB PTS,\" and each game entry under that column is for each game's FB PTS. The totals line sums those up. So 1,106 is the total, not the average. Therefore, the candidate's fact is incorrect because it's presenting the total as an average. The source doesn't state the average; it's the total. The candidate's interpretation and the fact are based on a misunderstanding of whether 1,106 is a total or an average. \n\nTherefore, the finding is unsupported because the source provides the total, not the average. The candidate's assertion that it's an average is not supported by the evidence. The correct average would require knowing the number of games and dividing the total by that number. The source doesn't provide the average, so the candidate's fact is not justified.\n</think>\n\n{\n  \"id\": \"matchup-f2\",\n  \"source_reading\": \"The source provides a table of Detroit Pistons game data with a 'TOTALS' line showing 1,106 under the 'FB PTS' column. This represents the season's total fast-break points, not an average. The opponent's total is 908. The table includes game-by-game data from January to February 2025.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 38,\n      \"lines\": [36]\n    }\n  ],\n  \"reason\": \"The source lists 1,106 as the total fast-break points for the season, not an average. The candidate incorrectly labels this as an 'average' without evidence of division by games played. The table header 'TOTALS' confirms this is cumulative data. The counterevidence about opponents is separate and does not negate the misrepresentation of the statistic.\",\n  \"verdict\": \"unsupported\"\n}",
+        "reasoning_text": "Okay, let's start by looking at the candidate finding. The fact is that the Pistons average 1,106 fast-break points (FB PTS) over the season. The citation points to a PDF from the Pistons' game notes, specifically line 36 on page 38. The line shows \"TOTALS\" with 1,106 under the FB PTS column. \n\nFirst, I need to confirm that this line is indeed summarizing the season's totals. The header on line 1 mentions \"DATE\", \"GAME\", and columns like \"PITP\", \"2ND PTS\", \"FB PTS\", etc. The totals line at the end would logically sum up the season's data. The opponent's average is also listed as 908, which is mentioned in the counterevidence. \n\nThe fact date is null, but the time scope is \"season_to_date,\" which aligns with the totals line. The source is from the Pistons' official game notes, so it's a credible source. The candidate's interpretation about being proficient in fast-break opportunities is a reasonable take on the data. The uncertainty mentions that effectiveness can vary based on matchups, which is a valid point since team performance can fluctuate against different opponents.\n\nThere's no direct contradiction in the provided evidence. The opponent's average is given, but the finding is about the Pistons' own average. The counterevidence is presented as a note but doesn't directly refute the fact. The source lines show the Pistons' total FB PTS as 1,106, so the average is correctly derived. The page and line numbers match the citation. \n\nI should check if the 1,106 is a total or an average. The header says \"TOTALS,\" so it's the total for the season. To get an average, we'd need to know the number of games. However, the candidate's fact states \"average,\" but the source might present it as a total. Wait, the line says \"TOTALS\" with 1,106 under FB PTS. If that's the total for the season, then the average would require dividing by the number of games. But the candidate's fact says \"average 1,106,\" which might be incorrect if 1,106 is the total. \n\nWait, looking at the lines, the \"TOTALS\" line is the sum of all the previous games. For example, the first column after \"TOTALS\" is 3,044, which seems to be the total for PITP. If that's the case, then 1,106 is the total fast-break points for the season, not the average. The candidate's fact states \"average 1,106,\" which would be incorrect unless the source explicitly states it as an average. \n\nLooking at the lines, the header on line 1 includes \"FB PTS,\" and each game entry under that column is for each game's FB PTS. The totals line sums those up. So 1,106 is the total, not the average. Therefore, the candidate's fact is incorrect because it's presenting the total as an average. The source doesn't state the average; it's the total. The candidate's interpretation and the fact are based on a misunderstanding of whether 1,106 is a total or an average. \n\nTherefore, the finding is unsupported because the source provides the total, not the average. The candidate's assertion that it's an average is not supported by the evidence. The correct average would require knowing the number of games and dividing the total by that number. The source doesn't provide the average, so the candidate's fact is not justified.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "03a76d37c1e002182f4a0f5e6b6010922e17892bdab3b6bf5fd6094dc39c1c46",
+        "request_sha256": "19214669028061b632cf1cfc462bf3906b1119adfcc7962c7bc060ea16d4f695",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "6ce85a03a435e51e9423a99e4b2c3e737bc5e6eb717e22f5a5bf212a65717f0d",
+        "status": "complete",
+        "text": "{\n  \"id\": \"matchup-f2\",\n  \"source_reading\": \"The source provides a table of Detroit Pistons game data with a 'TOTALS' line showing 1,106 under the 'FB PTS' column. This represents the season's total fast-break points, not an average. The opponent's total is 908. The table includes game-by-game data from January to February 2025.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 38,\n      \"lines\": [36]\n    }\n  ],\n  \"reason\": \"The source lists 1,106 as the total fast-break points for the season, not an average. The candidate incorrectly labels this as an 'average' without evidence of division by games played. The table header 'TOTALS' confirms this is cumulative data. The counterevidence about opponents is separate and does not negate the misrepresentation of the statistic.\",\n  \"verdict\": \"unsupported\"\n}"
+      },
+      "request_id": "03a76d37c1e002182f4a0f5e6b6010922e17892bdab3b6bf5fd6094dc39c1c46",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 1,
+            "page": 38,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "              DATE          GAME                                  PITP                       2ND PTS                      FB PTS                     BENCH PTS                      PTS TO                      BIG LEAD                  LEAD CHANGE                    TIMES TIED\n"
+          },
+          {
+            "line": 36,
+            "page": 38,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "                             TOTALS                               3,044                         870                         1,106                        2,280                        1,118\n"
+          }
+        ],
+        "id": "matchup-f1",
+        "missing_original_citations": [
+          [
+            "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            38,
+            1
+          ]
+        ],
+        "model_verdict": "unsupported",
+        "reason": "The source explicitly labels the 3,044 value as a 'TOTALS' row under the 'PITP' column, indicating it is a cumulative season total, not an average. The candidate's fact incorrectly describes it as an average. The 'PITP' column in the header (line 1) lists per-game transition points, but the 'TOTALS' line sums these values across games. No evidence in the source supports the claim of an average.",
+        "required_citations": [
+          {
+            "lines": [
+              1,
+              36
+            ],
+            "page": 38,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7"
+          }
+        ],
+        "source_reading": "The Detroit Pistons' game notes PDF lists a 'TOTALS' row with 3,044 in the 'PITP' (Points in Transition) column. This appears to represent the season's cumulative total, not an average, as the header line (line 1) labels 'PITP' as a column for transition points per game, but the 'TOTALS' line sums all such values.",
+        "verdict": "unsupported"
+      },
+      "expected": "unsupported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 876,
+        "prompt_token_ids_sha256": "dce9a38e7500e0f47965008bd9557dc121419e39283eb9faa20792b0d53212a9",
+        "prompt_tokens": 3967,
+        "raw_text": "<think>\nOkay, let's tackle this. The user provided a JSON with a candidate finding and pregame evidence. The task is to assess whether the finding is supported, unsupported, or unclear based on the evidence.\n\nFirst, the candidate's fact is that \"The Pistons have an average of 3,044 points in transition (PITP) over the season.\" The citation points to line 36 on page 38 of a PDF from DET. Looking at the pregame evidence, the relevant line is line 36 under the \"TOTALS\" row, which shows 3,044 in the first column labeled \"PITP.\" \n\nI need to check if this total is indeed the sum of transition points for the season. The line mentions \"TOTALS\" and the numbers in the same row seem to be cumulative totals for different categories. The first column after \"TOTALS\" is labeled \"PITP\" in the header (line 1 of page 38), so 3,044 is the total points in transition for the season. However, the candidate's fact states this is an average. But the line doesn't specify an average; it's the total. The header doesn't mention an average, just the total. So the candidate's fact is incorrect in stating it's an average. \n\nAdditionally, the counterevidence provided in the candidate mentions that opponents average 2,694 points in transition. Looking at line 37, the opponents' total is 2,694. If the candidate's fact is a total, then the counterevidence's comparison is between totals, not averages. This might not be a direct contradiction but shows that the candidate's interpretation might be off. \n\nThe interpretation part of the candidate suggests the Pistons rely heavily on transition points. If the total is 3,044, but the opponent's total is 2,694, that would mean the Pistons score more in transition than their opponents. However, without knowing the number of games, we can't confirm if this is an average or a total. The candidate's fact_date is null, which might indicate it's the season-to-date total. The time_scope is \"season_to_date,\" so it's cumulative up to the game date. \n\nThe problem is the candidate says \"average of 3,044 points,\" but the source shows it's a total, not an average. Therefore, the fact is misrepresented. The required_citations should include the source that shows the total, but the candidate's fact is incorrect. Therefore, the verdict should be unsupported because the assertion that it's an average isn't supported by the source, which presents it as a total.\n</think>\n\n{\n  \"id\": \"matchup-f1\",\n  \"source_reading\": \"The Detroit Pistons' game notes PDF lists a 'TOTALS' row with 3,044 in the 'PITP' (Points in Transition) column. This appears to represent the season's cumulative total, not an average, as the header line (line 1) labels 'PITP' as a column for transition points per game, but the 'TOTALS' line sums all such values.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 38,\n      \"lines\": [1, 36]\n    }\n  ],\n  \"reason\": \"The source explicitly labels the 3,044 value as a 'TOTALS' row under the 'PITP' column, indicating it is a cumulative season total, not an average. The candidate's fact incorrectly describes it as an average. The 'PITP' column in the header (line 1) lists per-game transition points, but the 'TOTALS' line sums these values across games. No evidence in the source supports the claim of an average.\",\n  \"verdict\": \"unsupported\"\n}",
+        "reasoning_text": "Okay, let's tackle this. The user provided a JSON with a candidate finding and pregame evidence. The task is to assess whether the finding is supported, unsupported, or unclear based on the evidence.\n\nFirst, the candidate's fact is that \"The Pistons have an average of 3,044 points in transition (PITP) over the season.\" The citation points to line 36 on page 38 of a PDF from DET. Looking at the pregame evidence, the relevant line is line 36 under the \"TOTALS\" row, which shows 3,044 in the first column labeled \"PITP.\" \n\nI need to check if this total is indeed the sum of transition points for the season. The line mentions \"TOTALS\" and the numbers in the same row seem to be cumulative totals for different categories. The first column after \"TOTALS\" is labeled \"PITP\" in the header (line 1 of page 38), so 3,044 is the total points in transition for the season. However, the candidate's fact states this is an average. But the line doesn't specify an average; it's the total. The header doesn't mention an average, just the total. So the candidate's fact is incorrect in stating it's an average. \n\nAdditionally, the counterevidence provided in the candidate mentions that opponents average 2,694 points in transition. Looking at line 37, the opponents' total is 2,694. If the candidate's fact is a total, then the counterevidence's comparison is between totals, not averages. This might not be a direct contradiction but shows that the candidate's interpretation might be off. \n\nThe interpretation part of the candidate suggests the Pistons rely heavily on transition points. If the total is 3,044, but the opponent's total is 2,694, that would mean the Pistons score more in transition than their opponents. However, without knowing the number of games, we can't confirm if this is an average or a total. The candidate's fact_date is null, which might indicate it's the season-to-date total. The time_scope is \"season_to_date,\" so it's cumulative up to the game date. \n\nThe problem is the candidate says \"average of 3,044 points,\" but the source shows it's a total, not an average. Therefore, the fact is misrepresented. The required_citations should include the source that shows the total, but the candidate's fact is incorrect. Therefore, the verdict should be unsupported because the assertion that it's an average isn't supported by the source, which presents it as a total.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "1290968f4c46d24f2333f19d67d6170b0dad3d3e234ee9aaeaed9ce7397b76ed",
+        "request_sha256": "0a3418eee52e9f04ef89d3fc6673e1b1400e1665e7f7e79a6aedfc644c7834a0",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "8fa3f11d13ae936b5cfa3dd46c49a7c3955fb65b09c3b940916314955cfda3c1",
+        "status": "complete",
+        "text": "{\n  \"id\": \"matchup-f1\",\n  \"source_reading\": \"The Detroit Pistons' game notes PDF lists a 'TOTALS' row with 3,044 in the 'PITP' (Points in Transition) column. This appears to represent the season's cumulative total, not an average, as the header line (line 1) labels 'PITP' as a column for transition points per game, but the 'TOTALS' line sums all such values.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 38,\n      \"lines\": [1, 36]\n    }\n  ],\n  \"reason\": \"The source explicitly labels the 3,044 value as a 'TOTALS' row under the 'PITP' column, indicating it is a cumulative season total, not an average. The candidate's fact incorrectly describes it as an average. The 'PITP' column in the header (line 1) lists per-game transition points, but the 'TOTALS' line sums these values across games. No evidence in the source supports the claim of an average.\",\n  \"verdict\": \"unsupported\"\n}"
+      },
+      "request_id": "1290968f4c46d24f2333f19d67d6170b0dad3d3e234ee9aaeaed9ce7397b76ed",
+      "valid": true
+    },
+    {
+      "correct": false,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 7,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "FACILITATOR:  While ranking near the top of the NBA in triple-double \n"
+          },
+          {
+            "line": 10,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "Jokic and LeBron James as the only players in the NBA averaging at least \n"
+          },
+          {
+            "line": 11,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "20 points, six rebounds and eight assists while nearing the top of league \n"
+          },
+          {
+            "line": 12,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "leaderboards in points/assists double-doubles and games with 20 PTS, 5 \n"
+          },
+          {
+            "line": 13,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "REB, 5 AST\n"
+          },
+          {
+            "line": 17,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "Nikola Jokic 41 \n"
+          },
+          {
+            "line": 18,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "Cade Cunningham 34\n"
+          },
+          {
+            "line": 19,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "LeBron James 29 \n"
+          },
+          {
+            "line": 25,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "Trae Young 34 \n"
+          },
+          {
+            "line": 27,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "Cade Cunningham  26 \n"
+          },
+          {
+            "line": 54,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "With 25.7 PPG and 24.2 points created oﬀ   assists, Cunningham accounts for 50.0 of Detroit’s 114.3 points per game (43.7%).\n"
+          },
+          {
+            "line": 58,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "Nikola Jokic 27 \n"
+          },
+          {
+            "line": 59,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "LeBron James 10 \n"
+          },
+          {
+            "line": 60,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "Cade Cunningham 8 \n"
+          },
+          {
+            "line": 68,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "Cade Cunningham 8 \n"
+          },
+          {
+            "line": 71,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "CLUTCH DEFENDER:   Cunningham has been one of the most clutch players in \n"
+          },
+          {
+            "line": 72,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "the NBA this season, especially on the defensive end. Including his game-\n"
+          },
+          {
+            "line": 73,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "winning block on Onyeka Okongwu at the buzzer against Atlanta on Nov. \n"
+          },
+          {
+            "line": 74,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "6, Cade is T-3rd in the NBA with six clutch blocks. \n"
+          },
+          {
+            "line": 75,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "In addition, he is only allowing opponents to shoot 37.9% against him \n"
+          },
+          {
+            "line": 76,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "in the 4th quarter, which is one of the lowest rates in the NBA this \n"
+          },
+          {
+            "line": 77,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "season (see table to right):\n"
+          },
+          {
+            "line": 83,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "Cade Cunningham 6\n"
+          },
+          {
+            "line": 95,
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "Cade Cunningham 37.9\n"
+          }
+        ],
+        "id": "recent_changes_rest_workload-f4",
+        "missing_original_citations": [],
+        "model_verdict": "supported",
+        "reason": "The source explicitly states Cunningham's 20+ PPG, 6 RPG, 8 APG averages and rankings in triple-doubles, points-assists double-doubles, and games with 20-5-5. His 25.7 PPG and 24.2 points created off assists are directly cited. The interpretation about workload consistency is plausible given his sustained stats, but the lack of recent rest/travel data creates uncertainty about his current readiness.",
+        "required_citations": [
+          {
+            "lines": [
+              7,
+              10,
+              11,
+              12,
+              13,
+              17,
+              18,
+              19,
+              25,
+              27,
+              54,
+              58,
+              59,
+              60,
+              68,
+              71,
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              83,
+              95
+            ],
+            "page": 12,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7"
+          }
+        ],
+        "source_reading": "The document highlights Cade Cunningham's season-long performance, including 34 games with 20+ points, 5+ assists, and 5+ rebounds (third in the NBA behind Jokic and LeBron James), 26 points-assists double-doubles (third in the NBA), and 8 triple-doubles (third in the NBA and DET history). It also notes his 25.7 PPG and 24.2 points created off assists, along with defensive metrics like 37.9% field goal allowed in the 4th quarter. No recent rest/workload details are provided.",
+        "verdict": "supported"
+      },
+      "expected": "unsupported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 1146,
+        "prompt_token_ids_sha256": "dda406b869b3808608b6f1062d802d986e865eae5f4dde5da9c4e3a15f7420ba",
+        "prompt_tokens": 11489,
+        "raw_text": "<think>\nOkay, let's start by looking at the candidate finding. The claim is that Cade Cunningham has been a consistent performer this season, ranking near the top of the NBA in triple-double production, scoring, passing, and rebounding, with averages of 20 points, six rebounds, and eight assists per game. The interpretation suggests he's handling his workload well and is likely to play a significant role in the upcoming game.\n\nFirst, I need to check the provided source material. The source is a PDF from the Detroit Pistons' game notes, dated February 28, 2025. The relevant page (page 12) has several tables. Let's look at the lines cited in the candidate's citations, which are from lines 7 to 96 of page 12.\n\nStarting at line 7, the text mentions Cunningham ranking near the top in triple-double production. Lines 10-13 state that he's among the league's best in scoring, passing, and rebounding, joining Jokic and LeBron as the only players averaging at least 20 points, six rebounds, and eight assists. The table from lines 17-21 shows he has 34 games with 20+ points, 5+ assists, and 5+ rebounds, which is third behind Jokic and LeBron. Another table (lines 25-29) shows he has 26 points-assists double-doubles, which is third again. \n\nLooking at line 54, it says Cunningham accounts for 25.7 PPG and 24.2 points created off assists. The triple-double stats in lines 58-60 show he has 8 triple-doubles, which is third. Also, in lines 68, it's mentioned he has 8 triple-doubles in Pistons history, matching Grant Hill's previous records. \n\nThe defensive stats in lines 71-95 note he's third in clutch blocks and allows a low FG% in the fourth quarter. However, the counterevidence part of the candidate's finding mentions the document doesn't provide recent minutes, rest, or travel info. \n\nNow, the fact date is null, which might mean the season-to-date stats are up to the time of the document (February 28). The interpretation about his workload and performance is based on his season averages and stats, but the uncertainty is about recent rest and workload affecting his performance. The source doesn't mention any recent injuries or rest days, so the assumption is he's been consistent. \n\nThe required citations should include the lines where his stats are detailed. The lines 7, 10-13, 17-21, 25-29, 54, 58-60, 68, 71-95 are relevant. The source text supports his averages and rankings. The interpretation that he's handling his workload is plausible based on his consistent stats, but the lack of recent data (as per counterevidence) makes the uncertainty valid. \n\nSo, the fact is supported by the source, but the interpretation about his continued performance in the upcoming game has some uncertainty due to missing recent info. Therefore, the verdict should be 'supported' because the stats are there, but the interpretation's certainty is tempered by the uncertainty note.\n</think>\n\n{\n  \"id\": \"recent_changes_rest_workload-f4\",\n  \"source_reading\": \"The document highlights Cade Cunningham's season-long performance, including 34 games with 20+ points, 5+ assists, and 5+ rebounds (third in the NBA behind Jokic and LeBron James), 26 points-assists double-doubles (third in the NBA), and 8 triple-doubles (third in the NBA and DET history). It also notes his 25.7 PPG and 24.2 points created off assists, along with defensive metrics like 37.9% field goal allowed in the 4th quarter. No recent rest/workload details are provided.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 12,\n      \"lines\": [7, 10, 11, 12, 13, 17, 18, 19, 25, 27, 54, 58, 59, 60, 68, 71, 72, 73, 74, 75, 76, 77, 83, 95]\n    }\n  ],\n  \"reason\": \"The source explicitly states Cunningham's 20+ PPG, 6 RPG, 8 APG averages and rankings in triple-doubles, points-assists double-doubles, and games with 20-5-5. His 25.7 PPG and 24.2 points created off assists are directly cited. The interpretation about workload consistency is plausible given his sustained stats, but the lack of recent rest/travel data creates uncertainty about his current readiness.\",\n  \"verdict\": \"supported\"\n}",
+        "reasoning_text": "Okay, let's start by looking at the candidate finding. The claim is that Cade Cunningham has been a consistent performer this season, ranking near the top of the NBA in triple-double production, scoring, passing, and rebounding, with averages of 20 points, six rebounds, and eight assists per game. The interpretation suggests he's handling his workload well and is likely to play a significant role in the upcoming game.\n\nFirst, I need to check the provided source material. The source is a PDF from the Detroit Pistons' game notes, dated February 28, 2025. The relevant page (page 12) has several tables. Let's look at the lines cited in the candidate's citations, which are from lines 7 to 96 of page 12.\n\nStarting at line 7, the text mentions Cunningham ranking near the top in triple-double production. Lines 10-13 state that he's among the league's best in scoring, passing, and rebounding, joining Jokic and LeBron as the only players averaging at least 20 points, six rebounds, and eight assists. The table from lines 17-21 shows he has 34 games with 20+ points, 5+ assists, and 5+ rebounds, which is third behind Jokic and LeBron. Another table (lines 25-29) shows he has 26 points-assists double-doubles, which is third again. \n\nLooking at line 54, it says Cunningham accounts for 25.7 PPG and 24.2 points created off assists. The triple-double stats in lines 58-60 show he has 8 triple-doubles, which is third. Also, in lines 68, it's mentioned he has 8 triple-doubles in Pistons history, matching Grant Hill's previous records. \n\nThe defensive stats in lines 71-95 note he's third in clutch blocks and allows a low FG% in the fourth quarter. However, the counterevidence part of the candidate's finding mentions the document doesn't provide recent minutes, rest, or travel info. \n\nNow, the fact date is null, which might mean the season-to-date stats are up to the time of the document (February 28). The interpretation about his workload and performance is based on his season averages and stats, but the uncertainty is about recent rest and workload affecting his performance. The source doesn't mention any recent injuries or rest days, so the assumption is he's been consistent. \n\nThe required citations should include the lines where his stats are detailed. The lines 7, 10-13, 17-21, 25-29, 54, 58-60, 68, 71-95 are relevant. The source text supports his averages and rankings. The interpretation that he's handling his workload is plausible based on his consistent stats, but the lack of recent data (as per counterevidence) makes the uncertainty valid. \n\nSo, the fact is supported by the source, but the interpretation about his continued performance in the upcoming game has some uncertainty due to missing recent info. Therefore, the verdict should be 'supported' because the stats are there, but the interpretation's certainty is tempered by the uncertainty note.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "2b382af1bfd20bc1362e527e05e0e222c182c25d51957157d1e64dd745c72fc3",
+        "request_sha256": "c61c066a5fa9c9f8e2dc6b57e3938c4ae9495bdfa12df4edce7d732ccbcfea95",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "9bab875c272db2324ee99795ac1feabd9a80f182d84ef0c9b33d4a5a5a94d954",
+        "status": "complete",
+        "text": "{\n  \"id\": \"recent_changes_rest_workload-f4\",\n  \"source_reading\": \"The document highlights Cade Cunningham's season-long performance, including 34 games with 20+ points, 5+ assists, and 5+ rebounds (third in the NBA behind Jokic and LeBron James), 26 points-assists double-doubles (third in the NBA), and 8 triple-doubles (third in the NBA and DET history). It also notes his 25.7 PPG and 24.2 points created off assists, along with defensive metrics like 37.9% field goal allowed in the 4th quarter. No recent rest/workload details are provided.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 12,\n      \"lines\": [7, 10, 11, 12, 13, 17, 18, 19, 25, 27, 54, 58, 59, 60, 68, 71, 72, 73, 74, 75, 76, 77, 83, 95]\n    }\n  ],\n  \"reason\": \"The source explicitly states Cunningham's 20+ PPG, 6 RPG, 8 APG averages and rankings in triple-doubles, points-assists double-doubles, and games with 20-5-5. His 25.7 PPG and 24.2 points created off assists are directly cited. The interpretation about workload consistency is plausible given his sustained stats, but the lack of recent rest/travel data creates uncertainty about his current readiness.\",\n  \"verdict\": \"supported\"\n}"
+      },
+      "request_id": "2b382af1bfd20bc1362e527e05e0e222c182c25d51957157d1e64dd745c72fc3",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 11,
+            "page": 6,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+            "text": "against the L.A. Lakers on Oct. 30…  DONOVAN MITCHELL made his 1,400th career three-pointer with his third triple against the L.A. Lakers on Oct. 30…JARRETT ALLEN recorded \n"
+          }
+        ],
+        "id": "recent_changes_rest_workload-f2",
+        "missing_original_citations": [],
+        "model_verdict": "unsupported",
+        "reason": "The source directly verifies the historical fact. However, the interpretation about Mitchell's current form and reliability is not supported by the evidence, as the milestone alone does not indicate recent performance trends or availability. The counterevidence correctly notes this limitation.",
+        "required_citations": [
+          {
+            "lines": [
+              11
+            ],
+            "page": 6,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221"
+          }
+        ],
+        "source_reading": "The source confirms Donovan Mitchell reached his 1,400th career three-pointer on October 30, 2023, against the L.A. Lakers. This is explicitly stated in the PDF's milestones section.",
+        "verdict": "unsupported"
+      },
+      "expected": "unsupported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 849,
+        "prompt_token_ids_sha256": "9dce8f9d73c6b8b06ddde3f7dd9a445bb9bfd1364506fb9a8b7de014df31b43d",
+        "prompt_tokens": 9771,
+        "raw_text": "<think>\nOkay, let's start by looking at the candidate's finding. The fact stated is that Donovan Mitchell made his 1,400th career three-pointer with his third triple against the L.A. Lakers on Oct. 30. The source provided is a PDF from the Cleveland Cavaliers, which is a game note or some kind of team publication.\n\nLooking at the pregame_source_context, there's a page (page 6) with a line that mentions Donovan Mitchell achieving that milestone on Oct. 30 against the Lakers. The line also mentions other players' milestones, but the specific mention of Mitchell's 1,400th three-pointer is there. The date is October 30, which aligns with the fact's date. \n\nThe candidate's interpretation is that this milestone indicates Mitchell's consistent performance and reliability, suggesting he's in good form and likely to contribute offensively. However, the counterevidence provided is that the milestone doesn't give info about his current availability or recent workload. The uncertainty is that the milestone alone doesn't reflect recent trends or current status.\n\nNow, I need to check if the source supports the fact. The source does mention the exact event: Mitchell's 1,400th three-pointer on Oct. 30 against the Lakers. The date and the event match. The source is from the Cavaliers, which is a credible source for such team-related milestones. \n\nThe interpretation part is a bit tricky. The candidate infers that the milestone suggests Mitchell is in good form and likely to contribute. But the source only states the fact of the milestone. It doesn't provide any additional data on his recent performance or workload. The counterevidence correctly points out that the milestone alone doesn't indicate current status. So the interpretation is a plausible qualitative assessment but not directly supported by the source beyond the fact itself.\n\nThe uncertainty is correctly noted because the milestone is a historical fact and doesn't provide current or recent data. The candidate's interpretation goes a bit beyond what the source explicitly states. The source doesn't mention anything about Mitchell's current form or workload, so the interpretation is an assumption not fully supported by the given evidence.\n\nIn conclusion, the fact itself is supported by the source, but the interpretation and the associated uncertainty are not fully supported. The verdict here should be supported for the fact, but since the module also includes interpretation, the overall assessment might need to consider if the interpretation is valid. However, the user's instruction says to check the fact and its interpretation. Since the interpretation is a plausible but not directly supported conclusion, the verdict might be unclear. Wait, the user's instruction says \"Return supported only when the fact and its interpretation are justified.\" So if the interpretation is not justified by the source, then the verdict is unsupported. But the counterevidence here says the milestone doesn't provide info on current availability. So the interpretation that he's in good form and likely to contribute is not supported by the source. Therefore, the finding is unsupported because the interpretation isn't backed by the evidence. The source only confirms the historical fact, not the current status or implications.\n</think>\n\n{\"id\": \"recent_changes_rest_workload-f2\", \"source_reading\": \"The source confirms Donovan Mitchell reached his 1,400th career three-pointer on October 30, 2023, against the L.A. Lakers. This is explicitly stated in the PDF's milestones section.\", \"required_citations\": [{\"source_id\": \"sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221\", \"page\": 6, \"lines\": [11]}], \"reason\": \"The source directly verifies the historical fact. However, the interpretation about Mitchell's current form and reliability is not supported by the evidence, as the milestone alone does not indicate recent performance trends or availability. The counterevidence correctly notes this limitation.\", \"verdict\": \"unsupported\"}",
+        "reasoning_text": "Okay, let's start by looking at the candidate's finding. The fact stated is that Donovan Mitchell made his 1,400th career three-pointer with his third triple against the L.A. Lakers on Oct. 30. The source provided is a PDF from the Cleveland Cavaliers, which is a game note or some kind of team publication.\n\nLooking at the pregame_source_context, there's a page (page 6) with a line that mentions Donovan Mitchell achieving that milestone on Oct. 30 against the Lakers. The line also mentions other players' milestones, but the specific mention of Mitchell's 1,400th three-pointer is there. The date is October 30, which aligns with the fact's date. \n\nThe candidate's interpretation is that this milestone indicates Mitchell's consistent performance and reliability, suggesting he's in good form and likely to contribute offensively. However, the counterevidence provided is that the milestone doesn't give info about his current availability or recent workload. The uncertainty is that the milestone alone doesn't reflect recent trends or current status.\n\nNow, I need to check if the source supports the fact. The source does mention the exact event: Mitchell's 1,400th three-pointer on Oct. 30 against the Lakers. The date and the event match. The source is from the Cavaliers, which is a credible source for such team-related milestones. \n\nThe interpretation part is a bit tricky. The candidate infers that the milestone suggests Mitchell is in good form and likely to contribute. But the source only states the fact of the milestone. It doesn't provide any additional data on his recent performance or workload. The counterevidence correctly points out that the milestone alone doesn't indicate current status. So the interpretation is a plausible qualitative assessment but not directly supported by the source beyond the fact itself.\n\nThe uncertainty is correctly noted because the milestone is a historical fact and doesn't provide current or recent data. The candidate's interpretation goes a bit beyond what the source explicitly states. The source doesn't mention anything about Mitchell's current form or workload, so the interpretation is an assumption not fully supported by the given evidence.\n\nIn conclusion, the fact itself is supported by the source, but the interpretation and the associated uncertainty are not fully supported. The verdict here should be supported for the fact, but since the module also includes interpretation, the overall assessment might need to consider if the interpretation is valid. However, the user's instruction says to check the fact and its interpretation. Since the interpretation is a plausible but not directly supported conclusion, the verdict might be unclear. Wait, the user's instruction says \"Return supported only when the fact and its interpretation are justified.\" So if the interpretation is not justified by the source, then the verdict is unsupported. But the counterevidence here says the milestone doesn't provide info on current availability. So the interpretation that he's in good form and likely to contribute is not supported by the source. Therefore, the finding is unsupported because the interpretation isn't backed by the evidence. The source only confirms the historical fact, not the current status or implications.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "35d779523ac336318ad9ef86ec8eca175c3d156f3e1ce348076aa954d2cc7e36",
+        "request_sha256": "2ce2e6f2434b163300bfdf52b7de6a039842e2c7307ba177c1cdca9fe29b36d8",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "809579f01cbadb8eccb003ed3a1a739f989425e85a4047caf125f4e23df49067",
+        "status": "complete",
+        "text": "{\"id\": \"recent_changes_rest_workload-f2\", \"source_reading\": \"The source confirms Donovan Mitchell reached his 1,400th career three-pointer on October 30, 2023, against the L.A. Lakers. This is explicitly stated in the PDF's milestones section.\", \"required_citations\": [{\"source_id\": \"sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221\", \"page\": 6, \"lines\": [11]}], \"reason\": \"The source directly verifies the historical fact. However, the interpretation about Mitchell's current form and reliability is not supported by the evidence, as the milestone alone does not indicate recent performance trends or availability. The counterevidence correctly notes this limitation.\", \"verdict\": \"unsupported\"}"
+      },
+      "request_id": "35d779523ac336318ad9ef86ec8eca175c3d156f3e1ce348076aa954d2cc7e36",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 67,
+            "page": 11,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "                  TYLER HERRO RECENT GAMES\n"
+          },
+          {
+            "line": 68,
+            "page": 11,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "         DATE            OPP.           MIN               FG      FGA        3FG        3FGA         FT      FTA        OR       DR      TOT         A       PF      ST       TO       BS       +/-       PTS\n"
+          },
+          {
+            "line": 73,
+            "page": 11,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "         12/01/24        at TOR         36:49              9        16          6         12          7        7         0        4         4        3        1        2       1        0       -11        31\n"
+          }
+        ],
+        "id": "recent_changes_rest_workload-f3",
+        "missing_original_citations": [],
+        "model_verdict": "supported",
+        "reason": "The cited source explicitly shows Herro's 12/01/24 game stats matching the claim. Minutes (36:49), points (31), rebounds (4) and assists (3) align with the table data. No conflicting information is present in the provided context.",
+        "required_citations": [
+          {
+            "lines": [
+              67,
+              68,
+              73
+            ],
+            "page": 11,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75"
+          }
+        ],
+        "source_reading": "Tyler Herro's 2024-12-01 game vs. TOR lists 36:49 minutes, 9/16 FG (6/12 3FG), 7/7 FT, 4 rebounds (0 OR/4 DR), and 3 assists. Total points (31) are calculated from field goals and free throws.",
+        "verdict": "supported"
+      },
+      "expected": "supported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 653,
+        "prompt_token_ids_sha256": "74bda5ef44b5ac66126af2f1e1fd0318ace51610ac085b6ca500eb202af87297",
+        "prompt_tokens": 5167,
+        "raw_text": "<think>\nOkay, let's take a look at this. The candidate's fact is that Tyler Herro's latest game on 2024-12-01 against TOR had 36:49 minutes, 31 points, 4 rebounds, and 3 assists. The citations provided are from the MIA game notes PDF, specifically page 11, lines 67, 68, and 73.\n\nLooking at the pregame_source_context, on page 11, under Tyler Herro's section, there's a table titled \"TYLER HERRO RECENT GAMES\". The line for 12/01/24 at TOR shows 36:49 minutes, 9 FG, 16 FGA, 6 3FG, 12 3FGA, 7 FT, 7 FTA, 0 OR, 4 DR, total rebounds 4, 3 assists, and 31 points. So the minutes, points, rebounds, and assists all match the candidate's fact. \n\nThe interpretation mentions that this is a descriptive baseline needing comparison, which is reasonable. The uncertainty is about availability for the upcoming game, which is correct because the prior game's data doesn't confirm he's playing in the next one. The counterevidence is correctly noted as none from this table alone. \n\nThe required citations should include the source_id, page, and the lines where the data is found. The source_id is the SHA256 hash provided, page 11, and lines 67 (table header), 68 (column headers), and 73 (the specific game data). \n\nNo contradictions here; all the numbers check out. So the verdict should be supported.\n</think>\n\n{\n  \"id\": \"recent_changes_rest_workload-f3\",\n  \"source_reading\": \"Tyler Herro's 2024-12-01 game vs. TOR lists 36:49 minutes, 9/16 FG (6/12 3FG), 7/7 FT, 4 rebounds (0 OR/4 DR), and 3 assists. Total points (31) are calculated from field goals and free throws.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75\",\n      \"page\": 11,\n      \"lines\": [67, 68, 73]\n    }\n  ],\n  \"reason\": \"The cited source explicitly shows Herro's 12/01/24 game stats matching the claim. Minutes (36:49), points (31), rebounds (4) and assists (3) align with the table data. No conflicting information is present in the provided context.\",\n  \"verdict\": \"supported\"\n}",
+        "reasoning_text": "Okay, let's take a look at this. The candidate's fact is that Tyler Herro's latest game on 2024-12-01 against TOR had 36:49 minutes, 31 points, 4 rebounds, and 3 assists. The citations provided are from the MIA game notes PDF, specifically page 11, lines 67, 68, and 73.\n\nLooking at the pregame_source_context, on page 11, under Tyler Herro's section, there's a table titled \"TYLER HERRO RECENT GAMES\". The line for 12/01/24 at TOR shows 36:49 minutes, 9 FG, 16 FGA, 6 3FG, 12 3FGA, 7 FT, 7 FTA, 0 OR, 4 DR, total rebounds 4, 3 assists, and 31 points. So the minutes, points, rebounds, and assists all match the candidate's fact. \n\nThe interpretation mentions that this is a descriptive baseline needing comparison, which is reasonable. The uncertainty is about availability for the upcoming game, which is correct because the prior game's data doesn't confirm he's playing in the next one. The counterevidence is correctly noted as none from this table alone. \n\nThe required citations should include the source_id, page, and the lines where the data is found. The source_id is the SHA256 hash provided, page 11, and lines 67 (table header), 68 (column headers), and 73 (the specific game data). \n\nNo contradictions here; all the numbers check out. So the verdict should be supported.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "3863fc31ab317eed89afe85ceb5e21b8a87e44afd06087f446a87f14d55e3730",
+        "request_sha256": "2869820e4e49eda0a57937e7bb504905ae2be98060757c539dbea58b73721d9a",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "93121624887459eefd39e5952708508f4e1288c6fb6c404219bc17f779242993",
+        "status": "complete",
+        "text": "{\n  \"id\": \"recent_changes_rest_workload-f3\",\n  \"source_reading\": \"Tyler Herro's 2024-12-01 game vs. TOR lists 36:49 minutes, 9/16 FG (6/12 3FG), 7/7 FT, 4 rebounds (0 OR/4 DR), and 3 assists. Total points (31) are calculated from field goals and free throws.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75\",\n      \"page\": 11,\n      \"lines\": [67, 68, 73]\n    }\n  ],\n  \"reason\": \"The cited source explicitly shows Herro's 12/01/24 game stats matching the claim. Minutes (36:49), points (31), rebounds (4) and assists (3) align with the table data. No conflicting information is present in the provided context.\",\n  \"verdict\": \"supported\"\n}"
+      },
+      "request_id": "3863fc31ab317eed89afe85ceb5e21b8a87e44afd06087f446a87f14d55e3730",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 63,
+            "page": 1,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": " 2/28      vs. Nuggets         7:00 pm                            --             GP/GS       PPG      RPG     APG     SPG     BPG      MPG\n"
+          },
+          {
+            "line": 64,
+            "page": 1,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": " 3/1        vs. Nets                7:00 pm                             --        54/54        25.7       6.3        9.5        1.0        0.8        35.5                    NOTES: Named a 2025 All-Star, the 29th in franchise\n"
+          }
+        ],
+        "id": "availability_rotation-f6",
+        "missing_original_citations": [],
+        "model_verdict": "supported",
+        "reason": "The source explicitly states the exact numerical values and game counts in lines 63-64. No counterevidence is present in the provided context. The fact's interpretation of requiring further comparison is acknowledged but does not negate the source's direct support for the stated averages.",
+        "required_citations": [
+          {
+            "lines": [
+              63,
+              64
+            ],
+            "page": 1,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7"
+          }
+        ],
+        "source_reading": "The DET game notes PDF on page 1 lists Cade Cunningham's 2024-25 regular-season averages with explicit 'GP/GS' of 54/54, and per-game stats of 25.7 points, 6.3 rebounds, 9.5 assists, 1.0 steals, 0.8 blocks, and 35.5 minutes. This is explicitly stated in lines 63-64 of the cited page.",
+        "verdict": "supported"
+      },
+      "expected": "supported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 728,
+        "prompt_token_ids_sha256": "6669e08223f253bba3dee7a4eb6c8dc91a82b0d1c2b503d00c526144efbde16b",
+        "prompt_tokens": 6971,
+        "raw_text": "<think>\nOkay, let's tackle this. The user provided a JSON with a candidate finding about Cade Cunningham's 2024-25 regular-season averages. The task is to assess whether this finding is supported, unsupported, or unclear based on the given pregame evidence.\n\nFirst, I need to look at the candidate's fact. It states that the averages table lists 54 games played and 54 starts with specific stats. The source cited is a PDF from the Pistons' game notes. The lines mentioned are 15, 58, 63, 64 from page 1 of the PDF.\n\nLooking at the provided source context, specifically the lines from the PDF, line 63 and 64 on page 1 mention \"GP/GS PPG RPG APG SPG BPG MPG\" and then \"54/54 25.7 6.3 9.5 1.0 0.8 35.5\". This seems to directly list the stats mentioned in the candidate's fact. \n\nI should check if there's any counterevidence. The candidate's counterevidence field says there's none from the table alone. Also, the lines from the source do show the exact numbers (54/54 games, the averages). The uncertainty mentioned in the candidate is about the rounded averages and the sample size, which is addressed here since the source explicitly states 54 games. \n\nThe interpretation part of the candidate says it's a descriptive baseline needing comparison, which is a valid point, but the question is about the fact's support. The source provides the exact numbers, so the fact is supported. The only thing left is to confirm there's no conflicting info. The lines from the source don't contradict the fact. \n\nSo the verdict should be supported. The required citations are the lines 63 and 64 from the source, which directly provide the stats. The source reading should mention that the PDF's table on page 1 lists the stats as given. The reason is that the source explicitly states the numbers in the candidate's fact.\n</think>\n\n{\n  \"id\": \"availability_rotation-f6\",\n  \"source_reading\": \"The DET game notes PDF on page 1 lists Cade Cunningham's 2024-25 regular-season averages with explicit 'GP/GS' of 54/54, and per-game stats of 25.7 points, 6.3 rebounds, 9.5 assists, 1.0 steals, 0.8 blocks, and 35.5 minutes. This is explicitly stated in lines 63-64 of the cited page.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 1,\n      \"lines\": [63, 64]\n    }\n  ],\n  \"reason\": \"The source explicitly states the exact numerical values and game counts in lines 63-64. No counterevidence is present in the provided context. The fact's interpretation of requiring further comparison is acknowledged but does not negate the source's direct support for the stated averages.\",\n  \"verdict\": \"supported\"\n}",
+        "reasoning_text": "Okay, let's tackle this. The user provided a JSON with a candidate finding about Cade Cunningham's 2024-25 regular-season averages. The task is to assess whether this finding is supported, unsupported, or unclear based on the given pregame evidence.\n\nFirst, I need to look at the candidate's fact. It states that the averages table lists 54 games played and 54 starts with specific stats. The source cited is a PDF from the Pistons' game notes. The lines mentioned are 15, 58, 63, 64 from page 1 of the PDF.\n\nLooking at the provided source context, specifically the lines from the PDF, line 63 and 64 on page 1 mention \"GP/GS PPG RPG APG SPG BPG MPG\" and then \"54/54 25.7 6.3 9.5 1.0 0.8 35.5\". This seems to directly list the stats mentioned in the candidate's fact. \n\nI should check if there's any counterevidence. The candidate's counterevidence field says there's none from the table alone. Also, the lines from the source do show the exact numbers (54/54 games, the averages). The uncertainty mentioned in the candidate is about the rounded averages and the sample size, which is addressed here since the source explicitly states 54 games. \n\nThe interpretation part of the candidate says it's a descriptive baseline needing comparison, which is a valid point, but the question is about the fact's support. The source provides the exact numbers, so the fact is supported. The only thing left is to confirm there's no conflicting info. The lines from the source don't contradict the fact. \n\nSo the verdict should be supported. The required citations are the lines 63 and 64 from the source, which directly provide the stats. The source reading should mention that the PDF's table on page 1 lists the stats as given. The reason is that the source explicitly states the numbers in the candidate's fact.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "39cb851c88fa25ef5d6267b3151e9c9a00c640fb61ba0f3864a8c9dec2a4dd8a",
+        "request_sha256": "ef36c75e1db4119370679459b93fe93d8ebf44938a11e8136b6e2df41f1d0e28",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "e3098b2a8edc803499dcdf381a56be35746d754431b7cdbb3a6ec3b1fa64f40f",
+        "status": "complete",
+        "text": "{\n  \"id\": \"availability_rotation-f6\",\n  \"source_reading\": \"The DET game notes PDF on page 1 lists Cade Cunningham's 2024-25 regular-season averages with explicit 'GP/GS' of 54/54, and per-game stats of 25.7 points, 6.3 rebounds, 9.5 assists, 1.0 steals, 0.8 blocks, and 35.5 minutes. This is explicitly stated in lines 63-64 of the cited page.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 1,\n      \"lines\": [63, 64]\n    }\n  ],\n  \"reason\": \"The source explicitly states the exact numerical values and game counts in lines 63-64. No counterevidence is present in the provided context. The fact's interpretation of requiring further comparison is acknowledged but does not negate the source's direct support for the stated averages.\",\n  \"verdict\": \"supported\"\n}"
+      },
+      "request_id": "39cb851c88fa25ef5d6267b3151e9c9a00c640fb61ba0f3864a8c9dec2a4dd8a",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 2,
+            "page": 11,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+            "text": " So far this season, EVAN MOBLEY is averaging a CAREER HIGH \n"
+          },
+          {
+            "line": 3,
+            "page": 11,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+            "text": "18.5 PPG (.569 FG%, .415 3FG%, .786 FT%), 9.0 RPG (20 th in NBA), 2.9 APG, 1.07 SPG and 1.46 \n"
+          },
+          {
+            "line": 4,
+            "page": 11,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+            "text": "BPG (12th-best in NBA) in 30.3 MPG. He has also notched 13 double-doubles (T-17th in NBA) and \n"
+          }
+        ],
+        "id": "matchup-f5",
+        "missing_original_citations": [],
+        "model_verdict": "supported",
+        "reason": "The fact matches the source's explicit statement about Mobley's season averages, rankings, and achievements. The interpretation aligns with the source's emphasis on his efficiency and versatility. The source provides no counterevidence, and the uncertainty about future performance is reasonable. All numerical values, player identity, and time scope are confirmed.",
+        "required_citations": [
+          {
+            "lines": [
+              2,
+              3,
+              4
+            ],
+            "page": 11,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221"
+          }
+        ],
+        "source_reading": "The source states that Evan Mobley is averaging a career-high 18.5 PPG with .569 FG%, .415 3FG%, and .786 FT%, along with 9.0 RPG (20th in NBA), 2.9 APG, 1.07 SPG, and 1.46 BPG (12th-best in NBA) in 30.3 MPG. It also notes 13 double-doubles and 8 games with 20+ PTS/10+ REB. Additional context highlights Mobley as one of three players meeting specific stat thresholds and his historic 41-point game on December 7.",
+        "verdict": "supported"
+      },
+      "expected": "supported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 924,
+        "prompt_token_ids_sha256": "ffa26cdbfa63d195022f4d8973ffbcb8f0587002f1af062aeb716cc1fc68735d",
+        "prompt_tokens": 3304,
+        "raw_text": "<think>\nOkay, let's start by looking at the candidate's claim. The fact states that Evan Mobley is averaging a career-high 18.5 PPG with certain stats. The source provided is a PDF from the Cavaliers, which is the team he plays for. The citation points to page 11, lines 2-4, which mention his career-high averages. \n\nFirst, I need to check if the numbers in the fact match the source. The source lines say \"18.5 PPG (.569 FG%, .415 3FG%, .786 FT%), 9.0 RPG (20th in NBA), 2.9 APG, 1.07 SPG and 1.46 BPG (12th-best in NBA) in 30.3 MPG.\" That matches the candidate's fact exactly. \n\nNext, verifying the player's identity. The source mentions \"EVAN MOBLEY\" in uppercase, which is the same as in the candidate's fact. The team is CLE (Cavaliers), which aligns with the away team in the game mentioned. \n\nThe time scope is \"season to date,\" and the source mentions \"So far this season,\" confirming the time frame. The stats are presented as averages, so they are season averages up to the time the document was published. The document's archive time is December 27, 2024, which is before the game date of December 27, so the data is current up to that point. \n\nThe interpretation part of the candidate's claim says Mobley is a key player with notable shooting efficiency and rebounding. The source supports this by highlighting his career-high points, high rankings in blocks and steals, and double-doubles. \n\nThere's no counterevidence provided in the source. The source seems to be a game note from the Cavaliers, which would typically be a reliable source for player stats. The stats are specific and include rankings (like 20th in NBA for RPG, 12th in BPG), which adds credibility. \n\nUncertainty is mentioned in the candidate's claim about possible variation in the upcoming game, but the source doesn't address future performance, so that's a reasonable note. \n\nI need to check if there's any contradiction. The source doesn't mention any limitations or conflicting data. All the stats provided in the candidate's fact are directly from the source. The fact_date is null, but the source is dated December 27, which is the same day as the game, so the data is current. \n\nTherefore, the candidate's fact is fully supported by the source. The interpretation is plausible based on the stats given. No counterevidence is present, and the uncertainty is appropriately noted.\n</think>\n\n{\n  \"id\": \"matchup-f5\",\n  \"source_reading\": \"The source states that Evan Mobley is averaging a career-high 18.5 PPG with .569 FG%, .415 3FG%, and .786 FT%, along with 9.0 RPG (20th in NBA), 2.9 APG, 1.07 SPG, and 1.46 BPG (12th-best in NBA) in 30.3 MPG. It also notes 13 double-doubles and 8 games with 20+ PTS/10+ REB. Additional context highlights Mobley as one of three players meeting specific stat thresholds and his historic 41-point game on December 7.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221\",\n      \"page\": 11,\n      \"lines\": [2, 3, 4]\n    }\n  ],\n  \"reason\": \"The fact matches the source's explicit statement about Mobley's season averages, rankings, and achievements. The interpretation aligns with the source's emphasis on his efficiency and versatility. The source provides no counterevidence, and the uncertainty about future performance is reasonable. All numerical values, player identity, and time scope are confirmed.\",\n  \"verdict\": \"supported\"\n}",
+        "reasoning_text": "Okay, let's start by looking at the candidate's claim. The fact states that Evan Mobley is averaging a career-high 18.5 PPG with certain stats. The source provided is a PDF from the Cavaliers, which is the team he plays for. The citation points to page 11, lines 2-4, which mention his career-high averages. \n\nFirst, I need to check if the numbers in the fact match the source. The source lines say \"18.5 PPG (.569 FG%, .415 3FG%, .786 FT%), 9.0 RPG (20th in NBA), 2.9 APG, 1.07 SPG and 1.46 BPG (12th-best in NBA) in 30.3 MPG.\" That matches the candidate's fact exactly. \n\nNext, verifying the player's identity. The source mentions \"EVAN MOBLEY\" in uppercase, which is the same as in the candidate's fact. The team is CLE (Cavaliers), which aligns with the away team in the game mentioned. \n\nThe time scope is \"season to date,\" and the source mentions \"So far this season,\" confirming the time frame. The stats are presented as averages, so they are season averages up to the time the document was published. The document's archive time is December 27, 2024, which is before the game date of December 27, so the data is current up to that point. \n\nThe interpretation part of the candidate's claim says Mobley is a key player with notable shooting efficiency and rebounding. The source supports this by highlighting his career-high points, high rankings in blocks and steals, and double-doubles. \n\nThere's no counterevidence provided in the source. The source seems to be a game note from the Cavaliers, which would typically be a reliable source for player stats. The stats are specific and include rankings (like 20th in NBA for RPG, 12th in BPG), which adds credibility. \n\nUncertainty is mentioned in the candidate's claim about possible variation in the upcoming game, but the source doesn't address future performance, so that's a reasonable note. \n\nI need to check if there's any contradiction. The source doesn't mention any limitations or conflicting data. All the stats provided in the candidate's fact are directly from the source. The fact_date is null, but the source is dated December 27, which is the same day as the game, so the data is current. \n\nTherefore, the candidate's fact is fully supported by the source. The interpretation is plausible based on the stats given. No counterevidence is present, and the uncertainty is appropriately noted.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "49a115df832bb8cb69b5537bc05322702f7f6da7ca1260d366625693143eeb26",
+        "request_sha256": "d8a95518a69db89356cda92e73c65753ea785de1711f84108002999547fab89b",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "e334193f7ce66054f767f2eaf1fdcd4d54d6348b9b3151d74601670a5edcfeac",
+        "status": "complete",
+        "text": "{\n  \"id\": \"matchup-f5\",\n  \"source_reading\": \"The source states that Evan Mobley is averaging a career-high 18.5 PPG with .569 FG%, .415 3FG%, and .786 FT%, along with 9.0 RPG (20th in NBA), 2.9 APG, 1.07 SPG, and 1.46 BPG (12th-best in NBA) in 30.3 MPG. It also notes 13 double-doubles and 8 games with 20+ PTS/10+ REB. Additional context highlights Mobley as one of three players meeting specific stat thresholds and his historic 41-point game on December 7.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221\",\n      \"page\": 11,\n      \"lines\": [2, 3, 4]\n    }\n  ],\n  \"reason\": \"The fact matches the source's explicit statement about Mobley's season averages, rankings, and achievements. The interpretation aligns with the source's emphasis on his efficiency and versatility. The source provides no counterevidence, and the uncertainty about future performance is reasonable. All numerical values, player identity, and time scope are confirmed.\",\n  \"verdict\": \"supported\"\n}"
+      },
+      "request_id": "49a115df832bb8cb69b5537bc05322702f7f6da7ca1260d366625693143eeb26",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 32,
+            "page": 7,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+            "text": " Cavs’ OFFENSIVE RATING,  \n"
+          },
+          {
+            "line": 33,
+            "page": 7,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+            "text": "1ST IN THE NBA \n"
+          },
+          {
+            "line": 59,
+            "page": 7,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+            "text": " Cavs’ DEFENSIVE RATING,  \n"
+          },
+          {
+            "line": 60,
+            "page": 7,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+            "text": "7TH IN THE NBA "
+          }
+        ],
+        "id": "matchup-f1",
+        "missing_original_citations": [
+          [
+            "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+            7,
+            33
+          ],
+          [
+            "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+            7,
+            59
+          ]
+        ],
+        "model_verdict": "unsupported",
+        "reason": "The source explicitly states the Cavaliers have the 1st-ranked offensive rating (supported) but the 7th-ranked defensive rating (candidate's claim of 2nd-best is contradicted). The defensive rating assertion in the fact is incorrect, invalidating the combined claim. The interpretation and uncertainty sections remain plausible but depend on the factual accuracy of both metrics.",
+        "required_citations": [
+          {
+            "lines": [
+              32,
+              33,
+              59,
+              60
+            ],
+            "page": 7,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221"
+          }
+        ],
+        "source_reading": "The source states the Cavaliers have the 1st-ranked offensive rating in the NBA (line 32-33) and 7th-ranked defensive rating (line 59-60). It also notes their 2nd-ranked points per game (line 43) and 2nd-ranked assist-to-turnover ratio (line 35).",
+        "verdict": "unsupported"
+      },
+      "expected": "unsupported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 668,
+        "prompt_token_ids_sha256": "ff350cabfda88b4de2eafc55369e096bd50960c38418540c6ad306d95a5e8db0",
+        "prompt_tokens": 3222,
+        "raw_text": "<think>\nOkay, let's take a look at this. The user provided a finding that the Cavaliers have the best offensive rating in the NBA and the second-best defensive rating. The candidate's fact is based on a PDF from the Cleveland Cavaliers' official source. \n\nFirst, I need to check the source. The PDF is from page 7, and the lines cited are 32, 35, 39, 43, 46, 50, 54, 60. Looking at the source context provided, line 32 says \"Cavs’ OFFENSIVE RATING, 1ST IN THE NBA\" and line 59-60 mention \"Cavs’ DEFENSIVE RATING, 7TH IN THE NBA\". Wait, the defensive rating is listed as 7th, not second. The candidate's fact claims second-best defensive rating, but the source says 7th. That's a discrepancy.\n\nFor the offensive rating, line 32 and 33 clearly state it's first. So the offensive part is correct. The defensive part is wrong because the source says 7th. The candidate's fact combines both, so part of it is correct, part incorrect. \n\nThe interpretation mentions both offensive and defensive strengths, but since the defensive rating is actually 7th, the interpretation isn't fully supported. The counterevidence note from the candidate mentions lack of player availability, which the source doesn't address. The uncertainty is about player availability, which isn't in the source, so that's okay.\n\nTherefore, the fact is partially correct but has an error in the defensive rating. Since the defensive part is wrong, the overall fact isn't supported. The required citations should include the lines that mention offensive and defensive ratings. The verdict should be unsupported because the defensive rating is incorrect.\n</think>\n\n{\n  \"id\": \"matchup-f1\",\n  \"source_reading\": \"The source states the Cavaliers have the 1st-ranked offensive rating in the NBA (line 32-33) and 7th-ranked defensive rating (line 59-60). It also notes their 2nd-ranked points per game (line 43) and 2nd-ranked assist-to-turnover ratio (line 35).\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221\",\n      \"page\": 7,\n      \"lines\": [32, 33, 59, 60]\n    }\n  ],\n  \"reason\": \"The source explicitly states the Cavaliers have the 1st-ranked offensive rating (supported) but the 7th-ranked defensive rating (candidate's claim of 2nd-best is contradicted). The defensive rating assertion in the fact is incorrect, invalidating the combined claim. The interpretation and uncertainty sections remain plausible but depend on the factual accuracy of both metrics.\",\n  \"verdict\": \"unsupported\"\n}",
+        "reasoning_text": "Okay, let's take a look at this. The user provided a finding that the Cavaliers have the best offensive rating in the NBA and the second-best defensive rating. The candidate's fact is based on a PDF from the Cleveland Cavaliers' official source. \n\nFirst, I need to check the source. The PDF is from page 7, and the lines cited are 32, 35, 39, 43, 46, 50, 54, 60. Looking at the source context provided, line 32 says \"Cavs’ OFFENSIVE RATING, 1ST IN THE NBA\" and line 59-60 mention \"Cavs’ DEFENSIVE RATING, 7TH IN THE NBA\". Wait, the defensive rating is listed as 7th, not second. The candidate's fact claims second-best defensive rating, but the source says 7th. That's a discrepancy.\n\nFor the offensive rating, line 32 and 33 clearly state it's first. So the offensive part is correct. The defensive part is wrong because the source says 7th. The candidate's fact combines both, so part of it is correct, part incorrect. \n\nThe interpretation mentions both offensive and defensive strengths, but since the defensive rating is actually 7th, the interpretation isn't fully supported. The counterevidence note from the candidate mentions lack of player availability, which the source doesn't address. The uncertainty is about player availability, which isn't in the source, so that's okay.\n\nTherefore, the fact is partially correct but has an error in the defensive rating. Since the defensive part is wrong, the overall fact isn't supported. The required citations should include the lines that mention offensive and defensive ratings. The verdict should be unsupported because the defensive rating is incorrect.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "7b347de00c74a15dfd140681f2482e2a14ae1b93641a59b02733d6c00afdb785",
+        "request_sha256": "8bfc02f5127034cfa01f73f8916c9a73f120b19566d2050fece61863a2792486",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "7ee11547c8d135948e60ecfab52efeef13e309990e3c228767a60c91a18ed628",
+        "status": "complete",
+        "text": "{\n  \"id\": \"matchup-f1\",\n  \"source_reading\": \"The source states the Cavaliers have the 1st-ranked offensive rating in the NBA (line 32-33) and 7th-ranked defensive rating (line 59-60). It also notes their 2nd-ranked points per game (line 43) and 2nd-ranked assist-to-turnover ratio (line 35).\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221\",\n      \"page\": 7,\n      \"lines\": [32, 33, 59, 60]\n    }\n  ],\n  \"reason\": \"The source explicitly states the Cavaliers have the 1st-ranked offensive rating (supported) but the 7th-ranked defensive rating (candidate's claim of 2nd-best is contradicted). The defensive rating assertion in the fact is incorrect, invalidating the combined claim. The interpretation and uncertainty sections remain plausible but depend on the factual accuracy of both metrics.\",\n  \"verdict\": \"unsupported\"\n}"
+      },
+      "request_id": "7b347de00c74a15dfd140681f2482e2a14ae1b93641a59b02733d6c00afdb785",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 1,
+            "page": 1,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "                               Miami HEAT (9-9) at Boston Celtics (16-4)\n"
+          },
+          {
+            "line": 2,
+            "page": 1,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "                                Monday, December 2, 2024 ▫ 7:30PM\n"
+          }
+        ],
+        "id": "recent_changes_rest_workload-f1",
+        "missing_original_citations": [],
+        "model_verdict": "supported",
+        "reason": "The source explicitly confirms the teams, game date, and time. The interpretation correctly notes the absence of recent changes or workload data, and the counterevidence aligns with the source's content. The fact is directly supported, and the uncertainty is appropriately acknowledged.",
+        "required_citations": [
+          {
+            "lines": [
+              1,
+              2
+            ],
+            "page": 1,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75"
+          }
+        ],
+        "source_reading": "The Miami HEAT (9-9) are scheduled to play against the Boston Celtics (16-4) on Monday, December 2, 2024 at 7:30PM at TD Garden. The source confirms the teams, date, and time but provides no details about recent roster changes, player rest, travel, or workload.",
+        "verdict": "supported"
+      },
+      "expected": "supported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 579,
+        "prompt_token_ids_sha256": "09e17f803e2549ff26e8b725ba110fda92071f1f0da9fbfc973f375eb0f75bbd",
+        "prompt_tokens": 5690,
+        "raw_text": "<think>\nOkay, let's start by looking at the candidate's finding. The fact is that the Miami HEAT (9-9) are playing at the Boston Celtics (16-4) on Monday, December 2, 2024 at 7:30 PM. The citation provided is a PDF from the Miami Heat's game notes, archived on December 2, 2024, at 9:26 AM ET. The source mentions the teams, the date, and the time, which matches the fact stated.\n\nNow, checking the pregame evidence. The source is the Miami Heat's official game notes PDF. The lines cited (1 and 2) clearly state the teams, the date, and the time. The rest of the page includes other info like the venue and some player stats, but nothing about recent changes, rest, or workload. The candidate's interpretation notes that the game is scheduled, so the teams are available, but there's no info on recent changes or workload. The counterevidence correctly points out that the source doesn't provide details on those factors.\n\nThe uncertainty is about the impact of those missing factors. Since the source only confirms the game's scheduling and doesn't mention anything about player rest, injuries, or recent roster changes, the interpretation is accurate. The verdict should be supported because the fact is confirmed by the source, and the interpretation correctly acknowledges the lack of additional data. There's no contradiction here. The required citations are the ones provided, as they directly support the fact stated.\n</think>\n\n{\n  \"id\": \"recent_changes_rest_workload-f1\",\n  \"source_reading\": \"The Miami HEAT (9-9) are scheduled to play against the Boston Celtics (16-4) on Monday, December 2, 2024 at 7:30PM at TD Garden. The source confirms the teams, date, and time but provides no details about recent roster changes, player rest, travel, or workload.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75\",\n      \"page\": 1,\n      \"lines\": [1, 2]\n    }\n  ],\n  \"reason\": \"The source explicitly confirms the teams, game date, and time. The interpretation correctly notes the absence of recent changes or workload data, and the counterevidence aligns with the source's content. The fact is directly supported, and the uncertainty is appropriately acknowledged.\",\n  \"verdict\": \"supported\"\n}",
+        "reasoning_text": "Okay, let's start by looking at the candidate's finding. The fact is that the Miami HEAT (9-9) are playing at the Boston Celtics (16-4) on Monday, December 2, 2024 at 7:30 PM. The citation provided is a PDF from the Miami Heat's game notes, archived on December 2, 2024, at 9:26 AM ET. The source mentions the teams, the date, and the time, which matches the fact stated.\n\nNow, checking the pregame evidence. The source is the Miami Heat's official game notes PDF. The lines cited (1 and 2) clearly state the teams, the date, and the time. The rest of the page includes other info like the venue and some player stats, but nothing about recent changes, rest, or workload. The candidate's interpretation notes that the game is scheduled, so the teams are available, but there's no info on recent changes or workload. The counterevidence correctly points out that the source doesn't provide details on those factors.\n\nThe uncertainty is about the impact of those missing factors. Since the source only confirms the game's scheduling and doesn't mention anything about player rest, injuries, or recent roster changes, the interpretation is accurate. The verdict should be supported because the fact is confirmed by the source, and the interpretation correctly acknowledges the lack of additional data. There's no contradiction here. The required citations are the ones provided, as they directly support the fact stated.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "8522a130b9fd16d92acbab26ed9383b7c708b3a6317a2c2ff2e143d075e74bab",
+        "request_sha256": "88738f1dc70c48d6f40e66bf494082dc9b11cf256f3b9821616aacf07d6c15e7",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "34b1df945c79b7803100627b79dda901d22caee21c0299c7fcfb41102c4c8fbd",
+        "status": "complete",
+        "text": "{\n  \"id\": \"recent_changes_rest_workload-f1\",\n  \"source_reading\": \"The Miami HEAT (9-9) are scheduled to play against the Boston Celtics (16-4) on Monday, December 2, 2024 at 7:30PM at TD Garden. The source confirms the teams, date, and time but provides no details about recent roster changes, player rest, travel, or workload.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75\",\n      \"page\": 1,\n      \"lines\": [1, 2]\n    }\n  ],\n  \"reason\": \"The source explicitly confirms the teams, game date, and time. The interpretation correctly notes the absence of recent changes or workload data, and the counterevidence aligns with the source's content. The fact is directly supported, and the uncertainty is appropriately acknowledged.\",\n  \"verdict\": \"supported\"\n}"
+      },
+      "request_id": "8522a130b9fd16d92acbab26ed9383b7c708b3a6317a2c2ff2e143d075e74bab",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 36,
+            "page": 38,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "                             TOTALS                               3,044                         870                         1,106                        2,280                        1,118\n"
+          }
+        ],
+        "id": "matchup-f4",
+        "missing_original_citations": [],
+        "model_verdict": "unsupported",
+        "reason": "The candidate's fact incorrectly labels 1,118 as an 'average' when the source explicitly presents it as a total. The interpretation further misrepresents the Pistons' advantage, as their PTS TO (1,118) is slightly lower than opponents' (1,123). The counterevidence correctly notes the similarity in totals but is overshadowed by the factual inaccuracy in the primary claim.",
+        "required_citations": [
+          {
+            "lines": [
+              36
+            ],
+            "page": 38,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7"
+          }
+        ],
+        "source_reading": "The source's 'TOTALS' line (line 36) shows the Pistons' season total for points off turnovers (PTS TO) as 1,118. The same line lists opponents' PTS TO as 1,123. Both are totals, not averages. The column header 'PTS TO' (line 1) confirms this metric, but the data represents cumulative points, not per-game averages.",
+        "verdict": "unsupported"
+      },
+      "expected": "unsupported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 913,
+        "prompt_token_ids_sha256": "67ef370df5dba2c96719ba86dcca27fa153560b1d95e6162602e5e01d3089588",
+        "prompt_tokens": 3969,
+        "raw_text": "<think>\nOkay, let's start by looking at the candidate's finding. The fact is that the Pistons average 1,118 points to turnovers (PTS TO) over the season. The citation provided is a line from the Pistons' game notes PDF, specifically line 36 on page 38, which shows \"TOTALS\" with 1,118 under the PTS TO column.\n\nFirst, I need to confirm if this line indeed represents the season average for the Pistons. The line is under \"TOTALS\" and the column header for PTS TO is present. The numbers in the line for other categories like \"PITP\" (Possessions?), \"2ND PTS\", etc., all seem to be totals, not averages. However, the candidate's fact states an average. If the 1,118 is a total points scored off turnovers for the season, then to get an average per game, we'd need to divide by the number of games. But the candidate's fact says \"average,\" which might be incorrect if 1,118 is the total. However, looking at the opponent's total in line 37, which is 1,123, that's a total as well. The candidate's counterevidence mentions the opponents' average, but that's part of the same total line.\n\nNext, the interpretation says the Pistons are efficient in scoring points off turnovers, which could be an advantage. The source data shows their total PTS TO is 1,118, which is higher than opponents' 1,123. Wait, that's actually lower. The opponent's total is 1,123, which is slightly higher than the Pistons' 1,118. So the interpretation might be incorrect. The candidate's counterevidence also mentions that opponents average 1,123, so if both teams are averaging similar numbers, the Pistons aren't significantly better. The candidate's interpretation suggests an advantage, but the data shows opponents have a slightly higher total. \n\nAdditionally, the uncertainty mentions effectiveness varies with matchups. That's a valid point, but the main issue here is whether the 1,118 is an average or total. The source line is under \"TOTALS,\" so 1,118 is likely the total points scored off turnovers for the season, not the average. Therefore, the candidate's fact is incorrect in stating it's an average. The counterevidence correctly points out the opponents' total, but the interpretation is flawed because the Pistons' total is actually lower than their opponents'. \n\nThe required citations are the line from the PDF. The source reading should note that the 1,118 is a total, not an average. The reason for the verdict would be that the fact is incorrect in presenting the total as an average, and the interpretation is misleading because the Pistons' PTS TO is slightly lower than opponents'. Therefore, the finding is unsupported.\n</think>\n\n{\n  \"id\": \"matchup-f4\",\n  \"source_reading\": \"The source's 'TOTALS' line (line 36) shows the Pistons' season total for points off turnovers (PTS TO) as 1,118. The same line lists opponents' PTS TO as 1,123. Both are totals, not averages. The column header 'PTS TO' (line 1) confirms this metric, but the data represents cumulative points, not per-game averages.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 38,\n      \"lines\": [36]\n    }\n  ],\n  \"reason\": \"The candidate's fact incorrectly labels 1,118 as an 'average' when the source explicitly presents it as a total. The interpretation further misrepresents the Pistons' advantage, as their PTS TO (1,118) is slightly lower than opponents' (1,123). The counterevidence correctly notes the similarity in totals but is overshadowed by the factual inaccuracy in the primary claim.\",\n  \"verdict\": \"unsupported\"\n}",
+        "reasoning_text": "Okay, let's start by looking at the candidate's finding. The fact is that the Pistons average 1,118 points to turnovers (PTS TO) over the season. The citation provided is a line from the Pistons' game notes PDF, specifically line 36 on page 38, which shows \"TOTALS\" with 1,118 under the PTS TO column.\n\nFirst, I need to confirm if this line indeed represents the season average for the Pistons. The line is under \"TOTALS\" and the column header for PTS TO is present. The numbers in the line for other categories like \"PITP\" (Possessions?), \"2ND PTS\", etc., all seem to be totals, not averages. However, the candidate's fact states an average. If the 1,118 is a total points scored off turnovers for the season, then to get an average per game, we'd need to divide by the number of games. But the candidate's fact says \"average,\" which might be incorrect if 1,118 is the total. However, looking at the opponent's total in line 37, which is 1,123, that's a total as well. The candidate's counterevidence mentions the opponents' average, but that's part of the same total line.\n\nNext, the interpretation says the Pistons are efficient in scoring points off turnovers, which could be an advantage. The source data shows their total PTS TO is 1,118, which is higher than opponents' 1,123. Wait, that's actually lower. The opponent's total is 1,123, which is slightly higher than the Pistons' 1,118. So the interpretation might be incorrect. The candidate's counterevidence also mentions that opponents average 1,123, so if both teams are averaging similar numbers, the Pistons aren't significantly better. The candidate's interpretation suggests an advantage, but the data shows opponents have a slightly higher total. \n\nAdditionally, the uncertainty mentions effectiveness varies with matchups. That's a valid point, but the main issue here is whether the 1,118 is an average or total. The source line is under \"TOTALS,\" so 1,118 is likely the total points scored off turnovers for the season, not the average. Therefore, the candidate's fact is incorrect in stating it's an average. The counterevidence correctly points out the opponents' total, but the interpretation is flawed because the Pistons' total is actually lower than their opponents'. \n\nThe required citations are the line from the PDF. The source reading should note that the 1,118 is a total, not an average. The reason for the verdict would be that the fact is incorrect in presenting the total as an average, and the interpretation is misleading because the Pistons' PTS TO is slightly lower than opponents'. Therefore, the finding is unsupported.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "852f03be21fc69657c3c94a2e50311acef7f99135c7f8865d731c538927bb784",
+        "request_sha256": "2b5fddf7a2a33524b8f62a2b735bc7e00630b4414d08d12f106eade30574562c",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "625991d7d2efe70f2377a7b6d744c3807c24063f793a9df4950adc04b2198287",
+        "status": "complete",
+        "text": "{\n  \"id\": \"matchup-f4\",\n  \"source_reading\": \"The source's 'TOTALS' line (line 36) shows the Pistons' season total for points off turnovers (PTS TO) as 1,118. The same line lists opponents' PTS TO as 1,123. Both are totals, not averages. The column header 'PTS TO' (line 1) confirms this metric, but the data represents cumulative points, not per-game averages.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 38,\n      \"lines\": [36]\n    }\n  ],\n  \"reason\": \"The candidate's fact incorrectly labels 1,118 as an 'average' when the source explicitly presents it as a total. The interpretation further misrepresents the Pistons' advantage, as their PTS TO (1,118) is slightly lower than opponents' (1,123). The counterevidence correctly notes the similarity in totals but is overshadowed by the factual inaccuracy in the primary claim.\",\n  \"verdict\": \"unsupported\"\n}"
+      },
+      "request_id": "852f03be21fc69657c3c94a2e50311acef7f99135c7f8865d731c538927bb784",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 9,
+            "page": 4,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "BACK-TO-BACK: Tonight marks the second of a road back-to-back after just playing in Toronto last night. It marks Miami’s third of 15 back-to-backs\n"
+          },
+          {
+            "line": 10,
+            "page": 4,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "this season, which is two more than last season. Additionally, the HEAT will play a season-high four back-to-backs in December.\n"
+          }
+        ],
+        "id": "recent_changes_rest_workload-f2",
+        "missing_original_citations": [],
+        "model_verdict": "supported",
+        "reason": "The source explicitly confirms the back-to-back schedule, the count of 15 back-to-backs this season (two more than last season), and the four December back-to-backs. The interpretation of a 'challenging travel and rest schedule' is a reasonable qualitative inference from the schedule data. Counterevidence about fatigue management is not sourced to the provided evidence but represents general basketball context. Uncertainty about performance impact is appropriately acknowledged as the source does not quantify outcomes.",
+        "required_citations": [
+          {
+            "lines": [
+              9,
+              10
+            ],
+            "page": 4,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75"
+          }
+        ],
+        "source_reading": "The Miami Heat's game notes (Dec 2, 2024) state that tonight's game is the second of a road back-to-back following a game in Toronto. This marks Miami’s third of 15 back-to-backs this season (two more than last season) and notes they will play a season-high four back-to-backs in December.",
+        "verdict": "supported"
+      },
+      "expected": "supported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 828,
+        "prompt_token_ids_sha256": "347196673ef89224d777634738552357846585d505471c6099dcd30deb419576",
+        "prompt_tokens": 3726,
+        "raw_text": "<think>\nOkay, let's start by looking at the candidate's claim. The fact they're asserting is that tonight's game is the second of a road back-to-back for Miami after playing in Toronto last night. It also mentions this is their third of 15 back-to-backs this season, two more than last season, and that they'll play a season-high four back-to-backs in December.\n\nFirst, I need to check the provided source. The source is a PDF from the Miami Heat's game notes, dated December 2, 2024. The relevant lines are 9 and 10 on page 4. Line 9 states that tonight is the second of a road back-to-back after Toronto, and line 10 adds that this is their third of 15 back-to-backs this season, two more than last season, with four in December. \n\nI need to verify if the source supports all parts of the fact. The source does mention the back-to-back games, the count this season compared to last, and the December total. The team is correctly identified as Miami (HEAT). The dates and numbers seem to align. There's no mention of any changes or updates after December 2, so the information is current as of the source's publication. \n\nThe interpretation by the candidate is that Miami has a challenging rest schedule, which might affect their performance. The counterevidence provided is that the team may have strategies to manage fatigue, and performance can vary. The source doesn't mention anything about strategies or performance, so the counterevidence is a general statement, not from the source. However, the fact itself is supported by the source. \n\nUncertainty is mentioned regarding the exact impact, which is reasonable since the source doesn't provide data on actual performance outcomes. The fact and its interpretation are based on the schedule information, which is present in the source. \n\nI need to check if there's any conflicting information in the source. The rest of the page talks about other players' stats and achievements, but nothing contradicts the back-to-back information. The required citations are correctly pointing to the source. \n\nTherefore, the fact is supported by the source, and the interpretation is a plausible qualitative take on the schedule's difficulty. The counterevidence isn't from the source but is a valid general consideration. The uncertainty is appropriately noted as the source doesn't provide performance data. \n\nThe verdict should be \"supported\" because the source confirms the factual claims, and the interpretation is reasonable given the context.\n</think>\n\n{\n  \"id\": \"recent_changes_rest_workload-f2\",\n  \"source_reading\": \"The Miami Heat's game notes (Dec 2, 2024) state that tonight's game is the second of a road back-to-back following a game in Toronto. This marks Miami’s third of 15 back-to-backs this season (two more than last season) and notes they will play a season-high four back-to-backs in December.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75\",\n      \"page\": 4,\n      \"lines\": [9, 10]\n    }\n  ],\n  \"reason\": \"The source explicitly confirms the back-to-back schedule, the count of 15 back-to-backs this season (two more than last season), and the four December back-to-backs. The interpretation of a 'challenging travel and rest schedule' is a reasonable qualitative inference from the schedule data. Counterevidence about fatigue management is not sourced to the provided evidence but represents general basketball context. Uncertainty about performance impact is appropriately acknowledged as the source does not quantify outcomes.\",\n  \"verdict\": \"supported\"\n}",
+        "reasoning_text": "Okay, let's start by looking at the candidate's claim. The fact they're asserting is that tonight's game is the second of a road back-to-back for Miami after playing in Toronto last night. It also mentions this is their third of 15 back-to-backs this season, two more than last season, and that they'll play a season-high four back-to-backs in December.\n\nFirst, I need to check the provided source. The source is a PDF from the Miami Heat's game notes, dated December 2, 2024. The relevant lines are 9 and 10 on page 4. Line 9 states that tonight is the second of a road back-to-back after Toronto, and line 10 adds that this is their third of 15 back-to-backs this season, two more than last season, with four in December. \n\nI need to verify if the source supports all parts of the fact. The source does mention the back-to-back games, the count this season compared to last, and the December total. The team is correctly identified as Miami (HEAT). The dates and numbers seem to align. There's no mention of any changes or updates after December 2, so the information is current as of the source's publication. \n\nThe interpretation by the candidate is that Miami has a challenging rest schedule, which might affect their performance. The counterevidence provided is that the team may have strategies to manage fatigue, and performance can vary. The source doesn't mention anything about strategies or performance, so the counterevidence is a general statement, not from the source. However, the fact itself is supported by the source. \n\nUncertainty is mentioned regarding the exact impact, which is reasonable since the source doesn't provide data on actual performance outcomes. The fact and its interpretation are based on the schedule information, which is present in the source. \n\nI need to check if there's any conflicting information in the source. The rest of the page talks about other players' stats and achievements, but nothing contradicts the back-to-back information. The required citations are correctly pointing to the source. \n\nTherefore, the fact is supported by the source, and the interpretation is a plausible qualitative take on the schedule's difficulty. The counterevidence isn't from the source but is a valid general consideration. The uncertainty is appropriately noted as the source doesn't provide performance data. \n\nThe verdict should be \"supported\" because the source confirms the factual claims, and the interpretation is reasonable given the context.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "a274597dbb4945ddf4db2646495286e38e8af5b39b73b0c9fe4aeb489940c80f",
+        "request_sha256": "11c04537605719e2a996400115806a0148d5151291dd2ed208435045a862bfa1",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "db3c72776574f278172bb4a5125d764c93788a9066bc01068a2aa1d45b2a957e",
+        "status": "complete",
+        "text": "{\n  \"id\": \"recent_changes_rest_workload-f2\",\n  \"source_reading\": \"The Miami Heat's game notes (Dec 2, 2024) state that tonight's game is the second of a road back-to-back following a game in Toronto. This marks Miami’s third of 15 back-to-backs this season (two more than last season) and notes they will play a season-high four back-to-backs in December.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75\",\n      \"page\": 4,\n      \"lines\": [9, 10]\n    }\n  ],\n  \"reason\": \"The source explicitly confirms the back-to-back schedule, the count of 15 back-to-backs this season (two more than last season), and the four December back-to-backs. The interpretation of a 'challenging travel and rest schedule' is a reasonable qualitative inference from the schedule data. Counterevidence about fatigue management is not sourced to the provided evidence but represents general basketball context. Uncertainty about performance impact is appropriately acknowledged as the source does not quantify outcomes.\",\n  \"verdict\": \"supported\"\n}"
+      },
+      "request_id": "a274597dbb4945ddf4db2646495286e38e8af5b39b73b0c9fe4aeb489940c80f",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 22,
+            "page": 4,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "TYLER FROM DEEP: Tyler Herro has now connected on a three-point field goal in 57-straight games, the longest overall streak of his career when\n"
+          },
+          {
+            "line": 23,
+            "page": 4,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "including the regular season and postseason. Additionally, Herro has made 52-straight when counting just the regular season, the third-longest such\n"
+          },
+          {
+            "line": 24,
+            "page": 4,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "streak in team history. Below are both Herro’s longest overall three-point made streaks and the longest regular season streaks in HEAT history.\n"
+          },
+          {
+            "line": 27,
+            "page": 4,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "                          57                      12/18/23 – present                              69                           Duncan Robinson            2/11/21 – 11/29/21\n"
+          },
+          {
+            "line": 28,
+            "page": 4,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "                          53                         8/1/20 – 3/2/21                              57                           Duncan Robinson            11/25/19 – 8/12/20\n"
+          },
+          {
+            "line": 29,
+            "page": 4,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+            "text": "                          28                        1/29/23 – 4/6/23                              52                              Tyler Herro            12/18/23 – present\n"
+          }
+        ],
+        "id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75:p4:c0-f3",
+        "missing_original_citations": [],
+        "model_verdict": "supported",
+        "reason": "The source directly states Herro's 57-game overall streak (12/18/23–present) and 52-game regular-season streak, explicitly noting the latter is third-longest in team history. The 'present' in the document (Dec 2, 2024) aligns with the game date. Historical comparisons in the table confirm the team context. The interpretation about Herro's offensive value is a reasonable inference, and the cited uncertainty about streak continuation is a general basketball consideration not contradicted by the source.",
+        "required_citations": [
+          {
+            "lines": [
+              22,
+              23,
+              24,
+              27,
+              28,
+              29
+            ],
+            "page": 4,
+            "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75"
+          }
+        ],
+        "source_reading": "The Miami Heat's game notes (Dec 2, 2024) confirm Tyler Herro has made a three-pointer in 57 consecutive games overall (including postseason) and 52 straight regular-season games, listed as third-longest in team history. The document explicitly states these streaks and provides comparative historical context (Duncan Robinson's 69- and 57-game regular-season streaks).",
+        "verdict": "supported"
+      },
+      "expected": "supported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 1055,
+        "prompt_token_ids_sha256": "8d11d9628179a2f38166a666bb62403914949fb1abbf3f673eedf9b339aee9a2",
+        "prompt_tokens": 4101,
+        "raw_text": "<think>\nOkay, let's tackle this. The user provided a JSON structure with a candidate finding about Tyler Herro's three-point shooting streak. I need to check if the evidence supports the claims made.\n\nFirst, looking at the candidate's fact: Tyler Herro has connected on a three-pointer in 57 straight games overall (including regular season and postseason) and 52 straight in the regular season, which is third-longest in team history. The source is a PDF from the Miami Heat's game notes, specifically page 4, lines 22-30. \n\nIn the source context, lines 22-24 mention the 57-game streak overall and 52 in the regular season. Then, the table in lines 27-29 lists Herro's 52-game streak from 12/18/23 to present, which matches the candidate's claim. The third-longest in team history is mentioned, and the table shows Duncan Robinson's 69 and 57-game streaks, making Herro's 52 the third. So the fact seems supported.\n\nThe interpretation is that Herro's consistency is a key offensive strength. The source doesn't directly state this, but it's a reasonable inference given the streak's significance. The counterevidence mentions opponents adjusting, which is a common consideration but not present in the source. The uncertainty about continuation is valid since the source only provides historical data up to 12/18/23, but the current game is on 2024-12-02, which is after that date. Wait, the game date is 2024-12-02, but the source's archive time is 2024-12-02T09:26:08Z. The streak is listed as ongoing \"present\" as of 12/18/23. However, if the current date in the source is December 2, 2024, and the streak started December 18, 2023, that's over 11 months. The source might be outdated, but the lines mention \"present\" which would be the time of the document's publication. Wait, the source is from December 2, 2024, so the \"present\" in the document would be up to that date. However, the streak is listed as 57 overall and 52 regular season. The dates in the table for Herro's 52-game streak are from 12/18/23 to present (which would be December 2, 2024). That seems like a long streak, but the source explicitly states it. Therefore, the fact is supported by the source. The interpretation is a reasonable take, though not explicitly stated. The counterevidence is a general consideration, not directly contradicted by the source. The uncertainty about continuation is valid since the source doesn't mention any interruptions. So the verdict should be supported.\n</think>\n\n{\n  \"id\": \"sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75:p4:c0-f3\",\n  \"source_reading\": \"The Miami Heat's game notes (Dec 2, 2024) confirm Tyler Herro has made a three-pointer in 57 consecutive games overall (including postseason) and 52 straight regular-season games, listed as third-longest in team history. The document explicitly states these streaks and provides comparative historical context (Duncan Robinson's 69- and 57-game regular-season streaks).\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75\",\n      \"page\": 4,\n      \"lines\": [22, 23, 24, 27, 28, 29]\n    }\n  ],\n  \"reason\": \"The source directly states Herro's 57-game overall streak (12/18/23–present) and 52-game regular-season streak, explicitly noting the latter is third-longest in team history. The 'present' in the document (Dec 2, 2024) aligns with the game date. Historical comparisons in the table confirm the team context. The interpretation about Herro's offensive value is a reasonable inference, and the cited uncertainty about streak continuation is a general basketball consideration not contradicted by the source.\",\n  \"verdict\": \"supported\"\n}",
+        "reasoning_text": "Okay, let's tackle this. The user provided a JSON structure with a candidate finding about Tyler Herro's three-point shooting streak. I need to check if the evidence supports the claims made.\n\nFirst, looking at the candidate's fact: Tyler Herro has connected on a three-pointer in 57 straight games overall (including regular season and postseason) and 52 straight in the regular season, which is third-longest in team history. The source is a PDF from the Miami Heat's game notes, specifically page 4, lines 22-30. \n\nIn the source context, lines 22-24 mention the 57-game streak overall and 52 in the regular season. Then, the table in lines 27-29 lists Herro's 52-game streak from 12/18/23 to present, which matches the candidate's claim. The third-longest in team history is mentioned, and the table shows Duncan Robinson's 69 and 57-game streaks, making Herro's 52 the third. So the fact seems supported.\n\nThe interpretation is that Herro's consistency is a key offensive strength. The source doesn't directly state this, but it's a reasonable inference given the streak's significance. The counterevidence mentions opponents adjusting, which is a common consideration but not present in the source. The uncertainty about continuation is valid since the source only provides historical data up to 12/18/23, but the current game is on 2024-12-02, which is after that date. Wait, the game date is 2024-12-02, but the source's archive time is 2024-12-02T09:26:08Z. The streak is listed as ongoing \"present\" as of 12/18/23. However, if the current date in the source is December 2, 2024, and the streak started December 18, 2023, that's over 11 months. The source might be outdated, but the lines mention \"present\" which would be the time of the document's publication. Wait, the source is from December 2, 2024, so the \"present\" in the document would be up to that date. However, the streak is listed as 57 overall and 52 regular season. The dates in the table for Herro's 52-game streak are from 12/18/23 to present (which would be December 2, 2024). That seems like a long streak, but the source explicitly states it. Therefore, the fact is supported by the source. The interpretation is a reasonable take, though not explicitly stated. The counterevidence is a general consideration, not directly contradicted by the source. The uncertainty about continuation is valid since the source doesn't mention any interruptions. So the verdict should be supported.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "b09e6036f12a6b4edf919be5ba3c9849efc6569206bacc4d94e82f1915188b45",
+        "request_sha256": "c65b8b39b212639947c533d4c82d45c4810b83f494c437b4868024a0aa97cb34",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "9d06573880decaa480e2a01a5bb37a9a6927cbd5627f7e6d064363ccef5c3b9b",
+        "status": "complete",
+        "text": "{\n  \"id\": \"sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75:p4:c0-f3\",\n  \"source_reading\": \"The Miami Heat's game notes (Dec 2, 2024) confirm Tyler Herro has made a three-pointer in 57 consecutive games overall (including postseason) and 52 straight regular-season games, listed as third-longest in team history. The document explicitly states these streaks and provides comparative historical context (Duncan Robinson's 69- and 57-game regular-season streaks).\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75\",\n      \"page\": 4,\n      \"lines\": [22, 23, 24, 27, 28, 29]\n    }\n  ],\n  \"reason\": \"The source directly states Herro's 57-game overall streak (12/18/23–present) and 52-game regular-season streak, explicitly noting the latter is third-longest in team history. The 'present' in the document (Dec 2, 2024) aligns with the game date. Historical comparisons in the table confirm the team context. The interpretation about Herro's offensive value is a reasonable inference, and the cited uncertainty about streak continuation is a general basketball consideration not contradicted by the source.\",\n  \"verdict\": \"supported\"\n}"
+      },
+      "request_id": "b09e6036f12a6b4edf919be5ba3c9849efc6569206bacc4d94e82f1915188b45",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 32,
+            "page": 3,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "          The Nuggets have won nine of the last 10 games against the Pistons.\n"
+          }
+        ],
+        "id": "matchup-f7",
+        "missing_original_citations": [],
+        "model_verdict": "supported",
+        "reason": "The source directly supports the factual claim with explicit text. The teams (Nuggets/Pistons) and numerical value (9/10) align with the citation. The time scope is historical ('last 10 games'), and no contradictory data appears in the provided context. The interpretation of a 'recent advantage' is reasonable given the 9-10 record, though historical trends inherently carry uncertainty.",
+        "required_citations": [
+          {
+            "lines": [
+              32
+            ],
+            "page": 3,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7"
+          }
+        ],
+        "source_reading": "The source explicitly states on page 3, line 32 of the Pistons' game notes: 'The Nuggets have won nine of the last 10 games against the Pistons.' This is part of a 'SERIES TRENDS' section that includes historical performance metrics between the teams.",
+        "verdict": "supported"
+      },
+      "expected": "supported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 699,
+        "prompt_token_ids_sha256": "f13b3211d2eb879b0a4771f11498544c2b5d5d70e843800d2dc73f9f14dc43e1",
+        "prompt_tokens": 4352,
+        "raw_text": "<think>\nOkay, let's start by looking at the candidate's finding. The fact is that \"The Nuggets have won nine of the last 10 games against the Pistons.\" The source cited is a PDF from the Pistons' game notes, specifically page 3, line 32, which states exactly that. \n\nFirst, I need to verify if the source actually supports this. The provided source context shows that line 32 of page 3 in the PDF says: \"The Nuggets have won nine of the last 10 games against the Pistons.\" That directly matches the candidate's fact. \n\nNext, check the teams involved. The Nuggets are the away team (DEN) and the Pistons are the home team (DET) in the game mentioned. The source is from the Pistons' perspective, so it's credible that they would mention their recent performance against Denver.\n\nLooking at the time scope, the fact is historical, referring to the last 10 games. The source is from February 28, 2025, and the last game mentioned in the series history is on the same date (line 16: 2/28/25). The line 32 is part of the \"SERIES TRENDS\" section, which is about historical data. \n\nThe interpretation is that the Nuggets have a recent advantage, which is a reasonable take on winning 9 out of 10. The counterevidence and uncertainty note that historical trends don't predict future performance, which is a valid point but doesn't negate the fact itself.\n\nNo contradictions are present in the provided source. The other lines in the source context don't conflict with this statement. The all-time series shows Pistons leading 52-48, but the recent 10 games favor the Nuggets. The specific mention of nine wins in the last ten is directly stated. \n\nTherefore, the fact is supported by the source. The interpretation is plausible. There's no counterevidence in the source against the fact. The uncertainty is appropriately noted, but the fact itself is confirmed by the citation.\n</think>\n\n{\n  \"id\": \"matchup-f7\",\n  \"source_reading\": \"The source explicitly states on page 3, line 32 of the Pistons' game notes: 'The Nuggets have won nine of the last 10 games against the Pistons.' This is part of a 'SERIES TRENDS' section that includes historical performance metrics between the teams.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 3,\n      \"lines\": [32]\n    }\n  ],\n  \"reason\": \"The source directly supports the factual claim with explicit text. The teams (Nuggets/Pistons) and numerical value (9/10) align with the citation. The time scope is historical ('last 10 games'), and no contradictory data appears in the provided context. The interpretation of a 'recent advantage' is reasonable given the 9-10 record, though historical trends inherently carry uncertainty.\",\n  \"verdict\": \"supported\"\n}",
+        "reasoning_text": "Okay, let's start by looking at the candidate's finding. The fact is that \"The Nuggets have won nine of the last 10 games against the Pistons.\" The source cited is a PDF from the Pistons' game notes, specifically page 3, line 32, which states exactly that. \n\nFirst, I need to verify if the source actually supports this. The provided source context shows that line 32 of page 3 in the PDF says: \"The Nuggets have won nine of the last 10 games against the Pistons.\" That directly matches the candidate's fact. \n\nNext, check the teams involved. The Nuggets are the away team (DEN) and the Pistons are the home team (DET) in the game mentioned. The source is from the Pistons' perspective, so it's credible that they would mention their recent performance against Denver.\n\nLooking at the time scope, the fact is historical, referring to the last 10 games. The source is from February 28, 2025, and the last game mentioned in the series history is on the same date (line 16: 2/28/25). The line 32 is part of the \"SERIES TRENDS\" section, which is about historical data. \n\nThe interpretation is that the Nuggets have a recent advantage, which is a reasonable take on winning 9 out of 10. The counterevidence and uncertainty note that historical trends don't predict future performance, which is a valid point but doesn't negate the fact itself.\n\nNo contradictions are present in the provided source. The other lines in the source context don't conflict with this statement. The all-time series shows Pistons leading 52-48, but the recent 10 games favor the Nuggets. The specific mention of nine wins in the last ten is directly stated. \n\nTherefore, the fact is supported by the source. The interpretation is plausible. There's no counterevidence in the source against the fact. The uncertainty is appropriately noted, but the fact itself is confirmed by the citation.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "d44a0b2e2042a82710d5bb0d84b87fffe0e6a2f19be724df22eddcb3e152f46d",
+        "request_sha256": "f0f9762f5d2df800dd4ab5de5be70e7bb617039285bbe2520af4916c67c4c4eb",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "d1ae7432ac7a10f85549acf290483f9d13d779f3f8a380c815f2f847f9548d4e",
+        "status": "complete",
+        "text": "{\n  \"id\": \"matchup-f7\",\n  \"source_reading\": \"The source explicitly states on page 3, line 32 of the Pistons' game notes: 'The Nuggets have won nine of the last 10 games against the Pistons.' This is part of a 'SERIES TRENDS' section that includes historical performance metrics between the teams.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 3,\n      \"lines\": [32]\n    }\n  ],\n  \"reason\": \"The source directly supports the factual claim with explicit text. The teams (Nuggets/Pistons) and numerical value (9/10) align with the citation. The time scope is historical ('last 10 games'), and no contradictory data appears in the provided context. The interpretation of a 'recent advantage' is reasonable given the 9-10 record, though historical trends inherently carry uncertainty.\",\n  \"verdict\": \"supported\"\n}"
+      },
+      "request_id": "d44a0b2e2042a82710d5bb0d84b87fffe0e6a2f19be724df22eddcb3e152f46d",
+      "valid": true
+    },
+    {
+      "correct": false,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 36,
+            "page": 38,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7",
+            "text": "                             TOTALS                               3,044                         870                         1,106                        2,280                        1,118\n"
+          }
+        ],
+        "id": "matchup-f3",
+        "missing_original_citations": [],
+        "model_verdict": "supported",
+        "reason": "The source directly states the Pistons' bench points total as 2,280 in the 'TOTALS' row. The interpretation of a strong bench is supported by the 2,280 figure exceeding opponents' 1,872. The counterevidence (opponents' bench points) is acknowledged but does not negate the Pistons' own value. Uncertainty about game-specific variability is reasonable but not contradicted by the source.",
+        "required_citations": [
+          {
+            "lines": [
+              36
+            ],
+            "page": 38,
+            "source_id": "sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7"
+          }
+        ],
+        "source_reading": "The Pistons' game notes PDF (page 38) lists 'TOTALS' with 2,280 BENCH PTS in a season-to-date context. The same page explicitly states this value under the 'BENCH PTS' column for the Pistons, contrasting with opponents' 1,872 bench points.",
+        "verdict": "supported"
+      },
+      "expected": "unsupported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 708,
+        "prompt_token_ids_sha256": "4a9c339b80ad8af45a25acc12ea1e3949989a1db2ceaf97a1190b929b0112ef9",
+        "prompt_tokens": 3955,
+        "raw_text": "<think>\nOkay, let's tackle this. The user provided a JSON with a candidate finding and pregame evidence. I need to assess whether the finding is supported, unsupported, or unclear based on the evidence.\n\nFirst, the candidate's fact is that \"The Pistons average 2,280 bench points (BENCH PTS) over the season.\" The source given is a PDF from DET (Pistons) with a line on page 38, line 36. Looking at the pregame_source_context, specifically line 36, the text shows \"TOTALS\" with BENCH PTS at 2,280. That seems to directly support the fact. \n\nNext, the interpretation is that the Pistons have a strong bench contributing significantly. The counterevidence mentions opponents' bench points at 1,872, but the candidate's fact is about the Pistons' own average. The counterevidence doesn't negate the Pistons' 2,280; it just provides context that opponents also have a decent bench. So the interpretation is a qualitative assessment based on the numbers, which is plausible.\n\nUncertainty is noted about bench effectiveness varying by game flow and defense. The source doesn't mention any specific issues, so the uncertainty is a general consideration, which is acceptable.\n\nCheck if the source's date matches the time scope. The fact_date is null, but the time_scope is \"season_to_date\". The PDF is from 2025-02-28, which would be during the season, so the totals up to that date are valid. The candidate's fact says \"over the season,\" but since the data is up to February, it's accurate as of that date. The cutoff_utc is set for the same day, so the data is current.\n\nNo contradictions in the source. The required citations are correctly pointing to the line with 2,280. The counterevidence is a separate point, not a contradiction. Therefore, the fact is supported, interpretation is reasonable, and uncertainty is noted appropriately.\n</think>\n\n{\n  \"id\": \"matchup-f3\",\n  \"source_reading\": \"The Pistons' game notes PDF (page 38) lists 'TOTALS' with 2,280 BENCH PTS in a season-to-date context. The same page explicitly states this value under the 'BENCH PTS' column for the Pistons, contrasting with opponents' 1,872 bench points.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 38,\n      \"lines\": [36]\n    }\n  ],\n  \"reason\": \"The source directly states the Pistons' bench points total as 2,280 in the 'TOTALS' row. The interpretation of a strong bench is supported by the 2,280 figure exceeding opponents' 1,872. The counterevidence (opponents' bench points) is acknowledged but does not negate the Pistons' own value. Uncertainty about game-specific variability is reasonable but not contradicted by the source.\",\n  \"verdict\": \"supported\"\n}",
+        "reasoning_text": "Okay, let's tackle this. The user provided a JSON with a candidate finding and pregame evidence. I need to assess whether the finding is supported, unsupported, or unclear based on the evidence.\n\nFirst, the candidate's fact is that \"The Pistons average 2,280 bench points (BENCH PTS) over the season.\" The source given is a PDF from DET (Pistons) with a line on page 38, line 36. Looking at the pregame_source_context, specifically line 36, the text shows \"TOTALS\" with BENCH PTS at 2,280. That seems to directly support the fact. \n\nNext, the interpretation is that the Pistons have a strong bench contributing significantly. The counterevidence mentions opponents' bench points at 1,872, but the candidate's fact is about the Pistons' own average. The counterevidence doesn't negate the Pistons' 2,280; it just provides context that opponents also have a decent bench. So the interpretation is a qualitative assessment based on the numbers, which is plausible.\n\nUncertainty is noted about bench effectiveness varying by game flow and defense. The source doesn't mention any specific issues, so the uncertainty is a general consideration, which is acceptable.\n\nCheck if the source's date matches the time scope. The fact_date is null, but the time_scope is \"season_to_date\". The PDF is from 2025-02-28, which would be during the season, so the totals up to that date are valid. The candidate's fact says \"over the season,\" but since the data is up to February, it's accurate as of that date. The cutoff_utc is set for the same day, so the data is current.\n\nNo contradictions in the source. The required citations are correctly pointing to the line with 2,280. The counterevidence is a separate point, not a contradiction. Therefore, the fact is supported, interpretation is reasonable, and uncertainty is noted appropriately.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "ec27433cfff81b1e70773a9727471c3d79c43913313055ecf94103bea9e7f3e3",
+        "request_sha256": "5f55c44d310ea1a7b9a3cf1609ec9eb4d27645bc76bc03f496dbade2e2ac82a1",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "10804f678ba07d1aea4668bcc4fd2935e9a468cad9492f514d9a71726708b918",
+        "status": "complete",
+        "text": "{\n  \"id\": \"matchup-f3\",\n  \"source_reading\": \"The Pistons' game notes PDF (page 38) lists 'TOTALS' with 2,280 BENCH PTS in a season-to-date context. The same page explicitly states this value under the 'BENCH PTS' column for the Pistons, contrasting with opponents' 1,872 bench points.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:860bdee5bad9a2f065c533f9488d680e79249b42a232145ceb6c8dd4951afce7\",\n      \"page\": 38,\n      \"lines\": [36]\n    }\n  ],\n  \"reason\": \"The source directly states the Pistons' bench points total as 2,280 in the 'TOTALS' row. The interpretation of a strong bench is supported by the 2,280 figure exceeding opponents' 1,872. The counterevidence (opponents' bench points) is acknowledged but does not negate the Pistons' own value. Uncertainty about game-specific variability is reasonable but not contradicted by the source.\",\n  \"verdict\": \"supported\"\n}"
+      },
+      "request_id": "ec27433cfff81b1e70773a9727471c3d79c43913313055ecf94103bea9e7f3e3",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 7,
+            "page": 3,
+            "source_id": "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+            "text": "  2023-24 REGULAR SEASON                             PPG           OPP. PPG             FG%             3FG%              FT%              RPG              APG             SPG               TO              BPG\n"
+          },
+          {
+            "line": 8,
+            "page": 3,
+            "source_id": "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4",
+            "text": "  76ers                                              119.8            112.0             .476             .367             .834             43.4             25.4             9.05             12.0            6.07\n"
+          }
+        ],
+        "id": "matchup-f1",
+        "missing_original_citations": [],
+        "model_verdict": "supported",
+        "reason": "The fact matches the 76ers' row in the table (lines 7-8 of page 3). The interpretation aligns with the numerical trends (high PPG, FG%, and SPG). Uncertainty about game-count denominators is valid as the table lacks explicit context. No counterevidence exists in the provided source.",
+        "required_citations": [
+          {
+            "lines": [
+              7,
+              8
+            ],
+            "page": 3,
+            "source_id": "sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4"
+          }
+        ],
+        "source_reading": "The source provides a 2023-24 regular-season table for the 76ers with 119.8 PPG, 112.0 OPP PPG, .476 FG%, .367 3FG%, .834 FT%, 43.4 RPG, 25.4 APG, 9.05 SPG, 12.0 TO, and 6.07 BPG. No denominator is specified for the shooting percentages.",
+        "verdict": "supported"
+      },
+      "expected": "supported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 657,
+        "prompt_token_ids_sha256": "2f707d3dff46d68b61263648c33a27d2624be7253f0a84f45816d8880d7acef1",
+        "prompt_tokens": 4540,
+        "raw_text": "<think>\nOkay, let's tackle this. The user provided a JSON with a finding about the 76ers' 2023-24 season stats. I need to check if the facts are supported by the given source.\n\nFirst, the source is a PDF from the Nuggets' game notes, page 3. The candidate's citation points to lines 7 and 8, which list the 76ers' stats. Looking at the pregame_source_context, line 7 has the headers for the season stats table, and line 8 has the 76ers' data: PPG 119.8, OPP PPG 112.0, FG% .476, 3FG% .367, FT% .834, RPG 43.4, APG 25.4, SPG 9.05, TO 12.0, BPG 6.07. That matches exactly what the fact states. \n\nThe interpretation mentions high-scoring offense and strong defense. The PPG of 119.8 is indeed high, and allowing 112.0 is relatively good. The shooting percentages are also notable. The uncertainty note about rounded averages and no game-count denominator is valid because the table doesn't specify how many games these stats are averaged over. There's no counterevidence here since the table only provides the 76ers' data without any opposing info. \n\nSo the fact is correctly extracted from the source. The interpretation is a reasonable take on the numbers, and the uncertainty is appropriately noted. No contradictions found. The verdict should be supported.\n</think>\n\n{\n  \"id\": \"matchup-f1\",\n  \"source_reading\": \"The source provides a 2023-24 regular-season table for the 76ers with 119.8 PPG, 112.0 OPP PPG, .476 FG%, .367 3FG%, .834 FT%, 43.4 RPG, 25.4 APG, 9.05 SPG, 12.0 TO, and 6.07 BPG. No denominator is specified for the shooting percentages.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4\",\n      \"page\": 3,\n      \"lines\": [7, 8]\n    }\n  ],\n  \"reason\": \"The fact matches the 76ers' row in the table (lines 7-8 of page 3). The interpretation aligns with the numerical trends (high PPG, FG%, and SPG). Uncertainty about game-count denominators is valid as the table lacks explicit context. No counterevidence exists in the provided source.\",\n  \"verdict\": \"supported\"\n}",
+        "reasoning_text": "Okay, let's tackle this. The user provided a JSON with a finding about the 76ers' 2023-24 season stats. I need to check if the facts are supported by the given source.\n\nFirst, the source is a PDF from the Nuggets' game notes, page 3. The candidate's citation points to lines 7 and 8, which list the 76ers' stats. Looking at the pregame_source_context, line 7 has the headers for the season stats table, and line 8 has the 76ers' data: PPG 119.8, OPP PPG 112.0, FG% .476, 3FG% .367, FT% .834, RPG 43.4, APG 25.4, SPG 9.05, TO 12.0, BPG 6.07. That matches exactly what the fact states. \n\nThe interpretation mentions high-scoring offense and strong defense. The PPG of 119.8 is indeed high, and allowing 112.0 is relatively good. The shooting percentages are also notable. The uncertainty note about rounded averages and no game-count denominator is valid because the table doesn't specify how many games these stats are averaged over. There's no counterevidence here since the table only provides the 76ers' data without any opposing info. \n\nSo the fact is correctly extracted from the source. The interpretation is a reasonable take on the numbers, and the uncertainty is appropriately noted. No contradictions found. The verdict should be supported.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "f4667a50aa681feb1c25a8fdba2a6e9a7948823de918c7d900e7772767372885",
+        "request_sha256": "dc6afa3d29376bfedc8cc5f56e466c739b12cfdf383fd8f1c07ebc1cdb24add6",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "9af67fb45f333dc5ea4085d2c3df72df439811d340124e16deb0677910c8d416",
+        "status": "complete",
+        "text": "{\n  \"id\": \"matchup-f1\",\n  \"source_reading\": \"The source provides a 2023-24 regular-season table for the 76ers with 119.8 PPG, 112.0 OPP PPG, .476 FG%, .367 3FG%, .834 FT%, 43.4 RPG, 25.4 APG, 9.05 SPG, 12.0 TO, and 6.07 BPG. No denominator is specified for the shooting percentages.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:bb4e20748aa357f8d5d1e4dd122ea031fea26f4346242588693d6b4f66fa58c4\",\n      \"page\": 3,\n      \"lines\": [7, 8]\n    }\n  ],\n  \"reason\": \"The fact matches the 76ers' row in the table (lines 7-8 of page 3). The interpretation aligns with the numerical trends (high PPG, FG%, and SPG). Uncertainty about game-count denominators is valid as the table lacks explicit context. No counterevidence exists in the provided source.\",\n  \"verdict\": \"supported\"\n}"
+      },
+      "request_id": "f4667a50aa681feb1c25a8fdba2a6e9a7948823de918c7d900e7772767372885",
+      "valid": true
+    },
+    {
+      "correct": true,
+      "decision": {
+        "canonical_evidence": [
+          {
+            "line": 12,
+            "page": 6,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221",
+            "text": "his 300th career steal with his first swipe at Milwaukee on Nov. 2 …TY JEROME recorded his 100th career steal at New Orleans on Nov. 6…CARIS LEVERT recorded his 500th career \n"
+          }
+        ],
+        "id": "recent_changes_rest_workload-f3",
+        "missing_original_citations": [],
+        "model_verdict": "unsupported",
+        "reason": "The source explicitly confirms Jarrett Allen's 300th career steal occurred on Nov. 2, 2024 (not 2023 as stated in the candidate's fact_date). The interpretation about 'potential impact in the upcoming game' is speculative and not supported by the source, which only documents a historical milestone. The counterevidence correctly notes the milestone does not reflect current status.",
+        "required_citations": [
+          {
+            "lines": [
+              12
+            ],
+            "page": 6,
+            "source_id": "sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221"
+          }
+        ],
+        "source_reading": "The source states 'JARRETT ALLEN recorded his 300th career steal with his first swipe at Milwaukee on Nov. 2' on page 6, line 12 of a Cleveland Cavaliers PDF dated Dec. 27, 2024. This directly supports the milestone but does not address current availability or workload.",
+        "verdict": "unsupported"
+      },
+      "expected": "unsupported",
+      "raw_response": {
+        "batch_seconds": 56.78138418799999,
+        "batch_size": 16,
+        "execution_sha256": "b9521f91d64c7e0a5073bb20af6f620c34867319a2b055079fd1c253e8f7e88a",
+        "finish_reason": "stop",
+        "max_tokens": 8596,
+        "output_tokens": 786,
+        "prompt_token_ids_sha256": "4da2f96feffce9acfb35af63ddbadeab41f001aac0e91bc7eba3c21a5ef8d613",
+        "prompt_tokens": 9760,
+        "raw_text": "<think>\nOkay, let's start by looking at the candidate's claim. The fact is that \"Jarrett Allen recorded his 300th career steal with his first swipe at Milwaukee on Nov. 2.\" The source provided is a PDF from the Cleveland Cavaliers, dated December 27, 2024. \n\nLooking at the citation, the relevant line is on page 6, line 12. The text there says: \"JARRETT ALLEN recorded his 300th career steal with his first swipe at Milwaukee on Nov. 2 …TY JEROME recorded his 100th career steal at New Orleans on Nov. 6…CARIS LEVERT recorded his 500th career \\n\". This seems to directly support the fact that Jarrett Allen hit his 300th steal on Nov 2 against Milwaukee.\n\nNow, checking the date. The fact_date is listed as 2023-11-02, but the source is from 2024. Wait, that's a problem. The source mentions the game happening in 2024, but the fact_date is 2023. That might be a mistake. The game on Nov 2 in the source is 2024, not 2023. So there's a discrepancy here. The actual date of the milestone is Nov 2, 2024, not 2023. \n\nAlso, the interpretation part talks about the milestone indicating defensive prowess and potential impact in the upcoming game. But the milestone itself is historical, as the game is on Dec 27, 2024. The interpretation might be stretching the relevance to the current game. The counterevidence note says the milestone doesn't provide info about current availability or recent workload. \n\nSo, the fact is supported by the source in terms of the event happening, but the date is incorrect (2023 vs 2024). The interpretation might be adding some analysis not directly supported by the source. The source only states the milestone, not any current impact. Therefore, the fact is correct in the event but has an incorrect date. The interpretation's relevance to the current game might not be justified. \n\nThe verdict should be \"unsupported\" because the fact_date is incorrect, and the interpretation goes beyond the source's information.\n</think>\n\n{\n  \"id\": \"recent_changes_rest_workload-f3\",\n  \"source_reading\": \"The source states 'JARRETT ALLEN recorded his 300th career steal with his first swipe at Milwaukee on Nov. 2' on page 6, line 12 of a Cleveland Cavaliers PDF dated Dec. 27, 2024. This directly supports the milestone but does not address current availability or workload.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221\",\n      \"page\": 6,\n      \"lines\": [12]\n    }\n  ],\n  \"reason\": \"The source explicitly confirms Jarrett Allen's 300th career steal occurred on Nov. 2, 2024 (not 2023 as stated in the candidate's fact_date). The interpretation about 'potential impact in the upcoming game' is speculative and not supported by the source, which only documents a historical milestone. The counterevidence correctly notes the milestone does not reflect current status.\",\n  \"verdict\": \"unsupported\"\n}",
+        "reasoning_text": "Okay, let's start by looking at the candidate's claim. The fact is that \"Jarrett Allen recorded his 300th career steal with his first swipe at Milwaukee on Nov. 2.\" The source provided is a PDF from the Cleveland Cavaliers, dated December 27, 2024. \n\nLooking at the citation, the relevant line is on page 6, line 12. The text there says: \"JARRETT ALLEN recorded his 300th career steal with his first swipe at Milwaukee on Nov. 2 …TY JEROME recorded his 100th career steal at New Orleans on Nov. 6…CARIS LEVERT recorded his 500th career \\n\". This seems to directly support the fact that Jarrett Allen hit his 300th steal on Nov 2 against Milwaukee.\n\nNow, checking the date. The fact_date is listed as 2023-11-02, but the source is from 2024. Wait, that's a problem. The source mentions the game happening in 2024, but the fact_date is 2023. That might be a mistake. The game on Nov 2 in the source is 2024, not 2023. So there's a discrepancy here. The actual date of the milestone is Nov 2, 2024, not 2023. \n\nAlso, the interpretation part talks about the milestone indicating defensive prowess and potential impact in the upcoming game. But the milestone itself is historical, as the game is on Dec 27, 2024. The interpretation might be stretching the relevance to the current game. The counterevidence note says the milestone doesn't provide info about current availability or recent workload. \n\nSo, the fact is supported by the source in terms of the event happening, but the date is incorrect (2023 vs 2024). The interpretation might be adding some analysis not directly supported by the source. The source only states the milestone, not any current impact. Therefore, the fact is correct in the event but has an incorrect date. The interpretation's relevance to the current game might not be justified. \n\nThe verdict should be \"unsupported\" because the fact_date is incorrect, and the interpretation goes beyond the source's information.",
+        "reasoning_token_reserve": 4096,
+        "removed_markdown_fence": false,
+        "request_id": "f9fe58a21b5760c078b2bb5340373d84d1791347625e7870818c3c3d6a1cab57",
+        "request_sha256": "f8109dce27fb0f0a7292e42fc957479dd6d0b449b373b60b43869b68c2fdbfe0",
+        "requested_answer_tokens": 4500,
+        "response_sha256": "4f67f67791a934c23a23b4eab3877fcd67e40b809bb20618a00538ccf4ab9836",
+        "status": "complete",
+        "text": "{\n  \"id\": \"recent_changes_rest_workload-f3\",\n  \"source_reading\": \"The source states 'JARRETT ALLEN recorded his 300th career steal with his first swipe at Milwaukee on Nov. 2' on page 6, line 12 of a Cleveland Cavaliers PDF dated Dec. 27, 2024. This directly supports the milestone but does not address current availability or workload.\",\n  \"required_citations\": [\n    {\n      \"source_id\": \"sha256:21b0c37bd479ca05636a07b26e44b6bd8e65ef8975a9dbee3c5523c737cbd221\",\n      \"page\": 6,\n      \"lines\": [12]\n    }\n  ],\n  \"reason\": \"The source explicitly confirms Jarrett Allen's 300th career steal occurred on Nov. 2, 2024 (not 2023 as stated in the candidate's fact_date). The interpretation about 'potential impact in the upcoming game' is speculative and not supported by the source, which only documents a historical milestone. The counterevidence correctly notes the milestone does not reflect current status.\",\n  \"verdict\": \"unsupported\"\n}"
+      },
+      "request_id": "f9fe58a21b5760c078b2bb5340373d84d1791347625e7870818c3c3d6a1cab57",
+      "valid": true
+    }
+  ],
+  "scope": "Actual training findings; four prose and four canonical-table positive controls; eight actual invalid findings. No whole-report claim.",
+  "valid": 16
+}

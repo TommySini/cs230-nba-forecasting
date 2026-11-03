@@ -1,0 +1,104 @@
+{
+  "recorded_at_utc": "2026-11-02T01:18:07.628272+00:00",
+  "status": "independent source audit correction; frozen requests and expected labels unchanged",
+  "stronger_result_present_at_audit": false,
+  "frozen_manifest_sha256": "f39ec6410ad9281ca7235d21d8a384ce8ffe090e5f7152c5786295f5cec8c133",
+  "request_id": "8522a130b9fd16d92acbab26ed9383b7c708b3a6317a2c2ff2e143d075e74bab",
+  "expected_record": {
+    "expected_verdict": "supported",
+    "finding_id": "recent_changes_rest_workload-f1",
+    "game_id": "espn:401704882",
+    "prompt_tokens": 5690,
+    "rationale": "Named Adebayo table p10L20\u201321/26 gives38:36,13PTS,20REB,7AST; prior-game caveat preserved.",
+    "request_id": "8522a130b9fd16d92acbab26ed9383b7c708b3a6317a2c2ff2e143d075e74bab",
+    "source_artifact_hash": "8cb15b5f1b1dd0e1fdff84b5513593e85e949e4df5ca05734b4a391f39f268d0"
+  },
+  "actual_candidate": {
+    "booster_overlap": "unknown",
+    "citations": [
+      {
+        "archive_time": "2024-12-02T09:26:08Z",
+        "lines": [
+          1,
+          2
+        ],
+        "page": 1,
+        "page_kind": "physical_pdf_page",
+        "pagination": "physical_pdf_pages",
+        "publisher": "MIA",
+        "quotations": [
+          {
+            "line": 1,
+            "text": "                               Miami HEAT (9-9) at Boston Celtics (16-4)\n"
+          },
+          {
+            "line": 2,
+            "text": "                                Monday, December 2, 2024 \u25ab 7:30PM\n"
+          }
+        ],
+        "sha256": "5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+        "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+        "source_kind": "pdf",
+        "url": "https://www.nba.com/gamenotes/heat.pdf"
+      }
+    ],
+    "counterevidence": "The source does not provide recent role/roster changes, minutes played, rest, travel, or schedule congestion details.",
+    "decoded_table_id": null,
+    "fact": "Miami HEAT (9-9) are playing at Boston Celtics (16-4) on Monday, December 2, 2024 at 7:30PM.",
+    "fact_date": "2024-12-02",
+    "id": "recent_changes_rest_workload-f1",
+    "interpretation": "The game is scheduled for the current date and time, indicating that the teams are available to play, but no recent changes, rest, or workload information is provided.",
+    "module": "recent_changes_rest_workload",
+    "time_scope": "current",
+    "uncertainty": "Without specific recent changes or workload details, it is uncertain how these factors might impact the game."
+  },
+  "provenance": {
+    "run_id": "bam_reference_v4_20261102",
+    "artifact_hash": "8cb15b5f1b1dd0e1fdff84b5513593e85e949e4df5ca05734b4a391f39f268d0",
+    "request_id": "8905647876934721769c5283675a5ec0a0dd6db71e6adab2aaddcd228cf730a7",
+    "stage": "module_partial",
+    "model": "Qwen/Qwen2.5-14B-Instruct@cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8"
+  },
+  "issue": "Preparation selected a game-header finding instead of intended Adebayo canonical-table finding. Actual positive mix is three canonical tables plus five prose/header findings. The header fact is source-supported, but its blanket lack-of-rest/travel-information caveat is contradicted by schedule context.",
+  "source_evidence": [
+    {
+      "source_id": "sha256:5cb46d15c6de10c09984146227e6e3b076e544e87dabf0a9686a8ac0e0ad3a75",
+      "page": 1,
+      "lines": [
+        {
+          "line": 1,
+          "text": "                               Miami HEAT (9-9) at Boston Celtics (16-4)\n"
+        },
+        {
+          "line": 2,
+          "text": "                                Monday, December 2, 2024 \u25ab 7:30PM\n"
+        },
+        {
+          "line": 42,
+          "text": "1 2/1         @ Toronto           L, 119-116                 -3                                                                                                         Is just one of three undrafted players\n"
+        },
+        {
+          "line": 43,
+          "text": "1 2/2         @ Boston            7:30PM                 FDSN                      #55\n"
+        },
+        {
+          "line": 98,
+          "text": "3/ 21         HOUSTON             8:00PM                 FDSN            10/19/24:     Waived Nassir Little, Zyon Pullin, Isaiah Stevens and Warren Washington\n"
+        },
+        {
+          "line": 100,
+          "text": "3/ 25         GOLDEN STATE        7:30PM                 FDSN            10/10/24:     Signed center Warren Washington\n"
+        },
+        {
+          "line": 102,
+          "text": "3/ 29         @ Philadelphia      7:30PM                 FDSN            10/10/24:     Waived guard Caleb Daniels\n"
+        }
+      ]
+    }
+  ],
+  "handling": "Keep original16-case scores as frozen-label diagnostics. Exclude this invalid control in a separately named15-case sensitivity; do not silently change labels, requests or denominators. No substitute case or new inference.",
+  "additional_baseline_reasoning_issue": {
+    "request_id": "35d779523ac336318ad9ef86ec8eca175c3d156f3e1ce348076aa954d2cc7e36",
+    "issue": "32B model rejects the Mitchell finding, but its source_reading explicitly claims the milestone was2023. Source current-season schedule is2024. Correct rejection verdict did not establish correct date reading."
+  }
+}

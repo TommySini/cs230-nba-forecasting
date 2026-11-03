@@ -1,0 +1,26 @@
+{
+  "benchmark_hash": "908915ea0a93b078b0c537d6099e6ad88b35c70b2fce2283ee2eb206c290b974",
+  "requests": "/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/read-then-continue-dataset-09962af6/data/processed/bam_quality/teacher_reference_v1/requests.jsonl",
+  "expected": "/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/read-then-continue-dataset-09962af6/data/processed/bam_quality/teacher_reference_v1/expected.json",
+  "cases": 40,
+  "games": 20,
+  "expected_supported": 24,
+  "expected_nonacceptance": 16,
+  "categories": {
+    "legacy_table_date_scope": 12,
+    "diverse_source_fact": 20,
+    "preseason_vs_regular": 1,
+    "misassigned_player": 1,
+    "ended_streak": 1,
+    "historical_season_header": 1,
+    "conditional_record_causality": 1,
+    "stale_injury": 1,
+    "wrong_team": 1,
+    "incomplete_sentence_citation": 1
+  },
+  "reference_sha256": "f45426b5ba2bc7e14af9b7343868e75ed554ba6f2a0573329a293b32e496d8a0",
+  "snapshot_manifest_sha256": "add6c3e90efcf7b75c4c80f7b773d9c70441c2e9ac2298120159651d2becaf30",
+  "model_runs": "not_run",
+  "manual_review": "pending",
+  "limitations": "Purposive training-only challenge; repeated facts/counterexamples are correlated. Neither accuracy nor model size establishes corpus-wide factual accuracy or forecast benefit."
+}

@@ -1,6 +1,7 @@
 {
   "scope": "Purposive discovery only; not a random coverage estimate",
-  "narrative_inputs_approved": 0,
+  "approved_excerpt_count": 1,
+  "existing_model_inputs_changed": false,
   "articles": [
     {
       "team": "NYK",
@@ -70,7 +71,7 @@
         "raw_path": "data/raw/narrative_pages/2d617296f1bf9e23a09bc6d2.html"
       },
       "included_in_inputs": false,
-      "decision": "candidate_requires_content_and_archive_review",
+      "decision": "rejected_content_wrong_venue",
       "title": "Knicks vs Raptors Game Notes: January 28, 2026",
       "published": "2026-01-28T18:27:40Z",
       "modified": "2026-01-28T18:27:40Z",
@@ -111,9 +112,23 @@
           "bytes": 30804,
           "raw_path": "data/raw/archive_versions/efb8956c5e22a7af2b62548a.html"
         },
-        "decision": "archived_article_parse_failed",
+        "decision": "pre_cutoff_replay_content_requires_review",
         "publication_time_verified": true,
-        "error": "Expected one NewsArticle and one article pageObject"
+        "article_text_matches_current": true,
+        "decoded_sha256": "500266adc3932dd199a4278c4458744d3c76c8cea6abcd6cf0941acfbf619589",
+        "archived_title": "Knicks vs Raptors Game Notes: January 28, 2026",
+        "archived_published": "2026-01-28T18:27:40Z",
+        "archived_modified": "2026-01-28T18:27:40Z",
+        "rejection_reasons": [],
+        "text_path": "data/processed/game_notes_sources/2026-01-28-NYK-archived.txt"
+      },
+      "manual_review": {
+        "url": "https://www.nba.com/knicks/news/knicks-vs-raptors-game-notes-january-28-2026",
+        "game_id": "espn:401810530",
+        "archive_sha256": "09c2f6aca002fc09d7d1a9360fe28fd678a8654f66f863380521500066e54d81",
+        "decision": "rejected_content_wrong_venue",
+        "review_date_local": "2026-10-30",
+        "review_note": "Pregame archive timing and article-text equality verified. Full article review found an opening that places the game at Madison Square Garden, while the joined schedule has New York visiting Toronto. It also has a stale Last game vs SAC heading above a Toronto recap. Keep this version quarantined; do not silently repair or use it."
       }
     }
   ],
@@ -158,7 +173,7 @@
         "raw_path": "data/raw/game_notes/54fc37e65ae09cc1bdecc748.pdf"
       },
       "included_in_inputs": false,
-      "decision": "candidate_requires_content_and_publication_review",
+      "decision": "approved_reviewed_pregame_excerpt",
       "pages": 44,
       "words": 37715,
       "pdf_creation_date": "D:20250221072340-08'00'",
@@ -202,6 +217,17 @@
         "publication_time_verified": true,
         "exact_bytes_match_current": true,
         "pages": 44
+      },
+      "manual_review": {
+        "url": "https://cdn.nba.com/teams/uploads/sites/1610612739/2025/02/250221-nykcle-notes.pdf",
+        "game_id": "espn:401705363",
+        "archive_sha256": "8203a0782d269826018cc69a83af45b3f99c6019874047ecb7243a2ec4ae6b84",
+        "decision": "approved_reviewed_pregame_excerpt",
+        "approved_pdf_pages": [
+          1
+        ],
+        "review_date_local": "2026-10-30",
+        "review_note": "Rendered first page reviewed: February 21, 2025, New York at Cleveland, 7pm ET. Team records 45-10 and 37-18 match prior-only schedule history. Target game is listed with tipoff rather than a completed score. The identical PDF was independently captured at 21:37:43 UTC, before the 23:00 UTC prediction cutoff. Only the first-page excerpt is approved; other pages require section review before model use."
       }
     }
   ],

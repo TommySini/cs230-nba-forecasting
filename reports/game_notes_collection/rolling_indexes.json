@@ -1,0 +1,478 @@
+[
+  {
+    "team": "ATL",
+    "url": "https://www.nba.com/gamenotes/hawks.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fhawks.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:12.274145Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "bba948b33c53d63d8748e629e2ec8e05f7b8f0400c9b0c732877840b18beaf20",
+      "bytes": 618,
+      "raw_path": "data/raw/archive_indexes/85c036763121ac5a7bce6623.json"
+    },
+    "captures": 6,
+    "candidate_games": 4
+  },
+  {
+    "team": "BOS",
+    "url": "https://www.nba.com/gamenotes/celtics.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fceltics.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:52:46.834062Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "62446992da4b0c46e118688b7f63b8fa9638d7959976f3fd59e2d1e730d0ad51",
+      "bytes": 15579,
+      "raw_path": "data/raw/archive_indexes/1471afdad4240f1c2384c5bc.json"
+    },
+    "captures": 157,
+    "candidate_games": 73
+  },
+  {
+    "team": "BKN",
+    "url": "https://www.nba.com/gamenotes/nets.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fnets.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:12.274061Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "eefdd62295b53a7df9b8136986b03903d12453c1c2d8e810afe84f89fb240088",
+      "bytes": 1092,
+      "raw_path": "data/raw/archive_indexes/78e07a4ee8542b66e70a2487.json"
+    },
+    "captures": 11,
+    "candidate_games": 7
+  },
+  {
+    "team": "CHA",
+    "url": "https://www.nba.com/gamenotes/hornets.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fhornets.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:12.329500Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "63e0bd7e6c1d6e9d573e8640c009025e4a0b4b2cb2c990eae118fa6b08e922b0",
+      "bytes": 927,
+      "raw_path": "data/raw/archive_indexes/bf7236c844e31a983c311eb3.json"
+    },
+    "captures": 9,
+    "candidate_games": 5
+  },
+  {
+    "team": "CHI",
+    "url": "https://www.nba.com/gamenotes/bulls.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fbulls.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:12.878283Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "53a4f145e973dee0f6d287937080349c74df00fa1395df5f6a4542ef8e99c098",
+      "bytes": 812,
+      "raw_path": "data/raw/archive_indexes/afe7ec66102faa35d6560929.json"
+    },
+    "captures": 8,
+    "candidate_games": 4
+  },
+  {
+    "team": "CLE",
+    "url": "https://www.nba.com/gamenotes/cavaliers.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fcavaliers.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:12.894133Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "dfa7321e5bbcb7a230a1c3db2c36fc5ed64cf5fbaca2cd9c05238328bfb9051a",
+      "bytes": 1248,
+      "raw_path": "data/raw/archive_indexes/7094378fbade2a13e3044102.json"
+    },
+    "captures": 12,
+    "candidate_games": 6
+  },
+  {
+    "team": "DAL",
+    "url": "https://www.nba.com/gamenotes/mavericks.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fmavericks.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:12.961610Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "793bf17a4eba9ccff5e8c4e836443cf0d535343ba782b72d5bf264b3571d3e38",
+      "bytes": 1147,
+      "raw_path": "data/raw/archive_indexes/bf19cb9a04dc87ffd4039b8b.json"
+    },
+    "captures": 11,
+    "candidate_games": 8
+  },
+  {
+    "team": "DEN",
+    "url": "https://www.nba.com/gamenotes/nuggets.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fnuggets.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:13.531020Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "041d8d588a9edfa521355c2ce1c87666c4aed34d17114010b1e3b9fb370a1598",
+      "bytes": 11718,
+      "raw_path": "data/raw/archive_indexes/de9bc9e8e9597be9bdd182fe.json"
+    },
+    "captures": 118,
+    "candidate_games": 76
+  },
+  {
+    "team": "DET",
+    "url": "https://www.nba.com/gamenotes/pistons.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fpistons.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:13.542200Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "8eb86359efdf9cf6ed6cfbbe8edb4cb17373957a3a9259abdcb9099d51e72e49",
+      "bytes": 14193,
+      "raw_path": "data/raw/archive_indexes/ffe17f490b005cf1b43681e3.json"
+    },
+    "captures": 143,
+    "candidate_games": 77
+  },
+  {
+    "team": "GSW",
+    "url": "https://www.nba.com/gamenotes/warriors.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fwarriors.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:13.754796Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "ac53180b00667fddbe9eca1fcd1b006b83de6d02823a15c7d588c7e1250e7d11",
+      "bytes": 2136,
+      "raw_path": "data/raw/archive_indexes/161e34cfa06763706a1a95aa.json"
+    },
+    "captures": 21,
+    "candidate_games": 9
+  },
+  {
+    "team": "HOU",
+    "url": "https://www.nba.com/gamenotes/rockets.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Frockets.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:14.063569Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "0233e834a910c594d1d858606a6a672762f85811ea8f562e2c6670985b523934",
+      "bytes": 927,
+      "raw_path": "data/raw/archive_indexes/6fc5d2af80d78624d2b06f5a.json"
+    },
+    "captures": 9,
+    "candidate_games": 7
+  },
+  {
+    "team": "IND",
+    "url": "https://www.nba.com/gamenotes/pacers.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fpacers.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:14.150831Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "6e2b337b7a3ffe058e959b2543b3bb8aac614c9050e19641d278ea6dd036fd74",
+      "bytes": 918,
+      "raw_path": "data/raw/archive_indexes/faa11a731cd013b0769d8ec1.json"
+    },
+    "captures": 9,
+    "candidate_games": 6
+  },
+  {
+    "team": "LAC",
+    "url": "https://www.nba.com/gamenotes/clippers.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fclippers.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:15.051126Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "68a6e2582360516582f0b001258194624750c776da5236ffef403b198d6a7eac",
+      "bytes": 736,
+      "raw_path": "data/raw/archive_indexes/7d6bdb4a57873830264a660b.json"
+    },
+    "captures": 7,
+    "candidate_games": 5
+  },
+  {
+    "team": "LAL",
+    "url": "https://www.nba.com/gamenotes/lakers.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Flakers.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:52:46.834172Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "09a10e5d158f906fcb6251072d337c5e5cb30d7bf1f1686802cf20d406e28d44",
+      "bytes": 1408,
+      "raw_path": "data/raw/archive_indexes/793f4776ed5d7cf077214163.json"
+    },
+    "captures": 14,
+    "candidate_games": 8
+  },
+  {
+    "team": "MEM",
+    "url": "https://www.nba.com/gamenotes/grizzlies.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fgrizzlies.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:15.141024Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "2d6588a0ab4a895166a95201d98b43ff9c90b984e9263b1cd234beb17ec34315",
+      "bytes": 10439,
+      "raw_path": "data/raw/archive_indexes/42be72c03bf155bb237cbe58.json"
+    },
+    "captures": 103,
+    "candidate_games": 61
+  },
+  {
+    "team": "MIA",
+    "url": "https://www.nba.com/gamenotes/heat.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fheat.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:15.516654Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "45e4424e3d1c69d7121945e5a439b28f12a9742eecfaba2940837f0bc35ac3ef",
+      "bytes": 1572,
+      "raw_path": "data/raw/archive_indexes/cdd35b5ac94ab3c0c58bd95a.json"
+    },
+    "captures": 16,
+    "candidate_games": 7
+  },
+  {
+    "team": "MIL",
+    "url": "https://www.nba.com/gamenotes/bucks.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fbucks.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:15.728956Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "a24db6931b0575827849bd31b290e320571b4bc9bbcf9a11bd832205abe0586c",
+      "bytes": 14974,
+      "raw_path": "data/raw/archive_indexes/193abb3dbbb2712fab501351.json"
+    },
+    "captures": 154,
+    "candidate_games": 84
+  },
+  {
+    "team": "MIN",
+    "url": "https://www.nba.com/gamenotes/timberwolves.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Ftimberwolves.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:16.030726Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "51508203d49e6257e87df7ad086a22ffcc9ea730328ea9bfabfaeabea4424ad1",
+      "bytes": 556,
+      "raw_path": "data/raw/archive_indexes/86462d25b2a8d00f33088c29.json"
+    },
+    "captures": 5,
+    "candidate_games": 3
+  },
+  {
+    "team": "NOP",
+    "url": "https://www.nba.com/gamenotes/pelicans.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fpelicans.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:16.315345Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "e9aafb149e9bccea9b9d75b01f26945acc0f86f163b9c4d42aa34e5200b4b838",
+      "bytes": 636,
+      "raw_path": "data/raw/archive_indexes/c9525350658c3dcb3af8abe6.json"
+    },
+    "captures": 6,
+    "candidate_games": 2
+  },
+  {
+    "team": "NYK",
+    "url": "https://www.nba.com/gamenotes/knicks.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fknicks.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:52:46.833761Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "2b261c5882fb20c64a15be0ea01f665bba26c92a85796a62e91cf3160471a7c3",
+      "bytes": 918,
+      "raw_path": "data/raw/archive_indexes/c73d867ed2d955a1a26b9ca7.json"
+    },
+    "captures": 9,
+    "candidate_games": 4
+  },
+  {
+    "team": "OKC",
+    "url": "https://www.nba.com/gamenotes/thunder.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fthunder.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:16.535238Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "c670f2d9e80d25cfcafaaceb85084deb560b0d7761081ce7c81dd3b880a0c90b",
+      "bytes": 1422,
+      "raw_path": "data/raw/archive_indexes/f86d5f31e8a946aa8be90d9a.json"
+    },
+    "captures": 14,
+    "candidate_games": 8
+  },
+  {
+    "team": "ORL",
+    "url": "https://www.nba.com/gamenotes/magic.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fmagic.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T02:56:16.899078Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "2eee6a98e2a5e8f507422cad38b4ef24026e35df023d8a5b5662bd5b5e82cb8e",
+      "bytes": 521,
+      "raw_path": "data/raw/archive_indexes/04a2286844751464d46560c0.json"
+    },
+    "captures": 5,
+    "candidate_games": 2
+  },
+  {
+    "team": "PHI",
+    "url": "https://www.nba.com/gamenotes/sixers.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fsixers.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T06:06:00.677837Z",
+      "status": "network_error",
+      "error": "<urlopen error [Errno 61] Connection refused>"
+    },
+    "captures": 0,
+    "candidate_games": 0
+  },
+  {
+    "team": "PHX",
+    "url": "https://www.nba.com/gamenotes/suns.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fsuns.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T04:26:11.092450Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "b270100040a63e4a04febe5e73197a2575c6d75be4057e2be8cd8fb4b4e5be96",
+      "bytes": 1092,
+      "raw_path": "data/raw/archive_indexes/f8071d287541a37ea2a55e4c.json"
+    },
+    "captures": 11,
+    "candidate_games": 7
+  },
+  {
+    "team": "POR",
+    "url": "https://www.nba.com/gamenotes/blazers.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fblazers.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T04:26:14.221234Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "154f7b4cd01d30533144f592fa2abbd605146cf6c6a898d4a692620e9f34678f",
+      "bytes": 927,
+      "raw_path": "data/raw/archive_indexes/651bb34b7abe7e53757d5e59.json"
+    },
+    "captures": 9,
+    "candidate_games": 6
+  },
+  {
+    "team": "SAC",
+    "url": "https://www.nba.com/gamenotes/kings.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fkings.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T04:26:15.628624Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "02b8f18819604fa77e12cfe53b05b5a3e1142274e7bb874c3b2e84fe59ef7492",
+      "bytes": 1200,
+      "raw_path": "data/raw/archive_indexes/0c94b95fe268caad127048e5.json"
+    },
+    "captures": 12,
+    "candidate_games": 6
+  },
+  {
+    "team": "SAS",
+    "url": "https://www.nba.com/gamenotes/spurs.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fspurs.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T04:26:16.598202Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "abb7d327290a9088cf4597deb1479342986ccd270cd52280b1e36d937b8ea4d6",
+      "bytes": 909,
+      "raw_path": "data/raw/archive_indexes/bca734e9044d12c900846d8a.json"
+    },
+    "captures": 9,
+    "candidate_games": 4
+  },
+  {
+    "team": "TOR",
+    "url": "https://www.nba.com/gamenotes/raptors.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fraptors.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T03:24:45.538970Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "ed86ebea070de569d9828ddd9fefaff42269692ff020350ab97f2cd67b31c92f",
+      "bytes": 1917,
+      "raw_path": "data/raw/archive_indexes/84a1aa0f2cfc549c80d04523.json"
+    },
+    "captures": 19,
+    "candidate_games": 11
+  },
+  {
+    "team": "UTA",
+    "url": "https://www.nba.com/gamenotes/jazz.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fjazz.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T03:24:48.782123Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "3aeb3e21a437f137f0e723faf22dbbffbc27f8af17cd7f968c4b2b7b4f212f06",
+      "bytes": 900,
+      "raw_path": "data/raw/archive_indexes/9f19647e32675ccbe462061c.json"
+    },
+    "captures": 9,
+    "candidate_games": 3
+  },
+  {
+    "team": "WAS",
+    "url": "https://www.nba.com/gamenotes/wizards.pdf",
+    "source": {
+      "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.nba.com%2Fgamenotes%2Fwizards.pdf&output=json&filter=statuscode%3A200&from=20231001&to=20260410&collapse=digest&fl=timestamp%2Coriginal%2Cdigest",
+      "retrieved_at_utc": "2026-10-31T03:24:49.279757Z",
+      "status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "sha256": "cd4645e939f6e99dfffcb2c4c7d2fb54f53cb70d6e4eef98e309aef6f0122cf2",
+      "bytes": 531,
+      "raw_path": "data/raw/archive_indexes/ad84879c2962228810bb914a.json"
+    },
+    "captures": 5,
+    "candidate_games": 2
+  }
+]

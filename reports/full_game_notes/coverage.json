@@ -1,0 +1,15 @@
+{
+  "games": 107,
+  "pages": 3783,
+  "research_chunks": 7343,
+  "characters": 37702801,
+  "flagged_pages": 866,
+  "layout_fallback_pages": 855,
+  "pages_with_unresolved_text_flags": 11,
+  "splits": {
+    "train": 80,
+    "dev": 13,
+    "test": 14
+  },
+  "research_status": "Full text and requests prepared; model research and new forecasting are not run."
+}
