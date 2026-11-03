@@ -1,0 +1,98 @@
+{
+  "history_paths": [
+    "data/processed/history_2012/game_history.jsonl",
+    "data/processed/seasonal/game_history.jsonl"
+  ],
+  "cutoff_minutes": 60,
+  "previous_game_buffer_hours": 2.5,
+  "max_window_hours": 72,
+  "cdx_queries": [],
+  "dated_url": "https://cdn.nba.com/teams/uploads/sites/1610612739/{day:%Y/%m/%y%m%d}-{pair}-notes.pdf",
+  "dated_team": "CLE",
+  "dated_first_season": 2019,
+  "archive_gap_seconds": 4,
+  "archive_backoff_seconds": 90,
+  "max_consecutive_failures": 6,
+  "user_agent": "CS230-academic-data-pilot/0.1",
+  "slugs": {
+    "hawks": "ATL",
+    "celtics": "BOS",
+    "nets": "BKN",
+    "bobcats": "CHA",
+    "bulls": "CHI",
+    "cavaliers": "CLE",
+    "mavericks": "DAL",
+    "nuggets": "DEN",
+    "pistons": "DET",
+    "warriors": "GSW",
+    "rockets": "HOU",
+    "pacers": "IND",
+    "clippers": "LAC",
+    "lakers": "LAL",
+    "grizzlies": "MEM",
+    "heat": "MIA",
+    "bucks": "MIL",
+    "timberwolves": "MIN",
+    "pelicans": "NOP",
+    "knicks": "NYK",
+    "thunder": "OKC",
+    "magic": "ORL",
+    "sixers": "PHI",
+    "76ers": "PHI",
+    "suns": "PHX",
+    "blazers": "POR",
+    "trailblazers": "POR",
+    "kings": "SAC",
+    "spurs": "SAS",
+    "raptors": "TOR",
+    "jazz": "UTA",
+    "wizards": "WAS"
+  },
+  "hornets_slug": {
+    "NOP_until": "2013-07-01",
+    "CHA_from": "2014-05-20"
+  },
+  "html_sources": {
+    "NYK": {
+      "url": "https://www.nba.com/knicks/api/content/category/game-notes?page={page}",
+      "title_pattern": "Game Notes"
+    },
+    "POR": {
+      "url": "https://www.nba.com/blazers/api/content/tag/preview?page={page}",
+      "title_pattern": "Game Notes"
+    }
+  },
+  "html_max_pages": 40,
+  "team_aliases": {
+    "CHA": [
+      "charlotte bobcats",
+      "charlotte hornets"
+    ],
+    "NOP": [
+      "new orleans hornets",
+      "new orleans pelicans"
+    ],
+    "BKN": [
+      "brooklyn nets",
+      "new jersey nets"
+    ],
+    "LAC": [
+      "los angeles clippers",
+      "la clippers"
+    ],
+    "PHI": [
+      "philadelphia 76ers",
+      "philadelphia sixers"
+    ],
+    "POR": [
+      "portland trail blazers",
+      "portland trailblazers"
+    ]
+  },
+  "cdx_snapshots": [
+    {
+      "path": "data/research/archive_coverage/data/cdx_gamenotes_all.json",
+      "description": "Full Wayback CDX prefix listing of www.nba.com/gamenotes/ (all pages, every status, uncollapsed, query-string variants), saved 2026-11-01 by the archive research run; the live index server was returning 503s"
+    }
+  ]
+}
