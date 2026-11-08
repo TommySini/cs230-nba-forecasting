@@ -1,24 +1,27 @@
 # Project working instructions
 
 - This is Tommaso Sini and Anthony Viverito's Stanford CS230 NBA forecasting project.
-- Read `HANDOFF.md`, `README.md`, and `docs/experiments.md` before continuing.
-  Long agent chronology lives in `docs/archive/` — do not treat it as current status.
+- Read `HANDOFF.md` and `README.md` before continuing.
+- **Rewrite, don't accumulate.** When code, a config, a report or a doc is
+  superseded, replace or delete it. Do not add `_v2`/dated copies next to the old
+  one or keep finished experiments' code around; git history keeps everything
+  (the tag `pre-cleanup` holds the state before the November 2026 cleanup).
 - Use the repository's `.venv` for all Python work: `.venv/bin/python` and
-  `uv pip install --python .venv/bin/python -r requirements.txt` (or the venv's pip).
+  `uv pip install --python .venv/bin/python -r requirements-baseline.txt`.
   Do not install packages into system Python or the global Conda environment.
 - The canonical repository is `/Users/tommasosini/Desktop/Repos/cs230-nba-forecasting`.
-  Data under `data/` is local and git-ignored. If Superset creates an isolated
-  worktree, the downloaded dataset and `.venv` will not automatically be there.
-  Prefer the local checkout for this data-collection phase; otherwise explicitly
-  arrange dataset access and create a separate venv in the worktree.
+  All datasets live in its git-ignored `data/`. In any other worktree, make
+  `data` a link to it instead of copying:
+  `ln -s /Users/tommasosini/Desktop/Repos/cs230-nba-forecasting/data data`.
 - Preserve raw sources and provenance. Never feed raw ESPN responses to the model:
   they contain postgame results, recaps, and current news.
 - Keep outcomes separate from pregame inputs. Enforce source timestamps at or
-  before each game's prediction cutoff. Unverified narratives stay separate.
-- Do not infer full-season or leaguewide narrative coverage from the current
-  early-November sample or the Cavaliers-only note adapter.
-- After collector changes, run leakage tests and the pilot validator. A cached
-  rebuild is available with `scripts/collect_pilot.py --offline`.
+  before each game's prediction cutoff (tipoff minus 60 minutes).
+- The game notes are a selected corpus (some teams and seasons), not league-wide
+  coverage. Do not claim otherwise.
+- After collector or dataset changes, run the tests and the matching validator
+  (`validate_notes_v2.py`, `validate_polymarket.py`, `validate_gradient_boosting.py`,
+  `validate_rich_gradient_boosting.py`, or `bam_data.py validate <snapshot>`).
 
 ## AWS project context (2026-11-08 setup)
 

@@ -3,5 +3,5 @@ __pycache__/
 *.pyc
 .env
 .env.*
-data/
-!data/README.md
+# Local data (a directory, or a link to the main checkout's data)
+/data
