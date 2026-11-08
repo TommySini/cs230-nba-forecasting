@@ -15,12 +15,12 @@ No real pilot fit has run.
 
 - GPU quota is 0 for G/VT On-Demand and Spot in all 17 enabled regions. Open quota cases:
   us-east-1 8 vCPUs, case `179411421300610`; Oregon 8 vCPUs, case `179411216100407`
-  (denied by email; appeal draft in `docs/aws_gpu_quota_appeal.md`). The user reports EC2
+  (denied by email; appeal sent 2026-11-08). The user reports EC2
   launches are limited to three regions; confirm which.
 - Bedrock: Anthropic first-use form submitted, Sonnet/Opus agreements AVAILABLE but
   authorization NOT_AUTHORIZED; AWS-sold gpt-oss/DeepSeek also NOT_AUTHORIZED. One gpt-oss
-  probe returned `ValidationException: Operation not allowed`. Follow-up draft:
-  `docs/aws_bedrock_access_followup.md`. Unsent messages: `docs/aws_next_support_messages.md`.
+  probe returned `ValidationException: Operation not allowed`. The user sent the
+  Bedrock follow-up and the support messages (quota for N. Virginia, Ohio, Oregon) on 2026-11-08.
 - IAM-only stack `cs230-train-pilot-20261108` is `CREATE_COMPLETE` (`infra/aws/train-pilot-iam.json`).
 - CLI profile `cs230` is bound to Codex only; its session had expired at last check.
 - Budget cap $200 (`config/bam_budget_200_20261107.json`; ledger in

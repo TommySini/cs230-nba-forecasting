@@ -32,7 +32,7 @@ fields; no additional earned credit was established.
 **04:46 UTC update:** `followup_0446.json` supersedes pending model statuses:
 both Anthropic agreements failed with `INVALID_PAYMENT_INSTRUMENT`. The user
 also supplied the GPU-denial email, despite quota API status still CASE_OPENED.
-The unsent appeal is in `docs/aws_gpu_quota_appeal.md`. No paid request was made.
+The user sent the appeal on 2026-11-08. No paid request was made.
 
 Account checks at 2026-11-08 04:34 UTC; model/quota readiness rechecked at 04:38 UTC.
 These checks cover the account-plan credit APIs, global IAM resources created

@@ -54,8 +54,8 @@ completed estimates $6.77, outstanding $1.83, buffer $5, admission availability
 $186.40. This is not a claim of a one-cent charge. Existing accounting was
 preserved and one attempt appended. See `probe_admission.json`,
 `bedrock_access_probe.json` and `probe_budget_state.json` in the evidence folder.
-The unsent [authorization inquiry](aws_bedrock_access_followup.md) now includes
-the concrete error. Account authorization/internal verification is not a
+The Bedrock authorization inquiry, including the concrete error, was sent by
+the user on 2026-11-08. Account authorization/internal verification is not a
 confirmed root cause; AWS must clarify if it persists after activation settles.
 No training, source processing, gold generation or GPU launch has run.
 
@@ -103,8 +103,8 @@ AWS-sold DeepSeek V3.2, gpt-oss-120b and Nova Pro also reported NOT_AUTHORIZED i
 us-east-1; this is not a Marketplace payment error for those models. No
 inference was invoked. Additional account-level access is a possibility in
 AWS's documentation, not a confirmed internal reason for this account's state.
-Allow activation to settle and recheck; if it persists, use the unsent
-[Bedrock authorization inquiry](aws_bedrock_access_followup.md). Do not ask the
+Allow activation to settle and recheck; the Bedrock authorization inquiry was
+sent on 2026-11-08. Do not ask the
 user to change the payment method again based on the old error.
 
 Marketplace can be avoided by AWS-sold Bedrock models, including DeepSeek,
@@ -177,8 +177,8 @@ Teacher hindsight design is approved as described below.
 This update supersedes pending statuses below. The user supplied an AWS email
 declining GPU case `179411216100407` and inviting a detailed-use-case appeal.
 The API still reports `Status=CASE_OPENED` with effective quota 0; that summary
-does not overturn the denial email. An [appeal draft](aws_gpu_quota_appeal.md)
-is prepared but **not sent**. The Support API remains unavailable under the
+does not overturn the denial email. The user sent the appeal
+on 2026-11-08. The Support API remains unavailable under the
 account's support subscription; use the console to reopen/respond.
 
 Both Claude models now return `agreementAvailability.status=ERROR`,
