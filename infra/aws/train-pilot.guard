@@ -1,0 +1,29 @@
+# Project-specific IAM foundation checks. No claim of a complete compliance audit.
+let roles = Resources.*[ Type == 'AWS::IAM::Role' ]
+let profiles = Resources.*[ Type == 'AWS::IAM::InstanceProfile' ]
+
+rule only_iam_foundation {
+    Resources.*.Type IN ['AWS::IAM::Role', 'AWS::IAM::InstanceProfile']
+}
+
+rule ec2_runtime_only when %roles !empty {
+    %roles.Properties.Path == '/cs230/'
+    %roles.Properties.MaxSessionDuration == 3600
+    %roles.Properties.AssumeRolePolicyDocument.Statement[*] {
+        Effect == 'Allow'
+        Principal.Service == 'ec2.amazonaws.com'
+        Principal.AWS !exists
+        Action == 'sts:AssumeRole'
+        Resource !exists
+    }
+    %roles.Properties.ManagedPolicyArns !exists
+    %roles.Properties.Policies[*].PolicyDocument.Statement[*][ Effect == 'Allow' ] {
+        Resource != '*'
+        Action[*] NOT IN ['*', 's3:*', 'iam:*', 'ec2:*', 'bedrock:*', 'aws-marketplace:Subscribe']
+    }
+}
+
+rule instance_profiles when %profiles !empty {
+    %profiles.Properties.Path == '/cs230/'
+    %profiles.Properties.Roles !empty
+}

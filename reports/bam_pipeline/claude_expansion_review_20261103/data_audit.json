@@ -1,0 +1,385 @@
+{
+  "canonical_commit": "723c8b0743ddc7acd42df60b4023ed8c969dc6cb",
+  "remote_main_verified_sha": "101b96049c83f44a7658015a1b23f8e9d27ddb58",
+  "scope": "Read-only metadata audit. No model outcomes used to choose splits. Counts are candidate eligibility, not completed source reconstruction or actual fitted forecasts.",
+  "inputs": [
+    {
+      "path": "/Users/tommasosini/Desktop/Repos/cs230-nba-forecasting/data/processed/notes_v2/approved.jsonl",
+      "sha256": "05d706fcd07ecac34d69d3fffd2df9c4d1996aa4163e864f924070171339efe3"
+    },
+    {
+      "path": "/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/read-then-continue-dataset-09962af6/data/processed/bam_pipeline/bam_v2_20261102_expanded/inputs.jsonl",
+      "sha256": "b5582001833bb9dd56b6ee408ff0189e202a20eec879c058300728774bdbeb0f"
+    }
+  ],
+  "history": [
+    {
+      "path": "/Users/tommasosini/Desktop/Repos/cs230-nba-forecasting/data/processed/history_2012/game_history.jsonl",
+      "rows": 13208,
+      "sha256": "64c11ad5eed1c70b56cc64d4d7035c5b75b7802eea16c3e69971ed3099aba38b"
+    },
+    {
+      "path": "/Users/tommasosini/Desktop/Repos/cs230-nba-forecasting/data/processed/seasonal/game_history.jsonl",
+      "rows": 3621,
+      "sha256": "37d7535b6b7a0b8aba9795ee5d1da421fc3a509debc4ce3f533f9ac114a36f7b"
+    }
+  ],
+  "history_unique_games": 16829,
+  "source_counts": {
+    "documents": 2144,
+    "unique_games": 1997,
+    "duplicate_team_game_rows": 0,
+    "tier": {
+      "archive_proven": 1634,
+      "site_timestamped": 510
+    },
+    "late_html_documents": 80,
+    "games_with_no_remaining_new_document_after_late_html_exclusion": 75,
+    "archive_supported_games": 1527,
+    "publisher_only_games": 470
+  },
+  "overlap": {
+    "old_games": 424,
+    "new_games": 1997,
+    "intersection": 376,
+    "old_only": 48,
+    "new_only": 1621,
+    "raw_union": 2045,
+    "new_after_late_html_exclusion": 1922,
+    "version_gated_union": 1980,
+    "old_games_rescuing_removed_new_only_late_sources": 10
+  },
+  "seasonal_split": {
+    "raw_new_only": {
+      "train": {
+        "games": 1592,
+        "min_date": "2012-11-12",
+        "max_date": "2024-04-10",
+        "min5_prior_game_potential": 1472,
+        "prior_month_200_numeric_game_potential": 1466,
+        "by_season": {
+          "2012": 16,
+          "2013": 117,
+          "2014": 43,
+          "2015": 131,
+          "2016": 48,
+          "2017": 71,
+          "2018": 69,
+          "2019": 26,
+          "2020": 213,
+          "2021": 182,
+          "2022": 343,
+          "2023": 333
+        }
+      },
+      "dev": {
+        "games": 223,
+        "min_date": "2024-10-23",
+        "max_date": "2025-04-10",
+        "min5_prior_game_potential": 212,
+        "prior_month_200_numeric_game_potential": 212,
+        "by_season": {
+          "2024": 223
+        }
+      },
+      "test": {
+        "games": 182,
+        "min_date": "2025-10-22",
+        "max_date": "2026-04-10",
+        "min5_prior_game_potential": 174,
+        "prior_month_200_numeric_game_potential": 174,
+        "by_season": {
+          "2025": 182
+        }
+      }
+    },
+    "new_without_late_html": {
+      "train": {
+        "games": 1592,
+        "min_date": "2012-11-12",
+        "max_date": "2024-04-10",
+        "min5_prior_game_potential": 1472,
+        "prior_month_200_numeric_game_potential": 1466,
+        "by_season": {
+          "2012": 16,
+          "2013": 117,
+          "2014": 43,
+          "2015": 131,
+          "2016": 48,
+          "2017": 71,
+          "2018": 69,
+          "2019": 26,
+          "2020": 213,
+          "2021": 182,
+          "2022": 343,
+          "2023": 333
+        }
+      },
+      "dev": {
+        "games": 193,
+        "min_date": "2024-10-23",
+        "max_date": "2025-04-10",
+        "min5_prior_game_potential": 182,
+        "prior_month_200_numeric_game_potential": 182,
+        "by_season": {
+          "2024": 193
+        }
+      },
+      "test": {
+        "games": 137,
+        "min_date": "2025-10-22",
+        "max_date": "2026-04-10",
+        "min5_prior_game_potential": 130,
+        "prior_month_200_numeric_game_potential": 130,
+        "by_season": {
+          "2025": 137
+        }
+      }
+    },
+    "raw_union": {
+      "train": {
+        "games": 1632,
+        "min_date": "2012-11-12",
+        "max_date": "2024-04-10",
+        "min5_prior_game_potential": 1512,
+        "prior_month_200_numeric_game_potential": 1506,
+        "by_season": {
+          "2012": 16,
+          "2013": 117,
+          "2014": 43,
+          "2015": 131,
+          "2016": 48,
+          "2017": 71,
+          "2018": 69,
+          "2019": 26,
+          "2020": 213,
+          "2021": 182,
+          "2022": 343,
+          "2023": 373
+        }
+      },
+      "dev": {
+        "games": 230,
+        "min_date": "2024-10-23",
+        "max_date": "2025-04-10",
+        "min5_prior_game_potential": 219,
+        "prior_month_200_numeric_game_potential": 219,
+        "by_season": {
+          "2024": 230
+        }
+      },
+      "test": {
+        "games": 183,
+        "min_date": "2025-10-22",
+        "max_date": "2026-04-10",
+        "min5_prior_game_potential": 175,
+        "prior_month_200_numeric_game_potential": 175,
+        "by_season": {
+          "2025": 183
+        }
+      }
+    },
+    "version_gated_union": {
+      "train": {
+        "games": 1632,
+        "min_date": "2012-11-12",
+        "max_date": "2024-04-10",
+        "min5_prior_game_potential": 1512,
+        "prior_month_200_numeric_game_potential": 1506,
+        "by_season": {
+          "2012": 16,
+          "2013": 117,
+          "2014": 43,
+          "2015": 131,
+          "2016": 48,
+          "2017": 71,
+          "2018": 69,
+          "2019": 26,
+          "2020": 213,
+          "2021": 182,
+          "2022": 343,
+          "2023": 373
+        }
+      },
+      "dev": {
+        "games": 201,
+        "min_date": "2024-10-23",
+        "max_date": "2025-04-10",
+        "min5_prior_game_potential": 190,
+        "prior_month_200_numeric_game_potential": 190,
+        "by_season": {
+          "2024": 201
+        }
+      },
+      "test": {
+        "games": 147,
+        "min_date": "2025-10-22",
+        "max_date": "2026-04-10",
+        "min5_prior_game_potential": 140,
+        "prior_month_200_numeric_game_potential": 140,
+        "by_season": {
+          "2025": 147
+        }
+      }
+    },
+    "archive_plus_old_union": {
+      "train": {
+        "games": 1468,
+        "min_date": "2012-11-12",
+        "max_date": "2024-04-09",
+        "min5_prior_game_potential": 1359,
+        "prior_month_200_numeric_game_potential": 1353,
+        "by_season": {
+          "2012": 16,
+          "2013": 117,
+          "2014": 43,
+          "2015": 131,
+          "2016": 48,
+          "2017": 71,
+          "2018": 69,
+          "2019": 26,
+          "2020": 213,
+          "2021": 175,
+          "2022": 301,
+          "2023": 258
+        }
+      },
+      "dev": {
+        "games": 113,
+        "min_date": "2024-11-04",
+        "max_date": "2025-04-10",
+        "min5_prior_game_potential": 113,
+        "prior_month_200_numeric_game_potential": 113,
+        "by_season": {
+          "2024": 113
+        }
+      },
+      "test": {
+        "games": 77,
+        "min_date": "2025-10-31",
+        "max_date": "2026-04-10",
+        "min5_prior_game_potential": 77,
+        "prior_month_200_numeric_game_potential": 77,
+        "by_season": {
+          "2025": 77
+        }
+      }
+    }
+  },
+  "new_collection_source_mix": {
+    "train": {
+      "documents": 1716,
+      "kind": {
+        "rolling_archive": 1515,
+        "html_post": 76,
+        "dated_live": 125
+      },
+      "tier": {
+        "archive_proven": 1515,
+        "site_timestamped": 201
+      },
+      "top_publishers": {
+        "BOS": 224,
+        "DET": 195,
+        "DEN": 188,
+        "MEM": 166,
+        "LAL": 142,
+        "CLE": 135,
+        "MIA": 118,
+        "POR": 82
+      }
+    },
+    "dev": {
+      "documents": 243,
+      "kind": {
+        "html_post": 97,
+        "dated_live": 71,
+        "rolling_archive": 75
+      },
+      "tier": {
+        "site_timestamped": 168,
+        "archive_proven": 75
+      },
+      "top_publishers": {
+        "CLE": 73,
+        "POR": 58,
+        "NYK": 42,
+        "DEN": 6,
+        "TOR": 5,
+        "DAL": 5,
+        "GSW": 5,
+        "CHA": 4
+      }
+    },
+    "test": {
+      "documents": 185,
+      "kind": {
+        "dated_live": 62,
+        "html_post": 79,
+        "rolling_archive": 44
+      },
+      "tier": {
+        "site_timestamped": 141,
+        "archive_proven": 44
+      },
+      "top_publishers": {
+        "NYK": 79,
+        "CLE": 63,
+        "MIL": 4,
+        "LAL": 4,
+        "GSW": 4,
+        "DEN": 3,
+        "BKN": 3,
+        "IND": 3
+      }
+    }
+  },
+  "previous_text_test_exposure": {
+    "text_ablation": {
+      "previously_evaluated_games": 18,
+      "new_collection_overlap": 4,
+      "proposed_union_overlap_by_split": {
+        "test": 1
+      }
+    },
+    "boosting_notes": {
+      "previously_evaluated_games": 14,
+      "new_collection_overlap": 14,
+      "proposed_union_overlap_by_split": {
+        "test": 14
+      }
+    },
+    "researched_forecaster": {
+      "previously_evaluated_games": 14,
+      "new_collection_overlap": 14,
+      "proposed_union_overlap_by_split": {
+        "test": 14
+      }
+    }
+  },
+  "old_snapshot_membership_in_new_seasonal_union": {
+    "train": {
+      "train": 249,
+      "dev": 107,
+      "test": 10
+    },
+    "dev": {
+      "test": 21
+    },
+    "test": {
+      "test": 37
+    }
+  },
+  "later_dev_alternative": {
+    "train": 1833,
+    "dev": 60,
+    "test": 87
+  },
+  "pending": [
+    "Reconstruct and hash-bind selected text/pages to exact raw sources and article identity.",
+    "Check numeric-year header and unreadable-page coverage.",
+    "Validate older schedule cache and season/game exceptions before preparing features.",
+    "Generate prior-only booster probabilities with original fixed hyperparameters; original final booster includes2024-25 and cannot supply in-sample DEV forecasts.",
+    "Freeze new snapshot and split without altering old424snapshot."
+  ]
+}

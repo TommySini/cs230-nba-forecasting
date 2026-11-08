@@ -1,5 +1,12 @@
 # Teacher API setup
 
+**Execution-platform update (2026-11-07):** the user now requires all experiment
+compute on AWS and requested architecture review before execution. Use
+[the AWS architecture](bam_aws_architecture.md) for new work: managed teacher
+calls through Bedrock with AWS authorization, research and training on EC2,
+and artifacts on S3, within the current $200 cap. The direct-provider/Modal
+instructions below describe the previous plan and must not launch the new run.
+
 An API model would generate and check TRAIN postmortems/gold targets. The
 researcher and forecaster would still be fine-tuned on Modal. No API provider has
 been selected or called yet, and the remaining $150 ceiling has not increased.

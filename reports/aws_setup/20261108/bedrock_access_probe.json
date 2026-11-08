@@ -1,0 +1,14 @@
+{
+  "status": "error",
+  "error": "NameError: name 'ClientError' is not defined",
+  "stdout": "",
+  "stderr": "Error calling function call_boto3 with arguments {'service_name': 'bedrock-runtime', 'operation_name': 'Converse', 'region_name': 'us-east-1', 'params': {'modelId': 'openai.gpt-oss-120b-1:0', 'messages': [{'role': 'user', 'content': [{'text': 'Reply OK.'}]}], 'inferenceConfig': {'maxTokens': 16}, 'serviceTier': {'type': 'default'}}}: An error occurred (ValidationException) when calling the Converse operation: Operation not allowed\n",
+  "api_calls": [
+    {
+      "service": "bedrock-runtime",
+      "operation": "Converse",
+      "status": "error",
+      "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: Operation not allowed"
+    }
+  ]
+}

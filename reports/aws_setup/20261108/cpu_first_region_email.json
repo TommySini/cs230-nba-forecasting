@@ -1,0 +1,38 @@
+{
+  "source": "User supplied AWS new-customer EC2 three-region email and quota denial email in this turn",
+  "ec2_launch_region_limit": 3,
+  "actual_allowed_regions": "Not identified in the email or by a successful live launch check",
+  "interpretation": "DescribeRegions opt-in status does not establish the new-account EC2 launch allowlist.",
+  "denial_case_identity": "The latest pasted denial did not include a case number. Do not assume it is the N. Virginia request.",
+  "live_checks": {
+    "aws_mcp": "search_documentation/retrieve_skill returned Unknown tool; retry failed",
+    "cli_version": "aws-cli/2.39.6",
+    "profile": "cs230",
+    "error": "aws: [ERROR]: Your session has expired. Please reauthenticate using 'aws login'.",
+    "checked_scopes": [
+      "Standard quota in us-east-1, us-east-2, us-west-2",
+      "G/VT quota and pending request in us-east-1",
+      "g6e.xlarge, g6e.2xlarge and c7i.large specifications"
+    ],
+    "result": "No current account values obtained"
+  },
+  "public_instance_comparison": {
+    "source": "https://aws.amazon.com/ec2/instance-types/g6e/",
+    "smaller": {
+      "instance": "g6e.xlarge",
+      "g_family_vcpus": 4,
+      "gpus": 1,
+      "gpu_memory_gb": 48,
+      "system_memory_gib": 32
+    },
+    "original": {
+      "instance": "g6e.2xlarge",
+      "g_family_vcpus": 8,
+      "gpus": 1,
+      "gpu_memory_gb": 48,
+      "system_memory_gib": 64
+    },
+    "status": "Smaller instance is an appeal alternative, not a tested change to the production gate."
+  },
+  "actions": "No login, resource launch, new quota request or external message sent; installation preserved."
+}

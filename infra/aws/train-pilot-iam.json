@@ -1,0 +1,714 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Scoped EC2 roles for the CS230 TRAIN pilot; creates no compute or storage.",
+  "Metadata": {
+    "AWSToolsMetrics": {
+      "AWSAgentToolkit": "aws-cloudformation@3"
+    },
+    "com.aws.cloudformation.Context": {
+      "must": [
+        "Only TRAIN data; no DEV or TEST.",
+        "Paid resources require separate credit, budget, quota and runtime admission."
+      ],
+      "ref": [
+        {
+          "at": "docs/bam_aws_architecture.md",
+          "has": "training-first protocol"
+        }
+      ]
+    }
+  },
+  "Parameters": {
+    "ArtifactBucketName": {
+      "Type": "String",
+      "AllowedPattern": "[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]",
+      "Description": "Future dedicated artifact bucket; this stack does not create it."
+    },
+    "TrainPrefix": {
+      "Type": "String",
+      "Default": "train/pilot-20261108",
+      "AllowedPattern": "train/[a-z0-9-]+",
+      "Description": "Single isolated TRAIN pilot prefix."
+    }
+  },
+  "Resources": {
+    "ResearchRole": {
+      "Type": "AWS::IAM::Role",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Scoped EC2 researcher runtime access; no local sign-in credentials or IAM/compute administration.",
+          "must": [
+            "Only one TRAIN pilot prefix.",
+            "No outcomes, postmortems, or gold read access.",
+            "No Marketplace subscriptions or held-out data."
+          ]
+        }
+      },
+      "Properties": {
+        "Path": "/cs230/",
+        "RoleName": {
+          "Fn::Sub": "${AWS::StackName}-researcher"
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "MaxSessionDuration": 3600,
+        "Policies": [
+          {
+            "PolicyName": "TrainPilotArtifacts",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Sid": "ListTrainPaths",
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:ListBucket"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}"
+                  },
+                  "Condition": {
+                    "StringLike": {
+                      "s3:prefix": [
+                        {
+                          "Fn::Sub": "${TrainPrefix}/code/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/pregame/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/weights/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/research/*"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "Sid": "ReadTrainArtifacts",
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:GetObjectVersion"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/code/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/pregame/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/weights/*"
+                    }
+                  ]
+                },
+                {
+                  "Sid": "WriteOwnOutputs",
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:PutObject"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/research/*"
+                    }
+                  ]
+                },
+                {
+                  "Sid": "WriteOwnLogs",
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/cs230/bam/researcher:*"
+                  }
+                },
+                {
+                  "Sid": "DenyHeldOutPaths",
+                  "Effect": "Deny",
+                  "Action": [
+                    "s3:*"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/dev/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/test/*"
+                    }
+                  ]
+                },
+                {
+                  "Sid": "DenyInsecureTransport",
+                  "Effect": "Deny",
+                  "Action": [
+                    "s3:*"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/*"
+                    }
+                  ],
+                  "Condition": {
+                    "Bool": {
+                      "aws:SecureTransport": "false"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "cs230-nba"
+          },
+          {
+            "Key": "Phase",
+            "Value": "TRAIN"
+          }
+        ]
+      }
+    },
+    "TrainingRole": {
+      "Type": "AWS::IAM::Role",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Scoped EC2 forecaster runtime access; no local sign-in credentials or IAM/compute administration.",
+          "must": [
+            "Only one TRAIN pilot prefix.",
+            "No Marketplace subscriptions or held-out data."
+          ]
+        }
+      },
+      "Properties": {
+        "Path": "/cs230/",
+        "RoleName": {
+          "Fn::Sub": "${AWS::StackName}-forecaster"
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "MaxSessionDuration": 3600,
+        "Policies": [
+          {
+            "PolicyName": "TrainPilotArtifacts",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Sid": "ListTrainPaths",
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:ListBucket"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}"
+                  },
+                  "Condition": {
+                    "StringLike": {
+                      "s3:prefix": [
+                        {
+                          "Fn::Sub": "${TrainPrefix}/code/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/pregame/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/research/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/targets/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/weights/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/checkpoints/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/metrics/*"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "Sid": "ReadTrainArtifacts",
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:GetObjectVersion"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/code/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/pregame/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/research/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/targets/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/weights/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/checkpoints/*"
+                    }
+                  ]
+                },
+                {
+                  "Sid": "WriteOwnOutputs",
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:PutObject"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/checkpoints/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/metrics/*"
+                    }
+                  ]
+                },
+                {
+                  "Sid": "WriteOwnLogs",
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/cs230/bam/forecaster:*"
+                  }
+                },
+                {
+                  "Sid": "DenyHeldOutPaths",
+                  "Effect": "Deny",
+                  "Action": [
+                    "s3:*"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/dev/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/test/*"
+                    }
+                  ]
+                },
+                {
+                  "Sid": "DenyInsecureTransport",
+                  "Effect": "Deny",
+                  "Action": [
+                    "s3:*"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/*"
+                    }
+                  ],
+                  "Condition": {
+                    "Bool": {
+                      "aws:SecureTransport": "false"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "cs230-nba"
+          },
+          {
+            "Key": "Phase",
+            "Value": "TRAIN"
+          }
+        ]
+      }
+    },
+    "ControllerRole": {
+      "Type": "AWS::IAM::Role",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Scoped EC2 controller runtime access; no local sign-in credentials or IAM/compute administration.",
+          "must": [
+            "Only one TRAIN pilot prefix.",
+            "No Marketplace subscriptions or held-out data."
+          ]
+        }
+      },
+      "Properties": {
+        "Path": "/cs230/",
+        "RoleName": {
+          "Fn::Sub": "${AWS::StackName}-controller"
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "MaxSessionDuration": 3600,
+        "Policies": [
+          {
+            "PolicyName": "TrainPilotArtifacts",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Sid": "ListTrainPaths",
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:ListBucket"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}"
+                  },
+                  "Condition": {
+                    "StringLike": {
+                      "s3:prefix": [
+                        {
+                          "Fn::Sub": "${TrainPrefix}/code/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/pregame/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/research/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/targets/*"
+                        },
+                        {
+                          "Fn::Sub": "${TrainPrefix}/metrics/*"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "Sid": "ReadTrainArtifacts",
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:GetObjectVersion"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/code/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/pregame/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/research/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/targets/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/metrics/*"
+                    }
+                  ]
+                },
+                {
+                  "Sid": "WriteOwnOutputs",
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:PutObject"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/pregame/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/research/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/targets/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/${TrainPrefix}/metrics/*"
+                    }
+                  ]
+                },
+                {
+                  "Sid": "WriteOwnLogs",
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/cs230/bam/controller:*"
+                  }
+                },
+                {
+                  "Sid": "DenyHeldOutPaths",
+                  "Effect": "Deny",
+                  "Action": [
+                    "s3:*"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/dev/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/test/*"
+                    }
+                  ]
+                },
+                {
+                  "Sid": "DenyInsecureTransport",
+                  "Effect": "Deny",
+                  "Action": [
+                    "s3:*"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucketName}/*"
+                    }
+                  ],
+                  "Condition": {
+                    "Bool": {
+                      "aws:SecureTransport": "false"
+                    }
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:InvokeModel"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/us.anthropic.claude-sonnet-4-6"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:InvokeModel"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock:us-east-1::foundation-model/anthropic.claude-sonnet-4-6"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock:us-east-2::foundation-model/anthropic.claude-sonnet-4-6"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock:us-west-2::foundation-model/anthropic.claude-sonnet-4-6"
+                    }
+                  ],
+                  "Condition": {
+                    "ArnEquals": {
+                      "bedrock:InferenceProfileArn": {
+                        "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/us.anthropic.claude-sonnet-4-6"
+                      }
+                    }
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:InvokeModel"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/us.anthropic.claude-opus-4-6-v1"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:InvokeModel"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock:us-east-1::foundation-model/anthropic.claude-opus-4-6-v1"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock:us-east-2::foundation-model/anthropic.claude-opus-4-6-v1"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock:us-west-2::foundation-model/anthropic.claude-opus-4-6-v1"
+                    }
+                  ],
+                  "Condition": {
+                    "ArnEquals": {
+                      "bedrock:InferenceProfileArn": {
+                        "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/us.anthropic.claude-opus-4-6-v1"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "cs230-nba"
+          },
+          {
+            "Key": "Phase",
+            "Value": "TRAIN"
+          }
+        ]
+      }
+    },
+    "ResearchProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Attach only this scoped runtime role to the corresponding EC2 job.",
+          "must": [
+            "No root-backed sign-in material on workers."
+          ]
+        }
+      },
+      "Properties": {
+        "Path": "/cs230/",
+        "Roles": [
+          {
+            "Ref": "ResearchRole"
+          }
+        ]
+      }
+    },
+    "TrainingProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Attach only this scoped runtime role to the corresponding EC2 job.",
+          "must": [
+            "No root-backed sign-in material on workers."
+          ]
+        }
+      },
+      "Properties": {
+        "Path": "/cs230/",
+        "Roles": [
+          {
+            "Ref": "TrainingRole"
+          }
+        ]
+      }
+    },
+    "ControllerProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Attach only this scoped runtime role to the corresponding EC2 job.",
+          "must": [
+            "No root-backed sign-in material on workers."
+          ]
+        }
+      },
+      "Properties": {
+        "Path": "/cs230/",
+        "Roles": [
+          {
+            "Ref": "ControllerRole"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "ResearchRoleArn": {
+      "Description": "Research execution role ARN",
+      "Value": {
+        "Fn::GetAtt": [
+          "ResearchRole",
+          "Arn"
+        ]
+      }
+    },
+    "ResearchInstanceProfile": {
+      "Description": "Research instance profile name",
+      "Value": {
+        "Ref": "ResearchProfile"
+      }
+    },
+    "TrainingRoleArn": {
+      "Description": "Training execution role ARN",
+      "Value": {
+        "Fn::GetAtt": [
+          "TrainingRole",
+          "Arn"
+        ]
+      }
+    },
+    "TrainingInstanceProfile": {
+      "Description": "Training instance profile name",
+      "Value": {
+        "Ref": "TrainingProfile"
+      }
+    },
+    "ControllerRoleArn": {
+      "Description": "Controller execution role ARN",
+      "Value": {
+        "Fn::GetAtt": [
+          "ControllerRole",
+          "Arn"
+        ]
+      }
+    },
+    "ControllerInstanceProfile": {
+      "Description": "Controller instance profile name",
+      "Value": {
+        "Ref": "ControllerProfile"
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "cap_usd": 200,
+  "ledger_path": "/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/read-then-continue-dataset-09962af6/data/processed/bam_budget/remaining_150_20261102.json",
+  "cost_policy": {},
+  "authorization": "User explicitly specified a $200 experiment budget on 2026-11-07 at approximately 20:34 America/New_York. Prioritize TRAIN proof of learning; defer DEV and exclude TEST from this phase.",
+  "scope": "Combined compute/API spending in the existing ledger's accounting scope, including prior completed estimates and uncertain reservations. Estimates are not provider invoices or a complete historical project bill.",
+  "protocol": "docs/bam_training_first.md",
+  "architecture": "docs/bam_aws_architecture.md",
+  "compute_platform": "aws",
+  "execution_status": "Implementation and prerequisite resolution authorized; any suitable AWS region permitted. GPU quota and Bedrock authorization still block training. Core eligible credit services and late-2027 expiry supplied by user; $100 earned verified. One bounded gpt-oss access probe rejected, one-cent reservation retained uncertain; no training/GPU launch.",
+  "rate_status": "Refresh and bind current provider quotes before admitting paid calls. Empty cost_policy deliberately provides no GPU call authorization; do not reuse November 2 rates implicitly.",
+  "ledger_note": "The original filename is retained to keep a single accounting ledger. Its cap is now $200; all existing calls and reservations remain. The prior version is saved as before_cap_200_20261107.json. The old $150 configuration fails closed.",
+  "phase": "train_only_qualification_before_full_training"
+}

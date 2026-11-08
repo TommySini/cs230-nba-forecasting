@@ -6,6 +6,14 @@ are cited in the README and locked by protocol hashes. Do not delete them to
 
 ## Active / primary
 
+Current work is the AWS-only TRAIN-first phase described in
+[`bam_training_first.md`](bam_training_first.md). The new standalone
+`bam_train_only.py` worker, `bam_train_contract.py` boundaries and
+`bam_aws_preflight.py` funding checks have synthetic validation; no NBA pilot
+learning or paid AWS run has completed. Account prerequisites and evidence are
+in [`aws_toolkit_setup.md`](aws_toolkit_setup.md). Legacy `--stage all` and Modal
+commands in historical experiments are not authorized for this phase.
+
 | Experiment | Scripts | Report | Notes |
 | --- | --- | --- | --- |
 | Stats gradient boosting | `run_gradient_boosting.py`, `validate_gradient_boosting.py` | `reports/gradient_boosting/` | League-wide baseline; shared feature code |

@@ -1,0 +1,5667 @@
+{
+  "checked_at": "2026-11-08T05:05:18.263624+00:00",
+  "region": "us-east-1",
+  "complete": true,
+  "filter": "ml.g or ml.p quota names containing training or spot",
+  "quota_records": [
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-DB4D51CF",
+      "QuotaCode": "L-DB4D51CF",
+      "QuotaName": "ml.g5.4xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g5.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.4xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-57998C77",
+      "QuotaCode": "L-57998C77",
+      "QuotaName": "ml.g4dn.16xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g4dn.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.16xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C35F807B",
+      "QuotaCode": "L-C35F807B",
+      "QuotaName": "ml.g4dn.2xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g4dn.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.2xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-AC01B100",
+      "QuotaCode": "L-AC01B100",
+      "QuotaName": "ml.p6-b200.48xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.p6-b200.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p6-b200.48xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-60EA3D74",
+      "QuotaCode": "L-60EA3D74",
+      "QuotaName": "ml.p6-b200.48xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.p6-b200.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p6-b200.48xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-F4259A37",
+      "QuotaCode": "L-F4259A37",
+      "QuotaName": "ml.g7.4xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g7.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.4xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-822C5A39",
+      "QuotaCode": "L-822C5A39",
+      "QuotaName": "ml.g5.2xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g5.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.2xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-E3DCB664",
+      "QuotaCode": "L-E3DCB664",
+      "QuotaName": "ml.g5.16xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g5.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.16xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-661EA218",
+      "QuotaCode": "L-661EA218",
+      "QuotaName": "ml.g7e.48xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g7e.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.48xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-BC684567",
+      "QuotaCode": "L-BC684567",
+      "QuotaName": "ml.g6.2xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.2xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-72017957",
+      "QuotaCode": "L-72017957",
+      "QuotaName": "ml.g6e.8xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6e.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.8xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-CE8E42E7",
+      "QuotaCode": "L-CE8E42E7",
+      "QuotaName": "ml.p4de.24xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.p4de.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p4de.24xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-040D0B77",
+      "QuotaCode": "L-040D0B77",
+      "QuotaName": "ml.g7.12xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g7.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.12xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-7090EA49",
+      "QuotaCode": "L-7090EA49",
+      "QuotaName": "ml.g7.4xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g7.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.4xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-FA6AE909",
+      "QuotaCode": "L-FA6AE909",
+      "QuotaName": "ml.g5.24xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g5.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.24xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-64EE493C",
+      "QuotaCode": "L-64EE493C",
+      "QuotaName": "ml.g7.12xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g7.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.12xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C6383286",
+      "QuotaCode": "L-C6383286",
+      "QuotaName": "ml.g5.12xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g5.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.12xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-AF730FBA",
+      "QuotaCode": "L-AF730FBA",
+      "QuotaName": "ml.g6e.8xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6e.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.8xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8DCA2E97",
+      "QuotaCode": "L-8DCA2E97",
+      "QuotaName": "ml.p3dn.24xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.p3dn.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p3dn.24xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-6100AC7F",
+      "QuotaCode": "L-6100AC7F",
+      "QuotaName": "ml.g5.48xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g5.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.48xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-F737A0D0",
+      "QuotaCode": "L-F737A0D0",
+      "QuotaName": "Number of ml.p5.4xlarge instances in reserved capacity across training plans per Region",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "The maximum number of ml.p5.4xlarge instances available in SageMaker reserved capacities across all training plans in this account and Region at any given time. These reservations secure compute resources across multiple Availability Zones, ensuring availability for large-scale AI model training workloads."
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-A1025C0C",
+      "QuotaCode": "L-A1025C0C",
+      "QuotaName": "ml.g6.2xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.2xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8BC5FA3F",
+      "QuotaCode": "L-8BC5FA3F",
+      "QuotaName": "ml.g6.12xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.12xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-73EC964F",
+      "QuotaCode": "L-73EC964F",
+      "QuotaName": "ml.g6.16xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.16xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-BEAAFC2A",
+      "QuotaCode": "L-BEAAFC2A",
+      "QuotaName": "Number of ml.p6-b200.48xlarge instances in reserved capacity across training plans per Region",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "The maximum number of ml.p6-b200.48xlarge instances available in SageMaker reserved capacities across all training plans in this account and Region at any given time. These reservations secure compute resources across multiple Availability Zones, ensuring availability for large-scale AI model training workloads."
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-6BC20E76",
+      "QuotaCode": "L-6BC20E76",
+      "QuotaName": "ml.g7e.2xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g7e.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.2xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-82733FAD",
+      "QuotaCode": "L-82733FAD",
+      "QuotaName": "ml.p5.48xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.p5.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5.48xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-513D1D07",
+      "QuotaCode": "L-513D1D07",
+      "QuotaName": "ml.g6.24xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.24xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-DD18D5D6",
+      "QuotaCode": "L-DD18D5D6",
+      "QuotaName": "ml.g5.8xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g5.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.8xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-3B7F2FD0",
+      "QuotaCode": "L-3B7F2FD0",
+      "QuotaName": "ml.p4de.24xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.p4de.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p4de.24xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-F4DB72A7",
+      "QuotaCode": "L-F4DB72A7",
+      "QuotaName": "ml.p6-b200.48xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.p6-b200.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p6-b200.48xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-51B72E7C",
+      "QuotaCode": "L-51B72E7C",
+      "QuotaName": "ml.g7e.48xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g7e.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.48xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8CCF67BD",
+      "QuotaCode": "L-8CCF67BD",
+      "QuotaName": "ml.g6.48xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.48xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-899C16F4",
+      "QuotaCode": "L-899C16F4",
+      "QuotaName": "ml.g7e.12xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g7e.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.12xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-6F46EF71",
+      "QuotaCode": "L-6F46EF71",
+      "QuotaName": "ml.g5.24xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g5.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.24xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-E659D201",
+      "QuotaCode": "L-E659D201",
+      "QuotaName": "ml.g7e.8xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g7e.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.8xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-148FBB89",
+      "QuotaCode": "L-148FBB89",
+      "QuotaName": "ml.g6.24xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.24xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-015B2121",
+      "QuotaCode": "L-015B2121",
+      "QuotaName": "ml.g7.2xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g7.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.2xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-2E2B5B49",
+      "QuotaCode": "L-2E2B5B49",
+      "QuotaName": "ml.g6e.2xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6e.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.2xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C1031CE4",
+      "QuotaCode": "L-C1031CE4",
+      "QuotaName": "ml.g6e.12xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6e.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.12xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-E555FB1E",
+      "QuotaCode": "L-E555FB1E",
+      "QuotaName": "ml.g7e.8xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g7e.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.8xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-0973A7D7",
+      "QuotaCode": "L-0973A7D7",
+      "QuotaName": "ml.g5.xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g5.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-F70A2467",
+      "QuotaCode": "L-F70A2467",
+      "QuotaName": "ml.g6e.12xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6e.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.12xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-16486321",
+      "QuotaCode": "L-16486321",
+      "QuotaName": "ml.p5en.48xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.p5en.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5en.48xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-34601F10",
+      "QuotaCode": "L-34601F10",
+      "QuotaName": "ml.g7e.24xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g7e.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.24xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-07B51BA0",
+      "QuotaCode": "L-07B51BA0",
+      "QuotaName": "ml.g6.4xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.4xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-A24FA80D",
+      "QuotaCode": "L-A24FA80D",
+      "QuotaName": "ml.p4de.24xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.p4de.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p4de.24xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-87545E46",
+      "QuotaCode": "L-87545E46",
+      "QuotaName": "ml.g7e.4xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g7e.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.4xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-82E1C851",
+      "QuotaCode": "L-82E1C851",
+      "QuotaName": "ml.p5.48xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.p5.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5.48xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-2908B1E9",
+      "QuotaCode": "L-2908B1E9",
+      "QuotaName": "ml.g4dn.4xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g4dn.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.4xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-944F78BB",
+      "QuotaCode": "L-944F78BB",
+      "QuotaName": "ml.g4dn.xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g4dn.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C5957AE3",
+      "QuotaCode": "L-C5957AE3",
+      "QuotaName": "ml.g7e.4xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g7e.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.4xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-BE072D49",
+      "QuotaCode": "L-BE072D49",
+      "QuotaName": "ml.g7e.48xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g7e.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.48xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-95233547",
+      "QuotaCode": "L-95233547",
+      "QuotaName": "ml.g5.12xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g5.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.12xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-B896E0F0",
+      "QuotaCode": "L-B896E0F0",
+      "QuotaName": "ml.g6.48xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.48xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-DE07CBDF",
+      "QuotaCode": "L-DE07CBDF",
+      "QuotaName": "ml.g5.xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g5.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-03E19172",
+      "QuotaCode": "L-03E19172",
+      "QuotaName": "ml.g5.12xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g5.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.12xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-27FFF8C5",
+      "QuotaCode": "L-27FFF8C5",
+      "QuotaName": "ml.p6-b300.48xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.p6-b300.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p6-b300.48xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C1AEC017",
+      "QuotaCode": "L-C1AEC017",
+      "QuotaName": "ml.g6e.16xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6e.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.16xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-CE130130",
+      "QuotaCode": "L-CE130130",
+      "QuotaName": "ml.g6e.24xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6e.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.24xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-BDE9EBA6",
+      "QuotaCode": "L-BDE9EBA6",
+      "QuotaName": "ml.g6e.xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6e.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-246C5638",
+      "QuotaCode": "L-246C5638",
+      "QuotaName": "ml.g4dn.4xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g4dn.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.4xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-4BCBE0A9",
+      "QuotaCode": "L-4BCBE0A9",
+      "QuotaName": "ml.g7e.2xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g7e.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.2xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-F88734E1",
+      "QuotaCode": "L-F88734E1",
+      "QuotaName": "ml.g6e.12xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6e.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.12xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-2D6DEB3C",
+      "QuotaCode": "L-2D6DEB3C",
+      "QuotaName": "ml.g5.2xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g5.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.2xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-6A1D833C",
+      "QuotaCode": "L-6A1D833C",
+      "QuotaName": "ml.g7.8xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g7.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.8xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-5D747920",
+      "QuotaCode": "L-5D747920",
+      "QuotaName": "ml.p6e-gb200.36xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.p6e-gb200.36xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p6e-gb200.36xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-09B4A649",
+      "QuotaCode": "L-09B4A649",
+      "QuotaName": "ml.p4d.24xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.p4d.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p4d.24xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-99850E94",
+      "QuotaCode": "L-99850E94",
+      "QuotaName": "ml.g7e.12xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g7e.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.12xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C87FF004",
+      "QuotaCode": "L-C87FF004",
+      "QuotaName": "ml.g5.48xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g5.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.48xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-B0E221DE",
+      "QuotaCode": "L-B0E221DE",
+      "QuotaName": "ml.g6.24xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.24xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-82BE9A32",
+      "QuotaCode": "L-82BE9A32",
+      "QuotaName": "ml.p6-b300.48xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.p6-b300.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p6-b300.48xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-42C5B178",
+      "QuotaCode": "L-42C5B178",
+      "QuotaName": "ml.p5.4xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.p5.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5.4xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-E71BCC55",
+      "QuotaCode": "L-E71BCC55",
+      "QuotaName": "ml.g6.4xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.4xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-BEAEADC8",
+      "QuotaCode": "L-BEAEADC8",
+      "QuotaName": "ml.g6e.xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6e.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-1E3225F6",
+      "QuotaCode": "L-1E3225F6",
+      "QuotaName": "ml.g6e.xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6e.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-FD73C65F",
+      "QuotaCode": "L-FD73C65F",
+      "QuotaName": "ml.g6.48xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.48xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-CAEE7DB7",
+      "QuotaCode": "L-CAEE7DB7",
+      "QuotaName": "ml.g5.2xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g5.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.2xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-15F329FB",
+      "QuotaCode": "L-15F329FB",
+      "QuotaName": "ml.g4dn.8xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g4dn.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.8xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-769E114F",
+      "QuotaCode": "L-769E114F",
+      "QuotaName": "ml.g4dn.8xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g4dn.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.8xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-477D3300",
+      "QuotaCode": "L-477D3300",
+      "QuotaName": "ml.p3dn.24xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.p3dn.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p3dn.24xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-CDC3B509",
+      "QuotaCode": "L-CDC3B509",
+      "QuotaName": "ml.g6.8xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.8xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-2EB460CE",
+      "QuotaCode": "L-2EB460CE",
+      "QuotaName": "ml.g7.12xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g7.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.12xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-6B5E5FD1",
+      "QuotaCode": "L-6B5E5FD1",
+      "QuotaName": "ml.g6e.2xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6e.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.2xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-F614EEE4",
+      "QuotaCode": "L-F614EEE4",
+      "QuotaName": "ml.g7e.8xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g7e.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.8xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C2764A80",
+      "QuotaCode": "L-C2764A80",
+      "QuotaName": "ml.p5.4xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.p5.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5.4xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8345B953",
+      "QuotaCode": "L-8345B953",
+      "QuotaName": "ml.g5.24xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g5.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.24xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-2C0E8383",
+      "QuotaCode": "L-2C0E8383",
+      "QuotaName": "ml.g6e.24xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6e.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.24xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-023C70AC",
+      "QuotaCode": "L-023C70AC",
+      "QuotaName": "ml.g7e.12xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g7e.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.12xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-5E364879",
+      "QuotaCode": "L-5E364879",
+      "QuotaName": "ml.g7e.2xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g7e.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.2xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-3F53BF0F",
+      "QuotaCode": "L-3F53BF0F",
+      "QuotaName": "ml.g4dn.xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g4dn.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-88E48241",
+      "QuotaCode": "L-88E48241",
+      "QuotaName": "ml.g5.4xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g5.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.4xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-A886A53A",
+      "QuotaCode": "L-A886A53A",
+      "QuotaName": "ml.g6.xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-29512C0F",
+      "QuotaCode": "L-29512C0F",
+      "QuotaName": "ml.g6e.2xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6e.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.2xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-45BD621D",
+      "QuotaCode": "L-45BD621D",
+      "QuotaName": "ml.g7.24xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g7.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.24xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-255399BF",
+      "QuotaCode": "L-255399BF",
+      "QuotaName": "ml.g7.48xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g7.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.48xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-56AE9D73",
+      "QuotaCode": "L-56AE9D73",
+      "QuotaName": "ml.g6.xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-812CA1D8",
+      "QuotaCode": "L-812CA1D8",
+      "QuotaName": "ml.g6e.8xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6e.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.8xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-28BE5719",
+      "QuotaCode": "L-28BE5719",
+      "QuotaName": "ml.p5en.48xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.p5en.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5en.48xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-50B5B169",
+      "QuotaCode": "L-50B5B169",
+      "QuotaName": "ml.g6.12xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.12xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-04A733DC",
+      "QuotaCode": "L-04A733DC",
+      "QuotaName": "Number of ml.p5en.48xlarge instances in reserved capacity across training plans per Region",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "The maximum number of ml.p5en.48xlarge instances available in SageMaker reserved capacities across all training plans in this account and Region at any given time. These reservations secure compute resources across multiple Availability Zones, ensuring availability for large-scale AI model training workloads."
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-68515813",
+      "QuotaCode": "L-68515813",
+      "QuotaName": "ml.g6e.16xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6e.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.16xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-E2612040",
+      "QuotaCode": "L-E2612040",
+      "QuotaName": "ml.g7e.24xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g7e.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.24xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-3AE4911A",
+      "QuotaCode": "L-3AE4911A",
+      "QuotaName": "ml.g6e.24xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6e.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.24xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-7BD2C9FA",
+      "QuotaCode": "L-7BD2C9FA",
+      "QuotaName": "ml.g4dn.12xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g4dn.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.12xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-6BC98A55",
+      "QuotaCode": "L-6BC98A55",
+      "QuotaName": "ml.g5.48xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g5.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.48xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-2C0436FB",
+      "QuotaCode": "L-2C0436FB",
+      "QuotaName": "ml.g7e.48xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g7e.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.48xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-1E48384D",
+      "QuotaCode": "L-1E48384D",
+      "QuotaName": "ml.p5en.48xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.p5en.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5en.48xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-13147793",
+      "QuotaCode": "L-13147793",
+      "QuotaName": "ml.g7e.12xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g7e.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.12xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-29508C65",
+      "QuotaCode": "L-29508C65",
+      "QuotaName": "ml.g5.12xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g5.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.12xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-35697161",
+      "QuotaCode": "L-35697161",
+      "QuotaName": "ml.g7e.24xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g7e.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.24xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-AD4C1352",
+      "QuotaCode": "L-AD4C1352",
+      "QuotaName": "ml.g4dn.16xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g4dn.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.16xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-6FEE2118",
+      "QuotaCode": "L-6FEE2118",
+      "QuotaName": "Number of ml.p6-b300.48xlarge instances in reserved capacity across training plans per Region",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "The maximum number of ml.p6-b300.48xlarge instances available in SageMaker reserved capacities across all training plans in this account and Region at any given time. These reservations secure compute resources across multiple Availability Zones, ensuring availability for large-scale AI model training workloads."
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-64ACD16E",
+      "QuotaCode": "L-64ACD16E",
+      "QuotaName": "ml.g7e.8xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g7e.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.8xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-99881E10",
+      "QuotaCode": "L-99881E10",
+      "QuotaName": "ml.g6.xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-ED7BD217",
+      "QuotaCode": "L-ED7BD217",
+      "QuotaName": "ml.g5.24xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g5.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.24xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-95C2C3D0",
+      "QuotaCode": "L-95C2C3D0",
+      "QuotaName": "Number of ml.p4de.24xlarge instances in reserved capacity across training plans per Region",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "The maximum number of ml.p4de.24xlarge instances available in SageMaker reserved capacities across all training plans in this account and Region at any given time. These reservations secure compute resources across multiple Availability Zones, ensuring availability for large-scale AI model training workloads."
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-799BE65F",
+      "QuotaCode": "L-799BE65F",
+      "QuotaName": "ml.p6-b300.48xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.p6-b300.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p6-b300.48xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-2CABAAC7",
+      "QuotaCode": "L-2CABAAC7",
+      "QuotaName": "ml.g7.2xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g7.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.2xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-E511AAB3",
+      "QuotaCode": "L-E511AAB3",
+      "QuotaName": "ml.p5.4xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.p5.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5.4xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-F742E2D7",
+      "QuotaCode": "L-F742E2D7",
+      "QuotaName": "ml.p5.48xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.p5.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5.48xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-7B0277D0",
+      "QuotaCode": "L-7B0277D0",
+      "QuotaName": "ml.g5.2xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g5.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.2xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-5B9B8573",
+      "QuotaCode": "L-5B9B8573",
+      "QuotaName": "ml.g6e.48xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6e.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.48xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8D196E75",
+      "QuotaCode": "L-8D196E75",
+      "QuotaName": "ml.g6.16xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.16xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-03304C28",
+      "QuotaCode": "L-03304C28",
+      "QuotaName": "ml.g6.4xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.4xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-B9718876",
+      "QuotaCode": "L-B9718876",
+      "QuotaName": "Number of ml.p4d.24xlarge instances in reserved capacity across training plans per Region",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "The maximum number of ml.p4d.24xlarge instances available in SageMaker reserved capacities across all training plans in this account and Region at any given time. These reservations secure compute resources across multiple Availability Zones, ensuring availability for large-scale AI model training workloads."
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-9EF527CA",
+      "QuotaCode": "L-9EF527CA",
+      "QuotaName": "Number of ml.p5.48xlarge instances in reserved capacity across training plans per Region",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "The maximum number of ml.p5.48xlarge instances available in SageMaker reserved capacities across all training plans in this account and Region at any given time. These reservations secure compute resources across multiple Availability Zones, ensuring availability for large-scale AI model training workloads."
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-D1AFBF6F",
+      "QuotaCode": "L-D1AFBF6F",
+      "QuotaName": "ml.g6e.2xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6e.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.2xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-CB4A3655",
+      "QuotaCode": "L-CB4A3655",
+      "QuotaName": "ml.g4dn.12xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g4dn.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.12xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-945D83D8",
+      "QuotaCode": "L-945D83D8",
+      "QuotaName": "ml.g6e.4xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6e.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.4xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C960C80D",
+      "QuotaCode": "L-C960C80D",
+      "QuotaName": "ml.g4dn.16xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g4dn.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.16xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-DBF210E3",
+      "QuotaCode": "L-DBF210E3",
+      "QuotaName": "ml.g6.8xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.8xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-777AE4B1",
+      "QuotaCode": "L-777AE4B1",
+      "QuotaName": "ml.g7.8xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g7.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.8xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-4ABE1E63",
+      "QuotaCode": "L-4ABE1E63",
+      "QuotaName": "ml.g6e.12xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6e.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.12xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-FE869B40",
+      "QuotaCode": "L-FE869B40",
+      "QuotaName": "ml.g5.4xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g5.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.4xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-B028B942",
+      "QuotaCode": "L-B028B942",
+      "QuotaName": "ml.p5.4xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.p5.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5.4xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-049F2CCC",
+      "QuotaCode": "L-049F2CCC",
+      "QuotaName": "ml.p6e-gb200.36xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.p6e-gb200.36xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p6e-gb200.36xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-3296ED98",
+      "QuotaCode": "L-3296ED98",
+      "QuotaName": "ml.g6e.24xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6e.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.24xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C8B8462D",
+      "QuotaCode": "L-C8B8462D",
+      "QuotaName": "ml.g6.16xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.16xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-40E8018C",
+      "QuotaCode": "L-40E8018C",
+      "QuotaName": "ml.g5.8xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g5.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.8xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C2495BC4",
+      "QuotaCode": "L-C2495BC4",
+      "QuotaName": "ml.g4dn.2xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g4dn.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.2xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-09D56C4F",
+      "QuotaCode": "L-09D56C4F",
+      "QuotaName": "ml.p4d.24xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.p4d.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p4d.24xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-82833386",
+      "QuotaCode": "L-82833386",
+      "QuotaName": "ml.g7.4xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g7.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.4xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8B83C3A5",
+      "QuotaCode": "L-8B83C3A5",
+      "QuotaName": "ml.g6.xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-5D321F81",
+      "QuotaCode": "L-5D321F81",
+      "QuotaName": "ml.p5.48xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.p5.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5.48xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-3408A20D",
+      "QuotaCode": "L-3408A20D",
+      "QuotaName": "ml.g4dn.4xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g4dn.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.4xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-64CEEC80",
+      "QuotaCode": "L-64CEEC80",
+      "QuotaName": "ml.g7e.24xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g7e.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.24xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8ACE3F87",
+      "QuotaCode": "L-8ACE3F87",
+      "QuotaName": "ml.g6.8xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.8xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-FE5D1DC0",
+      "QuotaCode": "L-FE5D1DC0",
+      "QuotaName": "ml.p4d.24xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.p4d.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p4d.24xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C63F67EB",
+      "QuotaCode": "L-C63F67EB",
+      "QuotaName": "ml.g7e.4xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g7e.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.4xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-B6D80D9C",
+      "QuotaCode": "L-B6D80D9C",
+      "QuotaName": "ml.g5.xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g5.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-0496610F",
+      "QuotaCode": "L-0496610F",
+      "QuotaName": "ml.g4dn.2xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g4dn.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.2xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-08AE20C2",
+      "QuotaCode": "L-08AE20C2",
+      "QuotaName": "ml.p6-b200.48xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.p6-b200.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p6-b200.48xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C6A59B44",
+      "QuotaCode": "L-C6A59B44",
+      "QuotaName": "ml.g7.48xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g7.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.48xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-BA5B2FC5",
+      "QuotaCode": "L-BA5B2FC5",
+      "QuotaName": "ml.g6.4xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.4xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-44E32710",
+      "QuotaCode": "L-44E32710",
+      "QuotaName": "ml.g5.8xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g5.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.8xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-B257AB01",
+      "QuotaCode": "L-B257AB01",
+      "QuotaName": "ml.g6e.4xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6e.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.4xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-A4A0DA1F",
+      "QuotaCode": "L-A4A0DA1F",
+      "QuotaName": "ml.p6-b300.48xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.p6-b300.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p6-b300.48xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-F08861C2",
+      "QuotaCode": "L-F08861C2",
+      "QuotaName": "ml.g6.16xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.16xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8D494B44",
+      "QuotaCode": "L-8D494B44",
+      "QuotaName": "ml.g7.24xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g7.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.24xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-3F6F4D62",
+      "QuotaCode": "L-3F6F4D62",
+      "QuotaName": "Number of ml.p6e-gb200.36xlarge instances in reserved capacity across training plans per Region",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "The maximum number of ml.p6e-gb200.36xlarge instances available in SageMaker reserved capacities across all training plans in this account and Region at any given time. These reservations secure compute resources across multiple Availability Zones, ensuring availability for large-scale AI model training workloads."
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-23843F46",
+      "QuotaCode": "L-23843F46",
+      "QuotaName": "ml.g7.48xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g7.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.48xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-955074FD",
+      "QuotaCode": "L-955074FD",
+      "QuotaName": "ml.g4dn.xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g4dn.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-1DE24427",
+      "QuotaCode": "L-1DE24427",
+      "QuotaName": "ml.g6e.xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6e.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-2C06E55A",
+      "QuotaCode": "L-2C06E55A",
+      "QuotaName": "ml.g6.12xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.12xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-AD2803B7",
+      "QuotaCode": "L-AD2803B7",
+      "QuotaName": "ml.g7.48xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g7.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.48xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-954CE822",
+      "QuotaCode": "L-954CE822",
+      "QuotaName": "ml.g6.12xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.12xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-5E232B14",
+      "QuotaCode": "L-5E232B14",
+      "QuotaName": "ml.g6.2xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.2xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-AA009456",
+      "QuotaCode": "L-AA009456",
+      "QuotaName": "ml.g7.2xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g7.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.2xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-199558F0",
+      "QuotaCode": "L-199558F0",
+      "QuotaName": "ml.g4dn.12xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g4dn.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.12xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-13C9BAB3",
+      "QuotaCode": "L-13C9BAB3",
+      "QuotaName": "ml.g5.4xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g5.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.4xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-3118B7E1",
+      "QuotaCode": "L-3118B7E1",
+      "QuotaName": "ml.g4dn.8xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g4dn.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g4dn.8xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-5E2EB366",
+      "QuotaCode": "L-5E2EB366",
+      "QuotaName": "ml.g6e.4xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6e.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.4xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-A075DD71",
+      "QuotaCode": "L-A075DD71",
+      "QuotaName": "ml.g7.8xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g7.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.8xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-22890FE8",
+      "QuotaCode": "L-22890FE8",
+      "QuotaName": "ml.g7.12xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g7.12xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.12xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-9BE199B8",
+      "QuotaCode": "L-9BE199B8",
+      "QuotaName": "ml.p6e-gb200.36xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.p6e-gb200.36xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p6e-gb200.36xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8AB02F72",
+      "QuotaCode": "L-8AB02F72",
+      "QuotaName": "ml.g6e.4xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6e.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.4xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-9C33052B",
+      "QuotaCode": "L-9C33052B",
+      "QuotaName": "ml.g6.48xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.48xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-6B466E90",
+      "QuotaCode": "L-6B466E90",
+      "QuotaName": "ml.g7.24xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g7.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.24xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-A8827666",
+      "QuotaCode": "L-A8827666",
+      "QuotaName": "ml.p4d.24xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.p4d.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p4d.24xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-C7BEBCB1",
+      "QuotaCode": "L-C7BEBCB1",
+      "QuotaName": "ml.g6e.16xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g6e.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.16xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-0DA2E7B0",
+      "QuotaCode": "L-0DA2E7B0",
+      "QuotaName": "ml.g6e.48xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6e.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.48xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-5E942007",
+      "QuotaCode": "L-5E942007",
+      "QuotaName": "ml.g6e.16xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6e.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.16xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-1DDB8D50",
+      "QuotaCode": "L-1DDB8D50",
+      "QuotaName": "ml.g6.24xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.24xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-95C5728F",
+      "QuotaCode": "L-95C5728F",
+      "QuotaName": "Number of ml.p5e.48xlarge instances in reserved capacity across training plans per Region",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "The maximum number of ml.p5e.48xlarge instances available in SageMaker reserved capacities across all training plans in this account and Region at any given time. These reservations secure compute resources across multiple Availability Zones, ensuring availability for large-scale AI model training workloads."
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-B2E25E6A",
+      "QuotaCode": "L-B2E25E6A",
+      "QuotaName": "ml.g7e.2xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g7e.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.2xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8F92321F",
+      "QuotaCode": "L-8F92321F",
+      "QuotaName": "ml.g6.2xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.2xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-F6B8A3A3",
+      "QuotaCode": "L-F6B8A3A3",
+      "QuotaName": "ml.g5.16xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g5.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.16xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-086A0843",
+      "QuotaCode": "L-086A0843",
+      "QuotaName": "ml.g7e.4xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g7e.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7e.4xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-9FAC65F7",
+      "QuotaCode": "L-9FAC65F7",
+      "QuotaName": "ml.g5.16xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g5.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.16xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-2E243138",
+      "QuotaCode": "L-2E243138",
+      "QuotaName": "ml.g6e.8xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6e.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.8xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8E6F4665",
+      "QuotaCode": "L-8E6F4665",
+      "QuotaName": "ml.g5.xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g5.xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-FB830EC3",
+      "QuotaCode": "L-FB830EC3",
+      "QuotaName": "ml.g6.8xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g6.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6.8xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-98345D70",
+      "QuotaCode": "L-98345D70",
+      "QuotaName": "ml.g7.2xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g7.2xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.2xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8B04A568",
+      "QuotaCode": "L-8B04A568",
+      "QuotaName": "ml.p5en.48xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.p5en.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5en.48xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-D948A761",
+      "QuotaCode": "L-D948A761",
+      "QuotaName": "ml.p4de.24xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.p4de.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p4de.24xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-9691D529",
+      "QuotaCode": "L-9691D529",
+      "QuotaName": "ml.g7.8xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g7.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.8xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-2AD5EFDD",
+      "QuotaCode": "L-2AD5EFDD",
+      "QuotaName": "ml.g6e.48xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g6e.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.48xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-D27958C4",
+      "QuotaCode": "L-D27958C4",
+      "QuotaName": "ml.p3dn.24xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.p3dn.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p3dn.24xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-43F5FC95",
+      "QuotaCode": "L-43F5FC95",
+      "QuotaName": "ml.g5.8xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g5.8xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.8xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-62EA4CCE",
+      "QuotaCode": "L-62EA4CCE",
+      "QuotaName": "ml.p5e.48xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.p5e.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.p5e.48xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-8497E1A4",
+      "QuotaCode": "L-8497E1A4",
+      "QuotaName": "ml.g6e.48xlarge for spot training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "spot-training-job/ml.g6e.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g6e.48xlarge for spot training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-B2708489",
+      "QuotaCode": "L-B2708489",
+      "QuotaName": "ml.g7.4xlarge for training job usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job/ml.g7.4xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.4xlarge for training job usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-7D217E5D",
+      "QuotaCode": "L-7D217E5D",
+      "QuotaName": "ml.g5.48xlarge for training warm pool usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "training-job-warmpool/ml.g5.48xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.48xlarge for training warm pool usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-BCC8C118",
+      "QuotaCode": "L-BCC8C118",
+      "QuotaName": "ml.g5.16xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g5.16xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g5.16xlarge for cluster spot instance usage"
+    },
+    {
+      "ServiceCode": "sagemaker",
+      "ServiceName": "Amazon SageMaker",
+      "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:sagemaker/L-E097084E",
+      "QuotaCode": "L-E097084E",
+      "QuotaName": "ml.g7.24xlarge for cluster spot instance usage",
+      "Value": 0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "None",
+          "Resource": "cluster-spot/ml.g7.24xlarge",
+          "Service": "SageMaker",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Period": {
+        "PeriodValue": 1,
+        "PeriodUnit": "HOUR"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "ml.g7.24xlarge for cluster spot instance usage"
+    }
+  ],
+  "api_calls": [
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 439
+      }
+    }
+  ]
+}

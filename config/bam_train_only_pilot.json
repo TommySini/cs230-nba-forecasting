@@ -1,0 +1,24 @@
+{
+  "experiment": "bam_aws_train_only_pilot_v1",
+  "seed": 230,
+  "model_id": "Qwen/Qwen2.5-14B-Instruct",
+  "model_revision": "cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8",
+  "minimum_eval_date": "2025-05-22",
+  "forecast": {
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05
+  },
+  "train_only": {
+    "max_optimizer_steps": 32,
+    "max_runtime_seconds": 1800,
+    "max_seq_length": 16384,
+    "evaluate_every_steps": 4,
+    "learning_rate": 0.00005,
+    "head_learning_rate": 0.01,
+    "explanation_weight": 1.0,
+    "gradient_clip": 1.0,
+    "minimum_relative_brier_reduction": 0.5,
+    "minimum_relative_ce_reduction": 0.1
+  }
+}

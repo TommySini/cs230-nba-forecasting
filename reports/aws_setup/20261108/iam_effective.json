@@ -1,0 +1,649 @@
+{
+  "status": "success",
+  "stdout": "",
+  "return_value": {
+    "researcher": {
+      "role": {
+        "Role": {
+          "Path": "/cs230/",
+          "RoleName": "cs230-train-pilot-20261108-researcher",
+          "RoleId": "AROAX5ECPUJFKE23F4FGK",
+          "Arn": "arn:aws:iam::<aws-account-id>:role/cs230/cs230-train-pilot-20261108-researcher",
+          "CreateDate": "2026-11-08T04:30:17+00:00",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "ec2.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Description": "",
+          "MaxSessionDuration": 3600,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "cs230-nba"
+            },
+            {
+              "Key": "Phase",
+              "Value": "TRAIN"
+            }
+          ],
+          "RoleLastUsed": {}
+        }
+      },
+      "inline": [
+        {
+          "RoleName": "cs230-train-pilot-20261108-researcher",
+          "PolicyName": "TrainPilotArtifacts",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Condition": {
+                  "StringLike": {
+                    "s3:prefix": [
+                      "train/pilot-20261108/code/*",
+                      "train/pilot-20261108/pregame/*",
+                      "train/pilot-20261108/weights/*",
+                      "train/pilot-20261108/research/*"
+                    ]
+                  }
+                },
+                "Action": [
+                  "s3:ListBucket"
+                ],
+                "Resource": "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2",
+                "Effect": "Allow",
+                "Sid": "ListTrainPaths"
+              },
+              {
+                "Action": [
+                  "s3:GetObject",
+                  "s3:GetObjectVersion"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/code/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/pregame/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/weights/*"
+                ],
+                "Effect": "Allow",
+                "Sid": "ReadTrainArtifacts"
+              },
+              {
+                "Action": [
+                  "s3:PutObject"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/research/*"
+                ],
+                "Effect": "Allow",
+                "Sid": "WriteOwnOutputs"
+              },
+              {
+                "Action": [
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents"
+                ],
+                "Resource": "arn:aws:logs:us-west-2:<aws-account-id>:log-group:/cs230/bam/researcher:*",
+                "Effect": "Allow",
+                "Sid": "WriteOwnLogs"
+              },
+              {
+                "Action": [
+                  "s3:*"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/dev/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/test/*"
+                ],
+                "Effect": "Deny",
+                "Sid": "DenyHeldOutPaths"
+              },
+              {
+                "Condition": {
+                  "Bool": {
+                    "aws:SecureTransport": "false"
+                  }
+                },
+                "Action": [
+                  "s3:*"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/*"
+                ],
+                "Effect": "Deny",
+                "Sid": "DenyInsecureTransport"
+              }
+            ]
+          }
+        }
+      ],
+      "attached": {
+        "AttachedPolicies": []
+      },
+      "managed": [],
+      "profiles": {
+        "InstanceProfiles": [
+          {
+            "Path": "/cs230/",
+            "InstanceProfileName": "cs230-train-pilot-20261108-ResearchProfile-xUwa2FS2VeOv",
+            "InstanceProfileId": "AIPAX5ECPUJFGZO75PIF6",
+            "Arn": "arn:aws:iam::<aws-account-id>:instance-profile/cs230/cs230-train-pilot-20261108-ResearchProfile-xUwa2FS2VeOv",
+            "CreateDate": "2026-11-08T04:30:35+00:00",
+            "Roles": [
+              {
+                "Path": "/cs230/",
+                "RoleName": "cs230-train-pilot-20261108-researcher",
+                "RoleId": "AROAX5ECPUJFKE23F4FGK",
+                "Arn": "arn:aws:iam::<aws-account-id>:role/cs230/cs230-train-pilot-20261108-researcher",
+                "CreateDate": "2026-11-08T04:30:17+00:00",
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": "ec2.amazonaws.com"
+                      },
+                      "Action": "sts:AssumeRole"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "forecaster": {
+      "role": {
+        "Role": {
+          "Path": "/cs230/",
+          "RoleName": "cs230-train-pilot-20261108-forecaster",
+          "RoleId": "AROAX5ECPUJFAIMVP4I2A",
+          "Arn": "arn:aws:iam::<aws-account-id>:role/cs230/cs230-train-pilot-20261108-forecaster",
+          "CreateDate": "2026-11-08T04:30:17+00:00",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "ec2.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Description": "",
+          "MaxSessionDuration": 3600,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "cs230-nba"
+            },
+            {
+              "Key": "Phase",
+              "Value": "TRAIN"
+            }
+          ],
+          "RoleLastUsed": {}
+        }
+      },
+      "inline": [
+        {
+          "RoleName": "cs230-train-pilot-20261108-forecaster",
+          "PolicyName": "TrainPilotArtifacts",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Condition": {
+                  "StringLike": {
+                    "s3:prefix": [
+                      "train/pilot-20261108/code/*",
+                      "train/pilot-20261108/pregame/*",
+                      "train/pilot-20261108/research/*",
+                      "train/pilot-20261108/targets/*",
+                      "train/pilot-20261108/weights/*",
+                      "train/pilot-20261108/checkpoints/*",
+                      "train/pilot-20261108/metrics/*"
+                    ]
+                  }
+                },
+                "Action": [
+                  "s3:ListBucket"
+                ],
+                "Resource": "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2",
+                "Effect": "Allow",
+                "Sid": "ListTrainPaths"
+              },
+              {
+                "Action": [
+                  "s3:GetObject",
+                  "s3:GetObjectVersion"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/code/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/pregame/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/research/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/targets/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/weights/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/checkpoints/*"
+                ],
+                "Effect": "Allow",
+                "Sid": "ReadTrainArtifacts"
+              },
+              {
+                "Action": [
+                  "s3:PutObject"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/checkpoints/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/metrics/*"
+                ],
+                "Effect": "Allow",
+                "Sid": "WriteOwnOutputs"
+              },
+              {
+                "Action": [
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents"
+                ],
+                "Resource": "arn:aws:logs:us-west-2:<aws-account-id>:log-group:/cs230/bam/forecaster:*",
+                "Effect": "Allow",
+                "Sid": "WriteOwnLogs"
+              },
+              {
+                "Action": [
+                  "s3:*"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/dev/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/test/*"
+                ],
+                "Effect": "Deny",
+                "Sid": "DenyHeldOutPaths"
+              },
+              {
+                "Condition": {
+                  "Bool": {
+                    "aws:SecureTransport": "false"
+                  }
+                },
+                "Action": [
+                  "s3:*"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/*"
+                ],
+                "Effect": "Deny",
+                "Sid": "DenyInsecureTransport"
+              }
+            ]
+          }
+        }
+      ],
+      "attached": {
+        "AttachedPolicies": []
+      },
+      "managed": [],
+      "profiles": {
+        "InstanceProfiles": [
+          {
+            "Path": "/cs230/",
+            "InstanceProfileName": "cs230-train-pilot-20261108-TrainingProfile-FIEVrefp6FMp",
+            "InstanceProfileId": "AIPAX5ECPUJFN46SH3H2J",
+            "Arn": "arn:aws:iam::<aws-account-id>:instance-profile/cs230/cs230-train-pilot-20261108-TrainingProfile-FIEVrefp6FMp",
+            "CreateDate": "2026-11-08T04:30:35+00:00",
+            "Roles": [
+              {
+                "Path": "/cs230/",
+                "RoleName": "cs230-train-pilot-20261108-forecaster",
+                "RoleId": "AROAX5ECPUJFAIMVP4I2A",
+                "Arn": "arn:aws:iam::<aws-account-id>:role/cs230/cs230-train-pilot-20261108-forecaster",
+                "CreateDate": "2026-11-08T04:30:17+00:00",
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": "ec2.amazonaws.com"
+                      },
+                      "Action": "sts:AssumeRole"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "controller": {
+      "role": {
+        "Role": {
+          "Path": "/cs230/",
+          "RoleName": "cs230-train-pilot-20261108-controller",
+          "RoleId": "AROAX5ECPUJFP3R6GJ6IC",
+          "Arn": "arn:aws:iam::<aws-account-id>:role/cs230/cs230-train-pilot-20261108-controller",
+          "CreateDate": "2026-11-08T04:30:18+00:00",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "ec2.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Description": "",
+          "MaxSessionDuration": 3600,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "cs230-nba"
+            },
+            {
+              "Key": "Phase",
+              "Value": "TRAIN"
+            }
+          ],
+          "RoleLastUsed": {}
+        }
+      },
+      "inline": [
+        {
+          "RoleName": "cs230-train-pilot-20261108-controller",
+          "PolicyName": "TrainPilotArtifacts",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Condition": {
+                  "StringLike": {
+                    "s3:prefix": [
+                      "train/pilot-20261108/code/*",
+                      "train/pilot-20261108/pregame/*",
+                      "train/pilot-20261108/research/*",
+                      "train/pilot-20261108/targets/*",
+                      "train/pilot-20261108/metrics/*"
+                    ]
+                  }
+                },
+                "Action": [
+                  "s3:ListBucket"
+                ],
+                "Resource": "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2",
+                "Effect": "Allow",
+                "Sid": "ListTrainPaths"
+              },
+              {
+                "Action": [
+                  "s3:GetObject",
+                  "s3:GetObjectVersion"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/code/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/pregame/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/research/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/targets/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/metrics/*"
+                ],
+                "Effect": "Allow",
+                "Sid": "ReadTrainArtifacts"
+              },
+              {
+                "Action": [
+                  "s3:PutObject"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/pregame/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/research/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/targets/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/metrics/*"
+                ],
+                "Effect": "Allow",
+                "Sid": "WriteOwnOutputs"
+              },
+              {
+                "Action": [
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents"
+                ],
+                "Resource": "arn:aws:logs:us-west-2:<aws-account-id>:log-group:/cs230/bam/controller:*",
+                "Effect": "Allow",
+                "Sid": "WriteOwnLogs"
+              },
+              {
+                "Action": [
+                  "s3:*"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/dev/*",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/test/*"
+                ],
+                "Effect": "Deny",
+                "Sid": "DenyHeldOutPaths"
+              },
+              {
+                "Condition": {
+                  "Bool": {
+                    "aws:SecureTransport": "false"
+                  }
+                },
+                "Action": [
+                  "s3:*"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2",
+                  "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/*"
+                ],
+                "Effect": "Deny",
+                "Sid": "DenyInsecureTransport"
+              },
+              {
+                "Action": [
+                  "bedrock:InvokeModel"
+                ],
+                "Resource": "arn:aws:bedrock:us-west-2:<aws-account-id>:inference-profile/us.anthropic.claude-sonnet-4-6",
+                "Effect": "Allow"
+              },
+              {
+                "Condition": {
+                  "ArnEquals": {
+                    "bedrock:InferenceProfileArn": "arn:aws:bedrock:us-west-2:<aws-account-id>:inference-profile/us.anthropic.claude-sonnet-4-6"
+                  }
+                },
+                "Action": [
+                  "bedrock:InvokeModel"
+                ],
+                "Resource": [
+                  "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-sonnet-4-6",
+                  "arn:aws:bedrock:us-east-2::foundation-model/anthropic.claude-sonnet-4-6",
+                  "arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-sonnet-4-6"
+                ],
+                "Effect": "Allow"
+              },
+              {
+                "Action": [
+                  "bedrock:InvokeModel"
+                ],
+                "Resource": "arn:aws:bedrock:us-west-2:<aws-account-id>:inference-profile/us.anthropic.claude-opus-4-6-v1",
+                "Effect": "Allow"
+              },
+              {
+                "Condition": {
+                  "ArnEquals": {
+                    "bedrock:InferenceProfileArn": "arn:aws:bedrock:us-west-2:<aws-account-id>:inference-profile/us.anthropic.claude-opus-4-6-v1"
+                  }
+                },
+                "Action": [
+                  "bedrock:InvokeModel"
+                ],
+                "Resource": [
+                  "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-opus-4-6-v1",
+                  "arn:aws:bedrock:us-east-2::foundation-model/anthropic.claude-opus-4-6-v1",
+                  "arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-opus-4-6-v1"
+                ],
+                "Effect": "Allow"
+              }
+            ]
+          }
+        }
+      ],
+      "attached": {
+        "AttachedPolicies": []
+      },
+      "managed": [],
+      "profiles": {
+        "InstanceProfiles": [
+          {
+            "Path": "/cs230/",
+            "InstanceProfileName": "cs230-train-pilot-20261108-ControllerProfile-5duCnrx0GwQm",
+            "InstanceProfileId": "AIPAX5ECPUJFHMXC7CMDN",
+            "Arn": "arn:aws:iam::<aws-account-id>:instance-profile/cs230/cs230-train-pilot-20261108-ControllerProfile-5duCnrx0GwQm",
+            "CreateDate": "2026-11-08T04:30:35+00:00",
+            "Roles": [
+              {
+                "Path": "/cs230/",
+                "RoleName": "cs230-train-pilot-20261108-controller",
+                "RoleId": "AROAX5ECPUJFP3R6GJ6IC",
+                "Arn": "arn:aws:iam::<aws-account-id>:role/cs230/cs230-train-pilot-20261108-controller",
+                "CreateDate": "2026-11-08T04:30:18+00:00",
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": "ec2.amazonaws.com"
+                      },
+                      "Action": "sts:AssumeRole"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "api_calls": [
+    {
+      "service": "iam",
+      "operation": "GetRole",
+      "status": "success"
+    },
+    {
+      "service": "iam",
+      "operation": "ListRolePolicies",
+      "status": "success",
+      "n_items": {
+        "PolicyNames": 1
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "ListAttachedRolePolicies",
+      "status": "success",
+      "n_items": {
+        "AttachedPolicies": 0
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "GetRolePolicy",
+      "status": "success"
+    },
+    {
+      "service": "iam",
+      "operation": "ListInstanceProfilesForRole",
+      "status": "success",
+      "n_items": {
+        "InstanceProfiles": 1
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "GetRole",
+      "status": "success"
+    },
+    {
+      "service": "iam",
+      "operation": "ListRolePolicies",
+      "status": "success",
+      "n_items": {
+        "PolicyNames": 1
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "ListAttachedRolePolicies",
+      "status": "success",
+      "n_items": {
+        "AttachedPolicies": 0
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "GetRolePolicy",
+      "status": "success"
+    },
+    {
+      "service": "iam",
+      "operation": "ListInstanceProfilesForRole",
+      "status": "success",
+      "n_items": {
+        "InstanceProfiles": 1
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "GetRole",
+      "status": "success"
+    },
+    {
+      "service": "iam",
+      "operation": "ListRolePolicies",
+      "status": "success",
+      "n_items": {
+        "PolicyNames": 1
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "ListAttachedRolePolicies",
+      "status": "success",
+      "n_items": {
+        "AttachedPolicies": 0
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "GetRolePolicy",
+      "status": "success"
+    },
+    {
+      "service": "iam",
+      "operation": "ListInstanceProfilesForRole",
+      "status": "success",
+      "n_items": {
+        "InstanceProfiles": 1
+      }
+    }
+  ]
+}

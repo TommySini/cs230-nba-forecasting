@@ -1,0 +1,31 @@
+{
+  "status": "success",
+  "stdout": "",
+  "return_value": {
+    "checked_at": "2026-11-08T05:11:15.232285+00:00",
+    "checks": {
+      "credits": {
+        "accountId": "<aws-account-id>",
+        "accountPlanType": "PAID",
+        "accountPlanStatus": "ACTIVE",
+        "accountPlanRemainingCredits": {
+          "amount": 100,
+          "unit": "USD"
+        }
+      },
+      "invocation_logging": {}
+    }
+  },
+  "api_calls": [
+    {
+      "service": "freetier",
+      "operation": "GetAccountPlanState",
+      "status": "success"
+    },
+    {
+      "service": "bedrock",
+      "operation": "GetModelInvocationLoggingConfiguration",
+      "status": "success"
+    }
+  ]
+}
