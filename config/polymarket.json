@@ -18,5 +18,15 @@
     "bootstrap_replicates": 2000,
     "calibration_bins": 10,
     "liquidity_threshold_usd": 50000
+  },
+  "horizons": {
+    "hours_before_tipoff": [8, 1],
+    "trade_window_hours": 2,
+    "max_pages": 200,
+    "max_history_age_minutes": 60,
+    "min_window_trades": 5,
+    "min_window_cash_usd": 500,
+    "max_last_trade_age_minutes": 60,
+    "max_history_vwap_gap": 0.05
   }
 }
