@@ -1,6 +1,0 @@
--r requirements-text.txt
-mlx==0.32.4
-mlx-lm==0.32.2
-mlx-metal==0.32.4
-protobuf==7.36.2
-sentencepiece==0.2.2

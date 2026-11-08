@@ -5,8 +5,7 @@ from pathlib import Path
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
-from game_note_tables import HEADER, decode_recent_tables, table_facts, mechanical_claim_check
-from run_game_note_research import page_lines
+from game_note_tables import HEADER, decode_recent_tables, table_facts, mechanical_claim_check, page_lines
 
 
 class GameNoteTableTests(unittest.TestCase):
