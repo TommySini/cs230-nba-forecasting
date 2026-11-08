@@ -1,5 +1,4 @@
 """Temporal boundaries and immutable source/page snapshots for the new pipeline."""
-from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 from email.utils import format_datetime
 import json
@@ -12,82 +11,79 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import bam_data as bam
 
 
-def note(gid="espn:1", sha="a" * 64, capture="20240101120000", url="https://nba.com/notes.pdf"):
-    time = datetime.strptime(capture, "%Y%m%d%H%M%S").replace(tzinfo=timezone.utc)
-    return {"game_id": gid, "game_date_et": "2024-01-01", "cutoff_utc": "2024-01-02T00:00:00Z",
-            "home_abbr": "BOS", "away_abbr": "DEN", "team": "BOS", "publisher_url": url,
-            "review": {"decision": "approved_template_checked_excerpt", "approved_pdf_pages": [1]},
-            "source": {"sha256": sha, "raw_path": "data/raw/source.pdf", "status": 200,
-                       "final_url": "https://web.archive.org/web/" + capture + "id_/" + url,
-                       "memento_datetime": format_datetime(time, usegmt=True)}}
+GAME = {"game_id": "espn:1", "game_date_et": "2024-01-01", "home_abbr": "BOS", "away_abbr": "DEN",
+        "scheduled_start_utc": "2024-01-02T01:00:00Z", "cutoff_utc": "2024-01-02T00:00:00Z"}
 
 
-class MergeTests(unittest.TestCase):
-    def test_multi_packet_dedup_and_versions_are_order_independent(self):
-        first = note()
-        duplicate = deepcopy(first)
-        duplicate["source"]["raw_path"] = "data/raw/duplicate.pdf"
-        later = note(sha="b" * 64, capture="20240101130000")
-        opponent = note(sha="c" * 64, url="https://nba.com/denver.pdf")
-        opponent["team"] = "DEN"
-        rows = [first, duplicate, later, opponent]
-        game = bam.merge_notes(rows)[0]
-        self.assertEqual(bam.merge_notes(rows), bam.merge_notes(list(reversed(rows))))
-        self.assertEqual(len(game["sources"]), 3)
-        self.assertEqual(sum(s["active_for_research"] for s in game["sources"]), 2)
-        self.assertFalse(next(s for s in game["sources"] if s["sha256"] == "a" * 64)["active_for_research"])
-        self.assertEqual(next(s for s in game["sources"] if s["sha256"] == "a" * 64)["source_version_count"], 2)
+def pdf_doc(root, body=b"exact archived bytes", capture=datetime(2024, 1, 1, 12, tzinfo=timezone.utc), team="BOS"):
+    path = Path(root) / f"data/raw/{team}.pdf"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(body)
+    return {"game_id": "espn:1", "team": team, "kind": "rolling_archive", "tier": "archive_proven",
+            "url": f"http://www.nba.com/gamenotes/{team}.pdf", "cutoff_utc": GAME["cutoff_utc"],
+            "replay_url": "https://web.archive.org/web/20240101120000id_/http://www.nba.com/gamenotes/x.pdf",
+            "text_path": f"data/processed/notes_v2/texts/1-{team}.txt",
+            "source": {"raw_path": f"data/raw/{team}.pdf", "sha256": bam.digest(body),
+                       "memento_datetime": format_datetime(capture, usegmt=True)}}
 
-    def test_conflicting_game_and_capture_rejected(self):
-        first = note()
-        mismatch = deepcopy(first)
-        mismatch["away_abbr"] = "CLE"
-        with self.assertRaisesRegex(ValueError, "metadata"):
-            bam.merge_notes([first, mismatch])
-        with self.assertRaisesRegex(ValueError, "archive capture"):
-            bam.merge_notes([first, note(sha="b" * 64)])
 
-    def test_repeated_identical_bytes_preserve_latest_capture_chronology(self):
-        notes = [note(capture="20240101120000"),
-                 note(sha="b" * 64, capture="20240101130000"),
-                 note(capture="20240101140000")]
-        game = bam.merge_notes(notes)[0]
-        latest = next(s for s in game["sources"] if s["active_for_research"])
-        self.assertEqual(latest["sha256"], "a" * 64)
-        self.assertEqual(latest["archive_time"], "2024-01-01T14:00:00Z")
-        self.assertEqual(latest["aliases"][0]["archive_time"], "2024-01-01T12:00:00Z")
-        self.assertEqual(bam.merge_notes(notes), bam.merge_notes(list(reversed(notes))))
+def html_doc(root, modified="2024-01-01T15:00:00Z"):
+    items = [{"permalink": "https://www.nba.com/knicks/news/other", "title": "Other", "contentExpanded": []},
+             {"permalink": "https://www.nba.com/knicks/news/notes", "title": "Knicks Game Notes",
+              "contentExpanded": [{"type": "paragraph", "text": "Opening line"}, {"type": "heading", "text": "SERIES NOTES"},
+                                  {"type": "paragraph", "html": "<p>Boston leads <b>2-1</b></p>"}]}]
+    path = Path(root) / "data/raw/api.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(json.dumps({"items": items}).encode())
+    return {"game_id": "espn:1", "team": "NYK", "kind": "html_post", "tier": "site_timestamped",
+            "url": items[1]["permalink"], "published_utc": "2024-01-01T14:00:00Z", "modified_utc": modified,
+            "modified_after_cutoff": modified > GAME["cutoff_utc"], "cutoff_utc": GAME["cutoff_utc"],
+            "text_path": "data/processed/notes_v2/texts/1-NYK-html.txt",
+            "source": {"api_raw_path": "data/raw/api.json", "api_sha256": bam.digest(path.read_bytes())}}, items[1]
 
-    def test_conflicting_capture_cannot_hide_in_duplicate_hash_alias(self):
-        with self.assertRaisesRegex(ValueError, "archive capture"):
-            bam.merge_notes([note(capture="20240101120000"), note(capture="20240101140000"),
-                             note(sha="b" * 64, capture="20240101140000")])
 
-    def test_version_selection_checks_all_publisher_url_aliases(self):
-        notes = [note(url="https://nba.com/a.pdf", capture="20240101140000"),
-                 note(url="https://nba.com/b.pdf", capture="20240101120000"),
-                 note(sha="b" * 64, url="https://nba.com/b.pdf", capture="20240101130000")]
-        game = bam.merge_notes(notes)[0]
-        self.assertEqual(sum(s["active_for_research"] for s in game["sources"]), 2)
-        source = next(s for s in game["sources"] if s["sha256"] == "a" * 64)
-        group = next(g for g in source["source_version_groups"] if g["url"].endswith("/b.pdf"))
-        self.assertEqual(group["selected_sha256"], "b" * 64)
+class NotesV2Tests(unittest.TestCase):
+    def test_late_revised_html_and_unscheduled_games_are_excluded(self):
+        with tempfile.TemporaryDirectory() as root:
+            pdf = pdf_doc(root)
+            late, _ = html_doc(root, modified="2024-01-02T03:00:00Z")
+            other = dict(pdf_doc(root, team="DEN"), game_id="espn:2")
+            rows, bodies, excluded = bam.notes_v2_games([pdf, late, other], {"espn:1": GAME}, root)
+            self.assertEqual(excluded, {"html_modified_after_cutoff": 1, "outside_numeric_history": 1})
+            self.assertEqual(len(rows), 1)
+            source = rows[0]["sources"][0]
+            self.assertEqual((source["source_kind"], source["evidence_tier"]), ("pdf", "archive_proven"))
+            self.assertEqual(source["archive_time"], "2024-01-01T12:00:00Z")
+            self.assertEqual(bodies[source["sha256"]], b"exact archived bytes")
+            self.assertNotIn("home_win", rows[0])
 
-    def test_verified_bytes_exact_hash_and_pre_cutoff(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            path = root / "data/raw/source.pdf"
-            path.parent.mkdir(parents=True)
-            path.write_bytes(b"exact archived bytes")
-            source = note(sha=bam.digest(path.read_bytes()))
-            self.assertEqual(bam.verified_bytes(source, root), path.read_bytes())
-            source["cutoff_utc"] = "2024-01-01T11:59:59Z"
+    def test_source_after_cutoff_or_changed_bytes_rejected(self):
+        with tempfile.TemporaryDirectory() as root:
+            late = pdf_doc(root, capture=datetime(2024, 1, 2, 0, 1, tzinfo=timezone.utc))
             with self.assertRaisesRegex(ValueError, "cutoff"):
-                bam.verified_bytes(source, root)
-            source["cutoff_utc"] = "2024-01-02T00:00:00Z"
-            path.write_bytes(b"modified")
+                bam.notes_v2_games([late], {"espn:1": GAME}, root)
+            doc = pdf_doc(root)
+            (Path(root) / doc["source"]["raw_path"]).write_bytes(b"modified")
             with self.assertRaisesRegex(ValueError, "checksum"):
-                bam.verified_bytes(source, root)
+                bam.notes_v2_games([doc], {"espn:1": GAME}, root)
+
+    def test_html_post_becomes_sections_with_title_and_heading_context(self):
+        with tempfile.TemporaryDirectory() as root:
+            doc, item = html_doc(root)
+            rows, bodies, _ = bam.notes_v2_games([doc], {"espn:1": GAME}, root)
+            source = rows[0]["sources"][0]
+            self.assertEqual(source["sha256"], bam.digest(bam.canonical(item)))
+            self.assertEqual((source["source_kind"], source["archive_time"]), ("html", "2024-01-01T15:00:00Z"))
+            _, pages = bam.extract_pages(("html", self.write(root, bodies[source["sha256"]]), source["sha256"]))
+            self.assertEqual([p["label"] for p in pages], ["title", "paragraph", "heading", "paragraph"])
+            self.assertEqual(" ".join(pages[3]["text"].split()), "Boston leads 2-1")
+            self.assertEqual([c["label"] for c in pages[3]["context_sections"]], ["title", "heading"])
+            self.assertEqual(bam.pages_with_lines(pages), pages)
+
+    def write(self, root, body):
+        path = Path(root) / "raw.bin"
+        path.write_bytes(body)
+        return str(path)
 
 
 class TemporalTests(unittest.TestCase):
@@ -136,7 +132,7 @@ class SnapshotTests(unittest.TestCase):
         bam.write_json(directory / "sources/a.json", {"source_sha256": sha, "pages": pages})
         (directory / "raw").mkdir()
         (directory / "raw/a.bin").write_bytes(raw)
-        row = {**{k: v for k, v in note().items() if k in bam.METADATA}, "split": "train",
+        row = {**{k: v for k, v in GAME.items() if k in bam.METADATA}, "split": "train",
                "scheduled_start_utc": "2024-01-02T01:00:00Z", "forecast_eligible": False, "p_boost": None,
                "sources": [{"source_id": "sha256:" + sha, "sha256": sha, "raw_path": "raw/a.bin",
                             "pages_path": "sources/a.json", "pages_sha256": bam.digest((directory / "sources/a.json").read_bytes()),

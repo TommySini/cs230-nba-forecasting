@@ -1,0 +1,15 @@
+{
+  "experiment": "bam_snapshot_notes_v2",
+  "seed": 230,
+  "notes_path": "data/processed/notes_v2/approved.jsonl",
+  "baseline_config": "config/gradient_boosting.json",
+  "minimum_oof_fit_games": 200,
+  "boosting_parameters": {"n_estimators": 100, "max_depth": 1},
+  "split_policy": {
+    "prediction_model_cutoff_date": "2024-09-25",
+    "dev_start_date": "2025-12-04",
+    "test_start_date": "2026-02-01",
+    "minimum_split_games": {"train": 30, "dev": 8, "test": 8}
+  },
+  "previously_inspected_game_ids": ["espn:401809249", "espn:401809511", "espn:401809773", "espn:401809775", "espn:401809777", "espn:401809779", "espn:401810038", "espn:401810048", "espn:401810049", "espn:401810052", "espn:401810054", "espn:401810055", "espn:401810056", "espn:401810190", "espn:401810196", "espn:401810200", "espn:401810250", "espn:401810273", "espn:401810306", "espn:401810326", "espn:401810375", "espn:401810390", "espn:401810392", "espn:401810433", "espn:401810443", "espn:401810451", "espn:401810458", "espn:401810464", "espn:401810470", "espn:401810476", "espn:401810483", "espn:401810485", "espn:401810496", "espn:401810547", "espn:401810565", "espn:401810589", "espn:401810633", "espn:401810657", "espn:401810672", "espn:401810724", "espn:401810739", "espn:401810776", "espn:401810787", "espn:401810820", "espn:401810866", "espn:401810965", "espn:401810972", "espn:401810973", "espn:401810974", "espn:401810979", "espn:401810983", "espn:401810988", "espn:401810996", "espn:401811013", "espn:401811023", "espn:401811027", "espn:401811028"]
+}
