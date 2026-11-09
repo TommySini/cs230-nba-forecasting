@@ -5,20 +5,21 @@ Out with an Injury/Illness reason + 0.5 per Doubtful/Questionable. Two-way and
 G League assignments are excluded. feature = away burden - home burden
 (positive favours the home team). The "text forecast" shifts boosting's log-odds
 by SCALE * feature; SCALE does not affect the correlations or the likelihood-ratio test.
+Reports come from collect_injuries.py (report time at or before the cutoff).
 """
-import csv
+import argparse
 import json
-import math
 import re
 
 import numpy as np
 
-from collect_pilot import ROOT
-from evaluate_orthogonality import REPORT_DIR, bootstrap, statistics
+from collect_pilot import ROOT, stamp
+from evaluate_orthogonality import (SPLITS, REPORT_DIR, boosting_forecasts, bootstrap, day_folds, logit, read_rows,
+                                    sigmoid, statistics)
 
+INJURIES = ROOT / "data/processed/injury_full/injuries.jsonl"
 WEIGHTS = {"Out": 1.0, "Doubtful": 0.5, "Questionable": 0.5}
 SCALE = 0.1
-KEYS = ["logit_corr", "delta_residual", "delta_coef", "explained_by_base"]
 
 
 def burden(segment):
@@ -37,43 +38,42 @@ def feature(row):
     return burden(away) - burden(home)
 
 
-def load(split):
-    with open(ROOT / f"data/processed/gradient_boosting/{split}_predictions.csv", encoding="utf-8", newline="") as s:
-        preds = {r["game_id"]: r for r in csv.DictReader(s)}
+def load(split, forecasts, reports):
     rows = []
-    with open(ROOT / "data/processed/injury_full/injuries.jsonl", encoding="utf-8") as s:
-        for line in s:
-            r = json.loads(line)
-            if r["split"] == split and r["injury_report"] is not None and r["game_id"] in preds:
-                f = feature(r)
-                if f is not None:
-                    p = preds[r["game_id"]]
-                    rows.append((r["game_id"], r["game_date_et"], int(p["home_win"]), float(p["gradient_boosting"]), f))
-    total = len(preds)
-    return rows, total
+    for r in reports:
+        if r["split"] != split or r["injury_report"] is None or r["game_id"] not in forecasts:
+            continue
+        if stamp(r["injury_report"]["report_time_utc"]) > stamp(r["cutoff_utc"]):
+            raise ValueError(f"Injury report after cutoff: {r['game_id']}")
+        f = feature(r)
+        if f is not None:
+            p = forecasts[r["game_id"]]
+            rows.append((r["game_id"], p["game_date_et"], p["home_win"], p["p_boost"], f))
+    return rows, sum(f["split"] == split for f in forecasts.values())
 
 
-def analyse(name, rows, total):
+def analyse(name, rows, total, seed=230, replicates=2000):
     y = np.array([r[2] for r in rows])
     base = np.array([r[3] for r in rows])
     feat = np.array([r[4] for r in rows], dtype=float)
     dates = np.array([r[1] for r in rows])
-    other = 1 / (1 + np.exp(-(np.log(base / (1 - base)) + SCALE * feat)))
-    days = np.unique(dates)
-    order = np.random.default_rng(230).permutation(days)
-    fold_of = {d: i % 5 for i, d in enumerate(order)}
-    folds = np.array([fold_of[d] for d in dates])
-    point = statistics(base, other, y, folds)
-    point["intervals"] = bootstrap(base, other, y, dates, 2000, 230, KEYS)
+    other = sigmoid(logit(base) + SCALE * feat)
+    point = statistics(base, other, y, day_folds(dates, 5, seed))
+    point["intervals"] = bootstrap(base, other, y, dates, replicates, seed)
     point.update(name=name, games_with_report=len(rows), games_in_split=total, scale=SCALE,
                  feature_mean_abs=float(np.abs(feat).mean()), feature_corr_with_residual_raw=float(np.corrcoef(feat, y - base)[0, 1]))
     return point
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--splits", nargs="+", default=["dev", "test"], choices=SPLITS)
+    args = parser.parse_args()
+    forecasts = boosting_forecasts(args.splits)
+    reports = read_rows(INJURIES)
     results, pooled = {}, []
-    for split in ("test", "validation"):
-        rows, total = load(split)
+    for split in args.splits:
+        rows, total = load(split, forecasts, reports)
         if len(rows) >= 30:
             results[split] = analyse(split, rows, total)
             pooled.extend(rows)

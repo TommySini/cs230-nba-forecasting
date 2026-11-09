@@ -110,6 +110,7 @@ scripts/
   run_gradient_boosting.py    the baseline: fit on TRAIN, select on DEV, score TEST; validate_gradient_boosting.py
   run_tabpfn.py               local TabPFN TRAIN diagnostic and DEV comparison; validate_tabpfn.py
   collect_polymarket*.py      market prices and trades; evaluate_polymarket*.py
+  evaluate_*orthogonality.py  does market, note or injury text add to boosting? (collect_injuries.py)
   bam_data.py                 shared notes/pages + frozen boosting -> verified BAM inputs
   bam_research.py             research prompts and claim checks (bam_claim_guards, bam_note_tables, game_note_tables)
   bam_postgame.py             outcome-side evidence for the teacher (training only)
@@ -152,6 +153,13 @@ Full source-level validation also needs the optional raw bundle:
 .venv/bin/python scripts/validate_notes_v2.py
 .venv/bin/python scripts/validate_polymarket.py
 .venv/bin/python scripts/bam_data.py validate data/processed
+```
+
+Orthogonality checks (processed bundle only): does a second signal add to boosting?
+
+```bash
+.venv/bin/python scripts/evaluate_orthogonality.py          # market vs boosting, DEV+TEST
+.venv/bin/python scripts/evaluate_notes_orthogonality.py    # note TF-IDF vs boosting, TRAIN+DEV
 ```
 
 GPU workers install `requirements-bam-training.txt` (training) or `requirements-research-vllm.txt`
