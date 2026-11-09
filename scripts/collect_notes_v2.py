@@ -35,7 +35,6 @@ from postgame_screen import postgame_flags
 
 CONFIG_PATH = ROOT / "config/notes_v2.json"
 DATA = ROOT / "data/processed/notes_v2"
-REPORT = ROOT / "reports/notes_v2"
 REPLAY = re.compile(r"https://web\.archive\.org/web/(\d{14})id_/(.+)")
 DATED_NAME = re.compile(r"/(\d{6})-([a-z]{2,4})([a-z]{3})-notes\.pdf$")
 
@@ -506,7 +505,7 @@ def choose(docs):
     return sorted(approved.values(), key=lambda d: (d["game_id"], d["team"]))
 
 
-def write_report(docs, approved, history):
+def summarize(docs, approved, history):
     games = {g["game_id"]: g for g in history}
     season = lambda d: games[d["game_id"]]["season"]
     by_season = defaultdict(Counter)
@@ -522,22 +521,6 @@ def write_report(docs, approved, history):
                "by_publisher": dict(Counter(d["team"] for d in approved).most_common()),
                "by_season": {str(s): dict(by_season[s], games=len(unique[s])) for s in sorted(by_season)},
                "rejections": dict(Counter(r.split(":")[0] for d in docs for r in d["reasons"]).most_common())}
-    write_json(REPORT / "coverage.json", summary)
-    lines = ["# Game notes v2: every recoverable pregame packet, 2012-13 to 2025-26", "",
-             f"{summary['approved_team_games']} team-game documents covering **{summary['approved_games']} games** passed "
-             "provenance, header and postgame checks.", "",
-             "| Season | Games | Team-game documents | Archive-proven | Site-timestamped |", "| --- | ---: | ---: | ---: | ---: |"]
-    for s in sorted(by_season):
-        c = by_season[s]
-        lines.append(f"| {s}-{(s + 1) % 100:02} | {len(unique[s])} | {c['team_games']} | {c['archive_proven']} | {c['site_timestamped']} |")
-    lines += ["", "Rejections (a document can have several reasons):", ""]
-    lines += [f"- `{k}`: {v}" for k, v in summary["rejections"].items()]
-    lines += ["", "Tiers: archive_proven means an Internet Archive replay timestamped before the cutoff; "
-              "site_timestamped means the publisher's own Last-Modified or published time is before the cutoff "
-              "(accepted by the 2026-11-01 decision). All documents passed the postgame screen "
-              "(`scripts/postgame_screen.py`). Coverage is selected by archive and publisher availability, "
-              "not representative of the league."]
-    (REPORT / "findings.md").write_text("\n".join(lines) + "\n")
     return summary
 
 
@@ -548,7 +531,6 @@ def main():
     config = json.loads(CONFIG_PATH.read_text())
     history = load_history(config)
     DATA.mkdir(parents=True, exist_ok=True)
-    REPORT.mkdir(parents=True, exist_ok=True)
     if args.stage in ("index", "all"):
         captures = fetch_cdx(Cache(delay=3), config)
         rolling = match_rolling(rolling_versions(captures, config), history, config)
@@ -568,7 +550,9 @@ def main():
         approved = choose(docs)
         write_jsonl(DATA / "documents.jsonl", docs)
         write_jsonl(DATA / "approved.jsonl", approved)
-        print(json.dumps(write_report(docs, approved, history), indent=1), flush=True)
+        summary = summarize(docs, approved, history)
+        write_json(DATA / "review_summary.json", summary)
+        print(json.dumps(summary, indent=1), flush=True)
 
 
 if __name__ == "__main__":

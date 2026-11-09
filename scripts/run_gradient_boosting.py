@@ -36,7 +36,7 @@ from collect_rich_stats import NBA_FRANCHISES
 
 CONFIG_PATH = ROOT / "config/gradient_boosting.json"
 DATA_DIR = ROOT / "data/processed/gradient_boosting"
-REPORT_DIR = ROOT / "reports/gradient_boosting"
+METRICS_PATH = ROOT / "results/gradient_boosting.json"
 SPLITS = ("train", "dev", "test")
 SIDES = ("home", "away")
 BASE_FEATURES = ("previous_games", "season_win_rate", "last_5_win_rate",
@@ -313,86 +313,9 @@ def run(config, jobs):
               "python_version": platform.python_version(), "runtime_seconds": round(time.time() - started, 1),
               "source_sha256": {str(path.relative_to(ROOT)): sha256(path) for path in sources},
               "artifact_sha256": {f"data/processed/gradient_boosting/{name}": sha256(DATA_DIR / name) for name in DATA_FILES}}
-    write_json(REPORT_DIR / "metrics.json", result)
-    write_report(result)
+    write_json(METRICS_PATH, result)
     print(json.dumps({name: {k: round(v["brier"], 4) for k, v in e["metrics"].items()} for name, e in evaluation.items()}), flush=True)
     return result
-
-
-def write_report(result):
-    config, evaluation = result["config"], result["evaluation"]
-    first, last = config["split_seasons"]["train"]
-    dev, test = (season_label(config["split_seasons"][name][0]) for name in ("dev", "test"))
-    gb, ref = evaluation["test"]["metrics"]["gradient_boosting"], evaluation["test"]["metrics"]["historical_home_rate"]
-    selected = result["dev_candidates"][result["selected_candidate_index"]]
-    coverage = result["coverage_by_season"]
-    lacking = [season_label(int(s)) for s, row in coverage.items() if row["split"] == "train" and not row["eligible"]]
-    lines = ["# Gradient-boosting statistics baseline", "",
-             f"TEST {test}: Brier **{gb['brier']:.4f}**, log loss {gb['log_loss']:.4f}, accuracy {gb['accuracy']:.1%} "
-             f"on {gb['games']:,} games, versus {ref['brier']:.4f} for the TRAIN home-win rate. "
-             f"Settings chosen on DEV {dev}: depth {selected['max_depth']}, {selected['n_estimators']} trees.", "",
-             "## Protocol", "",
-             f"- Splits by season: TRAIN {season_label(first)} to {season_label(last)}, DEV {dev}, TEST {test} "
-             "(`config/gradient_boosting.json`). Regular-season games from checksum-verified ESPN schedules.",
-             f"- Features ({len(result['feature_names'])}): 18 basic team features (games played, season and last-5 win rate, "
-             "last-5 point differential, rest, back-to-back) plus team and player box-score windows (season, last 5, last 10) "
-             "with team-coverage indicators; home, away and home-minus-away. All use earlier ET dates of the same season only.",
-             f"- Eligibility: both teams have at least {config['min_previous_games']} earlier games and "
-             f"{config['min_box_score_games']} valid earlier box scores. Other missing box scores reduce coverage: team "
-             "statistics pool the window's valid games, coverage features record the gap, and player statistics are missing "
-             "unless the whole window has player box scores.",
-             "- Models: gradient boosting with median imputation fitted on each model's own training rows. "
-             f"{len(config['candidates'])} fixed candidates are fitted on TRAIN and chosen by DEV Brier. DEV and TEST forecasts both "
-             "come from that TRAIN fit; TEST was scored once, after selection. No early stopping, calibration or TEST-driven tuning.",
-             "- TRAIN forecasts (`produced_by: prior_seasons`): each TRAIN season after the first is predicted by the selected "
-             "settings fitted on the earlier TRAIN seasons only, so every forecast BAM receives is fitted on strictly earlier "
-             f"games (the choice among the {len(config['candidates'])} settings used DEV). "
-             f"The first TRAIN season ({season_label(first)}) has none.", "",
-             "## DEV selection", "", "| Depth | Trees | DEV Brier | Log loss | Accuracy |", "| ---: | ---: | ---: | ---: | ---: |"]
-    for row in result["dev_candidates"]:
-        lines.append(f"| {row['max_depth']} | {row['n_estimators']} | {row['brier']:.4f} | {row['log_loss']:.4f} | {row['accuracy']:.1%} |")
-    lines += ["", "## Results", "", "| Split | Forecast | Games | Brier | 95% interval | Log loss | Accuracy |",
-              "| --- | --- | ---: | ---: | --- | ---: | ---: |"]
-    for name in ("dev", "test"):
-        u = evaluation[name]["uncertainty"]
-        for model, m in evaluation[name]["metrics"].items():
-            lo, hi = u["brier_intervals"][model]
-            lines.append(f"| {name.upper()} | {model} | {m['games']:,} | {m['brier']:.4f} | [{lo:.4f}, {hi:.4f}] | {m['log_loss']:.4f} | {m['accuracy']:.1%} |")
-    lines.append("")
-    for name in ("dev", "test"):
-        lo, hi = evaluation[name]["uncertainty"]["difference_vs_reference"]["gradient_boosting"]
-        lines.append(f"{name.upper()} paired Brier difference, boosting minus home rate: [{lo:+.4f}, {hi:+.4f}] "
-                     f"({evaluation[name]['uncertainty']['days']} ET dates resampled).")
-    lines += ["", "## TRAIN forecasts from earlier seasons", ""]
-    if result["train_forecasts"]:
-        lines += ["| Season | Games | Brier | Log loss | Accuracy |", "| --- | ---: | ---: | ---: | ---: |"]
-        lines += [f"| {season if season == 'all' else season_label(int(season))} | {m['games']:,} | {m['brier']:.4f} | {m['log_loss']:.4f} | {m['accuracy']:.1%} |"
-                  for season, m in result["train_forecasts"].items()]
-        lines.append("")
-    lines.append(f"{result['train_games_without_forecast']:,} eligible TRAIN games have no earlier TRAIN season and no forecast.")
-    lines += ["", "## Coverage by season", "",
-              f"Box scores: `{result['box_score_source']['path']}`."
-              + (f" TRAIN seasons without eligible games: {', '.join(lacking)}." if lacking else ""), "",
-              "| Season | Split | Games | Box records | Eligible | Excluded: warmup | Excluded: box coverage | With team-box gaps | With player-box gaps |",
-              "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"]
-    for season, row in coverage.items():
-        ex = row["excluded"]
-        lines.append(f"| {season_label(int(season))} | {row['split']} | {row['games']:,} | {row['box_scores']:,} | {row['eligible']:,} | "
-                     f"{ex.get('fewer_than_min_previous_games', 0):,} | {ex.get('fewer_than_min_box_scores', 0) + ex.get('invalid_window', 0):,} | "
-                     f"{row['eligible_with_team_box_gaps']:,} | {row['eligible_with_player_box_gaps']:,} |")
-    lines += ["", "## Limits", "",
-              f"- {AVAILABILITY_LIMITATION} Possessions and ratings are box-score estimates, not official NBA figures.",
-              "- No injury, lineup, odds or text inputs. Prior-game workload is not current-game availability.",
-              f"- The {test} TEST season was examined in earlier experiments, so this is an exploratory backtest. The previous protocol "
-              "(TRAIN 2023–24 only, final refit on 2023–25) scored 0.2099 (basic 18 features) and 0.2059 (rich features) on it: "
-              "[basic](../past/basic_boosting_2023/findings.md), [rich](../past/rich_boosting_2023/findings.md).",
-              "- Bootstrap intervals are conditional on the fitted models.", "",
-              "## Reproduce", "", "```bash", ".venv/bin/python scripts/run_gradient_boosting.py",
-              ".venv/bin/python scripts/validate_gradient_boosting.py", "```", "",
-              f"Runtime {result['runtime_seconds']:.0f} s. Inputs, labels, exclusions, predictions (`p_boost`, `produced_by`) and "
-              "`model.joblib` (fit game IDs and settings) are in `data/processed/gradient_boosting/`; full metrics, hashes and "
-              "versions in `metrics.json`.", ""]
-    (REPORT_DIR / "findings.md").write_text("\n".join(lines))
 
 
 def main():

@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from collect_pilot import parse_injury_pages, prior_features, preview_decision, get_injuries, stamp, sample_windows, select_sample, output_paths, collect_games
+from collect_pilot import parse_injury_pages, prior_features, preview_decision, get_injuries, stamp, sample_windows, select_sample, output_path, collect_games
 
 
 class LeakageTests(unittest.TestCase):
@@ -60,9 +60,9 @@ class LeakageTests(unittest.TestCase):
             sample_windows({"seasons": [{"start_year": 2024}], "sample_windows": [window, window]})
 
     def test_seasonal_outputs_cannot_replace_original_pilot(self):
-        self.assertNotEqual(output_paths({}), output_paths({"output_name": "seasonal"}))
+        self.assertNotEqual(output_path({}), output_path({"output_name": "seasonal"}))
         with self.assertRaises(ValueError):
-            output_paths({"output_name": "../"})
+            output_path({"output_name": "../"})
 
     def test_missing_schedule_day_aborts_and_successful_retry_clears_failure(self):
         config = {"seasons": [{"start_year": 2024, "sample_size": 1}],
@@ -79,7 +79,7 @@ class LeakageTests(unittest.TestCase):
         with TemporaryDirectory() as directory, patch("collect_pilot.ROOT", Path(directory)):
             with self.assertRaisesRegex(RuntimeError, "Incomplete schedule history"):
                 collect_games(cache, config)
-            failure_path = Path(directory) / "reports/seasonal/schedule_failures.json"
+            failure_path = Path(directory) / "data/processed/seasonal/schedule_failures.json"
             self.assertTrue(failure_path.exists())
             cache.body = b'{"events": []}'
             self.assertEqual(collect_games(cache, config), [])

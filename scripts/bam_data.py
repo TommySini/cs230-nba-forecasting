@@ -313,7 +313,7 @@ def validate_snapshot(directory):
 
 def prepare(config, snapshot_id=None, workers=4, root=ROOT):
     import joblib
-    from run_gradient_boosting import load_verified_history, season_splits
+    from run_gradient_boosting import METRICS_PATH, load_verified_history, season_splits
     root = Path(root)
     if root.resolve() != ROOT.resolve():
         raise ValueError("Schedule verifier uses this repository root; alternate roots are unsupported")
@@ -325,9 +325,9 @@ def prepare(config, snapshot_id=None, workers=4, root=ROOT):
     history_by_id = {r["game_id"]: r for r in load_verified_history(baseline)}
     boosting = root / "data/processed/gradient_boosting"
     # Only boosting outputs that match their validated metrics (validate_gradient_boosting.py).
-    for name, expected in json.loads((root / "reports/gradient_boosting/metrics.json").read_text())["artifact_sha256"].items():
+    for name, expected in json.loads(METRICS_PATH.read_text())["artifact_sha256"].items():
         if digest((root / name).read_bytes()) != expected:
-            raise ValueError("Boosting artifact differs from reports/gradient_boosting/metrics.json: " + name)
+            raise ValueError("Boosting artifact differs from results/gradient_boosting.json: " + name)
     predictions = {r["game_id"]: r for r in read_rows(boosting / "predictions.jsonl")}
     features = {r["game_id"]: r["features"] for r in read_rows(boosting / "inputs.jsonl")}
     boosting_excluded = {r["game_id"]: r for r in read_rows(boosting / "excluded.jsonl")}
@@ -416,10 +416,6 @@ def prepare(config, snapshot_id=None, workers=4, root=ROOT):
             if digest((root / name).read_bytes()) != expected:
                 raise ValueError("Input changed during preparation; retry after collector publishes: " + name)
         staging.rename(final)
-        report = root / "reports/bam_pipeline" / snapshot_id
-        report.mkdir(parents=True, exist_ok=False)
-        write_json(report / "data_summary.json", summary)
-        write_json(report / "snapshot_manifest.json", manifest)
         print(json.dumps(summary, indent=2), flush=True)
         return final
     except BaseException:

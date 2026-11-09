@@ -18,7 +18,7 @@ import time
 import urllib.parse
 
 from collect_pilot import ROOT, UTC, Cache, iso, stamp, write_json, write_jsonl
-from collect_polymarket import CONFIG_PATH, DATA_DIR, OUTCOME_FIELDS, REPORT_DIR, price_at, price_points, read_rows
+from collect_polymarket import CONFIG_PATH, DATA_DIR, OUTCOME_FIELDS, price_at, price_points, read_rows
 
 TRADES = "https://data-api.polymarket.com/v2/trades?"
 
@@ -136,7 +136,7 @@ def main():
             "window_trades_median": statistics.median(h["window_trades"] for h in hs),
             "window_cash_usd": {"p10": quantile(cash, .1), "median": quantile(cash, .5), "p90": quantile(cash, .9)},
             "last_trade_age_minutes": {"median": quantile(age, .5), "p90": quantile(age, .9)}}
-    write_json(REPORT_DIR / "horizon_coverage.json", summary)
+    write_json(DATA_DIR / "horizon_coverage.json", summary)
     print(json.dumps({k: v for k, v in summary.items() if k not in ("failures", "rules")}, indent=1), flush=True)
 
 

@@ -17,7 +17,6 @@ from collect_pilot import ROOT, UTC, Cache, iso, stamp, write_json, write_jsonl
 
 CONFIG_PATH = ROOT / "config/polymarket.json"
 DATA_DIR = ROOT / "data/processed/polymarket"
-REPORT_DIR = ROOT / "reports/polymarket"
 MARKETS = "https://gamma-api.polymarket.com/markets?"
 PRICES = "https://clob.polymarket.com/prices-history?"
 # Primary game markets use nba-{away}-{home}-{date}; some games also have a
@@ -192,7 +191,6 @@ def market_record(game, market, points, source, config):
     return record, "matched_price_at_cutoff"
 
 
-
 def summarize(records, audit, games, failures, config):
     decisions = Counter(row["decision"] for row in audit)
     by_season = {}
@@ -223,7 +221,7 @@ def main():
     games = load_games(config)
     markets, failures = discover_markets(cache, config, games)
     if failures:
-        write_json(REPORT_DIR / "listing_failures.json", failures)
+        write_json(DATA_DIR / "listing_failures.json", failures)
         raise RuntimeError("Incomplete market listing; retry before matching games")
     index = index_markets(markets)
     print(f"Listed {len(markets)} NBA moneyline markets for {len(games)} games", flush=True)
@@ -264,9 +262,8 @@ def main():
             raise ValueError("Outcome fields leaked into market probabilities")
     write_jsonl(DATA_DIR / "market_probs.jsonl", records)
     write_jsonl(DATA_DIR / "audit.jsonl", audit)
-    (REPORT_DIR / "listing_failures.json").unlink(missing_ok=True)
+    (DATA_DIR / "listing_failures.json").unlink(missing_ok=True)
     summary = summarize(records, audit, games, failures, config)
-    write_json(REPORT_DIR / "coverage.json", summary)
     print(json.dumps({k: v for k, v in summary.items() if k != "config"}, indent=2), flush=True)
 
 

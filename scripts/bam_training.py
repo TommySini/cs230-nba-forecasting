@@ -1,6 +1,6 @@
 """BAM research SFT and outcome forecasting workers; no CUDA imports at import time.
 
-See reports/bam_pipeline/training_design.md for the artifact/API contract.
+See docs/bam/training_design.md for the artifact/API contract.
 The same immutable HF checkpoint is loaded separately for research and forecasting.
 """
 from __future__ import annotations

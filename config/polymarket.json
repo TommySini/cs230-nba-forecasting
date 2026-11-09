@@ -13,7 +13,7 @@
   "max_staleness_minutes": 60,
   "comparison": {
     "boosting_predictions": "data/processed/gradient_boosting/predictions.jsonl",
-    "boosting_metrics": "reports/gradient_boosting/metrics.json",
+    "boosting_metrics": "results/gradient_boosting.json",
     "seed": 230,
     "bootstrap_replicates": 2000,
     "calibration_bins": 10,

@@ -10,9 +10,12 @@ import json
 import numpy as np
 
 from collect_pilot import ROOT, write_json
-from collect_polymarket import CONFIG_PATH, DATA_DIR, REPORT_DIR, read_rows
+from collect_polymarket import CONFIG_PATH, DATA_DIR, read_rows
 from evaluate_polymarket import SPLITS, joined_split, paired_bootstrap
 from run_gradient_boosting import score_predictions
+
+
+METRICS_PATH = ROOT / "results/polymarket_horizons.json"
 
 
 def main():
@@ -41,32 +44,8 @@ def main():
             "uncertainty": paired_bootstrap(y, predictions, dates,
                                             [(early, "gradient_boosting"), (late, "gradient_boosting"), (early, late)],
                                             config["comparison"]["bootstrap_replicates"], config["comparison"]["seed"])}
-    write_json(REPORT_DIR / "horizon_metrics.json", result)
-    write_report(result, hours)
+    write_json(METRICS_PATH, result)
     print(json.dumps({s: {k: round(v["brier"], 4) for k, v in r["metrics"].items()} for s, r in result["splits"].items()}, indent=1))
-
-
-def write_report(result, hours):
-    rules = result["rules"]
-    lines = ["# Market price at note-publication time versus one hour before tipoff", "",
-             f"Game notes are typically published about {max(hours)} hours before tipoff, so the fair market reference "
-             f"for a notes-based forecast is the price {max(hours)} hours before tipoff. Each price is the last CLOB "
-             f"price-history point at or before tipoff minus the horizon (at most {rules['max_history_age_minutes']} minutes old). "
-             f"It counts only when the preceding {rules['trade_window_hours']} hours hold at least {rules['min_window_trades']} trades "
-             f"and ${rules['min_window_cash_usd']:,} traded, the last trade is at most {rules['max_last_trade_age_minutes']} minutes old, "
-             f"and the price is within {rules['max_history_vwap_gap']} of the trades' volume-weighted price. "
-             "Only games usable at every horizon are scored, against the existing out-of-sample boosting predictions.", ""]
-    for split, r in result["splits"].items():
-        u = r["uncertainty"]
-        lines += [f"## {split.title()} season {r['season']}-{str(r['season'] + 1)[-2:]}: {r['scored_games']} of {r['baseline_games']} games", "",
-                  "| Forecast | Brier ↓ | 95% interval | Log loss ↓ | Accuracy |", "| --- | ---: | --- | ---: | ---: |"]
-        for name, m in r["metrics"].items():
-            lo, hi = u["brier_intervals"][name]
-            lines.append(f"| {name} | {m['brier']:.4f} | [{lo:.4f}, {hi:.4f}] | {m['log_loss']:.4f} | {m['accuracy']:.1%} |")
-        lines += ["", "Paired Brier differences (negative favors the first):", ""]
-        lines += [f"- `{pair}`: [{lo:+.4f}, {hi:+.4f}]" for pair, (lo, hi) in u["brier_differences"].items()]
-        lines.append("")
-    (REPORT_DIR / "horizon_findings.md").write_text("\n".join(lines))
 
 
 if __name__ == "__main__":

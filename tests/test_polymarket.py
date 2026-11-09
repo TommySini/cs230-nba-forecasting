@@ -1,13 +1,18 @@
 """Regression checks for market matching and cutoff-price leakage."""
 import json
+from contextlib import redirect_stdout
+import io
 from pathlib import Path
 import sys
+import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from collect_polymarket import (OUTCOME_FIELDS, candidate_markets, choose_market, discover_markets, index_markets,
                                 list_markets, market_record, outcome_side, price_at)
 from collect_pilot import stamp
+import evaluate_polymarket as evaluation
 
 CONFIG = {"cutoff_minutes": 60, "max_staleness_minutes": 60, "max_start_difference_minutes": 180,
           "nba_tag_id": 745, "listing_window_days": 7, "listing_page_size": 2, "listing_padding_days": 1}
@@ -32,6 +37,48 @@ class PolymarketTests(unittest.TestCase):
         self.assertEqual(outcome_side("Nets", self.game), "home")
         self.assertEqual(outcome_side("Hornets", self.game), "away")
         self.assertIsNone(outcome_side("Pistons", self.game))
+
+    def test_evaluation_uses_collected_records_without_a_report_coverage_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            data = root / "data/processed/polymarket"
+            data.mkdir(parents=True)
+            config = {**CONFIG, "scope": "fixture", "seasons": [2024, 2025],
+                      "comparison": {"boosting_metrics": "baseline.json", "boosting_predictions": "predictions.jsonl",
+                                     "bootstrap_replicates": 10, "seed": 230, "calibration_bins": 2,
+                                     "liquidity_threshold_usd": 50000}}
+            (root / "config.json").write_text(json.dumps(config))
+            (root / "baseline.json").write_text(json.dumps({"train_home_win_rate": .5}))
+            games, predictions, markets, audit = [], [], [], []
+            for i in range(4):
+                home_win = i % 2
+                games.append({**self.game, "game_id": str(i), "season": 2024 if i < 2 else 2025,
+                              "game_date_et": f"2025-01-{i+1:02d}", "home_score": 110 if home_win else 90})
+                predictions.append({"game_id": str(i), "split": "dev" if i < 2 else "test", "p_boost": .45 + .1 * home_win})
+                markets.append({"game_id": str(i), "home_probability": .4 + .2 * home_win,
+                                "tipoff_home_probability": .4 + .2 * home_win, "minutes_before_cutoff": 10})
+                audit.append({"game_id": str(i), "season": games[-1]["season"], "decision": "matched_price_at_cutoff",
+                              "market": {"volume": "100000", "resolution": "resolved", "outcomes": ["Nets", "Hornets"],
+                                         "outcome_prices": json.dumps([home_win, 1-home_win])}})
+            for path, rows in [(root / "predictions.jsonl", predictions), (data / "market_probs.jsonl", markets),
+                               (data / "audit.jsonl", audit)]:
+                path.write_text("".join(json.dumps(row) + "\n" for row in rows))
+            result_path = root / "results/polymarket.json"
+            with patch.multiple(evaluation, ROOT=root, DATA_DIR=data, CONFIG_PATH=root / "config.json", METRICS_PATH=result_path), \
+                    patch.object(evaluation, "load_games", return_value=games), patch("sys.argv", ["evaluate_polymarket.py"]), \
+                    redirect_stdout(io.StringIO()):
+                evaluation.main()
+                result = json.loads(result_path.read_text())
+                self.assertEqual(result["coverage"]["markets_with_price"], 4)
+                self.assertEqual(result["splits"]["test"]["matched_games"], 2)
+                self.assertEqual(result["resolution_consistency"], {"agree": 4, "disagree": [], "unresolved": 0})
+                self.assertIn("test_calibration", result)
+                self.assertFalse((root / "reports").exists())
+                original = result_path.read_bytes()
+                (data / "listing_failures.json").write_text('[{"error": "incomplete listing"}]')
+                with self.assertRaisesRegex(ValueError, "Incomplete market collection"):
+                    evaluation.main()
+                self.assertEqual(result_path.read_bytes(), original)
 
     def test_home_token_follows_outcome_order_not_title_order(self):
         found = candidate_markets(self.game, index_markets([market("nba-cha-bkn-2025-01-14", ["Nets", "Hornets"])]), 180)

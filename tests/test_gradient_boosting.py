@@ -1,8 +1,11 @@
 """Guard the boosting baseline: prior-only features, coverage handling, split isolation and scoring."""
 import copy
+import hashlib
 import math
 from pathlib import Path
 import sys
+import subprocess
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -14,6 +17,7 @@ from box_score_features import (BOX_SCORE_FEATURE_NAMES, PLAYER_FEATURE_NAMES, T
 import run_gradient_boosting as gb
 from run_gradient_boosting import (BASIC_FEATURE_NAMES, FEATURE_NAMES, arrays, bootstrap_brier, franchise_game,
                                    new_model, predict, prepare_examples, score_predictions, season_splits, select_and_fit)
+from validate_gradient_boosting import verify_hashes
 
 CONFIG = {"seed": 230, "cutoff_minutes": 60, "min_previous_games": 5, "min_box_score_games": 5,
           "split_seasons": {"train": [2021, 2023], "dev": [2024, 2024], "test": [2025, 2025]},
@@ -118,6 +122,43 @@ class PipelineTests(unittest.TestCase):
         inputs, labels, _ = self.examples()
         with self.assertRaisesRegex(ValueError, "align"):
             arrays(inputs, labels[::-1])
+
+
+class HistoricalProvenanceTests(unittest.TestCase):
+    def test_pinned_source_does_not_excuse_changed_data_or_artifacts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name, body in {"scripts/model.py": b"original code", "config.json": b"{}",
+                               "data/input": b"original data", "data/predictions": b"frozen predictions"}.items():
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(body)
+            def git(*args):
+                return subprocess.run(["git", "-C", directory, *args], check=True, capture_output=True, text=True).stdout.strip()
+            git("init", "-q")
+            git("add", "scripts/model.py", "config.json")
+            git("-c", "user.name=Test", "-c", "user.email=test@example.invalid", "-c", "commit.gpgsign=false",
+                "-c", "core.hooksPath=/dev/null", "commit", "-qm", "Original source")
+            revision = git("rev-parse", "HEAD")
+            digest = lambda name: hashlib.sha256((root / name).read_bytes()).hexdigest()
+            results = {"source_sha256": {name: digest(name) for name in ("scripts/model.py", "config.json", "data/input")},
+                       "artifact_sha256": {"data/predictions": digest("data/predictions")}}
+            (root / "scripts/model.py").write_text("new reporting path")
+            with self.assertRaisesRegex(AssertionError, "Source hash"):
+                verify_hashes(results, root=root)
+            verify_hashes(results, revision, root)
+            with self.assertRaisesRegex(ValueError, "immutable"):
+                verify_hashes(results, "HEAD", root)
+            wrong = copy.deepcopy(results)
+            wrong["source_sha256"]["scripts/model.py"] = "0" * 64
+            with self.assertRaisesRegex(AssertionError, "Source hash"):
+                verify_hashes(wrong, revision, root)
+            for name in ("config.json", "data/input", "data/predictions"):
+                original = (root / name).read_bytes()
+                (root / name).write_bytes(b"changed")
+                with self.assertRaisesRegex(AssertionError, "hash changed"):
+                    verify_hashes(results, revision, root)
+                (root / name).write_bytes(original)
 
 
 class FakeModel:

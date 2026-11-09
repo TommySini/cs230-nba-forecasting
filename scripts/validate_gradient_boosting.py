@@ -1,21 +1,47 @@
 """Rebuild the boosting inputs from sources; verify splits, prior-only lineage, models, predictions and metrics."""
+import argparse
+import hashlib
 import json
+import re
+import subprocess
 import warnings
 
 import joblib
 import numpy as np
 
-from run_gradient_boosting import (CONFIG_PATH, DATA_DIR, FEATURE_NAMES, REPORT_DIR, ROOT, SIDES, SPLITS, arrays,
+from run_gradient_boosting import (CONFIG_PATH, DATA_DIR, FEATURE_NAMES, METRICS_PATH, ROOT, SIDES, SPLITS, arrays,
                                    evaluate, load_box_scores, load_verified_history, predict, prepare_examples,
                                    read_rows, score_predictions, season_splits, sha256)
 
 
+def verify_hashes(results, source_revision=None, root=ROOT):
+    """Check original code in a pinned commit; data and artifacts always use current bytes.
+
+    The rest of this validator replays the frozen predictions with today's code.
+    Historical source verification never substitutes for that equivalence check.
+    """
+    if source_revision and not re.fullmatch(r"[0-9a-f]{40}", source_revision):
+        raise ValueError("source revision must be a full, immutable Git commit ID")
+    for name, expected in results["source_sha256"].items():
+        if source_revision and name.startswith("scripts/"):
+            body = subprocess.run(["git", "-C", str(root), "cat-file", "blob", f"{source_revision}:{name}"],
+                                  check=True, capture_output=True).stdout
+            actual = hashlib.sha256(body).hexdigest()
+        else:
+            actual = sha256(root / name)
+        assert actual == expected, f"Source hash changed: {name}"
+    for name, expected in results["artifact_sha256"].items():
+        assert sha256(root / name) == expected, f"Artifact hash changed: {name}"
+
+
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source-revision", help="Full Git commit for the original source hashes; data is always checked live")
+    args = parser.parse_args()
     config = json.loads(CONFIG_PATH.read_text())
-    results = json.loads((REPORT_DIR / "metrics.json").read_text())
+    results = json.loads(METRICS_PATH.read_text())
     assert results["config"] == config
-    for name, expected in {**results["source_sha256"], **results["artifact_sha256"]}.items():
-        assert sha256(ROOT / name) == expected, f"Hash changed: {name}"
+    verify_hashes(results, args.source_revision)
     history = load_verified_history(config)
     box_records, box_manifest = load_box_scores(config)
     assert box_manifest["histories"] == [{"path": s["path"], "sha256": sha256(ROOT / s["path"])} for s in config["histories"]], \
