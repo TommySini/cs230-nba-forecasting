@@ -1,0 +1,15 @@
+{
+  "seed": 230,
+  "cutoff_minutes": 60,
+  "output_name": "history_2012",
+  "scope": "Complete regular-season results 2012-13 through 2022-23 for matching archived game notes; one placeholder sample window (the pilot sampler requires one).",
+  "seasons": [
+    {"start_year": 2012}, {"start_year": 2013}, {"start_year": 2014}, {"start_year": 2015},
+    {"start_year": 2016}, {"start_year": 2017}, {"start_year": 2018}, {"start_year": 2019},
+    {"start_year": 2020}, {"start_year": 2021}, {"start_year": 2022}
+  ],
+  "history_start_month_day": "10-01",
+  "sample_windows": [
+    {"name": "season_end", "year_offset": 1, "start_month_day": "08-14", "end_month_day": "08-15", "sample_size": 1}
+  ]
+}

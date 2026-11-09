@@ -1,0 +1,52 @@
+{
+  "status": "success",
+  "stdout": "",
+  "return_value": {
+    "checked_at": "2026-11-08T05:05:39.037927+00:00",
+    "region": "us-west-2",
+    "agreements": [
+      {
+        "model_id": "anthropic.claude-sonnet-4-6",
+        "offer_id": "offer-ldnd26nhxx676",
+        "response": {
+          "modelId": "anthropic.claude-sonnet-4-6"
+        }
+      },
+      {
+        "model_id": "anthropic.claude-opus-4-6-v1",
+        "offer_id": "offer-ee7a27hh4hr62",
+        "response": {
+          "modelId": "anthropic.claude-opus-4-6-v1"
+        }
+      }
+    ]
+  },
+  "api_calls": [
+    {
+      "service": "bedrock",
+      "operation": "ListFoundationModelAgreementOffers",
+      "status": "success",
+      "n_items": {
+        "offers": 1
+      }
+    },
+    {
+      "service": "bedrock",
+      "operation": "CreateFoundationModelAgreement",
+      "status": "success"
+    },
+    {
+      "service": "bedrock",
+      "operation": "ListFoundationModelAgreementOffers",
+      "status": "success",
+      "n_items": {
+        "offers": 1
+      }
+    },
+    {
+      "service": "bedrock",
+      "operation": "CreateFoundationModelAgreement",
+      "status": "success"
+    }
+  ]
+}

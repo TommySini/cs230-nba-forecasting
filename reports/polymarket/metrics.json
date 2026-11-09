@@ -16,12 +16,25 @@
     "price_fidelity_minutes": 10,
     "max_staleness_minutes": 60,
     "comparison": {
-      "test_predictions": "data/processed/gradient_boosting/test_predictions.csv",
-      "validation_predictions": "data/processed/gradient_boosting/validation_predictions.csv",
+      "boosting_predictions": "data/processed/gradient_boosting/predictions.jsonl",
+      "boosting_metrics": "reports/gradient_boosting/metrics.json",
       "seed": 230,
       "bootstrap_replicates": 2000,
       "calibration_bins": 10,
       "liquidity_threshold_usd": 50000
+    },
+    "horizons": {
+      "hours_before_tipoff": [
+        8,
+        1
+      ],
+      "trade_window_hours": 2,
+      "max_pages": 200,
+      "max_history_age_minutes": 60,
+      "min_window_trades": 5,
+      "min_window_cash_usd": 500,
+      "max_last_trade_age_minutes": 60,
+      "max_history_vwap_gap": 0.05
     }
   },
   "splits": {
@@ -43,20 +56,20 @@
         },
         "gradient_boosting": {
           "games": 1121,
-          "brier": 0.21635771045885277,
-          "log_loss": 0.6218841366626661,
-          "roc_auc": 0.7047139898639088,
-          "accuracy": 0.6503122212310437,
-          "mean_home_probability": 0.552552713359848,
+          "brier": 0.20976206560744606,
+          "log_loss": 0.6071596593262004,
+          "roc_auc": 0.7254604975431556,
+          "accuracy": 0.6699375557537912,
+          "mean_home_probability": 0.5561848939754467,
           "observed_home_win_rate": 0.5504014272970562
         },
         "historical_home_rate": {
           "games": 1121,
-          "brier": 0.24753534074397773,
-          "log_loss": 0.6882104389446672,
+          "brier": 0.24799121838503924,
+          "log_loss": 0.6891398349757952,
           "roc_auc": 0.5,
           "accuracy": 0.5504014272970562,
-          "mean_home_probability": 0.5417040358744395,
+          "mean_home_probability": 0.5734561938024819,
           "observed_home_win_rate": 0.5504014272970562
         },
         "polymarket_tipoff_reference": {
@@ -80,12 +93,12 @@
             0.2092038464539732
           ],
           "gradient_boosting": [
-            0.20771414493497023,
-            0.22462770383403344
+            0.20045345927158303,
+            0.21883921219283278
           ],
           "historical_home_rate": [
-            0.24516580680798547,
-            0.24993938568027588
+            0.24381759488855448,
+            0.25222562848583313
           ],
           "polymarket_tipoff_reference": [
             0.1884057367813025,
@@ -94,18 +107,18 @@
         },
         "brier_differences": {
           "polymarket_cutoff_minus_gradient_boosting": [
-            -0.024193774562475463,
-            -0.010264501923466385
+            -0.01664562050857187,
+            -0.004912574701376585
           ],
           "polymarket_cutoff_minus_historical_home_rate": [
-            -0.058542806548321544,
-            -0.03858873851697194
+            -0.05923656671946536,
+            -0.03845243412461444
           ]
         },
         "accuracy_differences": {
           "polymarket_cutoff_minus_gradient_boosting": [
-            0.014273700838357228,
-            0.06392685421105535
+            -2.1626297577855162e-05,
+            0.04268943522417633
           ],
           "polymarket_cutoff_minus_historical_home_rate": [
             0.10535710366236054,
@@ -128,20 +141,20 @@
           },
           "gradient_boosting": {
             "games": 1087,
-            "brier": 0.2179317804478809,
-            "log_loss": 0.6253074180266196,
-            "roc_auc": 0.700054656008745,
-            "accuracy": 0.6467341306347746,
-            "mean_home_probability": 0.551836842276347,
+            "brier": 0.21193645160818034,
+            "log_loss": 0.6120116987469776,
+            "roc_auc": 0.719389219102275,
+            "accuracy": 0.6660533578656854,
+            "mean_home_probability": 0.5566828933412121,
             "observed_home_win_rate": 0.547378104875805
           },
           "historical_home_rate": {
             "games": 1087,
-            "brier": 0.24778751023740941,
-            "log_loss": 0.6887159523841571,
+            "brier": 0.24843538190044487,
+            "log_loss": 0.6900346370620833,
             "roc_auc": 0.5,
             "accuracy": 0.547378104875805,
-            "mean_home_probability": 0.5417040358744396,
+            "mean_home_probability": 0.573456193802482,
             "observed_home_win_rate": 0.547378104875805
           },
           "polymarket_tipoff_reference": {
@@ -174,20 +187,20 @@
         },
         "gradient_boosting": {
           "games": 1132,
-          "brier": 0.20973168111874962,
-          "log_loss": 0.6082021356690246,
-          "roc_auc": 0.732017074092742,
-          "accuracy": 0.6731448763250883,
-          "mean_home_probability": 0.5441151782379308,
+          "brier": 0.20593694524223374,
+          "log_loss": 0.5992635626381948,
+          "roc_auc": 0.7395381804435484,
+          "accuracy": 0.6722614840989399,
+          "mean_home_probability": 0.5523926682972038,
           "observed_home_win_rate": 0.5477031802120141
         },
         "historical_home_rate": {
           "games": 1132,
-          "brier": 0.24772722881347034,
-          "log_loss": 0.6885947579174271,
+          "brier": 0.24838762430665096,
+          "log_loss": 0.6899384256600192,
           "roc_auc": 0.5,
           "accuracy": 0.5477031802120141,
-          "mean_home_probability": 0.5460232350312779,
+          "mean_home_probability": 0.5734561938024819,
           "observed_home_win_rate": 0.5477031802120141
         },
         "polymarket_tipoff_reference": {
@@ -211,12 +224,12 @@
             0.20556554416716238
           ],
           "gradient_boosting": [
-            0.20034157144928597,
-            0.2190822742944014
+            0.19575924763523847,
+            0.21571959327266557
           ],
           "historical_home_rate": [
-            0.24521253666582044,
-            0.2503215646893083
+            0.244374005671937,
+            0.2525283597146414
           ],
           "polymarket_tipoff_reference": [
             0.1817031556541082,
@@ -225,18 +238,18 @@
         },
         "brier_differences": {
           "polymarket_cutoff_minus_gradient_boosting": [
-            -0.022124038681949735,
-            -0.00937273078916147
+            -0.018011273799307417,
+            -0.005481880842612388
           ],
           "polymarket_cutoff_minus_historical_home_rate": [
-            -0.06547962446195782,
-            -0.042280532360886525
+            -0.0661498272441028,
+            -0.04262497646785954
           ]
         },
         "accuracy_differences": {
           "polymarket_cutoff_minus_gradient_boosting": [
-            -0.0008996850240954173,
-            0.04185228293834685
+            -0.0018023771947129424,
+            0.04286582229651528
           ],
           "polymarket_cutoff_minus_historical_home_rate": [
             0.1093041737215996,
@@ -259,20 +272,20 @@
           },
           "gradient_boosting": {
             "games": 971,
-            "brier": 0.214434196975377,
-            "log_loss": 0.6183262993408312,
-            "roc_auc": 0.7177939770554493,
-            "accuracy": 0.6580844490216272,
-            "mean_home_probability": 0.5437294889841935,
+            "brier": 0.21154918598660785,
+            "log_loss": 0.6114924185269976,
+            "roc_auc": 0.7238331398524993,
+            "accuracy": 0.6560247167868177,
+            "mean_home_probability": 0.549164230675683,
             "observed_home_win_rate": 0.5386199794026777
           },
           "historical_home_rate": {
             "games": 971,
-            "brier": 0.24856330538483912,
-            "log_loss": 0.6902716576817459,
+            "brier": 0.2497220590246459,
+            "log_loss": 0.6926267486047498,
             "roc_auc": 0.5,
             "accuracy": 0.5386199794026777,
-            "mean_home_probability": 0.5460232350312779,
+            "mean_home_probability": 0.5734561938024818,
             "observed_home_win_rate": 0.5386199794026777
           },
           "polymarket_tipoff_reference": {
@@ -289,19 +302,19 @@
     }
   },
   "stack": {
-    "fit_on": "validation season (boosting model trained on 2023-24 only)",
+    "fit_on": "validation season (boosting model trained on TRAIN seasons only)",
     "coefficients": {
-      "intercept": -0.011789938590648846,
-      "market_logit": 1.0354575068896523,
-      "boosting_logit": -0.07817323625278841
+      "intercept": -0.017894467776895122,
+      "market_logit": 0.989591605932989,
+      "boosting_logit": 0.0010737887055836358
     },
     "test_metrics": {
       "games": 1132,
-      "brier": 0.19413871395313703,
-      "log_loss": 0.5689099167502737,
-      "roc_auc": 0.7669512348790323,
+      "brier": 0.19414293147186956,
+      "log_loss": 0.568973938887869,
+      "roc_auc": 0.766929183467742,
       "accuracy": 0.6925795053003534,
-      "mean_home_probability": 0.5467022178565683,
+      "mean_home_probability": 0.5463837540474367,
       "observed_home_win_rate": 0.5477031802120141
     },
     "uncertainty": {
@@ -315,20 +328,20 @@
           0.20556554416716238
         ],
         "market_plus_boosting_stack": [
-          0.1823088944731125,
-          0.20546189768817574
+          0.18221774053719356,
+          0.20549810616637207
         ]
       },
       "brier_differences": {
         "market_plus_boosting_stack_minus_polymarket_cutoff": [
-          -0.00038988005448797257,
-          0.00042259293687624456
+          -0.00020403621149628,
+          0.00023271277846919692
         ]
       },
       "accuracy_differences": {
         "market_plus_boosting_stack_minus_polymarket_cutoff": [
-          -0.004374837254210654,
-          0.00425921655801698
+          0.0,
+          0.0
         ]
       }
     }

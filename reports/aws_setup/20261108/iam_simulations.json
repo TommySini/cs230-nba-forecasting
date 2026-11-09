@@ -1,0 +1,242 @@
+{
+  "status": "success",
+  "stdout": "",
+  "return_value": {
+    "research_pregame": {
+      "EvaluationResults": [
+        {
+          "EvalActionName": "s3:GetObject",
+          "EvalResourceName": "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/pregame/example.json",
+          "EvalDecision": "allowed",
+          "MatchedStatements": [
+            {
+              "SourcePolicyId": "role_cs230-train-pilot-20261108-researcher_TrainPilotArtifacts",
+              "SourcePolicyType": "IAM Policy",
+              "StartPosition": {
+                "Line": 1,
+                "Column": 338
+              },
+              "EndPosition": {
+                "Line": 1,
+                "Column": 679
+              }
+            }
+          ],
+          "MissingContextValues": [],
+          "EvalDecisionDetails": {},
+          "ResourceSpecificResults": [
+            {
+              "EvalResourceName": "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/pregame/example.json",
+              "EvalResourceDecision": "allowed",
+              "MatchedStatements": [
+                {
+                  "SourcePolicyId": "role_cs230-train-pilot-20261108-researcher_TrainPilotArtifacts",
+                  "SourcePolicyType": "IAM Policy",
+                  "StartPosition": {
+                    "Line": 1,
+                    "Column": 338
+                  },
+                  "EndPosition": {
+                    "Line": 1,
+                    "Column": 679
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "research_targets": {
+      "EvaluationResults": [
+        {
+          "EvalActionName": "s3:GetObject",
+          "EvalResourceName": "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/targets/example.json",
+          "EvalDecision": "implicitDeny",
+          "MatchedStatements": [],
+          "MissingContextValues": [
+            "s3:prefix"
+          ],
+          "EvalDecisionDetails": {},
+          "ResourceSpecificResults": [
+            {
+              "EvalResourceName": "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/targets/example.json",
+              "EvalResourceDecision": "implicitDeny",
+              "MissingContextValues": [
+                "s3:prefix"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "train_test": {
+      "EvaluationResults": [
+        {
+          "EvalActionName": "s3:GetObject",
+          "EvalResourceName": "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/test/example.json",
+          "EvalDecision": "explicitDeny",
+          "MatchedStatements": [
+            {
+              "SourcePolicyId": "role_cs230-train-pilot-20261108-forecaster_TrainPilotArtifacts",
+              "SourcePolicyType": "IAM Policy",
+              "StartPosition": {
+                "Line": 1,
+                "Column": 1445
+              },
+              "EndPosition": {
+                "Line": 1,
+                "Column": 1628
+              }
+            }
+          ],
+          "MissingContextValues": [],
+          "EvalDecisionDetails": {},
+          "ResourceSpecificResults": [
+            {
+              "EvalResourceName": "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/test/example.json",
+              "EvalResourceDecision": "explicitDeny",
+              "MatchedStatements": [
+                {
+                  "SourcePolicyId": "role_cs230-train-pilot-20261108-forecaster_TrainPilotArtifacts",
+                  "SourcePolicyType": "IAM Policy",
+                  "StartPosition": {
+                    "Line": 1,
+                    "Column": 1445
+                  },
+                  "EndPosition": {
+                    "Line": 1,
+                    "Column": 1628
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "train_target": {
+      "EvaluationResults": [
+        {
+          "EvalActionName": "s3:GetObject",
+          "EvalResourceName": "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/targets/example.json",
+          "EvalDecision": "allowed",
+          "MatchedStatements": [
+            {
+              "SourcePolicyId": "role_cs230-train-pilot-20261108-forecaster_TrainPilotArtifacts",
+              "SourcePolicyType": "IAM Policy",
+              "StartPosition": {
+                "Line": 1,
+                "Column": 441
+              },
+              "EndPosition": {
+                "Line": 1,
+                "Column": 1024
+              }
+            }
+          ],
+          "MissingContextValues": [],
+          "EvalDecisionDetails": {},
+          "ResourceSpecificResults": [
+            {
+              "EvalResourceName": "arn:aws:s3:::cs230-nba-<aws-account-id>-us-west-2/train/pilot-20261108/targets/example.json",
+              "EvalResourceDecision": "allowed",
+              "MatchedStatements": [
+                {
+                  "SourcePolicyId": "role_cs230-train-pilot-20261108-forecaster_TrainPilotArtifacts",
+                  "SourcePolicyType": "IAM Policy",
+                  "StartPosition": {
+                    "Line": 1,
+                    "Column": 441
+                  },
+                  "EndPosition": {
+                    "Line": 1,
+                    "Column": 1024
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "controller_iam": {
+      "EvaluationResults": [
+        {
+          "EvalActionName": "iam:CreateUser",
+          "EvalResourceName": "*",
+          "EvalDecision": "implicitDeny",
+          "MatchedStatements": [],
+          "MissingContextValues": [
+            "bedrock:InferenceProfileArn",
+            "s3:prefix"
+          ]
+        }
+      ]
+    },
+    "controller_compute": {
+      "EvaluationResults": [
+        {
+          "EvalActionName": "ec2:RunInstances",
+          "EvalResourceName": "*",
+          "EvalDecision": "implicitDeny",
+          "MatchedStatements": [],
+          "MissingContextValues": [
+            "bedrock:InferenceProfileArn",
+            "s3:prefix"
+          ]
+        }
+      ]
+    }
+  },
+  "api_calls": [
+    {
+      "service": "iam",
+      "operation": "SimulatePrincipalPolicy",
+      "status": "success",
+      "n_items": {
+        "EvaluationResults": 1
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "SimulatePrincipalPolicy",
+      "status": "success",
+      "n_items": {
+        "EvaluationResults": 1
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "SimulatePrincipalPolicy",
+      "status": "success",
+      "n_items": {
+        "EvaluationResults": 1
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "SimulatePrincipalPolicy",
+      "status": "success",
+      "n_items": {
+        "EvaluationResults": 1
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "SimulatePrincipalPolicy",
+      "status": "success",
+      "n_items": {
+        "EvaluationResults": 1
+      }
+    },
+    {
+      "service": "iam",
+      "operation": "SimulatePrincipalPolicy",
+      "status": "success",
+      "n_items": {
+        "EvaluationResults": 1
+      }
+    }
+  ]
+}

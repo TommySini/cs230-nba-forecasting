@@ -1,5 +1,16 @@
-"""Reproducible statistics-only gradient boosting with season-held-out evaluation."""
+"""Gradient-boosting statistics baseline: fit on TRAIN, choose on DEV, score TEST once.
+
+Features are the 18 basic team features (collect_pilot.prior_features) plus team and
+player box-score windows (box_score_features), all from earlier ET dates of the same
+season. Each model imputes missing box-score statistics with medians fitted on its own
+training rows. A fixed candidate grid is fitted on TRAIN and chosen by DEV Brier; DEV and
+TEST forecasts both come from that TRAIN fit. Each TRAIN season after the first is
+forecast by the selected settings fitted on the earlier TRAIN seasons only, so every
+p_boost (which BAM uses as an input) is fitted on strictly earlier games; only the choice
+among the fixed settings used DEV. Splits are defined once, in config/gradient_boosting.json.
+"""
 import argparse
+from collections import Counter
 from contextlib import redirect_stdout
 import csv
 from datetime import timedelta
@@ -7,23 +18,33 @@ import hashlib
 from importlib.metadata import version
 import io
 import json
-import os
+import math
 import platform
+import time
 
 import joblib
+from joblib import Parallel, delayed
 import numpy as np
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.impute import SimpleImputer
 from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score
+from sklearn.pipeline import Pipeline
 
-from collect_pilot import ROOT, Cache, collect_games, iso, prior_features, stamp, write_json, write_jsonl
+from box_score_features import AVAILABILITY_LIMITATION, BOX_SCORE_FEATURE_NAMES, BoxScoreIndex
+from collect_pilot import ABBR, ROOT, Cache, collect_games, iso, prior_features, stamp, write_json, write_jsonl
+from collect_rich_stats import NBA_FRANCHISES
 
 CONFIG_PATH = ROOT / "config/gradient_boosting.json"
 DATA_DIR = ROOT / "data/processed/gradient_boosting"
 REPORT_DIR = ROOT / "reports/gradient_boosting"
+SPLITS = ("train", "dev", "test")
+SIDES = ("home", "away")
 BASE_FEATURES = ("previous_games", "season_win_rate", "last_5_win_rate",
                  "last_5_point_differential", "days_since_previous_game", "back_to_back")
-FEATURE_NAMES = tuple(f"{side}_{name}" for side in ("home", "away", "difference") for name in BASE_FEATURES)
-MODEL_NAMES = ("gradient_boosting", "historical_home_rate", "constant_50_percent")
+BASIC_FEATURE_NAMES = tuple(f"{side}_{name}" for side in ("home", "away", "difference") for name in BASE_FEATURES)
+FEATURE_NAMES = BASIC_FEATURE_NAMES + BOX_SCORE_FEATURE_NAMES
+CODE = ("scripts/run_gradient_boosting.py", "scripts/box_score_features.py", "scripts/collect_pilot.py")
+DATA_FILES = ("inputs.jsonl", "labels.jsonl", "excluded.jsonl", "predictions.jsonl", "model.joblib")
 
 
 def sha256(path):
@@ -42,48 +63,81 @@ def write_csv(path, rows):
         writer.writerows(rows)
 
 
+def season_label(season):
+    return f"{season}–{str(season + 1)[-2:]}"
+
+
+def season_splits(config):
+    """Season start year -> split, from inclusive [first, last] ranges."""
+    bounds = [config["split_seasons"][name] for name in SPLITS]
+    if any(first > last for first, last in bounds) or any(a[1] >= b[0] for a, b in zip(bounds, bounds[1:])):
+        raise ValueError("TRAIN, DEV and TEST seasons must be non-empty, disjoint and chronological")
+    return {season: name for name, (first, last) in zip(SPLITS, bounds) for season in range(first, last + 1)}
+
+
+def franchise_game(game):
+    return all(ABBR.get(game[f"{side}_abbr"], game[f"{side}_abbr"]) in NBA_FRANCHISES for side in SIDES)
+
+
 def load_verified_history(config):
-    history = read_rows(ROOT / config["history_path"])
-    schedule_config = json.loads((ROOT / config["history_config"]).read_text())
-    # Verify all schedule days and raw checksums, including games outside the
-    # 160-game text audit. Only normalized numeric history reaches feature code.
-    with redirect_stdout(io.StringIO()):
-        verified = collect_games(Cache(offline=True), schedule_config)
-    if history != verified:
-        raise ValueError("History does not match the complete checksum-verified schedule cache")
+    """Every configured schedule, each equal to its checksum-verified raw scoreboard cache.
+
+    ESPN labels All-Star exhibitions as regular season; a saved history may already omit
+    them (history_2012 does). They are dropped here in any case.
+    """
+    history = []
+    for source in config["histories"]:
+        rows = read_rows(ROOT / source["path"])
+        with redirect_stdout(io.StringIO()):
+            verified = collect_games(Cache(offline=True), json.loads((ROOT / source["config"]).read_text()))
+        if rows != verified and rows != [g for g in verified if franchise_game(g)]:
+            raise ValueError(f"{source['path']} does not match its checksum-verified schedule cache")
+        history += rows
     if len({game["game_id"] for game in history}) != len(history):
         raise ValueError("Duplicate historical game IDs")
-    return history
+    return [game for game in history if franchise_game(game)]
 
 
-def prepare_examples(history, config):
-    seasons = config["split_seasons"]
-    ordered = [seasons[name] for name in ("train", "validation", "test")]
-    if ordered != sorted(set(ordered)):
-        raise ValueError("Training, validation and test seasons must be distinct and chronological")
-    if config["min_previous_games"] < 1 or config["cutoff_minutes"] <= 0:
-        raise ValueError("Warmup and cutoff must be positive")
+def load_box_scores(config):
+    directory = ROOT / config["box_scores"]
+    manifest = json.loads((directory / "manifest.json").read_text())
+    if sha256(directory / "games.jsonl") != manifest["artifact_sha256"]["games.jsonl"]:
+        raise ValueError("Box-score records differ from their manifest")
+    return read_rows(directory / "games.jsonl"), manifest
+
+
+def prepare_examples(history, box_records, config):
+    """Prior-only feature rows, separate outcome labels, and exclusions with reasons."""
+    splits = season_splits(config)
+    index = BoxScoreIndex(history, box_records, min_previous_games=config["min_previous_games"],
+                          min_box_score_games=config["min_box_score_games"], cutoff_minutes=config["cutoff_minutes"])
     history = sorted(history, key=lambda g: (g["scheduled_start_utc"], g["game_id"]))
+    by_season = {}
+    for game in history:
+        if game["season"] not in splits:
+            raise ValueError(f"Unassigned season: {game['season']}")
+        by_season.setdefault(game["season"], []).append(game)
     inputs, labels, excluded = [], [], []
     for game in history:
-        if game["season"] not in ordered:
-            raise ValueError(f"Unassigned season: {game['season']}")
-        features = {side: prior_features(game, history, side) for side in ("home", "away")}
-        if any(f["previous_games"] < config["min_previous_games"] for f in features.values()):
-            excluded.append({"game_id": game["game_id"], "season": game["season"],
-                             "reason": "fewer_than_minimum_prior_games",
-                             "home_previous_games": features["home"]["previous_games"],
-                             "away_previous_games": features["away"]["previous_games"]})
-            continue
-        values = {f"{side}_{name}": float(features[side][name])
-                  for side in ("home", "away") for name in BASE_FEATURES}
-        values.update({f"difference_{name}": values[f"home_{name}"] - values[f"away_{name}"] for name in BASE_FEATURES})
-        if not all(np.isfinite(value) for value in values.values()):
-            raise ValueError(f"Non-finite features: {game['game_id']}")
-        split = next(name for name, season in seasons.items() if game["season"] == season)
+        # prior_features keeps same-season games on earlier ET dates; one season suffices.
+        basic = {side: prior_features(game, by_season[game["season"]], side) for side in SIDES}
+        box = index.for_game(game)
+        if any(basic[side]["previous_games"] != box["coverage"][side]["previous_games"] for side in SIDES):
+            raise ValueError(f"Basic and box-score windows disagree: {game['game_id']}")
         record = {key: game[key] for key in ("game_id", "season", "scheduled_start_utc", "game_date_et", "home_abbr", "away_abbr")}
-        record.update(split=split, cutoff_utc=iso(stamp(game["scheduled_start_utc"]) - timedelta(minutes=config["cutoff_minutes"])),
-                      features=values, prior_game_ids={side: features[side]["prior_game_ids"] for side in ("home", "away")})
+        record["split"] = splits[game["season"]]
+        if not box["eligible"]:
+            excluded.append({**{key: record[key] for key in ("game_id", "season", "split", "game_date_et")},
+                             "reason": box["reason"], "details": box["reasons"], "coverage": box["coverage"]})
+            continue
+        values = {f"{side}_{name}": float(basic[side][name]) for side in SIDES for name in BASE_FEATURES}
+        values.update({f"difference_{name}": values[f"home_{name}"] - values[f"away_{name}"] for name in BASE_FEATURES})
+        values.update(box["features"])
+        record.update(cutoff_utc=iso(stamp(game["scheduled_start_utc"]) - timedelta(minutes=config["cutoff_minutes"])),
+                      features={name: None if math.isnan(values[name]) else float(values[name]) for name in FEATURE_NAMES},
+                      prior_game_ids={side: basic[side]["prior_game_ids"] for side in SIDES},
+                      missing_box_score_game_ids={side: [m["game_id"] for m in box["missing_box_scores"][side]] for side in SIDES},
+                      box_score_coverage=box["coverage"])
         inputs.append(record)
         labels.append({"game_id": game["game_id"], "home_win": int(game["home_score"] > game["away_score"])})
     return inputs, labels, excluded
@@ -92,9 +146,8 @@ def prepare_examples(history, config):
 def arrays(inputs, labels):
     if [r["game_id"] for r in inputs] != [r["game_id"] for r in labels]:
         raise ValueError("Inputs and outcome labels must align by game ID")
-    x = np.array([[r["features"][name] for name in FEATURE_NAMES] for r in inputs], dtype=float)
-    y = np.array([r["home_win"] for r in labels], dtype=int)
-    return x, y
+    x = np.array([[r["features"][name] for name in FEATURE_NAMES] for r in inputs], dtype=float)  # None -> NaN
+    return x, np.array([r["home_win"] for r in labels], dtype=int)
 
 
 def score_predictions(y, probability):
@@ -109,40 +162,81 @@ def score_predictions(y, probability):
 
 
 def new_model(config, candidate):
-    return GradientBoostingClassifier(**config["model_parameters"], **candidate, random_state=config["seed"])
+    return Pipeline([("imputer", SimpleImputer(strategy="median", keep_empty_features=True)),
+                     ("model", GradientBoostingClassifier(**config["model_parameters"], **candidate,
+                                                          random_state=config["seed"]))])
 
 
-def select_candidate(x_train, y_train, x_validation, y_validation, config):
-    # There is deliberately no test-data argument to selection. No random
-    # validation split, early stopping, calibration fit or threshold search.
+def fit(config, candidate, x, y):
+    return new_model(config, candidate).fit(x, y)
+
+
+def select_and_fit(x, y, splits, seasons, config, jobs=-1):
+    """Fit each candidate on TRAIN, choose by DEV Brier, then refit on the TRAIN seasons before each later TRAIN season.
+
+    There is deliberately no TEST argument: TEST rows never reach fitting or selection.
+    """
     if config["selection_metric"] != "brier" or config["model_parameters"]["n_iter_no_change"] is not None:
-        raise ValueError("This protocol requires Brier selection and disabled internal early stopping")
-    results = []
-    for index, candidate in enumerate(config["candidates"]):
-        model = new_model(config, candidate).fit(x_train, y_train)
-        metrics = score_predictions(y_validation, model.predict_proba(x_validation)[:, 1])
-        results.append({"candidate_index": index, **candidate, **metrics})
-    best = min(results, key=lambda row: (row["brier"], row["candidate_index"]))
-    return config["candidates"][best["candidate_index"]], results
+        raise ValueError("The protocol requires DEV Brier selection and no internal early stopping")
+    train, dev = splits == "train", splits == "dev"
+    if not train.any() or not dev.any():
+        raise ValueError("TRAIN and DEV need eligible games")
+    parallel = Parallel(n_jobs=jobs)
+    models = parallel(delayed(fit)(config, candidate, x[train], y[train]) for candidate in config["candidates"])
+    trials = [{"candidate_index": i, **candidate, **score_predictions(y[dev], model.predict_proba(x[dev])[:, 1])}
+              for i, (candidate, model) in enumerate(zip(config["candidates"], models))]
+    best = min(trials, key=lambda r: (r["brier"], r["candidate_index"]))["candidate_index"]
+    later = sorted(set(seasons[train].tolist()))[1:]
+    prior = parallel(delayed(fit)(config, config["candidates"][best], x[train & (seasons < s)], y[train & (seasons < s)])
+                     for s in later)
+    return best, trials, models[best], dict(zip(later, prior))
 
 
-def bootstrap_brier(y, predictions, dates, repeats, seed):
-    # Resample ET calendar days together; preserve paired predictions and
-    # outcomes. This is conditional on the fitted model, not training uncertainty.
+def predict(final, prior, x, splits, seasons):
+    """DEV/TEST from the TRAIN fit; each later TRAIN season from the model fitted on earlier TRAIN seasons."""
+    train = splits == "train"
+    p, produced = np.full(len(x), np.nan), np.full(len(x), None, dtype=object)
+    p[~train], produced[~train] = final.predict_proba(x[~train])[:, 1], "train_fit"
+    for season, model in prior.items():
+        mask = train & (seasons == season)
+        p[mask], produced[mask] = model.predict_proba(x[mask])[:, 1], "prior_seasons"
+    return p, produced
+
+
+def evaluate(p, y, splits, seasons, dates, config):
+    """DEV/TEST scores against the TRAIN home-win rate, and prior-season TRAIN forecast scores by season."""
+    train = splits == "train"
+    home_rate = float(y[train].mean())
+    evaluation = {}
+    for name in ("dev", "test"):
+        mask = splits == name
+        compared = {"gradient_boosting": p[mask], "historical_home_rate": np.full(mask.sum(), home_rate),
+                    "constant_50_percent": np.full(mask.sum(), 0.5)}
+        evaluation[name] = {"metrics": {k: score_predictions(y[mask], v) for k, v in compared.items()},
+                            "uncertainty": bootstrap_brier(y[mask], compared, dates[mask], config["bootstrap_replicates"],
+                                                           config["seed"], "historical_home_rate")}
+    scored = train & np.isfinite(p)
+    by_season = {str(s): score_predictions(y[scored & (seasons == s)], p[scored & (seasons == s)])
+                 for s in sorted(set(seasons[scored].tolist()))}
+    if by_season:
+        by_season["all"] = score_predictions(y[scored], p[scored])
+    return home_rate, evaluation, by_season
+
+
+def bootstrap_brier(y, predictions, dates, repeats, seed, reference):
+    """Paired ET-calendar-day cluster bootstrap of Brier, conditional on the fitted models."""
     unique, inverse = np.unique(dates, return_inverse=True)
     counts = np.bincount(inverse)
     sampled = np.random.default_rng(seed).integers(0, len(unique), size=(repeats, len(unique)))
     denominators = counts[sampled].sum(axis=1)
-    draws = {}
-    for name, probability in predictions.items():
-        sums = np.bincount(inverse, weights=(probability - y) ** 2)
-        draws[name] = sums[sampled].sum(axis=1) / denominators
+    draws = {name: np.bincount(inverse, weights=(np.asarray(p) - y) ** 2)[sampled].sum(axis=1) / denominators
+             for name, p in predictions.items()}
     interval = lambda values: np.quantile(values, [0.025, 0.975]).tolist()
     return {"method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
-            "replicates": repeats, "days": len(unique), "seed": seed,
-            "brier_intervals": {name: interval(value) for name, value in draws.items()},
-            "gb_minus_home_rate_interval": interval(draws["gradient_boosting"] - draws["historical_home_rate"]),
-            "limitations": "Conditional on this fitted model and season; does not capture training uncertainty or serial dependence across days"}
+            "replicates": repeats, "days": len(unique), "seed": seed, "reference": reference,
+            "brier_intervals": {name: interval(v) for name, v in draws.items()},
+            "difference_vs_reference": {name: interval(v - draws[reference]) for name, v in draws.items() if name != reference},
+            "limitations": "Conditional on the fitted models; no training uncertainty or dependence across days"}
 
 
 def calibration_rows(y, probability, bins):
@@ -153,136 +247,159 @@ def calibration_rows(y, probability, bins):
             for i in range(bins) if np.any(bucket == i)]
 
 
-def write_plot(results, calibration):
-    os.environ.setdefault("MPLCONFIGDIR", str(DATA_DIR / "mpl-cache"))
-    import matplotlib
-    matplotlib.use("Agg")
-    from matplotlib import pyplot as plt
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 10, "axes.spines.top": False, "axes.spines.right": False})
-    fig, (left, right) = plt.subplots(1, 2, figsize=(11, 4.6), constrained_layout=True)
-    colors = ["#176b65", "#8795a2", "#bec6ce"]
-    names = list(MODEL_NAMES)
-    values = [results["test"][name]["brier"] for name in names]
-    left.barh(["Gradient boosting", "Historical home rate", "50% every game"], values, color=colors)
-    left.invert_yaxis()
-    left.set_xlim(0, max(values) * 1.22)
-    left.set_xlabel("Brier score · lower is better")
-    left.set_title("Held-out probability accuracy", loc="left", weight="bold")
-    for i, value in enumerate(values):
-        left.text(value + 0.005, i, f"{value:.4f}", va="center")
-    right.plot([0, 1], [0, 1], color="#aeb6be", linestyle="--", label="Perfect calibration")
-    px = [r["mean_probability"] for r in calibration]
-    py = [r["observed_home_win_rate"] for r in calibration]
-    right.plot(px, py, color=colors[0], linewidth=1.5)
-    right.scatter(px, py, s=[15 + r["games"] * 0.4 for r in calibration], color=colors[0], zorder=3)
-    right.set(xlim=(0, 1), ylim=(0, 1), xlabel="Predicted home-win probability", ylabel="Observed home-win rate")
-    right.set_title("Calibration · marker area reflects games", loc="left", weight="bold")
-    right.legend(loc="upper left", frameon=False, fontsize=9)
-    season = results["config"]["split_seasons"]["test"]
-    fig.suptitle(f'NBA statistics baseline | {season}–{str(season + 1)[-2:]} holdout · {results["test"][names[0]]["games"]:,} games', fontsize=14, weight="bold")
-    fig.savefig(REPORT_DIR / "baseline.png", dpi=180)
-    plt.close(fig)
+def coverage_by_season(history, box_records, inputs, excluded, config):
+    splits = season_splits(config)
+    boxes = Counter(r["season"] for r in box_records)
+    result = {}
+    for season in sorted({g["season"] for g in history}):
+        rows = [r for r in inputs if r["season"] == season]
+        gap = lambda key: sum(any(r["box_score_coverage"][s][key] < r["box_score_coverage"][s]["previous_games"]
+                                  for s in SIDES) for r in rows)
+        result[str(season)] = {"split": splits[season], "games": sum(g["season"] == season for g in history),
+                               "box_scores": boxes.get(season, 0), "eligible": len(rows),
+                               "excluded": dict(Counter(r["reason"] for r in excluded if r["season"] == season)),
+                               "eligible_with_team_box_gaps": gap("valid_box_scores"),
+                               "eligible_with_player_box_gaps": gap("valid_player_box_scores")}
+    return result
+
+
+def run(config, jobs):
+    started = time.time()
+    history = load_verified_history(config)
+    box_records, box_manifest = load_box_scores(config)
+    inputs, labels, excluded = prepare_examples(history, box_records, config)
+    print(f"Prepared {len(inputs)} eligible games ({len(excluded)} excluded) in {time.time() - started:.0f}s", flush=True)
+    x, y = arrays(inputs, labels)
+    splits = np.array([r["split"] for r in inputs])
+    seasons = np.array([r["season"] for r in inputs])
+    if not (splits == "test").any():
+        raise ValueError("TEST needs eligible games")
+    best, trials, final, prior = select_and_fit(x, y, splits, seasons, config, jobs)
+    candidate = config["candidates"][best]
+    print(f"DEV-selected candidate {best}: {candidate}", flush=True)
+    # TEST is scored once, by the DEV-selected TRAIN model.
+    train = splits == "train"
+    p, produced = predict(final, prior, x, splits, seasons)
+    ids = np.array([r["game_id"] for r in inputs])
+    predictions = [{"game_id": r["game_id"], "season": r["season"], "game_date_et": r["game_date_et"], "split": r["split"],
+                    "p_boost": float(p[i]), "produced_by": produced[i]}
+                   for i, r in enumerate(inputs) if produced[i] is not None]
+    settings = {**config["model_parameters"], **candidate, "random_state": config["seed"]}
+    bundle = {"feature_names": list(FEATURE_NAMES), "settings": settings, "candidate_index": best,
+              "final": {"model": final, "fit_game_ids": ids[train].tolist(), "selection_game_ids": ids[splits == "dev"].tolist()},
+              "prior_seasons": {season: {"model": model, "fit_game_ids": ids[train & (seasons < season)].tolist()}
+                                for season, model in prior.items()}}
+    for name, rows in (("inputs.jsonl", inputs), ("labels.jsonl", labels), ("excluded.jsonl", excluded),
+                       ("predictions.jsonl", predictions)):
+        write_jsonl(DATA_DIR / name, rows)
+    joblib.dump(bundle, DATA_DIR / "model.joblib")
+    dates = np.array([r["game_date_et"] for r in inputs])
+    home_rate, evaluation, train_metrics = evaluate(p, y, splits, seasons, dates, config)
+    test = splits == "test"
+    box_dir = ROOT / config["box_scores"]
+    sources = [CONFIG_PATH, box_dir / "manifest.json", box_dir / "games.jsonl", *(ROOT / name for name in CODE)]
+    sources += [ROOT / s[key] for s in config["histories"] for key in ("path", "config")]
+    result = {"config": config, "feature_names": list(FEATURE_NAMES), "history_games": len(history),
+              "eligible_games": len(inputs), "excluded_games": len(excluded),
+              "split_games": {name: int((splits == name).sum()) for name in SPLITS},
+              "coverage_by_season": coverage_by_season(history, box_records, inputs, excluded, config),
+              "box_score_source": {"path": config["box_scores"], **{k: box_manifest.get(k) for k in (
+                  "provider_counts", "season_counts", "complete_team_games", "complete_player_games", "failed_games")}},
+              "dev_candidates": trials, "selected_candidate_index": best, "selected_parameters": settings,
+              "train_home_win_rate": home_rate, "evaluation": evaluation, "train_forecasts": train_metrics,
+              "train_games_without_forecast": int((train & ~np.isfinite(p)).sum()),
+              "test_calibration": calibration_rows(y[test], p[test], config["calibration_bins"]),
+              "versions": {name: version(name) for name in ("numpy", "scipy", "scikit-learn", "joblib")},
+              "python_version": platform.python_version(), "runtime_seconds": round(time.time() - started, 1),
+              "source_sha256": {str(path.relative_to(ROOT)): sha256(path) for path in sources},
+              "artifact_sha256": {f"data/processed/gradient_boosting/{name}": sha256(DATA_DIR / name) for name in DATA_FILES}}
+    write_json(REPORT_DIR / "metrics.json", result)
+    write_report(result)
+    print(json.dumps({name: {k: round(v["brier"], 4) for k, v in e["metrics"].items()} for name, e in evaluation.items()}), flush=True)
+    return result
 
 
 def write_report(result):
-    gb, reference = result["test"]["gradient_boosting"], result["test"]["historical_home_rate"]
-    skill = 1 - gb["brier"] / reference["brier"]
+    config, evaluation = result["config"], result["evaluation"]
+    first, last = config["split_seasons"]["train"]
+    dev, test = (season_label(config["split_seasons"][name][0]) for name in ("dev", "test"))
+    gb, ref = evaluation["test"]["metrics"]["gradient_boosting"], evaluation["test"]["metrics"]["historical_home_rate"]
+    selected = result["dev_candidates"][result["selected_candidate_index"]]
+    coverage = result["coverage_by_season"]
+    lacking = [season_label(int(s)) for s, row in coverage.items() if row["split"] == "train" and not row["eligible"]]
     lines = ["# Gradient-boosting statistics baseline", "",
-             f'Held-out Brier score: **{gb["brier"]:.4f}**, versus **{reference["brier"]:.4f}** for the historical home-win-rate reference ({skill:.1%} relative reduction).', "",
-             "This is a retrospective statistics-only result. It is not a text-model result or a contamination-cleared LLM benchmark.", "",
+             f"TEST {test}: Brier **{gb['brier']:.4f}**, log loss {gb['log_loss']:.4f}, accuracy {gb['accuracy']:.1%} "
+             f"on {gb['games']:,} games, versus {ref['brier']:.4f} for the TRAIN home-win rate. "
+             f"Settings chosen on DEV {dev}: depth {selected['max_depth']}, {selected['n_estimators']} trees.", "",
              "## Protocol", "",
-             f'- Source: {result["history_games"]:,} checksum-verified historical regular-season results, through April 10 in each season. No additional network requests.',
-             f'- Eligibility: both teams have at least {result["config"]["min_previous_games"]} previous games in the same season; {result["excluded_games"]} warmup games excluded.',
-             '- Prediction cutoff: 60 minutes before the retrieved scheduled start. Features use only earlier ET calendar dates in the same season.',
-             '- Features: prior-game count, season win rate, last-five win rate, last-five average point differential, rest days and back-to-back status, for each side and home-minus-away differences (18 numeric features).',
-             '- Model selection: four predetermined shallow gradient-boosting classifiers, selected by validation Brier score. No random splits, internal early stopping, post-hoc probability calibration or test-driven tuning.',
-             '- Final fit: training plus validation seasons, with the selected parameters fixed. The historical-rate reference also uses only these fitted seasons.',
-             '- During the test season, earlier completed test games update rolling features. Their outcomes are available before later predictions; the model itself is not refitted.',
-             '- No injury text, narratives, current standings, odds, player data, team identifiers or target-game outcomes enter the feature matrix.', "",
-             "| Role | Season | Games | First game | Last game |", "| --- | --- | ---: | --- | --- |"]
-    for name, split in result["splits"].items():
-        lines.append(f'| {name} | {split["season"]}–{str(split["season"] + 1)[-2:]} | {split["games"]} | {split["first_date"]} | {split["last_date"]} |')
-    lines.extend(["", "## Validation model selection", "", "| Depth | Trees | Brier | Log loss | ROC AUC | Accuracy |", "| ---: | ---: | ---: | ---: | ---: | ---: |"])
-    for row in result["validation_candidates"]:
-        lines.append(f'| {row["max_depth"]} | {row["n_estimators"]} | {row["brier"]:.4f} | {row["log_loss"]:.4f} | {row["roc_auc"]:.4f} | {row["accuracy"]:.1%} |')
-    lines.extend(["", f'Selected parameters: `{json.dumps(result["selected_parameters"], sort_keys=True)}`.', "",
-                  "## Held-out test results", "", "| Model | Brier ↓ | Log loss ↓ | ROC AUC ↑ | Accuracy ↑ |", "| --- | ---: | ---: | ---: | ---: |"])
-    for name, row in result["test"].items():
-        lines.append(f'| {name} | {row["brier"]:.4f} | {row["log_loss"]:.4f} | {row["roc_auc"]:.4f} | {row["accuracy"]:.1%} |')
-    ci = result["uncertainty"]
-    lo, hi = ci["brier_intervals"]["gradient_boosting"]
-    delta_lo, delta_hi = ci["gb_minus_home_rate_interval"]
-    lines.extend(["", f'Gradient-boosting Brier 95% interval: **[{lo:.4f}, {hi:.4f}]**. Paired Brier difference (boosting minus historical rate): **[{delta_lo:.4f}, {delta_hi:.4f}]**; negative favors boosting.',
-                  f'Intervals use {ci["replicates"]:,} paired bootstrap resamples of {ci["days"]} ET game dates. {ci["limitations"]}.', "",
-                  f'Test home-win frequency: {gb["observed_home_win_rate"]:.1%}. Historical-rate prediction: {reference["mean_home_probability"]:.1%}. Accuracy uses a fixed 0.5 threshold; ties predict home.', "",
-                  "![Brier comparison and calibration](baseline.png)", "",
-                  "## Limits and next use", "",
-                  "The five-game warmup excludes season openers, and coverage ends April 10 rather than including every regular-season game. Scheduled starts were retrieved retrospectively; rescheduling and exact historical result-availability times are not independently archived. Previous-date results are used conservatively, but unusual delayed completion remains a limitation.", "",
-                  "The test season has now been examined for this baseline. Future model comparisons should preserve this protocol and disclose repeated evaluation; choose a later untouched period after the eventual language model's training cutoff for the final LLM benchmark. Narrative/injury experiments must compare all models on exactly the same eligible games, not compare their small text sample directly with this larger statistics cohort.", "",
-                  "## Reproduce", "", "```bash", "uv pip install --python .venv/bin/python -r requirements-baseline.txt",
-                  ".venv/bin/python scripts/run_gradient_boosting.py", ".venv/bin/python scripts/validate_gradient_boosting.py",
-                  ".venv/bin/python -m unittest discover -s tests -v", "```", "",
-                  "Model, separated inputs/labels, split membership and validation/test predictions are under `data/processed/gradient_boosting/` (git-ignored). Configuration, source/code hashes, library versions and full-precision metrics are in `metrics.json`; calibration bins are in `calibration.csv`.", "",
-                  "Implementation references: [scikit-learn gradient boosting](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html), [binary Brier score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.brier_score_loss.html), and [data leakage guidance](https://scikit-learn.org/stable/common_pitfalls.html#data-leakage).", ""])
+             f"- Splits by season: TRAIN {season_label(first)} to {season_label(last)}, DEV {dev}, TEST {test} "
+             "(`config/gradient_boosting.json`). Regular-season games from checksum-verified ESPN schedules.",
+             f"- Features ({len(result['feature_names'])}): 18 basic team features (games played, season and last-5 win rate, "
+             "last-5 point differential, rest, back-to-back) plus team and player box-score windows (season, last 5, last 10) "
+             "with team-coverage indicators; home, away and home-minus-away. All use earlier ET dates of the same season only.",
+             f"- Eligibility: both teams have at least {config['min_previous_games']} earlier games and "
+             f"{config['min_box_score_games']} valid earlier box scores. Other missing box scores reduce coverage: team "
+             "statistics pool the window's valid games, coverage features record the gap, and player statistics are missing "
+             "unless the whole window has player box scores.",
+             "- Models: gradient boosting with median imputation fitted on each model's own training rows. "
+             f"{len(config['candidates'])} fixed candidates are fitted on TRAIN and chosen by DEV Brier. DEV and TEST forecasts both "
+             "come from that TRAIN fit; TEST was scored once, after selection. No early stopping, calibration or TEST-driven tuning.",
+             "- TRAIN forecasts (`produced_by: prior_seasons`): each TRAIN season after the first is predicted by the selected "
+             "settings fitted on the earlier TRAIN seasons only, so every forecast BAM receives is fitted on strictly earlier "
+             f"games (the choice among the {len(config['candidates'])} settings used DEV). "
+             f"The first TRAIN season ({season_label(first)}) has none.", "",
+             "## DEV selection", "", "| Depth | Trees | DEV Brier | Log loss | Accuracy |", "| ---: | ---: | ---: | ---: | ---: |"]
+    for row in result["dev_candidates"]:
+        lines.append(f"| {row['max_depth']} | {row['n_estimators']} | {row['brier']:.4f} | {row['log_loss']:.4f} | {row['accuracy']:.1%} |")
+    lines += ["", "## Results", "", "| Split | Forecast | Games | Brier | 95% interval | Log loss | Accuracy |",
+              "| --- | --- | ---: | ---: | --- | ---: | ---: |"]
+    for name in ("dev", "test"):
+        u = evaluation[name]["uncertainty"]
+        for model, m in evaluation[name]["metrics"].items():
+            lo, hi = u["brier_intervals"][model]
+            lines.append(f"| {name.upper()} | {model} | {m['games']:,} | {m['brier']:.4f} | [{lo:.4f}, {hi:.4f}] | {m['log_loss']:.4f} | {m['accuracy']:.1%} |")
+    lines.append("")
+    for name in ("dev", "test"):
+        lo, hi = evaluation[name]["uncertainty"]["difference_vs_reference"]["gradient_boosting"]
+        lines.append(f"{name.upper()} paired Brier difference, boosting minus home rate: [{lo:+.4f}, {hi:+.4f}] "
+                     f"({evaluation[name]['uncertainty']['days']} ET dates resampled).")
+    lines += ["", "## TRAIN forecasts from earlier seasons", ""]
+    if result["train_forecasts"]:
+        lines += ["| Season | Games | Brier | Log loss | Accuracy |", "| --- | ---: | ---: | ---: | ---: |"]
+        lines += [f"| {season if season == 'all' else season_label(int(season))} | {m['games']:,} | {m['brier']:.4f} | {m['log_loss']:.4f} | {m['accuracy']:.1%} |"
+                  for season, m in result["train_forecasts"].items()]
+        lines.append("")
+    lines.append(f"{result['train_games_without_forecast']:,} eligible TRAIN games have no earlier TRAIN season and no forecast.")
+    lines += ["", "## Coverage by season", "",
+              f"Box scores: `{result['box_score_source']['path']}`."
+              + (f" TRAIN seasons without eligible games: {', '.join(lacking)}." if lacking else ""), "",
+              "| Season | Split | Games | Box records | Eligible | Excluded: warmup | Excluded: box coverage | With team-box gaps | With player-box gaps |",
+              "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"]
+    for season, row in coverage.items():
+        ex = row["excluded"]
+        lines.append(f"| {season_label(int(season))} | {row['split']} | {row['games']:,} | {row['box_scores']:,} | {row['eligible']:,} | "
+                     f"{ex.get('fewer_than_min_previous_games', 0):,} | {ex.get('fewer_than_min_box_scores', 0) + ex.get('invalid_window', 0):,} | "
+                     f"{row['eligible_with_team_box_gaps']:,} | {row['eligible_with_player_box_gaps']:,} |")
+    lines += ["", "## Limits", "",
+              f"- {AVAILABILITY_LIMITATION} Possessions and ratings are box-score estimates, not official NBA figures.",
+              "- No injury, lineup, odds or text inputs. Prior-game workload is not current-game availability.",
+              f"- The {test} TEST season was examined in earlier experiments, so this is an exploratory backtest. The previous protocol "
+              "(TRAIN 2023–24 only, final refit on 2023–25) scored 0.2099 (basic 18 features) and 0.2059 (rich features) on it: "
+              "[basic](../past/basic_boosting_2023/findings.md), [rich](../past/rich_boosting_2023/findings.md).",
+              "- Bootstrap intervals are conditional on the fitted models.", "",
+              "## Reproduce", "", "```bash", ".venv/bin/python scripts/run_gradient_boosting.py",
+              ".venv/bin/python scripts/validate_gradient_boosting.py", "```", "",
+              f"Runtime {result['runtime_seconds']:.0f} s. Inputs, labels, exclusions, predictions (`p_boost`, `produced_by`) and "
+              "`model.joblib` (fit game IDs and settings) are in `data/processed/gradient_boosting/`; full metrics, hashes and "
+              "versions in `metrics.json`.", ""]
     (REPORT_DIR / "findings.md").write_text("\n".join(lines))
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.parse_args()
-    config = json.loads(CONFIG_PATH.read_text())
-    if not config["refit_train_and_validation"]:
-        raise ValueError("This protocol requires refitting on training plus validation")
-    history = load_verified_history(config)
-    inputs, labels, excluded = prepare_examples(history, config)
-    x, y = arrays(inputs, labels)
-    masks = {name: np.array([row["split"] == name for row in inputs]) for name in config["split_seasons"]}
-    if any(not mask.any() for mask in masks.values()):
-        raise ValueError("Each chronological split must contain eligible games")
-    chosen, selection = select_candidate(x[masks["train"]], y[masks["train"]], x[masks["validation"]], y[masks["validation"]], config)
-    print("Validation selection:", json.dumps(selection), flush=True)
-    # Freeze the selection before fitting the final model or evaluating test labels.
-    fitted = masks["train"] | masks["validation"]
-    model = new_model(config, chosen).fit(x[fitted], y[fitted])
-    predictions = {"gradient_boosting": model.predict_proba(x[masks["test"]])[:, 1],
-                   "historical_home_rate": np.full(masks["test"].sum(), y[fitted].mean()),
-                   "constant_50_percent": np.full(masks["test"].sum(), 0.5)}
-    test_inputs = [row for row in inputs if row["split"] == "test"]
-    test_y = y[masks["test"]]
-    result = {"config": config, "feature_names": list(FEATURE_NAMES), "history_games": len(history),
-              "excluded_games": len(excluded), "selected_parameters": {**config["model_parameters"], **chosen, "random_state": config["seed"]},
-              "validation_candidates": selection, "splits": {},
-              "test": {name: score_predictions(test_y, p) for name, p in predictions.items()},
-              "uncertainty": bootstrap_brier(test_y, predictions, [row["game_date_et"] for row in test_inputs], config["bootstrap_replicates"], config["seed"]),
-              "versions": {name: version(name) for name in ("numpy", "scipy", "scikit-learn", "joblib", "matplotlib")},
-              "python_version": platform.python_version(),
-              "source_sha256": {name: sha256(ROOT / name) for name in (config["history_path"], config["history_config"], "config/gradient_boosting.json", "scripts/collect_pilot.py", "scripts/run_gradient_boosting.py")}}
-    for name, mask in masks.items():
-        subset = [row for row in inputs if row["split"] == name]
-        result["splits"][name] = {"season": config["split_seasons"][name], "games": len(subset),
-                                  "first_date": subset[0]["game_date_et"], "last_date": subset[-1]["game_date_et"]}
-    write_jsonl(DATA_DIR / "inputs.jsonl", inputs)
-    write_jsonl(DATA_DIR / "labels.jsonl", labels)
-    write_jsonl(DATA_DIR / "excluded.jsonl", excluded)
-    write_csv(DATA_DIR / "split_manifest.csv", [{k: row[k] for k in ("game_id", "season", "split", "game_date_et", "cutoff_utc")} for row in inputs])
-    write_csv(DATA_DIR / "test_predictions.csv", [{"game_id": row["game_id"], "game_date_et": row["game_date_et"], "home_win": int(test_y[i]),
-                                                  **{name: float(p[i]) for name, p in predictions.items()}} for i, row in enumerate(test_inputs)])
-    validation_model = new_model(config, chosen).fit(x[masks["train"]], y[masks["train"]])
-    val_probabilities = validation_model.predict_proba(x[masks["validation"]])[:, 1]
-    validation_inputs = [row for row in inputs if row["split"] == "validation"]
-    write_csv(DATA_DIR / "validation_predictions.csv", [{"game_id": row["game_id"], "home_win": int(y[masks["validation"]][i]),
-                                                        "gradient_boosting": float(val_probabilities[i]), "historical_home_rate": float(y[masks["train"]].mean())}
-                                                       for i, row in enumerate(validation_inputs)])
-    joblib.dump({"model": model, "feature_names": FEATURE_NAMES,
-                 "fit_game_ids": [row["game_id"] for row in inputs if row["split"] != "test"],
-                 "selection_game_ids": [row["game_id"] for row in validation_inputs]}, DATA_DIR / "model.joblib")
-    result["artifact_sha256"] = {str(path.relative_to(ROOT)): sha256(path) for path in sorted(DATA_DIR.glob("*.jsonl"))}
-    write_json(REPORT_DIR / "metrics.json", result)
-    calibration = calibration_rows(test_y, predictions["gradient_boosting"], config["calibration_bins"])
-    write_csv(REPORT_DIR / "calibration.csv", calibration)
-    write_plot(result, calibration)
-    write_report(result)
-    print(json.dumps({"splits": result["splits"], "test": result["test"], "uncertainty": result["uncertainty"]}, indent=2), flush=True)
+    parser.add_argument("--jobs", type=int, default=-1, help="parallel model fits (joblib n_jobs)")
+    args = parser.parse_args()
+    run(json.loads(CONFIG_PATH.read_text()), args.jobs)
 
 
 if __name__ == "__main__":

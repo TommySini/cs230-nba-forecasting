@@ -1,6 +1,6 @@
-"""Immutable, outcome-separated BAM inputs. Does not modify prior experiments.
+"""Immutable, outcome-separated BAM inputs built from the game-notes v2 dataset.
 
-Each prepare invocation freezes the complete approved-note manifests. A later
+Each prepare invocation freezes the approved notes_v2 manifest. A later
 collector update requires a new snapshot. Raw byte hashes identify sources;
 page/line citations are stable within the snapshot, not inferred by a model.
 """
@@ -9,17 +9,19 @@ from collections import Counter, defaultdict
 from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
+import gzip
 import hashlib
 import io
 from importlib.metadata import version
 import json
 import math
 from pathlib import Path
+import re
 import shutil
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-SCHEMA_VERSION = "bam-inputs-v1"
+SCHEMA_VERSION = "bam-inputs-v3"
 METADATA = ("game_id", "game_date_et", "cutoff_utc", "home_abbr", "away_abbr")
 
 
@@ -51,13 +53,35 @@ def write_rows(path, rows):
     path.write_bytes(b"".join(canonical(row) for row in rows))
 
 
-def verified_bytes(note, root=ROOT):
-    from audit_game_notes import archive_time_verified
-    if note.get("review", {}).get("decision") != "approved_template_checked_excerpt":
-        raise ValueError("Unapproved source packet")
-    source = note["source"]
-    if not archive_time_verified(source, note["publisher_url"], note["cutoff_utc"]):
-        raise ValueError("Source lacks verified archived bytes before prediction cutoff")
+def availability_time(doc):
+    """When these exact bytes were demonstrably public: archive capture, CDN Last-Modified, or last article edit."""
+    source = doc["source"]
+    if doc["kind"] == "rolling_archive":
+        return parsedate_to_datetime(source["memento_datetime"]).astimezone(timezone.utc)
+    if doc["kind"] == "dated_live":
+        return parsedate_to_datetime(source["last_modified"]).astimezone(timezone.utc)
+    if doc["kind"] == "html_post":
+        return max(stamp(doc["published_utc"]), stamp(doc.get("modified_utc") or doc["published_utc"]))
+    raise ValueError("Unknown notes_v2 document kind: " + doc["kind"])
+
+
+def article_item(doc, root=ROOT):
+    """The single article object for an HTML post inside its saved API listing page."""
+    body = (Path(root) / doc["source"]["api_raw_path"]).read_bytes()
+    if digest(body) != doc["source"]["api_sha256"]:
+        raise ValueError("API response checksum mismatch")
+    data = json.loads(body)
+    found = [item for item in data.get("items") or data.get("results") or [] if item.get("permalink") == doc["url"]]
+    if len(found) != 1:
+        raise ValueError("Article missing or repeated in its saved API page: " + doc["url"])
+    return found[0]
+
+
+def source_bytes(doc, root=ROOT):
+    """Exact source bytes: the raw PDF, or the canonical article object of an HTML post."""
+    if doc["kind"] == "html_post":
+        return canonical(article_item(doc, root))
+    source = doc["source"]
     path = (Path(root) / source["raw_path"]).resolve()
     if not path.is_relative_to((Path(root) / "data/raw").resolve()):
         raise ValueError("Raw source path escapes data/raw")
@@ -67,127 +91,69 @@ def verified_bytes(note, root=ROOT):
     return body
 
 
-def merge_notes(notes):
-    """Merge packets by game and content, retaining aliases and version warnings.
+def notes_v2_games(docs, schedule, root=ROOT):
+    """One row per game holding every eligible team document, plus source bytes and exclusion counts.
 
-    Distinct historical versions are retained for audit. Only the latest verified
-    pre-cutoff version of each publisher URL is active for research, preventing
-    duplicate documents from receiving more weight. Different URLs stay active.
+    HTML posts revised after the cutoff stay out: the saved revision is not shown to
+    have existed at prediction time. Games outside the numeric history are counted, not kept.
     """
-    games = {}
-    for note in sorted(notes, key=lambda n: canonical(n)):
-        meta = {key: note[key] for key in METADATA}
-        game = games.setdefault(note["game_id"], {**meta, "sources": []})
-        if any(game[key] != meta[key] for key in METADATA):
-            raise ValueError("Conflicting game metadata across note packets")
-        source = note["source"]
-        archive_time = parsedate_to_datetime(source["memento_datetime"]).astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
-        entry = {"source_id": "sha256:" + source["sha256"], "sha256": source["sha256"],
-                 "publisher": note.get("team", note.get("publisher", "unknown")),
-                 "url": note["publisher_url"], "raw_path": source["raw_path"],
-                 "archive_time": archive_time, "archive_url": source["final_url"],
-                 "archive_provenance": source, "approval_scope": note["review"], "aliases": []}
-        existing = next((s for s in game["sources"] if s["sha256"] == entry["sha256"]), None)
-        if existing:
-            alias = {k: entry[k] for k in ("publisher", "url", "raw_path", "archive_time", "archive_url", "archive_provenance", "approval_scope")}
-            if alias not in existing["aliases"]:
-                existing["aliases"].append(alias)
-        else:
-            game["sources"].append(entry)
-    for game in games.values():
-        capture_keys = ("publisher", "url", "raw_path", "archive_time", "archive_url", "archive_provenance", "approval_scope")
-        groups = defaultdict(list)
-        for source in game["sources"]:
-            # Identical bytes can recur after an intervening changed version.
-            # Keep every capture, then choose the newest capture as the primary
-            # provenance record. Hash dedup must not discard version chronology.
-            captures = [{k: source[k] for k in capture_keys}, *source["aliases"]]
-            unique = {canonical(capture): capture for capture in captures}
-            captures = sorted(unique.values(), key=lambda c: (c["archive_time"], canonical(c)))
-            source.update(captures[-1])
-            source["aliases"] = sorted(captures[:-1], key=canonical)
-            for capture in captures:
-                groups[capture["url"]].append((source["sha256"], capture))
-        group_details = {}
-        for url, captures in groups.items():
-            by_time = defaultdict(set)
-            for sha, capture in captures:
-                by_time[capture["archive_time"]].add(sha)
-            if any(len(hashes) > 1 for hashes in by_time.values()):
-                raise ValueError("Conflicting byte versions for the same archive capture")
-            latest = max(by_time)
-            group_details[url] = {"url": url, "source_version_count": len({sha for sha, _ in captures}),
-                                  "selected_sha256": next(iter(by_time[latest])), "latest_archive_time": latest}
-        for source in game["sources"]:
-            urls = {source["url"], *(alias["url"] for alias in source["aliases"])}
-            source["source_version_groups"] = [group_details[url] for url in sorted(urls)]
-            source["active_for_research"] = any(group_details[url]["selected_sha256"] == source["sha256"] for url in urls)
-            source["source_version_count"] = max(group_details[url]["source_version_count"] for url in urls)
-        game["sources"].sort(key=lambda s: (s["publisher"], s["url"], s["archive_time"], s["sha256"]))
-    return sorted(games.values(), key=lambda r: (r["game_date_et"], r["game_id"]))
-
-
-def assign_splits(rows, fit_ids, policy):
-    """Keep whole ET dates together; pre-backbone and booster-fit games train only."""
-    rows = sorted(rows, key=lambda r: (r["game_date_et"], r["game_id"]))
-    cutoff = policy["prediction_model_cutoff_date"]
-    train_only_dates = {r["game_date_et"] for r in rows
-                        if r["game_date_et"] <= cutoff or r["game_id"] in fit_ids or not r["forecast_eligible"]}
-    last_train_only = max(train_only_dates, default="")
-    minimum = policy.get("minimum_split_games", {"train": 30, "dev": 8, "test": 8})
-    explicit = policy.get("dev_start_date"), policy.get("test_start_date")
-    if any(explicit):
-        a_date, b_date = explicit
-        if not a_date or not b_date or a_date >= b_date or a_date <= max(last_train_only, cutoff):
-            raise ValueError("Invalid explicit chronological split boundaries")
-        result = [dict(r, split="train" if r["game_date_et"] < a_date else "dev" if r["game_date_et"] < b_date else "test") for r in rows]
-    else:
-        n = len(rows)
-        target = policy.get("requested_fractions", [0.75, 0.125, 0.125])
-        boundaries = [i for i in range(1, n) if rows[i - 1]["game_date_et"] != rows[i]["game_date_et"]]
-        choices = []
-        for a in boundaries:
-            if rows[a]["game_date_et"] <= max(last_train_only, cutoff):
-                continue
-            for b in boundaries:
-                counts = a, b - a, n - b
-                if b <= a or any(c < minimum[k] for c, k in zip(counts, ("train", "dev", "test"))):
-                    continue
-                choices.append((sum((c / n - f) ** 2 for c, f in zip(counts, target)), a, b))
-        if not choices:
-            raise ValueError("Insufficient chronological unseen games for dev/test; do not silently reuse training games")
-        _, a, b = min(choices)
-        result = [dict(r, split="train" if i < a else "dev" if i < b else "test") for i, r in enumerate(rows)]
-    if any(sum(r["split"] == split for r in result) < minimum[split] for split in minimum):
-        raise ValueError("Too few games for requested split minima")
-    return result
-
-
-def prior_probability_plan(targets, numeric, fit_ids, minimum=200):
-    """Pure earlier-only membership; no target outcome is consulted here."""
-    by_id = {r["game_id"]: r for r in numeric}
-    if not fit_ids or not fit_ids <= by_id.keys():
-        raise ValueError("Original booster fitting membership is missing from numeric history")
-    last_original = max(by_id[g]["game_date_et"] for g in fit_ids)
-    plans, assignments = {}, {}
-    for target in targets:
-        gid = target["game_id"]
-        if gid not in by_id:
-            assignments[gid] = {"fold": None, "reason": "baseline_warmup"}
+    games, bodies, excluded = {}, {}, Counter()
+    for doc in sorted(docs, key=lambda d: (d["game_id"], d["team"])):
+        game = schedule.get(doc["game_id"])
+        if game is None:
+            excluded["outside_numeric_history"] += 1
             continue
-        month = target["game_date_et"][:7] + "-01"
-        original = target["game_date_et"] > last_original
-        fold = "original_frozen" if original else month
-        prior = sorted(fit_ids) if original else sorted(r["game_id"] for r in numeric if r["game_date_et"] < month)
-        if len(prior) < minimum:
-            assignments[gid] = {"fold": None, "reason": "insufficient_earlier_boosting_history"}
+        if doc.get("modified_after_cutoff"):
+            excluded["html_modified_after_cutoff"] += 1
             continue
-        if gid in prior or max(by_id[g]["game_date_et"] for g in prior) >= target["game_date_et"]:
-            raise ValueError("Target or future game entered booster fitting")
-        plans[fold] = {"fit_game_ids": prior, "last_fit_date": max(by_id[g]["game_date_et"] for g in prior),
-                       "fit_before_date": None if original else month, "policy": "frozen_original" if original else "earlier_calendar_months_only"}
-        assignments[gid] = {"fold": fold, "reason": None}
-    return plans, assignments
+        cutoff = stamp(game["scheduled_start_utc"]) - timedelta(minutes=60)
+        if stamp(doc["cutoff_utc"]) != cutoff:
+            raise ValueError("Note cutoff differs from scheduled tipoff minus 60 minutes")
+        available = availability_time(doc)
+        if available > cutoff:
+            raise ValueError("Source not shown public before cutoff: " + doc["text_path"])
+        body = source_bytes(doc, root)
+        sha = digest(body)
+        bodies[sha] = body
+        html = doc["kind"] == "html_post"
+        row = games.setdefault(doc["game_id"], {**{k: game[k] for k in METADATA if k != "cutoff_utc"},
+                                                "cutoff_utc": doc["cutoff_utc"], "sources": []})
+        row["sources"].append({
+            "source_id": "sha256:" + sha, "sha256": sha, "publisher": doc["team"], "url": doc["url"],
+            "archive_time": available.isoformat().replace("+00:00", "Z"),
+            "archive_url": doc.get("replay_url", doc["url"]), "evidence_tier": doc["tier"],
+            "notes_v2_kind": doc["kind"], "source_kind": "html" if html else "pdf",
+            "pagination": "article_sections" if html else "pdf_pages",
+            "original_raw_path": doc["source"]["api_raw_path" if html else "raw_path"],
+            "active_for_research": True})
+    return sorted(games.values(), key=lambda r: (r["game_date_et"], r["game_id"])), bodies, excluded
+
+
+PRODUCED_BY = {"train": "prior_seasons", "dev": "train_fit", "test": "train_fit"}
+
+
+def attach_boosting(rows, history_by_id, splits, predictions, features, excluded):
+    """Season split, schedule fields and the boosting forecast of every game, from the boosting outputs.
+
+    A game is forecast-eligible iff the boosting pipeline wrote a prediction for it:
+    fitted on earlier TRAIN seasons for TRAIN, the TRAIN-fitted model for DEV and TEST.
+    """
+    for row in rows:
+        game = history_by_id[row["game_id"]]
+        if game["season"] not in splits:
+            raise ValueError(f"Season {game['season']} has no configured split")
+        split = splits[game["season"]]
+        prediction = predictions.get(row["game_id"])
+        if prediction and (prediction["split"] != split or prediction["game_date_et"] != row["game_date_et"]
+                           or prediction["produced_by"] != PRODUCED_BY[split]):
+            raise ValueError("Boosting prediction disagrees with the configured split or schedule: " + row["game_id"])
+        reason = None if prediction else (excluded[row["game_id"]]["reason"] if row["game_id"] in excluded
+                                          else "no_out_of_sample_boosting_prediction")
+        row.update(scheduled_start_utc=game["scheduled_start_utc"], season=game["season"], split=split,
+                   p_boost=prediction["p_boost"] if prediction else None, forecast_eligible=prediction is not None,
+                   boosting_produced_by=prediction["produced_by"] if prediction else None,
+                   forecast_ineligibility_reason=reason, features=features.get(row["game_id"]))
+    return rows
 
 
 def pages_with_lines(pages):
@@ -230,28 +196,57 @@ def load_snapshot_game(directory, game_id, active_only=True):
     return {**game, "sources": sources, "snapshot_id": manifest["snapshot_id"]}
 
 
+def select_page_text(plain, layout):
+    """Prefer layout text unless it drops characters that plain extraction recovers."""
+    flags = []
+    if len("".join(layout.split())) < .98 * len("".join(plain.split())):
+        selected, method = plain, "pypdf_plain_layout_omitted_text"
+        flags.append("layout_omitted_text_recovered_from_plain")
+    elif layout.strip():
+        selected, method = layout, "pypdf_layout"
+    else:
+        selected, method = plain, "pypdf_plain_fallback"
+    if len("".join(selected.split())) < 40:
+        flags.append("sparse_or_empty_text_needs_visual_review")
+    if "�" in selected or re.search(r"[\x00-\x08\x0b\x0e-\x1f]", selected):
+        flags.append("suspicious_glyphs_need_visual_review")
+    return selected, method, flags
+
+
+def article_pages(item):
+    """Title plus one section per article-owned block; each section keeps the title and last heading as context."""
+    from collect_notes_v2 import blocks_text
+    blocks = [("title", item.get("title") or "")]
+    blocks += [(block.get("type") or "block", blocks_text([block])) for block in item.get("contentExpanded") or []]
+    pages = []
+    for label, text in blocks:
+        if text.strip():
+            number = len(pages) + 1
+            pages.append({"page": number, "section": number, "label": label, "page_kind": "article_section",
+                          "text": text, "text_sha256": digest(text.encode()), "method": "notes_v2_article_blocks", "flags": []})
+    pages = pages_with_lines(pages)
+    title = pages[0] if pages and pages[0]["label"] == "title" else None
+    heading = None
+    for page in pages:
+        context = [p for p in (title, heading) if p and p["page"] != page["page"]]
+        page["context_sections"] = [{k: p[k] for k in ("section", "label", "lines")} for p in context]
+        if page["label"] == "heading":
+            heading = page
+    return pages
+
+
 def extract_pages(task):
-    """No mutation of the existing preparer's ROOT/OUTPUT/global paths."""
-    raw_path, raw_hash, cached, overrides = task
-    from audit_game_notes import decode_archive_body
-    from prepare_full_game_notes import select_page_text
-    from pypdf import PdfReader
+    """Citable pages of one source: PDF pages, or article sections for an HTML post."""
+    kind, raw_path, raw_hash = task
     body = Path(raw_path).read_bytes()
     if digest(body) != raw_hash:
         raise ValueError("Source changed during extraction")
-    if cached:
-        cache_path, cache_sha = cached
-        content = Path(cache_path).read_bytes()
-        if digest(content) != cache_sha:
-            raise ValueError("Extraction cache checksum changed")
-        packet = json.loads(content)
-        if packet["source"]["sha256"] != raw_hash:
-            raise ValueError("Extraction cache belongs to another source")
-        from prepare_full_game_notes import validate_page_coverage
-        validate_page_coverage(packet["pages"], packet["chunks"], packet["pdf_pages"])
-        return raw_hash, pages_with_lines(packet["pages"])
+    if kind == "html":
+        return raw_hash, article_pages(json.loads(body))
+    from pypdf import PdfReader
+    pdf = gzip.decompress(body) if body.startswith(b"\x1f\x8b") else body
     pages = []
-    for number, page in enumerate(PdfReader(io.BytesIO(decode_archive_body(body))).pages, 1):
+    for number, page in enumerate(PdfReader(io.BytesIO(pdf)).pages, 1):
         flags = []
         try:
             plain = page.extract_text() or ""
@@ -263,12 +258,9 @@ def extract_pages(task):
         except Exception as error:
             layout = ""
             flags.append("layout_extraction_failed:" + type(error).__name__)
-        override = overrides.get(raw_hash + ":" + str(number))
-        text, method, selected_flags = select_page_text(plain, layout, override)
-        pages.append({"page": number, "text": text, "text_sha256": digest(text.encode()),
+        text, method, selected_flags = select_page_text(plain, layout)
+        pages.append({"page": number, "page_kind": "physical_pdf_page", "text": text, "text_sha256": digest(text.encode()),
                       "plain_text": plain, "layout_text": layout, "method": method, "flags": flags + selected_flags})
-        if override:
-            pages[-1]["visual_transcription"] = {k: v for k, v in override.items() if k != "text"}
     return raw_hash, pages_with_lines(pages)
 
 
@@ -283,7 +275,7 @@ def validate_snapshot(directory):
     if [r["game_id"] for r in rows] != [r["game_id"] for r in labels] or len({r["game_id"] for r in rows}) != len(rows):
         raise ValueError("Duplicate or unaligned games")
     date_splits = defaultdict(set)
-    fit_ids = set(manifest["original_fit_game_ids"])
+    fit_ids = set(manifest["boosting_fit_game_ids"])
     for row in rows:
         date_splits[row["game_date_et"]].add(row["split"])
         if any(k in row for k in ("home_win", "home_score", "away_score", "recap", "postmortem")):
@@ -291,11 +283,15 @@ def validate_snapshot(directory):
         expected = stamp(row["scheduled_start_utc"]) - timedelta(minutes=60)
         if stamp(row["cutoff_utc"]) != expected:
             raise ValueError("Prediction cutoff differs from tipoff minus 60 minutes")
-        if row["split"] != "train" and (row["game_date_et"] <= manifest["policy"]["prediction_model_cutoff_date"] or row["game_id"] in fit_ids):
+        if row["split"] != manifest["season_splits"].get(str(row["season"])):
+            raise ValueError("Row split differs from its season's configured split")
+        if row["split"] != "train" and (row["game_date_et"] <= manifest["prediction_model_cutoff_date"] or row["game_id"] in fit_ids):
             raise ValueError("Training-only game in evaluation")
         p = row["p_boost"]
         if row["forecast_eligible"] != (p is not None) or p is not None and (not math.isfinite(p) or not 0 < p < 1):
             raise ValueError("Invalid forecast eligibility/probability")
+        if row["boosting_produced_by"] != (PRODUCED_BY[row["split"]] if p is not None else None):
+            raise ValueError("Boosting forecast does not come from the model its split requires")
         for source in row["sources"]:
             if stamp(source["archive_time"]) > stamp(row["cutoff_utc"]):
                 raise ValueError("Source archive is later than cutoff")
@@ -317,100 +313,43 @@ def validate_snapshot(directory):
 
 def prepare(config, snapshot_id=None, workers=4, root=ROOT):
     import joblib
-    from run_gradient_boosting import (FEATURE_NAMES, arrays, load_verified_history,
-                                      new_model, prepare_examples)
+    from run_gradient_boosting import load_verified_history, season_splits
     root = Path(root)
     if root.resolve() != ROOT.resolve():
-        raise ValueError("Feature verifier uses this repository root; alternate roots are unsupported")
+        raise ValueError("Schedule verifier uses this repository root; alternate roots are unsupported")
     base_path = root / config.get("baseline_config", "config/gradient_boosting.json")
     baseline = json.loads(base_path.read_text())
     if baseline["cutoff_minutes"] != 60:
         raise ValueError("BAM requires scheduled tipoff minus 60 minutes")
-    history = load_verified_history(baseline)
-    numeric, labels, _ = prepare_examples(history, baseline)
-    by_id = {r["game_id"]: r for r in numeric}
-    history_by_id = {r["game_id"]: r for r in history}
-    labels_by_id = {r["game_id"]: r for r in labels}
-    original_path = root / "data/processed/gradient_boosting/model.joblib"
-    original = joblib.load(original_path)
-    fit_ids = set(original["fit_game_ids"]) | set(original.get("selection_game_ids", []))
+    splits = season_splits(baseline)
+    history_by_id = {r["game_id"]: r for r in load_verified_history(baseline)}
+    boosting = root / "data/processed/gradient_boosting"
+    # Only boosting outputs that match their validated metrics (validate_gradient_boosting.py).
+    for name, expected in json.loads((root / "reports/gradient_boosting/metrics.json").read_text())["artifact_sha256"].items():
+        if digest((root / name).read_bytes()) != expected:
+            raise ValueError("Boosting artifact differs from reports/gradient_boosting/metrics.json: " + name)
+    predictions = {r["game_id"]: r for r in read_rows(boosting / "predictions.jsonl")}
+    features = {r["game_id"]: r["features"] for r in read_rows(boosting / "inputs.jsonl")}
+    boosting_excluded = {r["game_id"]: r for r in read_rows(boosting / "excluded.jsonl")}
+    fit_ids = set(joblib.load(boosting / "model.joblib")["final"]["fit_game_ids"])
     provenance = {}
     def freeze(path):
         path = Path(path)
         provenance[str(path.relative_to(root))] = digest(path.read_bytes())
-    for path in (base_path, original_path, root / baseline["history_path"], root / baseline["history_config"], Path(__file__),
-                 root / "scripts/run_gradient_boosting.py", root / "scripts/collect_pilot.py",
-                 root / "scripts/audit_game_notes.py", root / "scripts/prepare_full_game_notes.py"):
+    for path in (base_path, *(root / s[k] for s in baseline["histories"] for k in ("path", "config")), Path(__file__),
+                 *(boosting / name for name in ("predictions.jsonl", "inputs.jsonl", "excluded.jsonl", "model.joblib")),
+                 root / "scripts/run_gradient_boosting.py", root / "scripts/box_score_features.py",
+                 root / "scripts/collect_pilot.py", root / "scripts/collect_notes_v2.py", root / config["notes_path"]):
         freeze(path)
-    notes = []
-    for name in config.get("notes_paths", ["data/processed/game_notes_collection/approved_excerpts.jsonl"]):
-        path = root / name
-        content = path.read_bytes()
-        provenance[name] = digest(content)
-        notes.extend(json.loads(line) for line in content.splitlines() if line.strip())
-    bodies = {}
-    for note in notes:
-        game = history_by_id.get(note["game_id"])
-        if game is None:
-            raise ValueError("Note game missing verified schedule; extend numeric history separately")
-        for key in ("game_date_et", "home_abbr", "away_abbr"):
-            if note[key] != game[key]:
-                raise ValueError("Note differs from verified schedule: " + key)
-        if stamp(note["cutoff_utc"]) != stamp(game["scheduled_start_utc"]) - timedelta(minutes=60):
-            raise ValueError("Note cutoff differs from scheduled tipoff minus 60 minutes")
-        bodies[note["source"]["sha256"]] = verified_bytes(note, root)
-        freeze(root / note["source"]["raw_path"])
-    rows = merge_notes(notes)
-    minimum = config.get("minimum_oof_fit_games", 200)
-    # fit_game_ids describes actual final fit; selection IDs are additionally
-    # forbidden in hybrid dev/test but are not silently added to model fitting.
-    plans, assignments = prior_probability_plan(rows, numeric, set(original["fit_game_ids"]), minimum)
-    booster_parameters = config.get("boosting_parameters", {"n_estimators": 100, "max_depth": 1})
-    expected_parameters = original["model"].get_params()
-    model_parameters = {**baseline["model_parameters"], **booster_parameters, "random_state": baseline["seed"]}
-    if any(expected_parameters[k] != v for k, v in model_parameters.items()):
-        raise ValueError("OOF booster parameters differ from original frozen model")
-    for fold, plan in plans.items():
-        selected = [by_id[g] for g in plan["fit_game_ids"]]
-        x, y = arrays(selected, [labels_by_id[r["game_id"]] for r in selected])
-        model = original["model"] if fold == "original_frozen" else new_model(baseline, booster_parameters).fit(x, y)
-        targets = [row for row in rows if assignments[row["game_id"]]["fold"] == fold]
-        for row in targets:
-            row["p_boost"] = float(model.predict_proba([[by_id[row["game_id"]]["features"][n] for n in FEATURE_NAMES]])[0, 1])
-    for row in rows:
-        game = history_by_id[row["game_id"]]
-        row.update(scheduled_start_utc=game["scheduled_start_utc"], season=game["season"],
-                   p_boost=row.get("p_boost"), forecast_eligible=row.get("p_boost") is not None,
-                   boosting_fold=assignments[row["game_id"]]["fold"],
-                   forecast_ineligibility_reason=assignments[row["game_id"]]["reason"])
-        if row["game_id"] in by_id:
-            row.update(features=by_id[row["game_id"]]["features"], prior_game_ids=by_id[row["game_id"]]["prior_game_ids"])
-    policy = config.get("split_policy", config)
-    rows = assign_splits(rows, fit_ids, policy)
-    inspected = set()
-    for name in config.get("prior_inspected_inputs", ["data/processed/boosting_notes/inputs.jsonl", "data/processed/text_ablation/inputs.jsonl"]):
-        path = root / name
-        if path.exists():
-            freeze(path)
-            inspected.update(r["game_id"] for r in read_rows(path) if r["split"] in ("dev", "test", "validation"))
-    cache = {}
-    manifest_path = root / "data/processed/full_game_notes/manifest.json"
-    if manifest_path.exists():
-        freeze(manifest_path)
-        for item in json.loads(manifest_path.read_text())["packets"]:
-            cache[item["source"]["sha256"]] = (str(root / item["directory"] / "packet.json"), item["packet_sha256"])
-    overrides_path = root / "config/full_game_notes_extraction_overrides.json"
-    overrides = {}
-    if overrides_path.exists():
-        freeze(overrides_path)
-        overrides = json.loads(overrides_path.read_text())["pages"]
-        for value in overrides.values():
-            image_path = root / value["image_path"]
-            freeze(image_path)
-            if digest(image_path.read_bytes()) != value["image_sha256"]:
-                raise ValueError("Visual transcription reference changed")
-    if manifest_path.exists() and json.loads(manifest_path.read_text()).get("visual_override_sha256") != (digest(overrides_path.read_bytes()) if overrides_path.exists() else None):
-        cache = {}  # Prior extraction used different reviewed transcriptions.
+    docs = read_rows(root / config["notes_path"])
+    rows, bodies, excluded = notes_v2_games(docs, history_by_id, root)
+    kept = {r["game_id"] for r in rows}
+    for doc in docs:
+        if doc["game_id"] in kept and not doc.get("modified_after_cutoff"):
+            freeze(root / doc["source"]["api_raw_path" if doc["kind"] == "html_post" else "raw_path"])
+    rows = attach_boosting(rows, history_by_id, splits, predictions, features, boosting_excluded)
+    # Dev/test games of the earlier text pilots, whose labels and scores were already inspected.
+    inspected = set(config.get("previously_inspected_game_ids", []))
     identity = {"schema_version": SCHEMA_VERSION, "config": config, "provenance_sha256": provenance,
                 "runtime_versions": {name: version(name) for name in ("pypdf", "numpy", "scikit-learn", "joblib")}}
     snapshot_id = snapshot_id or digest(canonical(identity))[:20]
@@ -427,24 +366,24 @@ def prepare(config, snapshot_id=None, workers=4, root=ROOT):
     parent.mkdir(parents=True, exist_ok=True)
     staging = Path(tempfile.mkdtemp(prefix=".preparing-" + snapshot_id + "-", dir=parent))
     try:
-        tasks = {}
+        tasks, kinds = {}, {}
         for row in rows:
             for source in row["sources"]:
                 sha = source["sha256"]
-                original_raw_path = source["raw_path"]
-                tasks[sha] = (str(root / original_raw_path), sha, cache.get(sha), overrides)
-                source.update(original_raw_path=original_raw_path, raw_path="raw/" + sha + ".bin",
-                              pages_path="sources/" + sha + ".json")
+                source.update(raw_path="raw/" + sha + ".bin", pages_path="sources/" + sha + ".json")
                 raw = staging / source["raw_path"]
                 if not raw.exists():
                     raw.parent.mkdir(parents=True, exist_ok=True)
                     raw.write_bytes(bodies[sha])
+                tasks[sha] = (source["source_kind"], str(raw), sha)
+                kinds[sha] = source
         print(json.dumps({"snapshot_id": snapshot_id, "games": len(rows), "unique_sources": len(tasks),
-                          "cached_sources": sum(t[2] is not None for t in tasks.values()), "stage": "extracting"}), flush=True)
+                          "excluded_documents": dict(excluded), "stage": "extracting"}), flush=True)
         with ProcessPoolExecutor(max_workers=workers) as executor:
             for sha, pages in executor.map(extract_pages, [tasks[k] for k in sorted(tasks)]):
-                write_json(staging / "sources" / (sha + ".json"), {"source_sha256": sha, "pages": pages,
-                           "visual_completeness": "Text extraction preserves all PDF pages; figures and extraction flags require separate review."})
+                write_json(staging / "sources" / (sha + ".json"), {
+                    "source_sha256": sha, "source_kind": kinds[sha]["source_kind"], "pagination": kinds[sha]["pagination"],
+                    "pages": pages, "visual_completeness": "Every PDF page or article section retained; figures and extraction flags require separate review."})
                 print(json.dumps({"source_sha256": sha, "pages": len(pages)}), flush=True)
         for row in rows:
             for source in row["sources"]:
@@ -455,17 +394,21 @@ def prepare(config, snapshot_id=None, workers=4, root=ROOT):
         for split in ("train", "dev", "test"):
             membership = {r["game_id"] for r in rows if r["split"] == split}
             write_rows(staging / ("labels_" + split + ".jsonl"), [r for r in separate_labels if r["game_id"] in membership])
-        write_json(staging / "boosting_lineage.json", plans)
         reused = sorted(r["game_id"] for r in rows if r["split"] == "test" and r["game_id"] in inspected)
-        summary = {"games": len(rows), "sources": len(tasks), "splits": dict(Counter(r["split"] for r in rows)),
+        summary = {"games": len(rows), "sources": len(tasks), "excluded_documents": dict(excluded),
+                   "evidence_tiers": dict(Counter(s["evidence_tier"] for r in rows for s in r["sources"])),
+                   "splits": dict(Counter(r["split"] for r in rows)),
                    "forecast_eligible": dict(Counter(r["split"] for r in rows if r["forecast_eligible"])),
-                   "research_only": sum(not r["forecast_eligible"] for r in rows),
+                   "boosting_produced_by": dict(Counter(r["boosting_produced_by"] for r in rows if r["forecast_eligible"])),
+                   "research_only": dict(Counter(r["forecast_ineligibility_reason"] for r in rows if not r["forecast_eligible"])),
                    "previously_inspected_test_ids": reused,
                    "test_status": "exploratory_previously_inspected" if reused else "candidate_uninspected_requires_model_knowledge_audit",
-                   "full_packet_quality": "All archived pages preserved; first-page approval is not a full-packet semantic review."}
+                   "full_packet_quality": "All pages preserved; notes_v2 approval checks headers and results, not full-packet semantics."}
         artifacts = {str(p.relative_to(staging)): digest(p.read_bytes()) for p in sorted(staging.rglob("*")) if p.is_file()}
         manifest = {"schema_version": SCHEMA_VERSION, "snapshot_id": snapshot_id, "identity": identity,
-                    "policy": policy, "original_fit_game_ids": sorted(fit_ids), "artifact_sha256": artifacts, "summary": summary}
+                    "season_splits": {str(season): split for season, split in sorted(splits.items())},
+                    "prediction_model_cutoff_date": config["prediction_model_cutoff_date"],
+                    "boosting_fit_game_ids": sorted(fit_ids), "artifact_sha256": artifacts, "summary": summary}
         write_json(staging / "manifest.json", manifest)
         validate_snapshot(staging)
         # Check input files again before publishing an atomically complete snapshot.

@@ -1,68 +1,69 @@
 # CS230 NBA forecasting — handoff
 
-Short current state for the next session. Chronological agent history through
-2026-11-01 is archived in [`docs/archive/handoff-through-2026-11-01.md`](docs/archive/handoff-through-2026-11-01.md).
-Experiment map: [`docs/experiments.md`](docs/experiments.md). Public summary: [`README.md`](README.md).
+Current state for the next session. Public summary: [`README.md`](README.md).
+Everything removed in the November 2026 cleanup is at git tag `pre-cleanup`.
 
-## Status (2026-11-01)
+## Status (2026-11-08)
 
-**Main full-note experiment is complete.** No research/training/GPU job should be
-running. Pipeline `20261101T201235Z` finished research, source validation, MLX
-embeddings, head training, evaluation, and review index.
+**Plan: BAM teacher-explanation training on AWS, TRAIN-first.** Prove learning on 16–32
+TRAIN games before touching DEV; TEST stays excluded. Design: [`docs/bam_aws_architecture.md`](docs/bam_aws_architecture.md),
+[`docs/bam_training_first.md`](docs/bam_training_first.md). Account details and evidence:
+[`docs/aws_toolkit_setup.md`](docs/aws_toolkit_setup.md), `reports/aws_setup/20261108/`.
+No real pilot fit has run.
 
-| Item | Location |
-| --- | --- |
-| Findings / metrics | `reports/researched_forecaster/` |
-| Research quality | `reports/game_note_research/quality_audit.md` |
-| Evidence browser | `.venv/bin/python scripts/browse_evidence.py` → http://127.0.0.1:8765/ |
-| Modal app (idle, reusable) | `cs230-nba-research-vllm` in workspace `tsini` |
+**Blocked on AWS compute and model access.**
 
-**Headline result.** Same 14 held-out games: original boosting Brier **0.186** vs
-full-note hybrid **0.193** (hybrid worse by ~0.007; paired 95% CI includes zero).
-Not evidence that text helps. Limits: tiny / previously inspected test set, 11/14
-Cleveland packets. Frozen Qwen2.5-14B; only the 5,121-parameter head was trained.
+- GPU quota is 0 for G/VT On-Demand and Spot in all 17 enabled regions. Open quota cases:
+  us-east-1 8 vCPUs, case `179411421300610`; Oregon 8 vCPUs, case `179411216100407`
+  (denied by email; appeal sent 2026-11-08). The user reports EC2
+  launches are limited to three regions; confirm which.
+- Bedrock: Anthropic first-use form submitted, Sonnet/Opus agreements AVAILABLE but
+  authorization NOT_AUTHORIZED; AWS-sold gpt-oss/DeepSeek also NOT_AUTHORIZED. One gpt-oss
+  probe returned `ValidationException: Operation not allowed`. The user sent the
+  Bedrock follow-up and the support messages (quota for N. Virginia, Ohio, Oregon) on 2026-11-08.
+- IAM-only stack `cs230-train-pilot-20261108` is `CREATE_COMPLETE` (`infra/aws/train-pilot-iam.json`).
+- CLI profile `cs230` is bound to Codex only; its session had expired at last check.
+- Budget cap $200 (`config/bam_budget_200_20261107.json`; ledger in
+  `data/processed/bam_budget/`): $6.77 completed estimates, $1.83 outstanding, $5 buffer,
+  $186.40 available. $100 earned AWS credit confirmed.
 
-**Earlier pilots (keep as history).** Stats vs injury text (`text_ablation`) and
-boosting vs first-page notes (`boosting_notes`) also failed to show a text gain.
-Details in `docs/experiments.md` and their `reports/*/findings.md`.
+**Data and baseline (fixed 2026-11-08; leave alone).**
 
-## What to work on next
+- Fixed splits: TRAIN 2012–13 to 2023–24, DEV 2024–25, TEST 2025–26 (`config/gradient_boosting.json`).
+  `bam_train_contract.py` reads its TRAIN date range from the same config.
+- Box scores: `data/processed/box_scores/`, 16,810 of 16,821 games 2012–26 (2,104 repaired from
+  NBA.com; 11 missing with reasons in `failures.jsonl`). `collect_rich_stats.py` normalizes pre-2021
+  ESPN team rebounds, sends scrambled 2017–18 team stats and empty boxes to NBA.com repair, and
+  rebuilds offline from the raw cache in about 90 s. Known, left as is: 7 ESPN 2020–21 team rows
+  have offensive or defensive rebounds 1 below their player sum.
+- `run_gradient_boosting.py` is the single baseline: fit on TRAIN, settings chosen on DEV (depth 2,
+  200 trees; DEV Brier 0.2103), TEST scored once: **0.2058**. TRAIN games 2013–24 get forecasts from
+  models fitted on earlier seasons only (`produced_by: prior_seasons`); 2012–13 has none. Output:
+  `data/processed/gradient_boosting/predictions.jsonl`.
+- Market at 8 h beats boosting by about 0.010 Brier on DEV and TEST (`reports/polymarket/`).
+- BAM snapshot `data/processed/bam_pipeline/bam_notes_v2` (frozen; `bam_data.py validate` passes):
+  1,922 games with notes 2012–26, 2,064 documents (80 HTML posts revised after their cutoff
+  excluded). 1,768 have a boosting probability (TRAIN 1,456, DEV 182, TEST 130); the rest are
+  research-only (138 too early in the season, 16 in 2012–13). Summary:
+  `reports/bam_pipeline/bam_notes_v2/data_summary.json`.
 
-1. More verified pregame text beyond the current team/date sample.
-2. Fresh final holdout (e.g. 2026–27 games) — do not treat the 14-game pilot as
-   the definitive test.
-3. Joint probability + explanation training and market-smoothed targets remain
-   unimplemented (see README approach).
+## Next
+
+1. When quota and Bedrock access arrive: qualify the teacher/reviewer on a few TRAIN games,
+   generate research and reviewed gold for 16–32 TRAIN games, build the TRAIN bundle
+   (`bam_train_contract.py`) and run `bam_train_only.py`.
+2. DEV evaluation only after TRAIN learning is shown. TEST (2025–26) was already inspected in
+   earlier pilots, so treat it as exploratory; a fresh 2026–27 holdout is cleaner.
 
 ## Workspace
 
-- **This worktree (preferred for new work):**  
-  `/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/read-then-continue-dataset-09962af6`
-- **Canonical clone:** `/Users/tommasosini/Desktop/Repos/cs230-nba-forecasting`
-- **GitHub:** https://github.com/TommySini/cs230-nba-forecasting  
-  Worktree may be ahead of `origin/main`; push when you want remote to match.
-- `data/` is local and git-ignored. Use `.venv/bin/python`.
-
-## Commands agents should default to
-
-```bash
-.venv/bin/python -m unittest discover -s tests
-.venv/bin/python scripts/run_gradient_boosting.py          # stats baseline
-.venv/bin/python scripts/evaluate_polymarket.py            # market vs boosting
-.venv/bin/python scripts/run_research_experiment.py --stage all   # full pipeline (heavy)
-.venv/bin/modal deploy --env main scripts/modal_research_vllm.py  # only if cloud code changed
-.venv/bin/python scripts/modal_research_vllm.py --check-deployment
-```
-
-Do **not** start `scripts/archive/modal_research_batch.py` or `modal run` ephemeral
-apps for the main path. Active cloud path is deploy-once + Python CLI on
-`modal_research_vllm.py`. Shared Modal helpers still live in `scripts/modal_research.py`
-(legacy MLX benchmark app + volumes/`unpack`); leave that file alone unless
-refactoring deliberately.
+- Canonical checkout: `/Users/tommasosini/Desktop/Repos/cs230-nba-forecasting` (all data lives
+  in its `data/`; other worktrees link `data` there).
+- Use `.venv/bin/python`. The Codex worktree's `.venv` has the full ML stack (torch, transformers).
+- GitHub: https://github.com/TommySini/cs230-nba-forecasting. Local `main` may be ahead.
 
 ## Rules that never change
 
-- Pregame inputs only; enforce cutoff timestamps. No raw ESPN → model.
-- Outcomes separate from inputs. Unverified narratives stay quarantined.
-- Do not claim league-wide note coverage from the current selective sample.
-- After collector changes: leakage tests + pilot validator (`collect_pilot.py --offline`).
+- Pregame inputs only; enforce cutoff timestamps. No raw ESPN responses to the model.
+- Outcomes separate from inputs.
+- Rewrite instead of accumulating; delete superseded code, configs and reports.

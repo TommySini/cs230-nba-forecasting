@@ -1,0 +1,185 @@
+{
+  "rules": {
+    "hours_before_tipoff": [
+      8,
+      1
+    ],
+    "trade_window_hours": 2,
+    "max_pages": 200,
+    "max_history_age_minutes": 60,
+    "min_window_trades": 5,
+    "min_window_cash_usd": 500,
+    "max_last_trade_age_minutes": 60,
+    "max_history_vwap_gap": 0.05
+  },
+  "splits": {
+    "validation": {
+      "season": 2024,
+      "baseline_games": 1123,
+      "scored_games": 953,
+      "first_date": "2024-11-02",
+      "last_date": "2025-04-10",
+      "metrics": {
+        "market_8h_before": {
+          "games": 953,
+          "brier": 0.19733887722980062,
+          "log_loss": 0.5775404688269166,
+          "roc_auc": 0.7613276151407794,
+          "accuracy": 0.6988457502623295,
+          "mean_home_probability": 0.5492549842602309,
+          "observed_home_win_rate": 0.5445960125918153
+        },
+        "market_1h_before": {
+          "games": 953,
+          "brier": 0.19564884575026234,
+          "log_loss": 0.573399347560747,
+          "roc_auc": 0.7651767400974934,
+          "accuracy": 0.7030430220356768,
+          "mean_home_probability": 0.5488667366211961,
+          "observed_home_win_rate": 0.5445960125918153
+        },
+        "gradient_boosting": {
+          "games": 953,
+          "brier": 0.2084791771492333,
+          "log_loss": 0.604391100633761,
+          "roc_auc": 0.7314758086714082,
+          "accuracy": 0.6757607555089192,
+          "mean_home_probability": 0.553020651661353,
+          "observed_home_win_rate": 0.5445960125918153
+        }
+      },
+      "uncertainty": {
+        "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+        "replicates": 2000,
+        "days": 146,
+        "seed": 230,
+        "brier_intervals": {
+          "market_8h_before": [
+            0.18538954840922842,
+            0.21032114178719008
+          ],
+          "market_1h_before": [
+            0.1839014378625134,
+            0.2083252248992728
+          ],
+          "gradient_boosting": [
+            0.19842046993368095,
+            0.21928967830037685
+          ]
+        },
+        "brier_differences": {
+          "market_8h_before_minus_gradient_boosting": [
+            -0.0171752034640857,
+            -0.005069026096662586
+          ],
+          "market_1h_before_minus_gradient_boosting": [
+            -0.018847222707386126,
+            -0.007040610278894636
+          ],
+          "market_8h_before_minus_market_1h_before": [
+            -6.599415595595348e-05,
+            0.003466274020126374
+          ]
+        },
+        "accuracy_differences": {
+          "market_8h_before_minus_gradient_boosting": [
+            -0.0010803280474404764,
+            0.047378791698605455
+          ],
+          "market_1h_before_minus_gradient_boosting": [
+            0.005191304263958449,
+            0.05054035734149053
+          ],
+          "market_8h_before_minus_market_1h_before": [
+            -0.014583333333333282,
+            0.006437941112745093
+          ]
+        }
+      }
+    },
+    "test": {
+      "season": 2025,
+      "baseline_games": 1137,
+      "scored_games": 1125,
+      "first_date": "2025-10-31",
+      "last_date": "2026-04-10",
+      "metrics": {
+        "market_8h_before": {
+          "games": 1125,
+          "brier": 0.1952330482222222,
+          "log_loss": 0.5714925316616237,
+          "roc_auc": 0.7645321217918062,
+          "accuracy": 0.6924444444444444,
+          "mean_home_probability": 0.5491,
+          "observed_home_win_rate": 0.5466666666666666
+        },
+        "market_1h_before": {
+          "games": 1125,
+          "brier": 0.19380913844444445,
+          "log_loss": 0.5682157612340979,
+          "roc_auc": 0.7677634305754822,
+          "accuracy": 0.6933333333333334,
+          "mean_home_probability": 0.5498288888888889,
+          "observed_home_win_rate": 0.5466666666666666
+        },
+        "gradient_boosting": {
+          "games": 1125,
+          "brier": 0.20554531635130038,
+          "log_loss": 0.5984302944108444,
+          "roc_auc": 0.7408990913438547,
+          "accuracy": 0.6746666666666666,
+          "mean_home_probability": 0.5523253290849296,
+          "observed_home_win_rate": 0.5466666666666666
+        }
+      },
+      "uncertainty": {
+        "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+        "replicates": 2000,
+        "days": 154,
+        "seed": 230,
+        "brier_intervals": {
+          "market_8h_before": [
+            0.18350126007681228,
+            0.20671669196304399
+          ],
+          "market_1h_before": [
+            0.1820178921495433,
+            0.20520652462509079
+          ],
+          "gradient_boosting": [
+            0.1955234340169359,
+            0.21532298773471462
+          ]
+        },
+        "brier_differences": {
+          "market_8h_before_minus_gradient_boosting": [
+            -0.01604367529217442,
+            -0.0043536817408590485
+          ],
+          "market_1h_before_minus_gradient_boosting": [
+            -0.017766429710338826,
+            -0.0054913033275084035
+          ],
+          "market_8h_before_minus_market_1h_before": [
+            -0.00029646040598044974,
+            0.0032615628288006158
+          ]
+        },
+        "accuracy_differences": {
+          "market_8h_before_minus_gradient_boosting": [
+            -0.004566523658989466,
+            0.040414224900486496
+          ],
+          "market_1h_before_minus_gradient_boosting": [
+            -0.0037849982441017778,
+            0.04159476401179942
+          ],
+          "market_8h_before_minus_market_1h_before": [
+            -0.012115846385500303,
+            0.010518247521941415
+          ]
+        }
+      }
+    }
+  }
+}

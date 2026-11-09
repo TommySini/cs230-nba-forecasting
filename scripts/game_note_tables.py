@@ -7,6 +7,12 @@ FIELDS = ('fg', 'fga', 'three_fg', 'three_fga', 'ft', 'fta', 'off_rebounds', 'de
           'rebounds', 'assists', 'fouls', 'steals', 'turnovers', 'blocks', 'plus_minus', 'points')
 
 
+def page_lines(page):
+    """Citable lines of one page; formatting-only normalization of the original text."""
+    lines = [" ".join(line.replace("\x00", "").split()) for line in page["text"].splitlines()]
+    return [{"id": f"P{page['page']:03}L{i:04}", "page": page["page"], "line": i, "text": text}
+            for i, text in enumerate(lines, 1) if text]
+
 def numeric_row(text):
     """Identify dense rows whose column meaning cannot safely be guessed by an LM."""
     tokens = text.split()

@@ -1,2 +1,0 @@
-# Cloud orchestration only; keep experiment versions in their existing files.
-modal==1.6.3

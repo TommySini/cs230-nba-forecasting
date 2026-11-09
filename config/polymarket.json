@@ -12,11 +12,21 @@
   "price_fidelity_minutes": 10,
   "max_staleness_minutes": 60,
   "comparison": {
-    "test_predictions": "data/processed/gradient_boosting/test_predictions.csv",
-    "validation_predictions": "data/processed/gradient_boosting/validation_predictions.csv",
+    "boosting_predictions": "data/processed/gradient_boosting/predictions.jsonl",
+    "boosting_metrics": "reports/gradient_boosting/metrics.json",
     "seed": 230,
     "bootstrap_replicates": 2000,
     "calibration_bins": 10,
     "liquidity_threshold_usd": 50000
+  },
+  "horizons": {
+    "hours_before_tipoff": [8, 1],
+    "trade_window_hours": 2,
+    "max_pages": 200,
+    "max_history_age_minutes": 60,
+    "min_window_trades": 5,
+    "min_window_cash_usd": 500,
+    "max_last_trade_age_minutes": 60,
+    "max_history_vwap_gap": 0.05
   }
 }

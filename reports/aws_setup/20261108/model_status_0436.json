@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "stdout": "",
+  "return_value": {
+    "checked_at": "2026-11-08T04:36:30.090445+00:00",
+    "anthropic.claude-sonnet-4-6": {
+      "modelId": "anthropic.claude-sonnet-4-6",
+      "agreementAvailability": {
+        "status": "PENDING"
+      },
+      "authorizationStatus": "NOT_AUTHORIZED",
+      "entitlementAvailability": "AVAILABLE",
+      "regionAvailability": "AVAILABLE"
+    },
+    "anthropic.claude-opus-4-6-v1": {
+      "modelId": "anthropic.claude-opus-4-6-v1",
+      "agreementAvailability": {
+        "status": "PENDING"
+      },
+      "authorizationStatus": "NOT_AUTHORIZED",
+      "entitlementAvailability": "AVAILABLE",
+      "regionAvailability": "AVAILABLE"
+    }
+  },
+  "api_calls": [
+    {
+      "service": "bedrock",
+      "operation": "GetFoundationModelAvailability",
+      "status": "success"
+    },
+    {
+      "service": "bedrock",
+      "operation": "GetFoundationModelAvailability",
+      "status": "success"
+    }
+  ]
+}

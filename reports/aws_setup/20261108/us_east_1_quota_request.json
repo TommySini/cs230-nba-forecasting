@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "stdout": "",
+  "return_value": {
+    "requested_at": "2026-11-08T05:03:31.923931+00:00",
+    "region": "us-east-1",
+    "response": {
+      "RequestedQuota": {
+        "Id": "8405145fff6c4426a52d9e373c4fac98BKDvHupa",
+        "ServiceCode": "ec2",
+        "ServiceName": "Amazon Elastic Compute Cloud (Amazon EC2)",
+        "QuotaCode": "L-DB2E81BA",
+        "QuotaName": "Running On-Demand G and VT instances",
+        "DesiredValue": 8,
+        "Status": "PENDING",
+        "Created": "2026-11-08T05:03:31.841000+00:00",
+        "Requester": "{\"accountId\":\"<aws-account-id>\",\"callerArn\":\"arn:aws:iam::<aws-account-id>:root\"}",
+        "QuotaArn": "arn:aws:servicequotas:us-east-1:<aws-account-id>:ec2/L-DB2E81BA",
+        "GlobalQuota": false,
+        "Unit": "None",
+        "QuotaRequestedAtLevel": "ACCOUNT"
+      }
+    }
+  },
+  "api_calls": [
+    {
+      "service": "service-quotas",
+      "operation": "RequestServiceQuotaIncrease",
+      "status": "success"
+    }
+  ]
+}

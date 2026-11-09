@@ -1,0 +1,165 @@
+{
+  "status": "success",
+  "stdout": "",
+  "return_value": {
+    "checked_at": "2026-11-08T05:01:17.213704+00:00",
+    "region": "us-east-1",
+    "models": [
+      {
+        "modelArn": "arn:aws:bedrock:us-east-1::foundation-model/openai.gpt-oss-120b-1:0",
+        "modelId": "openai.gpt-oss-120b-1:0",
+        "modelName": "gpt-oss-120b",
+        "providerName": "OpenAI",
+        "inputModalities": [
+          "TEXT"
+        ],
+        "outputModalities": [
+          "TEXT"
+        ],
+        "responseStreamingSupported": true,
+        "customizationsSupported": [],
+        "inferenceTypesSupported": [
+          "ON_DEMAND"
+        ],
+        "modelLifecycle": {
+          "status": "ACTIVE",
+          "startOfLifeTime": "2025-08-06T00:00:00+00:00"
+        }
+      },
+      {
+        "modelArn": "arn:aws:bedrock:us-east-1::foundation-model/deepseek.v3.2",
+        "modelId": "deepseek.v3.2",
+        "modelName": "DeepSeek V3.2",
+        "providerName": "DeepSeek",
+        "inputModalities": [
+          "TEXT"
+        ],
+        "outputModalities": [
+          "TEXT"
+        ],
+        "responseStreamingSupported": true,
+        "customizationsSupported": [],
+        "inferenceTypesSupported": [
+          "ON_DEMAND"
+        ],
+        "modelLifecycle": {
+          "status": "ACTIVE",
+          "startOfLifeTime": "2026-02-06T18:00:00+00:00"
+        }
+      },
+      {
+        "modelArn": "arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-pro-v1:0",
+        "modelId": "amazon.nova-pro-v1:0",
+        "modelName": "Nova Pro",
+        "providerName": "Amazon",
+        "inputModalities": [
+          "TEXT",
+          "IMAGE",
+          "VIDEO"
+        ],
+        "outputModalities": [
+          "TEXT"
+        ],
+        "responseStreamingSupported": true,
+        "customizationsSupported": [],
+        "inferenceTypesSupported": [
+          "ON_DEMAND",
+          "INFERENCE_PROFILE"
+        ],
+        "modelLifecycle": {
+          "status": "ACTIVE",
+          "startOfLifeTime": "2024-12-03T00:00:00+00:00"
+        }
+      },
+      {
+        "modelArn": "arn:aws:bedrock:us-east-1::foundation-model/deepseek.r1-v1:0",
+        "modelId": "deepseek.r1-v1:0",
+        "modelName": "DeepSeek-R1",
+        "providerName": "DeepSeek",
+        "inputModalities": [
+          "TEXT"
+        ],
+        "outputModalities": [
+          "TEXT"
+        ],
+        "responseStreamingSupported": true,
+        "customizationsSupported": [],
+        "inferenceTypesSupported": [
+          "INFERENCE_PROFILE"
+        ],
+        "modelLifecycle": {
+          "status": "ACTIVE",
+          "startOfLifeTime": "2025-03-10T08:00:00+00:00"
+        }
+      }
+    ],
+    "availability": [
+      {
+        "modelId": "openai.gpt-oss-120b-1",
+        "agreementAvailability": {
+          "status": "AVAILABLE"
+        },
+        "authorizationStatus": "NOT_AUTHORIZED",
+        "entitlementAvailability": "AVAILABLE",
+        "regionAvailability": "AVAILABLE"
+      },
+      {
+        "modelId": "deepseek.v3.2",
+        "agreementAvailability": {
+          "status": "AVAILABLE"
+        },
+        "authorizationStatus": "NOT_AUTHORIZED",
+        "entitlementAvailability": "AVAILABLE",
+        "regionAvailability": "AVAILABLE"
+      },
+      {
+        "modelId": "amazon.nova-pro-v1",
+        "agreementAvailability": {
+          "status": "AVAILABLE"
+        },
+        "authorizationStatus": "NOT_AUTHORIZED",
+        "entitlementAvailability": "AVAILABLE",
+        "regionAvailability": "AVAILABLE"
+      },
+      {
+        "modelId": "deepseek.r1-v1",
+        "agreementAvailability": {
+          "status": "AVAILABLE"
+        },
+        "authorizationStatus": "NOT_AUTHORIZED",
+        "entitlementAvailability": "AVAILABLE",
+        "regionAvailability": "AVAILABLE"
+      }
+    ]
+  },
+  "api_calls": [
+    {
+      "service": "bedrock",
+      "operation": "ListFoundationModels",
+      "status": "success",
+      "n_items": {
+        "modelSummaries": 125
+      }
+    },
+    {
+      "service": "bedrock",
+      "operation": "GetFoundationModelAvailability",
+      "status": "success"
+    },
+    {
+      "service": "bedrock",
+      "operation": "GetFoundationModelAvailability",
+      "status": "success"
+    },
+    {
+      "service": "bedrock",
+      "operation": "GetFoundationModelAvailability",
+      "status": "success"
+    },
+    {
+      "service": "bedrock",
+      "operation": "GetFoundationModelAvailability",
+      "status": "success"
+    }
+  ]
+}

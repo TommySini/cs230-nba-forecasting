@@ -1,0 +1,151 @@
+{
+  "status": "error",
+  "error": "TimeoutError",
+  "stdout": "",
+  "api_calls": [
+    {
+      "service": "ec2",
+      "operation": "DescribeRegions",
+      "status": "success",
+      "n_items": {
+        "Regions": 34
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    },
+    {
+      "service": "service-quotas",
+      "operation": "ListServiceQuotas",
+      "status": "success",
+      "n_items": {
+        "Quotas": 1000
+      }
+    }
+  ]
+}
