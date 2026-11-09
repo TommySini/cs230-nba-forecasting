@@ -53,6 +53,17 @@ Reports: [market](reports/polymarket/findings.md), [market at 8 h](reports/polym
 **Text: no measurable gain yet.** Three small pilots, on 14–18 test games each, found no gain
 from text ([summaries](reports/past/README.md)). The full BAM pipeline has not been trained yet.
 
+**TabPFN baseline.** The `tabpfn-implementation` branch adds a local comparison using the
+same frozen 252 pregame features as boosting. TabPFN-2.5 uses all 13,457 TRAIN games as
+context and predicts the same 1,123 DEV games. Its checkpoint is pretrained on synthetic
+data; no NBA-specific weight updates are performed. The comparison starts with a small
+TRAIN-only inference diagnostic, then reports paired DEV Brier, log loss, AUC, accuracy,
+and a day-clustered confidence interval. The local run finished in 237 seconds: DEV Brier
+**0.20783** versus boosting's **0.21033**; paired difference **-0.00250**, 95% interval
+**[-0.00512, +0.00015]**. The interval includes zero, so this is not a conclusive advantage.
+TEST is excluded. The existing boosting outputs and BAM forecasts stay frozen.
+Details: [TabPFN](reports/tabpfn/findings.md).
+
 ## Data
 
 All data is local and git-ignored, under the canonical checkout's `data/`.
@@ -82,6 +93,7 @@ scripts/
   collect_notes_v2.py         game notes; validate_notes_v2.py, postgame_screen.py
   collect_rich_stats.py       box scores; box_score_features.py turns them into prior-game features
   run_gradient_boosting.py    the baseline: fit on TRAIN, select on DEV, score TEST; validate_gradient_boosting.py
+  run_tabpfn.py               local TabPFN TRAIN diagnostic and DEV comparison; validate_tabpfn.py
   collect_polymarket*.py      market prices and trades; evaluate_polymarket*.py
   bam_data.py                 notes_v2 + boosting -> immutable BAM snapshot
   bam_research.py             research prompts and claim checks (bam_claim_guards, bam_note_tables, game_note_tables)
@@ -115,5 +127,26 @@ uv pip install --python .venv/bin/python -r requirements-baseline.txt
 
 GPU workers install `requirements-bam-training.txt` (training) or `requirements-research-vllm.txt`
 (research generation) on the AWS instance, not on the Mac.
+
+The user authorized local compute specifically for TabPFN. In its worktree, install
+`requirements-tabpfn.txt` into `.venv`. The checked-in config pins the package, checkpoint
+revision and SHA256, four estimators, and the Apple Silicon `mps` device. Run:
+
+```bash
+uv pip install --python .venv/bin/python -r requirements-tabpfn.txt
+.venv/bin/python scripts/run_tabpfn.py --stage download-model
+.venv/bin/python scripts/run_tabpfn.py --stage prepare
+.venv/bin/python scripts/run_tabpfn.py --stage train-smoke
+.venv/bin/python scripts/validate_tabpfn.py --stage train-smoke
+.venv/bin/python scripts/run_tabpfn.py --stage prepare --cohort dev
+.venv/bin/python scripts/run_tabpfn.py --stage dev
+.venv/bin/python scripts/validate_tabpfn.py --stage dev
+```
+
+Preparation refuses to overwrite an existing bundle. Repeat a model stage only to resume
+an interrupted run; validate completed results instead. DEV is exploratory because the
+boosting settings were already selected using DEV. These forecasts are not wired into BAM
+unless a later model-selection decision authorizes that change. TabPFN-2.5 weights permit
+[academic research](https://huggingface.co/Prior-Labs/tabpfn_2_5/blob/6c45f3a6d0d07c6c5f62572e04a0c2929de91b8b/LICENSE.txt).
 
 Current status and next steps: [`HANDOFF.md`](HANDOFF.md).

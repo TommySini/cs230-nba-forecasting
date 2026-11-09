@@ -5,6 +5,29 @@ Everything removed in the November 2026 cleanup is at git tag `pre-cleanup`.
 
 ## Status (2026-11-08)
 
+**TabPFN comparison branch (2026-11-09).** `tabpfn-implementation` is based on
+`fixed-splits-all-seasons` at `a75d4cc`, matching the canonical frozen datasets.
+The user explicitly authorized local TabPFN compute. The separate worktree is
+`/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/tabpfn-implementation`;
+its `data` links to the canonical checkout and its `.venv` has the optional
+`requirements-tabpfn.txt` dependencies. Earlier uncommitted BAM changes remain
+untouched in the original worktree.
+
+`scripts/run_tabpfn.py` uses the pinned synthetic-only TabPFN-2.5 checkpoint on
+Apple MPS, four estimators, all 252 frozen features, and all 13,457 TRAIN rows
+without subsampling. The 32-game TRAIN diagnostic passed (14 context / 18 later
+queries, split at an ET-date boundary). The full 1,123-game DEV comparison completed
+in 236.6 seconds: TabPFN Brier **0.207831**, boosting **0.210332**. Difference
+**-0.002500**, paired day-bootstrap 95% interval **[-0.005122, +0.000148]**: a
+modest point-estimate improvement, not a conclusive advantage. Accuracy is 66.8%
+versus 66.9%. No TEST inference or scoring was added.
+The full suite passes 348 tests with one optional Qwen-tokenizer test skipped.
+`scripts/validate_tabpfn.py` passes for both stages; all 15 frozen baseline hashes
+remain unchanged. Results are in `reports/tabpfn/findings.md` and `metrics.json`;
+per-game forecasts and manifests are in `data/processed/tabpfn/`. Original
+boosting/BAM outputs remain frozen. DEV comparison is exploratory because boosting
+settings used DEV. No compute job remains running; no AWS resources were launched.
+
 **Plan: BAM teacher-explanation training on AWS, TRAIN-first.** Prove learning on 16–32
 TRAIN games before touching DEV; TEST stays excluded. Design: [`docs/bam_aws_architecture.md`](docs/bam_aws_architecture.md),
 [`docs/bam_training_first.md`](docs/bam_training_first.md). Account details and evidence:

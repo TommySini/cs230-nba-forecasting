@@ -37,6 +37,9 @@
   region on 2026-11-08; Oregon was the original selection. Pin each launch plan
   to one region with matching live quota, permissions and pricing evidence.
   The Agent Toolkit/MCP service itself uses `us-east-1`.
+  Exception: on 2026-11-09 the user explicitly authorized all TabPFN baseline
+  compute locally, like gradient boosting. Use this worktree's `.venv` and the
+  frozen boosting inputs; this does not change BAM's AWS execution policy.
 - The user approved binding profile `cs230` to **Codex only**. Do not propagate
   this root-backed sign-in to other agents. Use a scoped execution role before
   launching training infrastructure; do not put sign-in credentials on instances.
