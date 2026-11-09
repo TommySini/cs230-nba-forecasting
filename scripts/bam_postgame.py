@@ -11,7 +11,7 @@ from pathlib import Path
 import shutil
 import tempfile
 
-from bam_data import ROOT, digest, read_rows, stamp, validate_snapshot, write_json, write_rows
+from bam_data import ROOT, digest, read_rows, stamp, validate_snapshot, write_json, write_rows, read_snapshot_inputs, snapshot_manifest_path
 
 
 class ArticleText(HTMLParser):
@@ -176,7 +176,8 @@ def verified_json(path, root=ROOT):
     body = path.read_bytes()
     if digest(body) != meta.get("sha256") or meta.get("status") != 200:
         raise ValueError("Postgame raw cache checksum/status mismatch")
-    if (Path(root) / meta["raw_path"]).resolve() != path.resolve():
+    from nba_dataset import resolve_source_path
+    if resolve_source_path(root, meta["raw_path"]).resolve() != path.resolve():
         raise ValueError("Postgame cache provenance path mismatch")
     return json.loads(body), meta
 
@@ -184,20 +185,26 @@ def verified_json(path, root=ROOT):
 def prepare(snapshot, output, fetch_missing=False):
     from collect_pilot import Cache
     snapshot, output = Path(snapshot).resolve(), Path(output).resolve()
-    validate_snapshot(snapshot)
-    games = [g for g in read_rows(snapshot / "inputs.jsonl") if g["split"] == "train"]
-    history = {g["game_id"]: g for g in read_rows(ROOT / "data/processed/seasonal/game_history.jsonl")}
-    manifest = json.loads((snapshot / "manifest.json").read_text())
-    history_hash = manifest["identity"]["provenance_sha256"].get("data/processed/seasonal/game_history.jsonl")
-    if digest((ROOT / "data/processed/seasonal/game_history.jsonl").read_bytes()) != history_hash:
-        raise ValueError("Numerical history differs from input snapshot")
+    validate_snapshot(snapshot, root=ROOT, label_splits=("train",))
+    games = read_snapshot_inputs(snapshot, root=ROOT, splits=("train",))
+    manifest = json.loads(snapshot_manifest_path(snapshot).read_text())
+    from nba_dataset import Dataset, resolve_source_path
+    if (snapshot / "bam_manifest.json").exists():
+        train_seasons = [int(season) for season, split in manifest["season_splits"].items() if split == "train"]
+        history = {g["game_id"]: g for g in Dataset(ROOT, processed_dir=snapshot).history(seasons=train_seasons)}
+    else:
+        history_path = ROOT / "data/processed/seasonal/game_history.jsonl"
+        history = {g["game_id"]: g for g in read_rows(history_path)}
+        history_hash = manifest["identity"]["provenance_sha256"].get("data/processed/seasonal/game_history.jsonl")
+        if digest(history_path.read_bytes()) != history_hash:
+            raise ValueError("Numerical history differs from input snapshot")
     if output.exists():
         raise FileExistsError("Postgame outputs are immutable; choose another output directory")
     cache = Cache(offline=not fetch_missing)
     records, missing, quarantined = [], [], []
     for game in games:
         target = {**game, "home_score": history[game["game_id"]]["home_score"], "away_score": history[game["game_id"]]["away_score"]}
-        scoreboard = ROOT / history[game["game_id"]]["schedule_source"]
+        scoreboard = resolve_source_path(ROOT, history[game["game_id"]]["schedule_source"])
         document, provenance = verified_json(scoreboard)
         sources = [normalize_document(target, document, provenance, "scoreboard")]
         espn_id = game["game_id"].split(":")[-1]
@@ -226,7 +233,7 @@ def prepare(snapshot, output, fetch_missing=False):
         write_rows(staging / "records.jsonl", records)
         write_rows(staging / "missing_rich_sources.jsonl", missing)
         write_rows(staging / "quarantined_sources.jsonl", quarantined)
-        report = {"snapshot_id": manifest["snapshot_id"], "snapshot_manifest_sha256": digest((snapshot / "manifest.json").read_bytes()),
+        report = {"snapshot_id": manifest["snapshot_id"], "snapshot_manifest_sha256": digest(snapshot_manifest_path(snapshot).read_bytes()),
                   "normalizer_sha256": digest(Path(__file__).read_bytes()), "training_games": len(records),
                   "missing_rich_sources": len(missing),
                   "quarantined_sources": len(quarantined),

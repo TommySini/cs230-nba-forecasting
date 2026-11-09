@@ -158,10 +158,10 @@ class SavedRunValidationTests(unittest.TestCase):
         uncertainty = bootstrap_brier(y, predictions, [row["game_date_et"] for row in self.rows],
                                       100, 230, "rich_gradient_boosting")
         self.run = {
-            "stage": "dev", "status": "complete", "model": self.config["model"],
+            "schema_version": 2, "stage": "dev", "status": "complete", "model": self.config["model"],
             "versions": {"tabpfn": "synthetic"},
             "manifest_sha256": sha256(self.output / "manifest.json"),
-            "artifact_sha256": {"predictions.csv": sha256(self.output / "predictions.csv")},
+            "predictions_sha256": runner.prediction_digest(self.rows),
             "metrics": metrics, "uncertainty": uncertainty,
             "primary_comparison": {
                 "brier_difference": metrics["tabpfn"]["brier"] - metrics["rich_gradient_boosting"]["brier"],
@@ -175,7 +175,9 @@ class SavedRunValidationTests(unittest.TestCase):
 
     def validate(self):
         with patch.object(validator, "ROOT", self.root), patch(
-                "run_tabpfn.load_prepared", return_value=(self.manifest, self.inputs, self.labels)):
+                "run_tabpfn.load_prepared", return_value=(self.manifest, self.inputs, self.labels)), patch(
+                "run_tabpfn.record_directory", return_value=self.output), patch(
+                "run_tabpfn.load_comparison_rows", side_effect=lambda *args: self.rows):
             return validator.validate_run(self.config, "dev")
 
     def test_saved_run_metrics_reproduce_without_loading_model(self):
@@ -184,8 +186,7 @@ class SavedRunValidationTests(unittest.TestCase):
         self.assertAlmostEqual(result["primary_comparison"]["brier_difference"], -.07)
 
     def test_changed_prediction_bytes_fail_before_scoring(self):
-        path = self.output / "predictions.csv"
-        path.write_text(path.read_text().replace("0.3", "0.1"))
+        self.rows[0]["tabpfn"] = 0.1
         with self.assertRaisesRegex(ValueError, "Changed run artifact"):
             self.validate()
 
@@ -196,15 +197,9 @@ class SavedRunValidationTests(unittest.TestCase):
             self.validate()
 
     def test_missing_prediction_hash_is_rejected(self):
-        self.run["artifact_sha256"] = {}
+        self.run.pop("predictions_sha256")
         self.save_run()
         with self.assertRaisesRegex(ValueError, "bind the prediction"):
-            self.validate()
-
-    def test_artifact_path_traversal_is_rejected(self):
-        self.run["artifact_sha256"]["../outside.json"] = "unused"
-        self.save_run()
-        with self.assertRaisesRegex(ValueError, "within its output directory"):
             self.validate()
 
     def test_invented_scores_and_intervals_are_rejected(self):
@@ -277,7 +272,8 @@ class RunnerBoundaryTests(unittest.TestCase):
                     runner, "load_prepared", return_value=(manifest, inputs, labels)), patch.object(
                     runner, "model_for", return_value=fake), patch.object(
                     runner, "new_model", return_value=FakeBooster()), patch.object(
-                    runner, "version", return_value="synthetic"), patch.object(runner, "write_report"):
+                    runner, "version", return_value="synthetic"), patch.object(runner, "write_report"), patch(
+                    "nba_dataset.store_predictions") as store:
                 for override in ({"rows": 1}, {"limit": 1}, {"indices": [0]}):
                     with self.subTest(context_audit=override):
                         fake.audit_override = override
@@ -300,32 +296,61 @@ class RunnerBoundaryTests(unittest.TestCase):
                 np.testing.assert_array_equal(y, [0, 1])
             self.assertEqual([x[:, 0].tolist() for x in query_calls], [[2.], [3.], [3.]])
 
-    def test_excluded_split_outcomes_are_never_deserialized(self):
-        with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory)
-            (path / "inputs.jsonl").write_text("\n".join(json.dumps(row) for row in (
-                {"game_id": "train", "split": "train"},
-                {"game_id": "dev", "split": "dev"},
-                {"game_id": "test", "split": "test"},
-            )) + "\n")
-            (path / "labels.jsonl").write_text(
-                '{"game_id": "train", "home_win": 1}\n'
-                'THIS DEV OUTCOME MUST NEVER BE PARSED\n'
-                'THIS TEST OUTCOME MUST NEVER BE PARSED\n')
-            inputs, labels = runner.read_source_rows(path / "inputs.jsonl", path / "labels.jsonl", {"train"})
-            self.assertEqual([row["game_id"] for row in inputs], ["train"])
-            self.assertEqual(labels, {"train": {"game_id": "train", "home_win": 1}})
+    def test_excluded_split_label_partitions_are_never_opened(self):
+        class FakeDataset:
+            def inputs(self, splits):
+                self.input_splits = set(splits)
+                return [{"game_id": "train", "split": "train"}]
+            def labels(self, splits):
+                self.label_splits = set(splits)
+                if self.label_splits != {"train"}:
+                    raise AssertionError("Forbidden labels opened")
+                return [{"game_id": "train", "home_win": 1}]
+        dataset = FakeDataset()
+        inputs, labels = runner.read_source_rows(dataset, {"train"})
+        self.assertEqual(dataset.label_splits, {"train"})
+        self.assertEqual(labels, {"train": {"game_id": "train", "home_win": 1}})
+        with self.assertRaisesRegex(ValueError, "TEST is excluded"):
+            runner.read_source_rows(dataset, {"test"})
 
-    def test_source_alignment_and_row_count_are_checked(self):
+    def test_source_alignment_and_duplicate_ids_are_checked(self):
+        from unittest.mock import Mock
+        dataset = Mock()
+        dataset.inputs.return_value = [{"game_id": "a", "split": "train"}]
+        for labels in ([{"game_id": "b", "home_win": 1}], [],
+                       [{"game_id": "a", "home_win": 1}] * 2):
+            dataset.labels.return_value = labels
+            with self.assertRaises(ValueError):
+                runner.read_source_rows(dataset, {"train"})
+
+    def test_prepared_manifest_cannot_subsample_or_reorder_cohort(self):
+        from unittest.mock import Mock
+        manifest, inputs, labels, _ = fixture()
+        config = {"smoke_games": 32, "smoke_context_games": 16, "model": {}}
+        manifest.update(schema_version=2, config=config, dataset_id="fixed",
+                        implementation_sha256=runner.sha256(Path(runner.__file__)),
+                        baseline_config={"cutoff_minutes": 60, "split_seasons": {
+                            "train": [2023, 2023], "dev": [2024, 2024], "test": [2025, 2025]}})
+        dataset = Mock()
+        dataset.manifest = {"dataset_id": "fixed"}
+        dataset.inputs.return_value = inputs
+        dataset.labels.return_value = labels
         with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory)
-            (path / "inputs.jsonl").write_text('{"game_id":"a","split":"train"}\n')
-            for content in ('{"game_id":"b","home_win":1}\n', "",
-                            '{"game_id":"a","home_win":1}\n{}\n'):
-                with self.subTest(content=content):
-                    (path / "labels.jsonl").write_text(content)
-                    with self.assertRaises(ValueError):
-                        runner.read_source_rows(path / "inputs.jsonl", path / "labels.jsonl", {"train"})
+            output = Path(directory)
+            with patch.object(runner, "shared_dataset", return_value=dataset), patch.object(
+                    runner, "record_directory", return_value=output):
+                (output / "manifest.json").write_text(json.dumps(manifest))
+                runner.load_prepared(config, "dev")
+                for key, ids in (("fit_game_ids", ["g0"]), ("query_game_ids", ["g2"]),
+                                 ("fit_game_ids", ["g1", "g0"]), ("query_game_ids", ["g3", "g2"])):
+                    changed = {**manifest, key: ids}
+                    (output / "manifest.json").write_text(json.dumps(changed))
+                    with self.assertRaisesRegex(ValueError, "complete fixed cohort"):
+                        runner.load_prepared(config, "dev")
+
+    def test_inference_rejects_staged_dataset_before_writing(self):
+        with self.assertRaisesRegex(ValueError, "validation-only"):
+            runner.fit_and_predict({"dataset_dir": "data/staging"}, "dev")
 
     def test_fixed_train_smoke_is_chronological_and_outcome_independent(self):
         inputs, labels = [], {}

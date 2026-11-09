@@ -1,6 +1,6 @@
 {
   "scope": "Polymarket NBA game moneyline markets for the 2024-25 and 2025-26 regular seasons; Polymarket listed no per-game NBA markets during 2023-24",
-  "history_path": "data/processed/seasonal/game_history.jsonl",
+  "dataset_dir": "data/processed",
   "seasons": [2024, 2025],
   "cutoff_minutes": 60,
   "nba_tag_id": 745,
@@ -12,7 +12,7 @@
   "price_fidelity_minutes": 10,
   "max_staleness_minutes": 60,
   "comparison": {
-    "boosting_predictions": "data/processed/gradient_boosting/predictions.jsonl",
+    "boosting_model": "gradient_boosting",
     "boosting_metrics": "reports/gradient_boosting/metrics.json",
     "seed": 230,
     "bootstrap_replicates": 2000,

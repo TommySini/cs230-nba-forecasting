@@ -1,10 +1,7 @@
 {
   "seed": 230,
-  "histories": [
-    {"path": "data/processed/history_2012/game_history.jsonl", "config": "config/history_2012.json"},
-    {"path": "data/processed/seasonal/game_history.jsonl", "config": "config/seasonal.json"}
-  ],
-  "box_scores": "data/processed/box_scores",
+  "dataset_dir": "data/processed",
+  "history_configs": ["config/history_2012.json", "config/seasonal.json"],
   "cutoff_minutes": 60,
   "min_previous_games": 5,
   "min_box_score_games": 5,

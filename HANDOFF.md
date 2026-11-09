@@ -3,7 +3,29 @@
 Current state for the next session. Public summary: [`README.md`](README.md).
 Everything removed in the November 2026 cleanup is at git tag `pre-cleanup`.
 
-## Status (2026-11-08)
+## Status (2026-11-09)
+
+**Shared Parquet migration.** `data-reconstruction` branches from the completed
+TabPFN baseline at `7681631`; its worktree is
+`/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/data-reconstruction`.
+The canonical shared tables are published and this branch reads them in place of
+model-specific input copies. See
+[`docs/data_reconstruction.md`](docs/data_reconstruction.md) for the table map,
+feature dictionary, TRAIN-game walkthrough and migration commands. Features,
+labels, forecasts, raw provenance and citation lines preserve the frozen values.
+The full suite passes 383 tests (one optional tokenizer test skipped); boosting,
+both TabPFN cohorts, notes, Polymarket and BAM validation pass on the installed data.
+Evidence: `reports/data_reconstruction/validation.json`. The staging copy was removed.
+No training or new forecasting experiment was launched for this migration;
+validation replays the saved boosting models to check existing predictions.
+
+**Compatibility window remains open.** A live TabPFN adaptation process was observed
+during migration; its separate worktree references the old baseline files. Publication uses
+`--keep-raw-layout`: original raw and legacy processed paths remain intact.
+Do not move or delete them until their consumers have switched. Unique adaptation
+weights and records are outside the cleanup scope. After coordination, run
+`nba_dataset.py relocate-raw`, all matching validators, then `cleanup --validated`.
+Cleanup verifies replacement coverage and surviving raw bytes before deletion.
 
 **TabPFN comparison branch (2026-11-09).** `tabpfn-implementation` is based on
 `fixed-splits-all-seasons` at `a75d4cc`, matching the canonical frozen datasets.
@@ -21,12 +43,13 @@ in 236.6 seconds: TabPFN Brier **0.207831**, boosting **0.210332**. Difference
 **-0.002500**, paired day-bootstrap 95% interval **[-0.005122, +0.000148]**: a
 modest point-estimate improvement, not a conclusive advantage. Accuracy is 66.8%
 versus 66.9%. No TEST inference or scoring was added.
-The full suite passes 348 tests with one optional Qwen-tokenizer test skipped.
 `scripts/validate_tabpfn.py` passes for both stages; all 15 frozen baseline hashes
 remain unchanged. Results are in `reports/tabpfn/findings.md` and `metrics.json`;
-per-game forecasts and manifests are in `data/processed/tabpfn/`. Original
-boosting/BAM outputs remain frozen. DEV comparison is exploratory because boosting
-settings used DEV. No compute job remains running; no AWS resources were launched.
+per-game forecasts are in shared `data/processed/predictions.parquet`; cohort/run
+records are in `reports/tabpfn/{train-smoke,dev}/`. Original boosting/BAM forecast
+values remain frozen. DEV comparison is exploratory because boosting settings used
+DEV. That baseline run finished; separate adaptation work is now active. No AWS
+resources were launched by the data migration.
 
 **Plan: BAM teacher-explanation training on AWS, TRAIN-first.** Prove learning on 16–32
 TRAIN games before touching DEV; TEST stays excluded. Design: [`docs/bam_aws_architecture.md`](docs/bam_aws_architecture.md),
@@ -50,27 +73,31 @@ No real pilot fit has run.
   `data/processed/bam_budget/`): $6.77 completed estimates, $1.83 outstanding, $5 buffer,
   $186.40 available. $100 earned AWS credit confirmed.
 
-**Data and baseline (fixed 2026-11-08; leave alone).**
+**Data and baseline (values fixed 2026-11-08; storage reorganized).**
 
 - Fixed splits: TRAIN 2012–13 to 2023–24, DEV 2024–25, TEST 2025–26 (`config/gradient_boosting.json`).
   `bam_train_contract.py` reads its TRAIN date range from the same config.
-- Box scores: `data/processed/box_scores/`, 16,810 of 16,821 games 2012–26 (2,104 repaired from
-  NBA.com; 11 missing with reasons in `failures.jsonl`). `collect_rich_stats.py` normalizes pre-2021
+- Box scores: shared `box_score_games`, `team_box_scores`, `player_box_scores` and
+  `sources` Parquet tables, 16,810 of 16,821 games 2012–26 (2,104 repaired from
+  NBA.com; 11 missing with reasons in `box_score_audit.json`). `collect_rich_stats.py` normalizes pre-2021
   ESPN team rebounds, sends scrambled 2017–18 team stats and empty boxes to NBA.com repair, and
   rebuilds offline from the raw cache in about 90 s. Known, left as is: 7 ESPN 2020–21 team rows
   have offensive or defensive rebounds 1 below their player sum.
 - `run_gradient_boosting.py` is the single baseline: fit on TRAIN, settings chosen on DEV (depth 2,
   200 trees; DEV Brier 0.2103), TEST scored once: **0.2058**. TRAIN games 2013–24 get forecasts from
   models fitted on earlier seasons only (`produced_by: prior_seasons`); 2012–13 has none. Output:
-  `data/processed/gradient_boosting/predictions.jsonl`.
+  `data/processed/predictions.parquet`, filtered to `model_id=gradient_boosting`.
 - Market at 8 h beats boosting by about 0.010 Brier on DEV and TEST (`reports/polymarket/`).
-- BAM snapshot `data/processed/bam_pipeline/bam_notes_v2` (frozen; `bam_data.py validate` passes):
+- BAM cohort in shared `notes.parquet`, `note_pages.parquet`, `bam_manifest.json`
+  (`bam_data.py validate data/processed` passes):
   1,922 games with notes 2012–26, 2,064 documents (80 HTML posts revised after their cutoff
   excluded). 1,768 have a boosting probability (TRAIN 1,456, DEV 182, TEST 130); the rest are
   research-only (138 too early in the season, 16 in 2012–13). Summary:
   `reports/bam_pipeline/bam_notes_v2/data_summary.json`.
 
 ## Next
+
+Finish data cleanup only after legacy consumers switch, as described above.
 
 1. When quota and Bedrock access arrive: qualify the teacher/reviewer on a few TRAIN games,
    generate research and reviewed gold for 16–32 TRAIN games, build the TRAIN bundle

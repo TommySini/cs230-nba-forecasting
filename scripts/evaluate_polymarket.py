@@ -6,7 +6,9 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 
 from collect_pilot import ROOT, write_json
-from collect_polymarket import CONFIG_PATH, DATA_DIR, REPORT_DIR, outcome_side, read_rows
+from collect_polymarket import (CONFIG_PATH, REPORT_DIR, outcome_side, load_games,
+                                load_market_records, load_market_audit)
+from nba_dataset import Dataset
 from run_gradient_boosting import calibration_rows, score_predictions, write_csv
 
 SPLITS = {"validation": "dev", "test": "test"}  # Polymarket report name -> boosting split
@@ -52,7 +54,8 @@ def joined_split(name, config, markets, games):
     home_rate = json.loads((ROOT / comparison["boosting_metrics"]).read_text())["train_home_win_rate"]
     rows = [dict(row, gradient_boosting=row["p_boost"], historical_home_rate=home_rate,
                  home_win=int(games[row["game_id"]]["home_score"] > games[row["game_id"]]["away_score"]))
-            for row in read_rows(ROOT / comparison["boosting_predictions"]) if row["split"] == SPLITS[name]]
+            for row in Dataset(ROOT, ROOT / config["dataset_dir"]).predictions(comparison["boosting_model"])
+            if row["split"] == SPLITS[name]]
     return rows, [(row, markets[row["game_id"]], games[row["game_id"]]) for row in rows if row["game_id"] in markets]
 
 
@@ -61,9 +64,9 @@ def main():
     parser.parse_args()
     config = json.loads(CONFIG_PATH.read_text())
     comparison = config["comparison"]
-    games = {g["game_id"]: g for g in read_rows(ROOT / config["history_path"])}
-    markets = {r["game_id"]: r for r in read_rows(DATA_DIR / "market_probs.jsonl")}
-    audit = {r["game_id"]: r for r in read_rows(DATA_DIR / "audit.jsonl")}
+    games = {g["game_id"]: g for g in load_games(config)}
+    markets = {r["game_id"]: r for r in load_market_records()}
+    audit = {r["game_id"]: r for r in load_market_audit()}
     result = {"config": config, "splits": {}}
     arrays = {}
     for name in SPLITS:
@@ -115,7 +118,7 @@ def main():
     result["coverage"] = json.loads((REPORT_DIR / "coverage.json").read_text())
     calibration = calibration_rows(y_test, p_test["polymarket_cutoff"], comparison["calibration_bins"])
     write_csv(REPORT_DIR / "calibration.csv", calibration)
-    write_csv(DATA_DIR / "comparison_test.csv", [
+    write_csv(REPORT_DIR / "comparison_test.csv", [
         {"game_id": g["game_id"], "game_date_et": g["game_date_et"], "home_win": int(y_test[i]),
          **{k: float(p[i]) for k, p in p_test.items()}, "market_plus_boosting_stack": float(stacked[i])}
         for i, (_, _, g) in enumerate(joined_test)])
@@ -197,7 +200,7 @@ def write_report(result):
                   "Polymarket listed no per-game NBA markets in 2023–24, so the training season has no market comparison.",
                   "- Polymarket keeps price history for closed markets, so the same collector can score a later held-out period (for example 2026–27) after games finish.", "",
                   "## Reproduce", "", "```bash",
-                  ".venv/bin/python scripts/collect_polymarket.py --offline",
+                  ".venv/bin/python scripts/nba_dataset.py validate",
                   ".venv/bin/python scripts/evaluate_polymarket.py",
                   ".venv/bin/python scripts/validate_polymarket.py",
                   ".venv/bin/python -m unittest tests.test_polymarket -v", "```", ""])

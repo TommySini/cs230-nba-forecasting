@@ -63,7 +63,7 @@ A two-feature logistic stack, logit(market) and logit(boosting), was fitted on t
 ## Reproduce
 
 ```bash
-.venv/bin/python scripts/collect_polymarket.py --offline
+.venv/bin/python scripts/nba_dataset.py validate
 .venv/bin/python scripts/evaluate_polymarket.py
 .venv/bin/python scripts/validate_polymarket.py
 .venv/bin/python -m unittest tests.test_polymarket -v

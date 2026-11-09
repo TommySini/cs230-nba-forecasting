@@ -177,6 +177,7 @@ class CollectorTests(unittest.TestCase):
             check_counters(row)
 
     def test_rebuild_checks_raw_provenance_and_bytes(self):
+        from nba_dataset import remap_paths
         game, doc, source = fixture()
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -187,7 +188,7 @@ class CollectorTests(unittest.TestCase):
             source.update(raw_path="data/raw/summaries/example.json", sha256=digest(body))
             path.with_suffix(".meta.json").write_text(json.dumps(source))
             record = normalize_summary(game, doc, source)
-            self.assertEqual(rebuild_from_record(game, record, root), record)
+            self.assertEqual(rebuild_from_record(game, record, root), remap_paths(record))
             path.write_bytes(body + b" ")
             with self.assertRaisesRegex(ValueError, "checksum/status mismatch"):
                 rebuild_from_record(game, record, root)
@@ -366,7 +367,8 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual([i["reason"] for i in home["player_issues"]][:1], ["missing_participated_player_id"])
         self.assertNotIn("999", [p["player_id"] for p in home["players"]])
 
-    def test_collect_combines_histories_and_repairs_from_cache_only(self):
+    def test_collect_shared_history_writes_tables_and_repairs_from_cache_only(self):
+        from nba_dataset import remap_paths
         game, doc, _ = fixture()
         game.update(season=2012)
         valid = dict(game, game_id="espn:124", espn_id="124", scheduled_start_utc="2023-11-03T00:00:00Z",
@@ -386,23 +388,39 @@ class CollectorTests(unittest.TestCase):
             cache_put(root, nba_box_url("0021200007"), "rich_stats_nba", ".html", nba_page("0021200007", game))
             cache_put(root, nba_box_url("0021200009"), "rich_stats_nba", ".html",
                       nba_page("0021200009", mismatch, home_score=21))
-            histories = []
-            for name, rows in (("a.jsonl", [game, mismatch]), ("b.jsonl", [valid])):
-                histories.append(root / name)
-                histories[-1].write_text("".join(json.dumps(r) + "\n" for r in rows))
+            history = [game, mismatch, valid]
+            source_dataset = {"dataset_id": "frozen-fixture", "manifest_sha256": "c" * 64}
             with mock.patch.object(collect_pilot, "ROOT", root), mock.patch.object(collect_rich_stats, "ROOT", root):
-                records, failures, manifest = collect(histories, root / "out", workers=1)
+                records, failures, manifest = collect(history, root / "out", workers=1, source_dataset=source_dataset)
                 by_id = {r["game_id"]: r for r in records}
                 self.assertEqual(by_id["espn:123"]["provenance"]["source_game_id"], "0021200007")
                 self.assertEqual(by_id["espn:124"]["provenance"]["provider"], "ESPN")
                 self.assertEqual([(f["game_id"], f["reason"]) for f in failures],
                                  [("espn:125", "espn_invalid_no_verified_nba_page")])
-                self.assertEqual([h["path"] for h in manifest["histories"]], ["a.jsonl", "b.jsonl"])
+                self.assertEqual(manifest["source_dataset"], source_dataset)
+                self.assertEqual(set(manifest["tables"]), {"box_score_games", "team_box_scores", "player_box_scores", "sources"})
+                self.assertFalse((root / "out/games.jsonl").exists())
+                self.assertTrue((root / "out/box_score_audit.json").exists())
                 self.assertEqual(manifest["season_coverage"]["2012"]["nba_repaired"], 1)
                 self.assertEqual(manifest["nba_page_probes"], 0)
-                self.assertEqual(rebuild_from_record(game, by_id["espn:123"], root), by_id["espn:123"])
+                self.assertEqual(rebuild_from_record(game, by_id["espn:123"], root), remap_paths(by_id["espn:123"]))
                 with self.assertRaisesRegex(ValueError, "Duplicate history game"):
-                    collect(histories + histories[:1], root / "dup", workers=1)
+                    collect(history + history[:1], root / "dup", workers=1)
+
+    def test_collect_refuses_published_or_nonempty_output_before_fetching(self):
+        game, _, _ = fixture()
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            with mock.patch.object(collect_rich_stats, "ROOT", root), mock.patch.object(collect_rich_stats, "fetch") as fetch:
+                with self.assertRaisesRegex(ValueError, "not the shared dataset"):
+                    collect([game], root / "data/processed")
+                output = root / "stage"
+                output.mkdir()
+                (output / "manifest.json").write_text('{"frozen": true}')
+                with self.assertRaisesRegex(ValueError, "empty unpublished"):
+                    collect([game], output)
+                fetch.assert_not_called()
+                self.assertEqual((output / "manifest.json").read_text(), '{"frozen": true}')
 
 
 if __name__ == "__main__":

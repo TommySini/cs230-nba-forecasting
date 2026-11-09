@@ -1,8 +1,5 @@
 {
-  "history_paths": [
-    "data/processed/history_2012/game_history.jsonl",
-    "data/processed/seasonal/game_history.jsonl"
-  ],
+  "dataset_path": "data/processed",
   "cutoff_minutes": 60,
   "previous_game_buffer_hours": 2.5,
   "max_window_hours": 72,
@@ -91,7 +88,7 @@
   },
   "cdx_snapshots": [
     {
-      "path": "data/research/archive_coverage/data/cdx_gamenotes_all.json",
+      "path": "data/raw/notes/archive_cdx/cdx_gamenotes_all.json",
       "description": "Full Wayback CDX prefix listing of www.nba.com/gamenotes/ (all pages, every status, uncollapsed, query-string variants), saved 2026-11-01 by the archive research run; the live index server was returning 503s"
     }
   ]

@@ -1,0 +1,232 @@
+{
+  "status": "published and validated; legacy cleanup deferred",
+  "checked_at_utc": "2026-11-09T21:07:40.383785+00:00",
+  "branch": "data-reconstruction",
+  "source_revision": "7681631",
+  "dataset_id": "4e5ba4eb05544f07f2806ae47d03761bf4e701e254543145299a59f99e9474ca",
+  "tables": {
+    "box_score_games": {
+      "rows": 16810,
+      "sha256": "94d50bacaaf9cc47950bc2c5de06edb440df4caa67d33c6bf65ea1a854beec73",
+      "bytes": 777128
+    },
+    "feature_lineage": {
+      "rows": 1328789,
+      "sha256": "0733d0270d956fc83c7f9bfec321ec3a72db0235b556bd661ba050e7d794c8d9",
+      "bytes": 1139064
+    },
+    "features": {
+      "rows": 15717,
+      "sha256": "d39889cfd056642856e427e5b8ad57486635c118babbbcb7484ff74e6ac901f8",
+      "bytes": 22824904
+    },
+    "games": {
+      "rows": 16829,
+      "sha256": "f347feaa47101c4c4b2c6fc428c1577530020a6081d1d4576424060480f83521",
+      "bytes": 609509
+    },
+    "labels_dev": {
+      "rows": 1204,
+      "sha256": "02b052536e90e51d00e143f9812d7e1dd7a2bb4edd8dc99f55ddbee2138df6d2",
+      "bytes": 7406
+    },
+    "labels_test": {
+      "rows": 1220,
+      "sha256": "7f47040bbf2cd24c6c078e59bf3f177814f7914b1815ee072ade06d593e68fee",
+      "bytes": 7288
+    },
+    "labels_train": {
+      "rows": 14405,
+      "sha256": "d8ce0e00055947e187e8fd11f8981a2b0be67c7d4b3e8d7998f5d67880cc3a27",
+      "bytes": 72103
+    },
+    "market_audit": {
+      "rows": 2424,
+      "sha256": "f5f77143e01e89410d1bddc58ba7e7dbbac0e192ab35b255089c970f77b25b4a",
+      "bytes": 361332
+    },
+    "market_prices": {
+      "rows": 9640,
+      "sha256": "9c27c6030453287c67ba9eacd07fee407a4f8ce063c7fa277854fc59526ebee4",
+      "bytes": 1597200
+    },
+    "note_pages": {
+      "rows": 53294,
+      "sha256": "ff4e160fb882907af43067ac0f06df9f34786fe51ebe628994a2b72777b8f733",
+      "bytes": 385093267
+    },
+    "note_texts": {
+      "rows": 3839,
+      "sha256": "cef2dd8f2e92acb7db23d375c0a8c3f7bba79d8827d07264460575245e77e410",
+      "bytes": 108290934
+    },
+    "notes": {
+      "rows": 2064,
+      "sha256": "a03b60e47cd5bbf91ac5d6bf6c3a3413281f7efbd16a2aaf1acea4f30629ec49",
+      "bytes": 636511
+    },
+    "player_box_scores": {
+      "rows": 356205,
+      "sha256": "9815873a748e6c69bc22a61bf4c86150b9f228df6beb694f8cab78169a07c54d",
+      "bytes": 3210579
+    },
+    "predictions": {
+      "rows": 16850,
+      "sha256": "55cbbb40ab615755d127c99f7e58682d651a6e79c5f58bbe8344c245e5543d36",
+      "bytes": 261961
+    },
+    "sources": {
+      "rows": 16810,
+      "sha256": "2765de8770def58dd0746e57db4b3ed94fadcadae94585430999d6e8004d7077",
+      "bytes": 1872845
+    },
+    "team_box_scores": {
+      "rows": 33620,
+      "sha256": "59d1918e8b23cded7c124a709b77c1acacf8d569c5180474e6327eae12680e37",
+      "bytes": 1168669
+    }
+  },
+  "feature_columns": 252,
+  "round_trip_checks": {
+    "tabpfn_train-smoke_progress": {
+      "exact": true,
+      "predictions": 18,
+      "runtime_seconds": 2.4451973331160843
+    },
+    "tabpfn_train-smoke": {
+      "predictions": 18,
+      "exact": true,
+      "resume_state": "completed, verified redundant with predictions and run metadata"
+    },
+    "tabpfn_dev_progress": {
+      "exact": true,
+      "predictions": 1123,
+      "runtime_seconds": 236.56381795811467
+    },
+    "tabpfn_dev": {
+      "predictions": 1123,
+      "exact": true,
+      "resume_state": "completed, verified redundant with predictions and run metadata"
+    },
+    "inputs": {
+      "rows": 15717,
+      "logical_sha256": "bc96b51b5c822e284b4f7903809d7dad8387b93cef0ee16f2a177068ec2e1dfd",
+      "exact": true
+    },
+    "labels": {
+      "rows": 15717,
+      "logical_sha256": "e85a0fedd11959b40046226ae5e38b0fa286936f20b0004fb9627355a65be27a",
+      "exact": true
+    },
+    "history": {
+      "rows": 16829,
+      "logical_sha256": "1649491678a59bf2de6481a8103102290fd936d185676be953532c533384a06e",
+      "exact": true
+    },
+    "box_scores": {
+      "rows": 16810,
+      "logical_sha256": "94f7080f04c0b7c268cfb61d441b15c1f6524c20a77863a3cd303788db429f6c",
+      "exact": true
+    },
+    "excluded": {
+      "rows": 1104,
+      "logical_sha256": "7ca7875f81995daf32fac8237836072ad89465f2503f6fdc5b6f6f819f7a1501",
+      "exact": true
+    },
+    "boosting_predictions": {
+      "rows": 14568,
+      "logical_sha256": "e55f4c6828c58b5f877ba7e782a082e1cc3181207e6d52add858193cc80a1fb1",
+      "exact": true
+    },
+    "market_records": 2410,
+    "horizon_records": 2410,
+    "horizon_observations": 4820,
+    "market_audit": 2424
+  },
+  "benchmark": {
+    "method": "One warmup per format, then three warm-cache reads on the same machine, 252 columns to NumPy float64. JSONL includes original audit metadata; Parquet projects the feature table. No model inference.",
+    "matrix_equal_nan": true,
+    "rows": 15717,
+    "columns": 252,
+    "input_jsonl_bytes": 262281139,
+    "feature_parquet_bytes": 22824904,
+    "shared_headers_lineage_features_bytes": 24573477,
+    "measurements": {
+      "jsonl_full_matrix": {
+        "runs_seconds": [
+          1.0830688750002082,
+          1.1188350419997732,
+          1.063669375000245
+        ],
+        "median_seconds": 1.0830688750002082
+      },
+      "parquet_full_matrix": {
+        "runs_seconds": [
+          0.011372041999493376,
+          0.011314249999486492,
+          0.01092466600039188
+        ],
+        "median_seconds": 0.011314249999486492
+      }
+    }
+  },
+  "models_retrained": false,
+  "existing_boosting_predictions_reproduced": true,
+  "new_forecasting_experiment": false,
+  "cleanup": {
+    "status": "deferred",
+    "reason": "A separate TabPFN adaptation worktree references legacy baseline data; a live process was observed during migration. Keep original raw and processed paths until these consumers switch.",
+    "original_sources_deleted": false
+  },
+  "validation": {
+    "scope": "installed canonical shared tables, models and run records; original raw layout retained",
+    "tests_run": 383,
+    "tests_skipped": 1,
+    "test_skip_reason": "optional Qwen tokenizer unavailable",
+    "validators": {
+      "gradient_boosting": "PASS; 15,717 rows rebuilt, all 14,568 predictions and saved metrics reproduce",
+      "tabpfn_train_smoke": "PASS; 14 fit / 18 query games; frozen predictions and metrics reproduce",
+      "tabpfn_dev": "PASS; 13,457 fit / 1,123 query games; frozen predictions and metrics reproduce",
+      "notes": "PASS; 2,144 documents / 1,997 games; checksummed source and cutoff evidence reproduce",
+      "polymarket": "PASS; 2,424 audited games / 2,410 matched games / 4,820 horizon observations reproduce offline",
+      "bam": "PASS; 1,922 games / 2,064 documents / 53,294 citation pages; 1,768 eligible boosting probabilities"
+    },
+    "tests_passed": 382,
+    "commands": [
+      ".venv/bin/python -m unittest discover -s tests",
+      ".venv/bin/python scripts/validate_gradient_boosting.py",
+      ".venv/bin/python scripts/validate_tabpfn.py --stage train-smoke",
+      ".venv/bin/python scripts/validate_tabpfn.py --stage dev",
+      ".venv/bin/python scripts/validate_notes_v2.py",
+      ".venv/bin/python scripts/validate_polymarket.py",
+      ".venv/bin/python scripts/bam_data.py validate data/processed"
+    ],
+    "log_sha256": {
+      "gb": "4ca3c60fa7dd19099e07f45b239b02b2db347d5160fba90f5f9be81530b0d6c0",
+      "tabpfn-smoke": "cde53590a06bb6fb669ffa31070a3145b21b6f1065c708fab18839bf5304adcb",
+      "tabpfn-dev": "541630db77c43c40cc23ed381a83a70b171e227534d11dfb33816e6f3acb7b2e",
+      "notes": "af3de4b4d8ef13da3ee4756c4984d3f7dc8c778986c300ffa388887dd46fd68d",
+      "market": "acea1eee84163f4d01855df7fcadc1f5aa6fcaab3ac634d15960279db23a4868",
+      "bam": "9a47809f5e0501162b49bcbbab0cb5b489e61d9bf76a5bdb00f54225d34df00b"
+    },
+    "raw_inventory_sha256": "030dbab507be9003f7594c34af8bc94d6c014ff175b97fadf255d8767065cf05"
+  },
+  "manifest_sha256": "a4e7ce00f27a453f25c623c58a6b1a0b1ca90590c64558e11b0d4fae16e6da02",
+  "publication": {
+    "status": "complete",
+    "published_at_utc": "2026-11-09T21:04:54.571480+00:00",
+    "raw_layout": "original",
+    "raw_files": 74799,
+    "raw_bytes": 21181501614
+  },
+  "writer": {
+    "pyarrow": "26.0.1",
+    "implementation_sha256": {
+      "scripts/collect_polymarket.py": "196310d7c84003a050b738f408d103f1e731e0cb9bd9e8bfb2f8dc797bd56df1",
+      "scripts/bam_data.py": "24878a9c32c0fa1a9789afb9959a68bde4a3666fc38276e18b7d7d89e5ae95d4",
+      "scripts/nba_dataset.py": "4ba3578f9eb78284f0c35b2cd4119a8b693faa70db2f80bf8e1869df0ef29992"
+    }
+  },
+  "staging_removed": true,
+  "shared_table_bytes": 527930700
+}

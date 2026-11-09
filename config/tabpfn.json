@@ -1,11 +1,7 @@
 {
   "experiment_id": "tabpfn_baseline",
-  "source_manifest": "reports/gradient_boosting/metrics.json",
   "baseline_config": "config/gradient_boosting.json",
-  "source_inputs": "data/processed/gradient_boosting/inputs.jsonl",
-  "source_labels": "data/processed/gradient_boosting/labels.jsonl",
-  "source_predictions": "data/processed/gradient_boosting/predictions.jsonl",
-  "output_dir": "data/processed/tabpfn",
+  "output_dir": "reports/tabpfn",
   "report_dir": "reports/tabpfn",
   "compute_platform": "local",
   "seed": 230,
@@ -25,5 +21,6 @@
     "max_context_rows": 50000,
     "device": "mps",
     "n_estimators": 4
-  }
+  },
+  "dataset_dir": "data/processed"
 }

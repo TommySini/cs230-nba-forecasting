@@ -10,7 +10,7 @@ import json
 import numpy as np
 
 from collect_pilot import ROOT, write_json
-from collect_polymarket import CONFIG_PATH, DATA_DIR, REPORT_DIR, read_rows
+from collect_polymarket import CONFIG_PATH, REPORT_DIR, load_games, load_horizon_records
 from evaluate_polymarket import SPLITS, joined_split, paired_bootstrap
 from run_gradient_boosting import score_predictions
 
@@ -19,9 +19,9 @@ def main():
     argparse.ArgumentParser(description=__doc__).parse_args()
     config = json.loads(CONFIG_PATH.read_text())
     hours = config["horizons"]["hours_before_tipoff"]
-    games = {g["game_id"]: g for g in read_rows(ROOT / config["history_path"])}
+    games = {g["game_id"]: g for g in load_games(config)}
     prices = {}
-    for row in read_rows(DATA_DIR / "horizon_prices.jsonl"):
+    for row in load_horizon_records():
         by_hour = {h["hours_before_tipoff"]: h for h in row["horizons"]}
         if all(by_hour[h]["usable"] for h in hours):
             prices[row["game_id"]] = {h: by_hour[h]["history_probability"] for h in hours}

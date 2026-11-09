@@ -1,24 +1,19 @@
-"""Immutable, outcome-separated BAM inputs built from the game-notes v2 dataset.
+"""Outcome-separated BAM views over shared games, features, forecasts and notes.
 
-Each prepare invocation freezes the approved notes_v2 manifest. A later
-collector update requires a new snapshot. Raw byte hashes identify sources;
-page/line citations are stable within the snapshot, not inferred by a model.
+The shared tables preserve the admitted corpus and exact page/line citations.
+Legacy execution bundles remain readable for validation during migration.
 """
 import argparse
 from collections import Counter, defaultdict
-from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 import gzip
 import hashlib
 import io
-from importlib.metadata import version
 import json
 import math
 from pathlib import Path
 import re
-import shutil
-import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_VERSION = "bam-inputs-v3"
@@ -67,7 +62,8 @@ def availability_time(doc):
 
 def article_item(doc, root=ROOT):
     """The single article object for an HTML post inside its saved API listing page."""
-    body = (Path(root) / doc["source"]["api_raw_path"]).read_bytes()
+    from nba_dataset import resolve_source_path
+    body = resolve_source_path(root, doc["source"]["api_raw_path"]).read_bytes()
     if digest(body) != doc["source"]["api_sha256"]:
         raise ValueError("API response checksum mismatch")
     data = json.loads(body)
@@ -82,7 +78,8 @@ def source_bytes(doc, root=ROOT):
     if doc["kind"] == "html_post":
         return canonical(article_item(doc, root))
     source = doc["source"]
-    path = (Path(root) / source["raw_path"]).resolve()
+    from nba_dataset import resolve_source_path
+    path = resolve_source_path(root, source["raw_path"]).resolve()
     if not path.is_relative_to((Path(root) / "data/raw").resolve()):
         raise ValueError("Raw source path escapes data/raw")
     body = path.read_bytes()
@@ -167,13 +164,28 @@ def pages_with_lines(pages):
     return result
 
 
-def load_snapshot_game(directory, game_id, active_only=True):
+def load_snapshot_game(directory, game_id, active_only=True, root=ROOT):
     """Materialize the research input interface without loading any outcome file.
 
     Call validate_snapshot once before a training run. Per-game loading checks
     input and source-page hashes against that frozen manifest again.
     """
     directory = Path(directory)
+    if (directory / "bam_manifest.json").exists():
+        manifest = _verify_shared_files(directory, root=root)
+        found = [row for row in read_snapshot_inputs(directory, root=root) if row["game_id"] == game_id]
+        if len(found) != 1:
+            raise KeyError(game_id)
+        game = found[0]
+        sources = []
+        for source in game["sources"]:
+            if active_only and not source["active_for_research"]:
+                continue
+            packet = read_note_packet(directory, source["sha256"])
+            if digest(canonical(packet)) != source["pages_sha256"]:
+                raise ValueError("Source page checksum changed")
+            sources.append({**source, "pages": packet["pages"]})
+        return {**game, "sources": sources, "snapshot_id": manifest["snapshot_id"]}
     manifest = json.loads((directory / "manifest.json").read_text())
     body = (directory / "inputs.jsonl").read_bytes()
     if digest(body) != manifest["artifact_sha256"]["inputs.jsonl"]:
@@ -264,15 +276,34 @@ def extract_pages(task):
     return raw_hash, pages_with_lines(pages)
 
 
-def validate_snapshot(directory):
+def validate_snapshot(directory, root=ROOT, *, label_splits=("train", "dev", "test")):
     directory = Path(directory)
+    if (directory / "bam_manifest.json").exists():
+        return validate_shared_notes(directory, root=root, label_splits=label_splits)
+    requested = set(label_splits)
+    if not requested <= {"train", "dev", "test"}:
+        raise ValueError("Unknown BAM label split")
     manifest = json.loads((directory / "manifest.json").read_text())
     for path, expected in manifest["artifact_sha256"].items():
+        if path.startswith("labels") and requested != {"train", "dev", "test"}:
+            if path not in {f"labels_{split}.jsonl" for split in requested}:
+                continue
         if digest((directory / path).read_bytes()) != expected:
             raise ValueError("Snapshot artifact checksum changed: " + path)
     rows = read_rows(directory / "inputs.jsonl")
-    labels = read_rows(directory / "labels.jsonl")
-    if [r["game_id"] for r in rows] != [r["game_id"] for r in labels] or len({r["game_id"] for r in rows}) != len(rows):
+    label_rows = [row for row in rows if row["split"] in requested]
+    if requested == {"train", "dev", "test"}:
+        labels = read_rows(directory / "labels.jsonl")
+    else:
+        labels = []
+        for split in ("train", "dev", "test"):
+            if split not in requested:
+                continue
+            path = directory / f"labels_{split}.jsonl"
+            if not path.exists():
+                raise ValueError("Scoped legacy validation requires separate outcome partitions")
+            labels.extend(read_rows(path))
+    if [r["game_id"] for r in label_rows] != [r["game_id"] for r in labels] or len({r["game_id"] for r in rows}) != len(rows):
         raise ValueError("Duplicate or unaligned games")
     date_splits = defaultdict(set)
     fit_ids = set(manifest["boosting_fit_game_ids"])
@@ -311,120 +342,299 @@ def validate_snapshot(directory):
     return manifest["summary"]
 
 
+def snapshot_manifest_path(directory):
+    directory = Path(directory)
+    return directory / ("bam_manifest.json" if (directory / "bam_manifest.json").exists() else "manifest.json")
+
+
+def _file_hash(path):
+    with Path(path).open("rb") as stream:
+        return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def _verify_shared_files(directory, root=ROOT):
+    """Verify the outcome-blind view's dependencies; never open a label store."""
+    directory = Path(directory)
+    manifest = json.loads((directory / "bam_manifest.json").read_text())
+    for name, expected in manifest["artifact_sha256"].items():
+        if Path(name).name != name or "label" in name:
+            raise ValueError("Invalid outcome-blind BAM dependency")
+        if _file_hash(directory / name) != expected:
+            raise ValueError("Shared BAM artifact checksum changed: " + name)
+    # Other models append to the shared prediction table. The main dataset manifest
+    # pins its current bytes; BAM pins only its original boosting cohort and values.
+    from nba_dataset import Dataset
+    predictions = Dataset(root=root, processed_dir=directory).predictions("gradient_boosting", stage="baseline")
+    by_id = {}
+    for row in predictions:
+        if row["game_id"] in by_id:
+            raise ValueError("Duplicate gradient forecast in shared table")
+        by_id[row["game_id"]] = row
+    relevant = [by_id[row["game_id"]] for row in manifest["cohort"] if row["game_id"] in by_id]
+    if digest(canonical(relevant)) != manifest["gradient_forecasts_sha256"]:
+        raise ValueError("BAM gradient forecast cohort or values changed")
+    return manifest
+
+
+def _page_schema():
+    import pyarrow as pa
+    line = pa.struct([("line", pa.int32()), ("text", pa.string())])
+    context = pa.struct([("section", pa.int32()), ("label", pa.string()), ("lines", pa.list_(line))])
+    return pa.schema([
+        ("source_sha256", pa.string()), ("_fields", pa.list_(pa.string())),
+        ("page", pa.int32()), ("page_kind", pa.string()), ("text", pa.large_string()),
+        ("text_sha256", pa.string()), ("method", pa.string()), ("flags", pa.list_(pa.string())),
+        ("plain_text", pa.large_string()), ("layout_text", pa.large_string()),
+        ("lines", pa.list_(line)), ("section", pa.int32()), ("label", pa.string()),
+        ("context_sections", pa.list_(context)),
+    ])
+
+
+def read_note_packet(directory, source_sha256):
+    import pyarrow.parquet as pq
+    directory = Path(directory)
+    table = pq.read_table(directory / "note_pages.parquet", filters=[("source_sha256", "=", source_sha256)])
+    pages = [{key: row[key] for key in row["_fields"]} for row in table.to_pylist()]
+    if not pages:
+        raise KeyError(source_sha256)
+    pages.sort(key=lambda page: page["page"])
+    notes = pq.read_table(directory / "notes.parquet", filters=[("sha256", "=", source_sha256)],
+                          columns=["packet_metadata"]).to_pylist()
+    metadata = json.loads(notes[0]["packet_metadata"])
+    return {**metadata, "pages": pages}
+
+
+def read_snapshot_inputs(directory, root=ROOT, *, legacy_paths=False, splits=None):
+    """Reconstruct admitted pregame rows by ID without opening outcomes."""
+    from nba_dataset import Dataset, read_rows as table_rows
+    directory = Path(directory)
+    allowed = {"train", "dev", "test"} if splits is None else set(splits)
+    if not allowed <= {"train", "dev", "test"}:
+        raise ValueError("Unknown BAM split")
+    if not (directory / "bam_manifest.json").exists():
+        return [row for row in read_rows(directory / "inputs.jsonl") if row["split"] in allowed]
+    manifest = json.loads((directory / "bam_manifest.json").read_text())
+    dataset = Dataset(root=root, processed_dir=directory)
+    features = {row["game_id"]: row["features"] for row in dataset.inputs(splits=allowed)}
+    predictions = {row["game_id"]: row for row in dataset.predictions("gradient_boosting", stage="baseline")}
+    sources = defaultdict(list)
+    for note in table_rows(directory / "notes.parquet"):
+        source = {key: note[key] for key in note["source_fields"]}
+        source["archive_time"] = stamp(note["archive_time"]).isoformat().replace("+00:00", "Z")
+        if legacy_paths:
+            source["raw_path"] = note["legacy_raw_path"]
+            source["pages_path"] = note["legacy_pages_path"]
+        sources[note["game_id"]].append((note["source_order"], source))
+    rows = []
+    for cohort in manifest["cohort"]:
+        if cohort["split"] not in allowed:
+            continue
+        game_id = cohort["game_id"]
+        prediction = predictions.get(game_id)
+        row = {**cohort, "features": features.get(game_id),
+               "p_boost": prediction["p_boost"] if prediction else None,
+               "sources": [source for _, source in sorted(sources[game_id])]}
+        if row["forecast_eligible"] != (prediction is not None):
+            raise ValueError("Shared forecast membership differs from admitted BAM cohort")
+        rows.append(row)
+    return rows
+
+
+def _admitted_source_bytes(source, root):
+    from nba_dataset import resolve_source_path
+    body = resolve_source_path(root, source["original_raw_path"]).read_bytes()
+    if source["source_kind"] == "html":
+        listing = json.loads(body)
+        items = [item for item in listing.get("items") or listing.get("results") or []
+                 if item.get("permalink") == source["url"]]
+        if len(items) != 1:
+            raise ValueError("Admitted article missing or repeated in original listing")
+        return canonical(items[0])
+    return body
+
+
+def validate_shared_notes(directory, root=ROOT, *, label_splits=("train", "dev", "test")):
+    """Check migrated corpus, exact citations and source admission without new extraction."""
+    from nba_dataset import Dataset
+    directory = Path(directory)
+    manifest = _verify_shared_files(directory, root=root)
+    rows = read_snapshot_inputs(directory, root=root, legacy_paths=True)
+    if digest(canonical(rows)) != manifest["logical_inputs_sha256"]:
+        raise ValueError("Shared BAM inputs differ from the frozen corpus")
+    if not set(label_splits) <= {"train", "dev", "test"}:
+        raise ValueError("Unknown BAM label split")
+    if label_splits:
+        dataset = Dataset(root=root, processed_dir=directory)
+        labels = {row["game_id"]: row for row in dataset.labels(label_splits, eligible_only=False)}
+        for split in label_splits:
+            ordered_labels = [{"game_id": row["game_id"], "home_win": labels[row["game_id"]]["home_win"]}
+                              for row in rows if row["split"] == split]
+            if digest(canonical(ordered_labels)) != manifest["logical_labels_sha256_by_split"][split]:
+                raise ValueError("Shared BAM labels differ from the frozen corpus")
+    seen = set()
+    for row in rows:
+        if any(key in row for key in ("home_win", "home_score", "away_score", "recap", "postmortem")):
+            raise ValueError("Outcome content in predictor input")
+        if stamp(row["scheduled_start_utc"]) - stamp(row["cutoff_utc"]) != timedelta(minutes=60):
+            raise ValueError("Prediction cutoff differs from tipoff minus 60 minutes")
+        if manifest["season_splits"].get(str(row["season"])) != row["split"]:
+            raise ValueError("BAM season split changed")
+        for source in row["sources"]:
+            if stamp(source["archive_time"]) > stamp(row["cutoff_utc"]):
+                raise ValueError("Source archive is later than cutoff")
+            if source["sha256"] in seen:
+                continue
+            seen.add(source["sha256"])
+            if digest(_admitted_source_bytes(source, root)) != source["sha256"]:
+                raise ValueError("Original note source checksum changed")
+            packet = read_note_packet(directory, source["sha256"])
+            if digest(canonical(packet)) != source["pages_sha256"]:
+                raise ValueError("Migrated page packet checksum changed")
+            if pages_with_lines(packet["pages"]) != packet["pages"]:
+                raise ValueError("Page/line citations changed")
+    return manifest["summary"]
+
+
+def migrate_notes(root, staging):
+    """Losslessly stage existing note records/pages; never extract PDFs or write raw sources."""
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+    from nba_dataset import write_table, resolve_source_path
+    root, staging = Path(root), Path(staging)
+    old = root / "data/processed/bam_pipeline/bam_notes_v2"
+    old_notes = root / "data/processed/notes_v2"
+    manifest = json.loads((old / "manifest.json").read_text())
+    rows, labels = read_rows(old / "inputs.jsonl"), read_rows(old / "labels.jsonl")
+    known_bam = {"manifest.json", "inputs.jsonl", "labels.jsonl", "labels_train.jsonl", "labels_dev.jsonl", "labels_test.jsonl"}
+    known_bam.update(source[key] for row in rows for source in row["sources"] for key in ("raw_path", "pages_path"))
+    known_notes = {"candidates.jsonl", "documents.jsonl", "approved.jsonl", "html_posts.jsonl", "review_summary.json", "fetch.log"}
+    known_notes.update(str(path.relative_to(old_notes)) for path in (old_notes / "texts").glob("*.txt"))
+    for directory, known in ((old, known_bam), (old_notes, known_notes)):
+        unknown = {str(path.relative_to(directory)) for path in directory.rglob("*") if path.is_file()} - known
+        if unknown:
+            raise ValueError("Unmapped notes cleanup files: " + str(sorted(unknown)))
+    for name in ("inputs.jsonl", "labels.jsonl"):
+        if _file_hash(old / name) != manifest["artifact_sha256"][name]:
+            raise ValueError("Frozen BAM migration input changed: " + name)
+    notes, packet_hashes, seen, input_hashes, coverage = [], {}, set(), {}, {}
+    def cover(path, replacement, expected=None):
+        relative = str(path.relative_to(root))
+        actual = _file_hash(path) if expected is None else expected
+        input_hashes[relative] = actual
+        coverage[relative] = {"sha256": actual, "replacement": replacement}
+    cover(old / "manifest.json", "bam_manifest.json:legacy_manifest")
+    cover(old / "inputs.jsonl", "bam_manifest.json:cohort + shared features/predictions/notes; logical_inputs_sha256")
+    cover(old / "labels.jsonl", "labels_train/dev/test.parquet; logical_labels_sha256")
+    for split in ("train", "dev", "test"):
+        path = old / f"labels_{split}.jsonl"
+        if path.exists():
+            expected = [label for row, label in zip(rows, labels) if row["split"] == split]
+            if read_rows(path) != expected or _file_hash(path) != manifest["artifact_sha256"][path.name]:
+                raise ValueError("Frozen BAM label partition changed: " + split)
+            cover(path, f"labels_{split}.parquet; logical_labels_sha256_by_split")
+    source_keys = set()
+    page_schema = _page_schema()
+    with pq.ParquetWriter(staging / "note_pages.parquet", page_schema, compression="zstd") as writer:
+        for row in rows:
+            for order, source in enumerate(row["sources"]):
+                source_keys.update(source)
+                packet_path = old / source["pages_path"]
+                if _file_hash(packet_path) != source["pages_sha256"]:
+                    raise ValueError("Frozen note page checksum changed")
+                packet = json.loads(packet_path.read_text())
+                if digest(canonical(packet)) != source["pages_sha256"]:
+                    raise ValueError("Page packet is not in the expected canonical encoding")
+                if digest(_admitted_source_bytes(source, root)) != source["sha256"]:
+                    raise ValueError("Original note bytes differ from admitted snapshot")
+                if _file_hash(old / source["raw_path"]) != source["sha256"]:
+                    raise ValueError("Frozen snapshot raw copy changed")
+                cover(packet_path, "note_pages.parquet + notes.parquet:packet_metadata; sha256=" + source["sha256"],
+                      expected=source["pages_sha256"])
+                cover(old / source["raw_path"], "original source " + source["original_raw_path"] +
+                      ("; canonical article selected by URL " + source["url"] if source["source_kind"] == "html" else ""),
+                      expected=source["sha256"])
+                if source["sha256"] not in seen:
+                    seen.add(source["sha256"])
+                    if pages_with_lines(packet["pages"]) != packet["pages"]:
+                        raise ValueError("Frozen citation line structure changed")
+                    pages = [{"source_sha256": source["sha256"], "_fields": list(page), **page}
+                             for page in packet["pages"]]
+                    unknown = set().union(*(set(page) for page in pages)) - set(page_schema.names)
+                    if unknown:
+                        raise ValueError("Unmapped page fields: " + str(unknown))
+                    writer.write_table(pa.Table.from_pylist(pages, schema=page_schema))
+                    packet_hashes[source["sha256"]] = source["pages_sha256"]
+                notes.append({**source, "game_id": row["game_id"], "source_order": order,
+                              "source_fields": list(source), "archive_time": stamp(source["archive_time"]),
+                              "legacy_raw_path": source["raw_path"], "legacy_pages_path": source["pages_path"],
+                              "raw_path": source["original_raw_path"],
+                              "pages_path": "note_pages.parquet#" + source["sha256"],
+                              "packet_metadata": json.dumps({k: v for k, v in packet.items() if k != "pages"}, sort_keys=True)})
+    fields = [(key, pa.bool_() if key == "active_for_research" else
+               pa.timestamp("us", tz="UTC") if key == "archive_time" else pa.string()) for key in sorted(source_keys)]
+    schema = pa.schema(fields + [("game_id", pa.string()), ("source_order", pa.int32()),
+                                 ("source_fields", pa.list_(pa.string())), ("legacy_raw_path", pa.string()),
+                                 ("legacy_pages_path", pa.string()), ("packet_metadata", pa.string())])
+    write_table(staging / "notes.parquet", notes, schema=schema)
+    # Heterogeneous rejection/header checks remain inspectable metadata; lengthy text is stored once.
+    audit = {name: read_rows(old_notes / (name + ".jsonl"))
+             for name in ("candidates", "documents", "approved", "html_posts")}
+    text_rows = []
+    for path in sorted((old_notes / "texts").glob("*.txt")):
+        raw = path.read_bytes()
+        text_rows.append({"text_path": str(path.relative_to(root)), "text": raw.decode("utf-8"), "sha256": digest(raw)})
+        cover(path, "note_texts.parquet:text_path=" + str(path.relative_to(root)), expected=digest(raw))
+    for number, post in enumerate(audit["html_posts"]):
+        text = post.pop("text")
+        text_id = "html-post:" + str(number)
+        text_rows.append({"text_path": text_id, "text": text, "sha256": digest(text.encode())})
+        post["text_id"] = text_id
+    write_table(staging / "note_texts.parquet", text_rows,
+                schema=pa.schema([("text_path", pa.string()), ("text", pa.large_string()), ("sha256", pa.string())]))
+    audit["review_summary"] = json.loads((old_notes / "review_summary.json").read_text())
+    if (old_notes / "fetch.log").exists():
+        audit["collector_logs"] = {"fetch.log": (old_notes / "fetch.log").read_bytes().decode("utf-8")}
+        cover(old_notes / "fetch.log", "note_audit.json:collector_logs.fetch.log")
+    write_json(staging / "note_audit.json", audit)
+    for path in sorted(old_notes.glob("*.json*")):
+        cover(path, "note_audit.json:" + path.stem + (" + note_texts.parquet" if path.stem == "html_posts" else ""))
+    dependent = ("notes.parquet", "note_pages.parquet", "note_texts.parquet", "note_audit.json",
+                 "features.parquet", "games.parquet", "feature_lineage.parquet")
+    compact = {key: manifest[key] for key in ("snapshot_id", "season_splits", "prediction_model_cutoff_date",
+                                             "boosting_fit_game_ids", "summary", "identity")}
+    compact.update(schema_version="bam-shared-v1",
+                   cohort=[{key: value for key, value in row.items() if key not in ("features", "sources", "p_boost")} for row in rows],
+                   logical_inputs_sha256=digest(canonical(rows)), logical_labels_sha256=digest(canonical(labels)),
+                   gradient_forecasts_sha256=digest(canonical([
+                       {**{key: row[key] for key in ("game_id", "season", "game_date_et", "split", "p_boost")},
+                        "produced_by": row["boosting_produced_by"]} for row in rows if row["p_boost"] is not None])),
+                   logical_labels_sha256_by_split={
+                       split: digest(canonical([label for row, label in zip(rows, labels) if row["split"] == split]))
+                       for split in ("train", "dev", "test")},
+                   legacy_manifest=manifest, source_sha256=input_hashes, cleanup_coverage=coverage,
+                   artifact_sha256={name: _file_hash(staging / name) for name in dependent if (staging / name).exists()})
+    write_json(staging / "bam_manifest.json", compact)
+    # Round-trip every source packet, including optional page fields and exact line endings.
+    for source_hash, expected in packet_hashes.items():
+        if digest(canonical(read_note_packet(staging, source_hash))) != expected:
+            raise ValueError("Parquet changed a note packet: " + source_hash)
+    return {"games": len(rows), "documents": len(notes), "sources": len(seen), "reviewed_texts": len(text_rows),
+            "source_sha256": input_hashes, "cleanup_coverage": coverage,
+            "remove_candidates": [str(old.relative_to(root)), str(old_notes.relative_to(root))], "install_files": {}}
+
+
 def prepare(config, snapshot_id=None, workers=4, root=ROOT):
-    import joblib
-    from run_gradient_boosting import load_verified_history, season_splits
-    root = Path(root)
-    if root.resolve() != ROOT.resolve():
-        raise ValueError("Schedule verifier uses this repository root; alternate roots are unsupported")
-    base_path = root / config.get("baseline_config", "config/gradient_boosting.json")
-    baseline = json.loads(base_path.read_text())
-    if baseline["cutoff_minutes"] != 60:
-        raise ValueError("BAM requires scheduled tipoff minus 60 minutes")
-    splits = season_splits(baseline)
-    history_by_id = {r["game_id"]: r for r in load_verified_history(baseline)}
-    boosting = root / "data/processed/gradient_boosting"
-    # Only boosting outputs that match their validated metrics (validate_gradient_boosting.py).
-    for name, expected in json.loads((root / "reports/gradient_boosting/metrics.json").read_text())["artifact_sha256"].items():
-        if digest((root / name).read_bytes()) != expected:
-            raise ValueError("Boosting artifact differs from reports/gradient_boosting/metrics.json: " + name)
-    predictions = {r["game_id"]: r for r in read_rows(boosting / "predictions.jsonl")}
-    features = {r["game_id"]: r["features"] for r in read_rows(boosting / "inputs.jsonl")}
-    boosting_excluded = {r["game_id"]: r for r in read_rows(boosting / "excluded.jsonl")}
-    fit_ids = set(joblib.load(boosting / "model.joblib")["final"]["fit_game_ids"])
-    provenance = {}
-    def freeze(path):
-        path = Path(path)
-        provenance[str(path.relative_to(root))] = digest(path.read_bytes())
-    for path in (base_path, *(root / s[k] for s in baseline["histories"] for k in ("path", "config")), Path(__file__),
-                 *(boosting / name for name in ("predictions.jsonl", "inputs.jsonl", "excluded.jsonl", "model.joblib")),
-                 root / "scripts/run_gradient_boosting.py", root / "scripts/box_score_features.py",
-                 root / "scripts/collect_pilot.py", root / "scripts/collect_notes_v2.py", root / config["notes_path"]):
-        freeze(path)
-    docs = read_rows(root / config["notes_path"])
-    rows, bodies, excluded = notes_v2_games(docs, history_by_id, root)
-    kept = {r["game_id"] for r in rows}
-    for doc in docs:
-        if doc["game_id"] in kept and not doc.get("modified_after_cutoff"):
-            freeze(root / doc["source"]["api_raw_path" if doc["kind"] == "html_post" else "raw_path"])
-    rows = attach_boosting(rows, history_by_id, splits, predictions, features, boosting_excluded)
-    # Dev/test games of the earlier text pilots, whose labels and scores were already inspected.
-    inspected = set(config.get("previously_inspected_game_ids", []))
-    identity = {"schema_version": SCHEMA_VERSION, "config": config, "provenance_sha256": provenance,
-                "runtime_versions": {name: version(name) for name in ("pypdf", "numpy", "scikit-learn", "joblib")}}
-    snapshot_id = snapshot_id or digest(canonical(identity))[:20]
-    if not snapshot_id or Path(snapshot_id).name != snapshot_id or snapshot_id in (".", ".."):
-        raise ValueError("Snapshot ID must be one directory name")
-    parent = root / "data/processed/bam_pipeline"
-    final = parent / snapshot_id
-    if final.exists():
-        existing = json.loads((final / "manifest.json").read_text())
-        if existing["identity"] != identity:
-            raise FileExistsError("Snapshot ID already exists with different inputs/config")
-        validate_snapshot(final)
-        return final
-    parent.mkdir(parents=True, exist_ok=True)
-    staging = Path(tempfile.mkdtemp(prefix=".preparing-" + snapshot_id + "-", dir=parent))
-    try:
-        tasks, kinds = {}, {}
-        for row in rows:
-            for source in row["sources"]:
-                sha = source["sha256"]
-                source.update(raw_path="raw/" + sha + ".bin", pages_path="sources/" + sha + ".json")
-                raw = staging / source["raw_path"]
-                if not raw.exists():
-                    raw.parent.mkdir(parents=True, exist_ok=True)
-                    raw.write_bytes(bodies[sha])
-                tasks[sha] = (source["source_kind"], str(raw), sha)
-                kinds[sha] = source
-        print(json.dumps({"snapshot_id": snapshot_id, "games": len(rows), "unique_sources": len(tasks),
-                          "excluded_documents": dict(excluded), "stage": "extracting"}), flush=True)
-        with ProcessPoolExecutor(max_workers=workers) as executor:
-            for sha, pages in executor.map(extract_pages, [tasks[k] for k in sorted(tasks)]):
-                write_json(staging / "sources" / (sha + ".json"), {
-                    "source_sha256": sha, "source_kind": kinds[sha]["source_kind"], "pagination": kinds[sha]["pagination"],
-                    "pages": pages, "visual_completeness": "Every PDF page or article section retained; figures and extraction flags require separate review."})
-                print(json.dumps({"source_sha256": sha, "pages": len(pages)}), flush=True)
-        for row in rows:
-            for source in row["sources"]:
-                source["pages_sha256"] = digest((staging / source["pages_path"]).read_bytes())
-        separate_labels = [{"game_id": r["game_id"], "home_win": int(history_by_id[r["game_id"]]["home_score"] > history_by_id[r["game_id"]]["away_score"])} for r in rows]
-        write_rows(staging / "inputs.jsonl", rows)
-        write_rows(staging / "labels.jsonl", separate_labels)
-        for split in ("train", "dev", "test"):
-            membership = {r["game_id"] for r in rows if r["split"] == split}
-            write_rows(staging / ("labels_" + split + ".jsonl"), [r for r in separate_labels if r["game_id"] in membership])
-        reused = sorted(r["game_id"] for r in rows if r["split"] == "test" and r["game_id"] in inspected)
-        summary = {"games": len(rows), "sources": len(tasks), "excluded_documents": dict(excluded),
-                   "evidence_tiers": dict(Counter(s["evidence_tier"] for r in rows for s in r["sources"])),
-                   "splits": dict(Counter(r["split"] for r in rows)),
-                   "forecast_eligible": dict(Counter(r["split"] for r in rows if r["forecast_eligible"])),
-                   "boosting_produced_by": dict(Counter(r["boosting_produced_by"] for r in rows if r["forecast_eligible"])),
-                   "research_only": dict(Counter(r["forecast_ineligibility_reason"] for r in rows if not r["forecast_eligible"])),
-                   "previously_inspected_test_ids": reused,
-                   "test_status": "exploratory_previously_inspected" if reused else "candidate_uninspected_requires_model_knowledge_audit",
-                   "full_packet_quality": "All pages preserved; notes_v2 approval checks headers and results, not full-packet semantics."}
-        artifacts = {str(p.relative_to(staging)): digest(p.read_bytes()) for p in sorted(staging.rglob("*")) if p.is_file()}
-        manifest = {"schema_version": SCHEMA_VERSION, "snapshot_id": snapshot_id, "identity": identity,
-                    "season_splits": {str(season): split for season, split in sorted(splits.items())},
-                    "prediction_model_cutoff_date": config["prediction_model_cutoff_date"],
-                    "boosting_fit_game_ids": sorted(fit_ids), "artifact_sha256": artifacts, "summary": summary}
-        write_json(staging / "manifest.json", manifest)
-        validate_snapshot(staging)
-        # Check input files again before publishing an atomically complete snapshot.
-        for name, expected in provenance.items():
-            if digest((root / name).read_bytes()) != expected:
-                raise ValueError("Input changed during preparation; retry after collector publishes: " + name)
-        staging.rename(final)
-        report = root / "reports/bam_pipeline" / snapshot_id
-        report.mkdir(parents=True, exist_ok=False)
-        write_json(report / "data_summary.json", summary)
-        write_json(report / "snapshot_manifest.json", manifest)
-        print(json.dumps(summary, indent=2), flush=True)
-        return final
-    except BaseException:
-        shutil.rmtree(staging, ignore_errors=True)
-        raise
+    """Return the validated shared view; preparation no longer copies a dataset."""
+    directory = Path(root) / config.get("dataset_path", "data/processed")
+    if not (directory / "bam_manifest.json").exists():
+        raise FileNotFoundError("Migrate the shared dataset with nba_dataset.py before preparing BAM")
+    manifest = _verify_shared_files(directory, root=root)
+    if snapshot_id is not None and snapshot_id != manifest["snapshot_id"]:
+        raise ValueError("BAM view identity is fixed by the migrated dataset")
+    if config.get("prediction_model_cutoff_date") != manifest["prediction_model_cutoff_date"]:
+        raise ValueError("Prediction model cutoff differs from the admitted corpus")
+    validate_shared_notes(directory, root=root, label_splits=())
+    return directory
 
 
 def main():

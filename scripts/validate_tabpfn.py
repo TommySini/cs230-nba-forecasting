@@ -82,10 +82,11 @@ def validate_prediction_rows(manifest, inputs, labels, rows):
 
 def validate_run(config, stage):
     # Import lazily so pure artifact checks do not import TabPFN or load weights.
-    from run_tabpfn import load_prepared
+    from run_tabpfn import (load_prepared, record_directory, shared_dataset, verify_imported_record,
+                           load_comparison_rows, prediction_digest)
 
     manifest, inputs, labels = load_prepared(config, stage)
-    output = ROOT / config["output_dir"] / stage
+    output = record_directory(config, stage)
     run = json.loads((output / "run.json").read_text())
     if run.get("stage") != stage or run.get("status") != "complete":
         raise ValueError("Expected a completed run for the requested stage")
@@ -93,17 +94,19 @@ def validate_run(config, stage):
         raise ValueError("Recorded model/package differs from the experiment pin")
     if run["manifest_sha256"] != sha256(output / "manifest.json"):
         raise ValueError("Prepared manifest changed after the run")
-    artifacts = run["artifact_sha256"]
-    if "predictions.csv" not in artifacts:
+    rows = load_comparison_rows(config, stage, manifest)
+    if run.get("schema_version", 1) == 1:
+        dataset = shared_dataset(config)
+        verify_imported_record(dataset, stage, "run.json", run)
+        original_path = f"data/processed/tabpfn/{stage}/predictions.csv"
+        if run.get("artifact_sha256", {}).get("predictions.csv") != dataset.manifest["source_sha256"].get(original_path):
+            raise ValueError("Imported run does not bind the prediction artifact")
+        if prediction_digest(rows) != dataset.manifest["imported_prediction_sha256"][stage]:
+            raise ValueError("Changed imported per-game predictions")
+    elif not run.get("predictions_sha256"):
         raise ValueError("Run does not bind the prediction artifact")
-    for name, expected in artifacts.items():
-        relative = Path(name)
-        if relative.is_absolute() or ".." in relative.parts:
-            raise ValueError("Run artifact paths must stay within its output directory")
-        if sha256(output / relative) != expected:
-            raise ValueError(f"Changed run artifact: {name}")
-    with (output / "predictions.csv").open(newline="") as stream:
-        rows = list(csv.DictReader(stream))
+    elif run["predictions_sha256"] != prediction_digest(rows):
+        raise ValueError("Changed run artifact: shared predictions")
     y, predictions, metrics = validate_prediction_rows(manifest, inputs, labels, rows)
     uncertainty = bootstrap_brier(
         y, predictions, [row["game_date_et"] for row in rows],
@@ -127,8 +130,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
     parser.add_argument("--stage", choices=("train-smoke", "dev"), default="train-smoke")
+    parser.add_argument("--dataset", type=Path, help="Validate a staged shared dataset")
     args = parser.parse_args()
-    result = validate_run(load_config(args.config.resolve()), args.stage)
+    config = load_config(args.config.resolve())
+    if args.dataset:
+        config["dataset_dir"] = str(args.dataset.resolve())
+    result = validate_run(config, args.stage)
     print(json.dumps({"status": "PASS", **result}, indent=2))
 
 

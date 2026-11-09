@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch, Mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import bam_data as bam
@@ -174,6 +175,123 @@ class SnapshotTests(unittest.TestCase):
                 bam.write_json(path / "manifest.json", manifest)
                 with self.assertRaises(ValueError):
                     bam.validate_snapshot(directory)
+
+
+class SharedNotesTests(unittest.TestCase):
+    def fixture(self, root):
+        root = Path(root)
+        old = root / "data/processed/bam_pipeline/bam_notes_v2"
+        old.mkdir(parents=True)
+        row = SnapshotTests().fixture(old)
+        raw_path = root / "data/raw/notes/example.pdf"
+        raw_path.parent.mkdir(parents=True)
+        raw_path.write_bytes((old / "raw/a.bin").read_bytes())
+        row.update(features={"x": 1.25}, forecast_eligible=True, p_boost=0.4,
+                   boosting_produced_by="prior_seasons", forecast_ineligibility_reason=None)
+        row["sources"][0].update(original_raw_path="data/raw/notes/example.pdf", source_kind="pdf")
+        bam.write_rows(old / "inputs.jsonl", [row])
+        manifest = json.loads((old / "manifest.json").read_text())
+        manifest.update(identity={"config": {}}, artifact_sha256={
+            str(path.relative_to(old)): bam.digest(path.read_bytes())
+            for path in old.rglob("*") if path.is_file() and path.name != "manifest.json"})
+        bam.write_json(old / "manifest.json", manifest)
+        reviewed = root / "data/processed/notes_v2"
+        reviewed.mkdir()
+        for name in ("candidates", "documents", "approved", "html_posts"):
+            bam.write_rows(reviewed / (name + ".jsonl"), [])
+        bam.write_json(reviewed / "review_summary.json", {})
+        stage = root / "stage"
+        stage.mkdir()
+        bam.migrate_notes(root, stage)
+        dataset = Mock()
+        dataset.inputs.return_value = [{"game_id": row["game_id"], "features": row["features"]}]
+        dataset.predictions.return_value = [{**{key: row[key] for key in ("game_id", "season", "game_date_et", "split", "p_boost")},
+                                            "produced_by": row["boosting_produced_by"]}]
+        dataset.labels.return_value = [{"game_id": row["game_id"], "home_win": 1}]
+        return stage, row, dataset
+
+    def test_shared_load_preserves_citations_without_labels_or_raw_copies(self):
+        with tempfile.TemporaryDirectory() as root:
+            stage, row, dataset = self.fixture(root)
+            with patch("nba_dataset.Dataset", return_value=dataset):
+                loaded = bam.load_snapshot_game(stage, row["game_id"], root=root)
+                self.assertEqual(loaded["features"], {"x": 1.25})
+                self.assertEqual(loaded["p_boost"], 0.4)
+                self.assertNotIn("home_win", loaded)
+                dataset.labels.assert_not_called()
+                page = loaded["sources"][0]["pages"][0]
+                self.assertEqual("".join(line["text"] for line in page["lines"]), page["text"])
+                self.assertNotIn("plain_text", page)  # Arrow optional fields must not alter packet identity.
+                self.assertFalse((stage / "raw").exists())
+                self.assertFalse((stage / "inputs.jsonl").exists())
+                self.assertEqual(bam.read_snapshot_inputs(stage, root=root, legacy_paths=True), [row])
+                self.assertEqual(bam.validate_snapshot(stage, root=root, label_splits=()), {"games": 1})
+                dataset.labels.assert_not_called()
+                dataset.history.assert_not_called()
+                dataset.box_scores.assert_not_called()
+                self.assertEqual(bam.validate_snapshot(stage, root=root, label_splits=("train",)), {"games": 1})
+                dataset.labels.assert_called_once_with(("train",), eligible_only=False)
+                self.assertEqual(bam.validate_snapshot(stage, root=root), {"games": 1})
+
+    def test_shared_pages_and_original_source_mutations_are_rejected(self):
+        with tempfile.TemporaryDirectory() as root:
+            stage, row, dataset = self.fixture(root)
+            with patch("nba_dataset.Dataset", return_value=dataset):
+                (Path(root) / row["sources"][0]["original_raw_path"]).write_bytes(b"changed")
+                with self.assertRaisesRegex(ValueError, "source checksum"):
+                    bam.validate_snapshot(stage, root=root)
+                with (stage / "note_pages.parquet").open("ab") as stream:
+                    stream.write(b"changed")
+                with self.assertRaisesRegex(ValueError, "checksum"):
+                    bam.load_snapshot_game(stage, row["game_id"], root=root)
+
+    def test_postgame_opens_only_train_labels_and_train_history(self):
+        import bam_postgame
+        with tempfile.TemporaryDirectory() as root:
+            stage, row, dataset = self.fixture(root)
+            dataset.history.side_effect = RuntimeError("stop after TRAIN history boundary")
+            with patch("nba_dataset.Dataset", return_value=dataset), patch.object(bam_postgame, "ROOT", Path(root)):
+                with self.assertRaisesRegex(RuntimeError, "TRAIN history boundary"):
+                    bam_postgame.prepare(stage, Path(root) / "teacher")
+            dataset.labels.assert_called_once_with(("train",), eligible_only=False)
+            dataset.history.assert_called_once_with(seasons=[2023])
+            dataset.box_scores.assert_not_called()
+
+    def test_cleanup_coverage_accounts_for_all_files_and_rejects_unknowns(self):
+        with tempfile.TemporaryDirectory() as root:
+            stage, row, dataset = self.fixture(root)
+            root = Path(root)
+            manifest = json.loads((stage / "bam_manifest.json").read_text())
+            originals = [root / "data/processed/bam_pipeline/bam_notes_v2", root / "data/processed/notes_v2"]
+            expected = {str(path.relative_to(root)) for directory in originals
+                        for path in directory.rglob("*") if path.is_file()}
+            self.assertEqual(set(manifest["cleanup_coverage"]), expected)
+            self.assertEqual(set(manifest["source_sha256"]), expected)
+            (originals[1] / "unmapped.csv").write_text("important,new,data\\n")
+            old_hash = bam.digest((stage / "notes.parquet").read_bytes())
+            with self.assertRaisesRegex(ValueError, "Unmapped notes cleanup"):
+                bam.migrate_notes(root, stage)
+            self.assertEqual(bam.digest((stage / "notes.parquet").read_bytes()), old_hash)
+
+    def test_other_model_forecasts_do_not_change_bam_but_changed_boosting_is_rejected(self):
+        from nba_dataset import write_table, write_json, SCHEMA_VERSION
+        with tempfile.TemporaryDirectory() as root:
+            stage, row, dataset = self.fixture(root)
+            forecast = {**dataset.predictions.return_value[0], "model_id": "gradient_boosting", "stage": "baseline",
+                        "run_id": "frozen", "prediction_index": 0, "p_home_win": 0.4}
+            forecast.pop("p_boost")
+            metadata = write_table(stage / "predictions.parquet", [forecast])
+            manifest = {"schema_version": SCHEMA_VERSION, "tables": {"predictions": metadata}}
+            write_json(stage / "manifest.json", manifest)
+            bam._verify_shared_files(stage, root=root)
+            other = {**forecast, "model_id": "new_model", "p_home_win": 0.9}
+            manifest["tables"]["predictions"] = write_table(stage / "predictions.parquet", [forecast, other])
+            write_json(stage / "manifest.json", manifest)
+            bam._verify_shared_files(stage, root=root)
+            manifest["tables"]["predictions"] = write_table(stage / "predictions.parquet", [dict(forecast, p_home_win=0.7), other])
+            write_json(stage / "manifest.json", manifest)
+            with self.assertRaisesRegex(ValueError, "gradient forecast"):
+                bam._verify_shared_files(stage, root=root)
 
 
 if __name__ == "__main__":

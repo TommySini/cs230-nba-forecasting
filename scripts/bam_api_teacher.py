@@ -43,6 +43,14 @@ def _encoded(value):
 def load_train_registry(snapshot):
     """Read hash-verified game inputs only; never open dev/test outcome stores."""
     snapshot = Path(snapshot)
+    if (snapshot / 'bam_manifest.json').exists():
+        from bam_data import _verify_shared_files, read_snapshot_inputs, snapshot_manifest_path
+        _verify_shared_files(snapshot)
+        rows = read_snapshot_inputs(snapshot, splits=("train",))
+        _require(len({row['game_id'] for row in rows}) == len(rows), "Duplicate shared game IDs")
+        return {'snapshot_manifest_sha256': file_hash(snapshot_manifest_path(snapshot)),
+                'games': {row['game_id']: {key: row[key] for key in ('game_id', 'game_date_et', 'cutoff_utc', 'split')}
+                          for row in rows}}
     manifest = json.loads((snapshot / 'manifest.json').read_text())
     expected = manifest['artifact_sha256']['inputs.jsonl']
     _require(file_hash(snapshot / 'inputs.jsonl') == expected, "Snapshot game inputs changed")

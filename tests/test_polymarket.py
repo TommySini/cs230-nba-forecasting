@@ -2,11 +2,14 @@
 import json
 from pathlib import Path
 import sys
+import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from collect_polymarket import (OUTCOME_FIELDS, candidate_markets, choose_market, discover_markets, index_markets,
-                                list_markets, market_record, outcome_side, price_at)
+                                list_markets, market_record, outcome_side, price_at, write_market_tables,
+                                load_market_records, load_horizon_records, load_market_audit,
+                                load_price_observations, migrate_market_data)
 from collect_pilot import stamp
 
 CONFIG = {"cutoff_minutes": 60, "max_staleness_minutes": 60, "max_start_difference_minutes": 180,
@@ -119,6 +122,90 @@ class PolymarketTests(unittest.TestCase):
         self.assertEqual(failures, [])
         markets, failures = list_markets(FakeCache([None]), CONFIG, games)
         self.assertEqual(len(failures), 1)
+
+
+class MarketStorageTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.directory = Path(self.temp.name)
+        self.game = {"game_id": "espn:1", "season": 2024, "game_date_et": "2025-01-14",
+                     "scheduled_start_utc": "2025-01-15T00:30:00Z", "home_team": "Brooklyn Nets",
+                     "away_team": "Charlotte Hornets", "home_abbr": "BKN", "away_abbr": "CHA"}
+        chosen = candidate_markets(self.game, index_markets([market("nba-cha-bkn-2025-01-14", ["Hornets", "Nets"])]), 180)[0]
+        cutoff = int(stamp("2025-01-14T23:30:00Z").timestamp())
+        self.record, _ = market_record(self.game, chosen, [{"t": cutoff - 1, "p": 0.41}, {"t": cutoff + 60, "p": 0.99}],
+                                      {"url": "https://example.com/prices", "raw_path": "data/raw/polymarket_prices/a.json",
+                                       "sha256": "a" * 64, "status": 200}, CONFIG)
+        self.audit = [{"game_id": "espn:1", "season": 2024, "decision": "matched_price_at_cutoff",
+                       "candidate_slugs": [self.record["market_slug"]],
+                       "market": {"slug": self.record["market_slug"], "id": "1", "type_label": "moneyline",
+                                  "question": "Hornets vs Nets", "volume": "1000", "outcomes": ["Hornets", "Nets"],
+                                  "outcome_prices": '["0", "1"]', "resolution": "resolved", "closed_time": None},
+                       "price_source": self.record["source"]},
+                      {"game_id": "espn:2", "season": 2024, "decision": "no_matching_market", "candidate_slugs": []}]
+        self.horizons = [{**{k: self.record[k] for k in ("game_id", "season", "game_date_et", "scheduled_start_utc",
+                                                       "home_abbr", "away_abbr", "market_slug", "condition_id", "home_token_id")},
+                          "trade_pages": [{"url": "https://example.com/trades", "sha256": "b" * 64,
+                                           "raw_path": "data/raw/polymarket_trades/b.json"}],
+                          "horizons": [{"hours_before_tipoff": 8, "anchor_utc": "2025-01-14T16:30:00Z",
+                                        "history_probability": None, "history_point_utc": None, "history_age_minutes": None,
+                                        "window_trades": 0, "window_cash_usd": 0, "usable": False,
+                                        "reasons": ["no_recent_history_point", "too_few_trades", "too_little_cash"]}]}]
+
+    def test_typed_tables_round_trip_optional_fields_and_exclude_reference_from_pregame(self):
+        import pyarrow.parquet as pq
+        from nba_dataset import remap_paths
+        write_market_tables(self.directory, [self.record], self.audit, self.horizons)
+        self.assertEqual(load_market_records(processed_dir=self.directory), remap_paths([self.record]))
+        self.assertEqual(load_market_audit(processed_dir=self.directory), remap_paths(self.audit))
+        self.assertEqual(load_horizon_records(processed_dir=self.directory), remap_paths(self.horizons))
+        observations = load_price_observations(processed_dir=self.directory)
+        self.assertEqual({r["record_kind"] for r in observations}, {"cutoff", "horizon"})
+        self.assertNotIn(0.99, [r["home_probability"] for r in observations])
+        self.assertTrue(all(not OUTCOME_FIELDS.intersection(r) for r in observations))
+        schema = pq.read_schema(self.directory / "market_prices.parquet")
+        self.assertEqual(str(schema.field("cutoff_utc").type), "timestamp[us, tz=UTC]")
+        self.assertEqual(str(schema.field("home_probability").type), "double")
+
+    def test_price_after_cutoff_is_rejected_when_loading(self):
+        late = dict(self.record, price_time_utc="2025-01-14T23:30:01Z")
+        write_market_tables(self.directory, [late], self.audit)
+        with self.assertRaisesRegex(ValueError, "later than its cutoff"):
+            load_price_observations(processed_dir=self.directory)
+
+    def test_failed_download_audit_preserves_text_status_and_error(self):
+        failure = {"game_id": "espn:3", "season": 2024, "decision": "price_fetch_failed", "candidate_slugs": [],
+                   "price_source": {"url": "https://example.com/failure", "status": "network_error", "error": "timeout"}}
+        write_market_tables(self.directory, [self.record], [failure])
+        self.assertEqual(load_market_audit(processed_dir=self.directory), [failure])
+
+    def test_outcomes_and_duplicate_ids_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "Outcome fields"):
+            write_market_tables(self.directory, [dict(self.record, home_win=1)], self.audit)
+        with self.assertRaisesRegex(ValueError, "Duplicate market game"):
+            write_market_tables(self.directory, [self.record, self.record], self.audit)
+
+    def test_migration_preserves_all_legacy_fields_and_returns_source_hashes(self):
+        legacy = self.directory / "data/processed/polymarket"
+        legacy.mkdir(parents=True)
+        for name, records in (("market_probs", [self.record]), ("horizon_prices", self.horizons), ("audit", self.audit)):
+            (legacy / (name + ".jsonl")).write_text("".join(json.dumps(r) + "\n" for r in records))
+        (legacy / "comparison_test.csv").write_bytes(b"game_id,p\ng1,0.5\n")
+        log = b"[1/1] markets walked\r\ncomplete\n"
+        (legacy / "trades_fetch.log").write_bytes(log)
+        result = migrate_market_data(self.directory, self.directory / "staging")
+        self.assertEqual(result["equality"], {"market_records": 1, "horizon_records": 1,
+                                             "horizon_observations": 1, "market_audit": 2})
+        self.assertEqual(len(result["source_sha256"]), 5)
+        self.assertEqual(set(result["source_sha256"]), set(result["cleanup_coverage"]))
+        report = self.directory / "staging/exports/reports/polymarket/collection.json"
+        self.assertEqual(json.loads(report.read_text())["trades_fetch_log"].encode(), log)
+        self.assertTrue((legacy / "market_probs.jsonl").exists())
+        (legacy / "unrecognized.json").write_text("{}")
+        with self.assertRaisesRegex(ValueError, "Unrecognized market migration inputs"):
+            migrate_market_data(self.directory, self.directory / "other_staging")
+        self.assertFalse((self.directory / "other_staging").exists())
 
 
 if __name__ == "__main__":

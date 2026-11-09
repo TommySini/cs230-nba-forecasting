@@ -1,5 +1,7 @@
 """Rebuild the boosting inputs from sources; verify splits, prior-only lineage, models, predictions and metrics."""
+import argparse
 import json
+from pathlib import Path
 import warnings
 
 import joblib
@@ -11,16 +13,29 @@ from run_gradient_boosting import (CONFIG_PATH, DATA_DIR, FEATURE_NAMES, REPORT_
 
 
 def main():
+    from nba_dataset import Dataset
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--dataset", type=Path, default=ROOT / "data/processed")
+    args = parser.parse_args()
+    dataset = Dataset(ROOT, args.dataset)
+    dataset.verify()
     config = json.loads(CONFIG_PATH.read_text())
+    config["dataset_dir"] = str(args.dataset.resolve())
     results = json.loads((REPORT_DIR / "metrics.json").read_text())
-    assert results["config"] == config
-    for name, expected in {**results["source_sha256"], **results["artifact_sha256"]}.items():
-        assert sha256(ROOT / name) == expected, f"Hash changed: {name}"
+    imported = "dataset_id" not in results
+    if imported:
+        original = dataset.manifest["legacy_records"]["reports/gradient_boosting/metrics.json"]
+        assert results == original, "Preserved boosting result changed"
+    else:
+        assert results["dataset_id"] == dataset.manifest["dataset_id"], "Training dataset changed"
+        for name, expected in results["source_sha256"].items():
+            assert sha256(ROOT / name) == expected, f"Training source changed: {name}"
+    for name in ("seed", "split_seasons", "cutoff_minutes", "min_previous_games", "min_box_score_games",
+                 "selection_metric", "model_parameters", "candidates"):
+        assert results["config"][name] == config[name], f"Model protocol changed: {name}"
     history = load_verified_history(config)
     box_records, box_manifest = load_box_scores(config)
-    assert box_manifest["histories"] == [{"path": s["path"], "sha256": sha256(ROOT / s["path"])} for s in config["histories"]], \
-        "Box scores were built from other schedules"
-    inputs, labels, excluded = [read_rows(DATA_DIR / name) for name in ("inputs.jsonl", "labels.jsonl", "excluded.jsonl")]
+    inputs, labels, excluded = dataset.inputs(), dataset.labels(SPLITS), dataset.excluded()
     assert (inputs, labels, excluded) == prepare_examples(history, box_records, config), "Saved rows do not rebuild from sources"
     by_id, season_split = {g["game_id"]: g for g in history}, season_splits(config)
     for row in inputs:
@@ -36,7 +51,12 @@ def main():
     x, y = arrays(inputs, labels)
     splits, seasons = np.array([r["split"] for r in inputs]), np.array([r["season"] for r in inputs])
     ids, train = np.array([r["game_id"] for r in inputs]), splits == "train"
-    bundle = joblib.load(DATA_DIR / "model.joblib")  # Only this locally generated, hash-checked artifact.
+    model_path = args.dataset / "exports/data/models/gradient_boosting/model.joblib"
+    if not model_path.exists():
+        model_path = ROOT / "data/models/gradient_boosting/model.joblib"
+    model_key = "data/processed/gradient_boosting/model.joblib" if imported else "data/models/gradient_boosting/model.joblib"
+    assert sha256(model_path) == results["artifact_sha256"][model_key], "Saved model hash changed"
+    bundle = joblib.load(model_path)  # Only this locally generated, hash-checked artifact.
     best = min(results["dev_candidates"], key=lambda r: (r["brier"], r["candidate_index"]))["candidate_index"]
     settings = {**config["model_parameters"], **config["candidates"][best], "random_state": config["seed"]}
     assert bundle["candidate_index"] == results["selected_candidate_index"] == best
@@ -61,7 +81,7 @@ def main():
         np.testing.assert_array_equal(model.named_steps["imputer"].statistics_, medians)
 
     p, produced = predict(bundle["final"]["model"], {s: e["model"] for s, e in bundle["prior_seasons"].items()}, x, splits, seasons)
-    saved = read_rows(DATA_DIR / "predictions.jsonl")
+    saved = dataset.predictions("gradient_boosting")
     kept = [i for i in range(len(inputs)) if produced[i] is not None]
     assert [r["game_id"] for r in saved] == ids[kept].tolist(), "Every eligible game needs one prediction row"
     for i, row in zip(kept, saved):

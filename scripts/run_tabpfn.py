@@ -10,7 +10,6 @@ import csv
 from datetime import datetime, timedelta, timezone
 import hashlib
 from importlib.metadata import version
-from itertools import zip_longest
 import json
 import math
 import os
@@ -21,9 +20,9 @@ import urllib.request
 
 import numpy as np
 
-from collect_pilot import ROOT, write_json, write_jsonl
+from collect_pilot import ROOT, write_json
 from run_gradient_boosting import (FEATURE_NAMES, bootstrap_brier, new_model,
-                                   score_predictions, season_splits, write_csv)
+                                   score_predictions, season_splits)
 
 CONFIG_PATH = ROOT / "config/tabpfn.json"
 STAGES = ("train-smoke", "dev")
@@ -84,9 +83,9 @@ def load_config(path):
     if config["bootstrap_replicates"] < 1 or config["query_batch_size"] < 1 or config["max_runtime_seconds"] <= 0:
         raise ValueError("Bootstrap repeats, query batch size and runtime bound must be positive")
     output = repo_path(config["output_dir"]).resolve()
-    allowed = (ROOT / "data/processed/tabpfn").resolve()
+    allowed = (ROOT / "reports/tabpfn").resolve()
     if output != allowed and allowed not in output.parents:
-        raise ValueError("TabPFN outputs must stay inside data/processed/tabpfn")
+        raise ValueError("TabPFN run records must stay inside reports/tabpfn")
     if repo_path(config["report_dir"]).resolve() != (ROOT / "reports/tabpfn").resolve():
         raise ValueError("TabPFN reports must stay in reports/tabpfn")
     model = config["model"]
@@ -105,31 +104,65 @@ def output_directory(config, stage):
     return repo_path(config["output_dir"]) / stage
 
 
-def read_source_rows(input_path, label_path, allowed_splits):
-    """Do not deserialize outcomes for excluded splits in the mixed source files.
+def shared_dataset(config):
+    from nba_dataset import Dataset
+    return Dataset(ROOT, ROOT / config.get("dataset_dir", "data/processed"))
 
-    The baseline hashes bind both streams and their positional alignment. All
-    selected pairs are still checked by ID; excluded label bytes are only skipped.
-    """
-    rows, labels = [], {}
-    with input_path.open() as input_stream, label_path.open() as label_stream:
-        for input_line, label_line in zip_longest(input_stream, label_stream):
-            if input_line is None or label_line is None:
-                raise ValueError("Source input and label row counts differ")
-            row = json.loads(input_line)
-            if row["split"] not in allowed_splits:
-                continue
-            label = json.loads(label_line)
-            if row["game_id"] != label["game_id"]:
-                raise ValueError("Source inputs and labels are not aligned")
-            if row["game_id"] in labels:
-                raise ValueError("Duplicate game ID")
-            if set(label) != {"game_id", "home_win"} or type(label["home_win"]) is not int or label["home_win"] not in (0, 1):
-                raise ValueError("Expected separate binary home-win labels")
-            rows.append(row)
-            labels[row["game_id"]] = label
+
+def read_source_rows(dataset, allowed_splits):
+    """Open only explicitly allowed label partitions; TEST has no TabPFN stage."""
+    if not allowed_splits or not set(allowed_splits) <= {"train", "dev"}:
+        raise ValueError("TEST is excluded")
+    rows = dataset.inputs(splits=allowed_splits)
+    outcomes = dataset.labels(allowed_splits)
+    labels = {r["game_id"]: r for r in outcomes}
+    ids = [r["game_id"] for r in rows]
+    if len(ids) != len(set(ids)) or len(labels) != len(outcomes) or set(ids) != set(labels):
+        raise ValueError("Shared inputs and labels must align uniquely")
     return rows, labels
 
+
+def record_directory(config, stage):
+    """Read staged metadata during validation, installed reports otherwise."""
+    output = output_directory(config, stage)
+    staging = shared_dataset(config).processed_dir / "exports" / config["output_dir"] / stage
+    return staging if staging.exists() else output
+
+
+def prediction_digest(rows):
+    return hashlib.sha256(json.dumps(rows, sort_keys=True, allow_nan=False, separators=(",", ":")).encode()).hexdigest()
+
+
+def load_comparison_rows(config, stage, manifest):
+    dataset = shared_dataset(config)
+    ids = manifest["query_game_ids"]
+    forecasts = {}
+    for model in ("tabpfn", "tabpfn_comparator"):
+        rows = dataset.predictions(model, stage=stage)
+        by_id = {r["game_id"]: r for r in rows}
+        if len(by_id) != len(rows) or set(by_id) != set(ids):
+            raise ValueError("Saved prediction membership differs from query cohort")
+        forecasts[model] = by_id
+    result = []
+    for gid in ids:
+        left, right = forecasts["tabpfn"][gid], forecasts["tabpfn_comparator"][gid]
+        if left["game_date_et"] != right["game_date_et"]:
+            raise ValueError("Comparator prediction dates differ")
+        result.append({"game_id": gid, "game_date_et": left["game_date_et"],
+                       "tabpfn": left["p_home_win"], "rich_gradient_boosting": right["p_home_win"]})
+    return result
+
+
+def verify_imported_record(dataset, stage, name, value):
+    key = f"data/processed/tabpfn/{stage}/{name}"
+    if dataset.manifest["legacy_records"].get(key) != value:
+        raise ValueError("Changed imported run record: " + key)
+
+
+def experiment_settings(config):
+    paths = {"source_manifest", "source_inputs", "source_labels", "source_predictions", "baseline_config",
+             "dataset_dir", "output_dir", "report_dir"}
+    return {k: v for k, v in config.items() if k not in paths}
 
 def select_cohort(inputs, labels_by_id, stage, smoke_games=32, context_games=24):
     """Choose by dates and fixed limits only; never choose using outcomes."""
@@ -187,93 +220,62 @@ def validate_rows(inputs, labels, names, baseline_config):
 
 
 def require_smoke(config):
-    directory = output_directory(config, "train-smoke")
-    result = json.loads((directory / "run.json").read_text())
-    if result.get("stage") != "train-smoke" or result.get("status") != "complete":
-        raise ValueError("Finish the TRAIN diagnostic before preparing or running DEV")
-    if result["manifest_sha256"] != sha256(directory / "manifest.json"):
-        raise ValueError("TRAIN diagnostic manifest changed")
-    verify_hashes(result["artifact_sha256"], directory)
-    smoke_manifest = json.loads((directory / "manifest.json").read_text())
-    if smoke_manifest["config"] != config:
-        raise ValueError("Configuration changed since the TRAIN diagnostic")
-
+    from validate_tabpfn import validate_run
+    validate_run(config, "train-smoke")
 
 def prepare_dataset(config, config_path, *, stage="train-smoke"):
     output = output_directory(config, stage)
     if output.exists() and any(output.iterdir()):
-        raise ValueError("Prepared output already exists; never overwrite a frozen experiment")
+        raise ValueError("Prepared output already exists; never overwrite a completed experiment")
     if stage == "dev":
         require_smoke(config)
-    source_path = repo_path(config["source_manifest"])
-    source = json.loads(source_path.read_text())
-    baseline_path = repo_path(config["baseline_config"])
-    baseline = json.loads(baseline_path.read_text())
-    if source["config"] != baseline or source["feature_names"] != list(FEATURE_NAMES):
-        raise ValueError("Frozen baseline manifest/config/features do not match this checkout")
-    frozen = source["source_sha256"] | source["artifact_sha256"]
-    for required in (config["baseline_config"], config["source_inputs"], config["source_labels"], config["source_predictions"]):
-        if required not in frozen:
-            raise ValueError(f"Source manifest does not pin {required}")
-    verify_hashes(frozen)
-    frozen[config["source_manifest"]] = sha256(source_path)
-    for path in (Path(__file__).resolve(), ROOT / "scripts/validate_tabpfn.py", ROOT / "requirements-tabpfn.txt", Path(config_path).resolve()):
-        frozen[str(path.relative_to(ROOT))] = sha256(path)
-    rows, labels = read_source_rows(repo_path(config["source_inputs"]), repo_path(config["source_labels"]),
-                                    {"train"} if stage == "train-smoke" else {"train", "dev"})
+    dataset = shared_dataset(config)
+    dataset.verify(label_splits={"train"} if stage == "train-smoke" else {"train", "dev"})
+    baseline = json.loads(repo_path(config["baseline_config"]).read_text())
+    names = dataset.manifest["feature_names"]
+    rows, labels = read_source_rows(dataset, {"train"} if stage == "train-smoke" else {"train", "dev"})
     inputs, outcomes, fit_ids, query_ids = select_cohort(rows, labels, stage, config["smoke_games"], config["smoke_context_games"])
-    validate_rows(inputs, outcomes, source["feature_names"], baseline)
-    if len(fit_ids) > config["model"]["max_context_rows"]:
-        raise ValueError("All TRAIN rows exceed the pinned model limit; no silent subsampling is allowed")
-    if set(labels[i]["home_win"] for i in fit_ids) != {0, 1}:
-        raise ValueError("The fixed context needs both outcome classes; do not select using labels")
+    validate_rows(inputs, outcomes, names, baseline)
+    if len(fit_ids) > config["model"]["max_context_rows"] or set(labels[i]["home_win"] for i in fit_ids) != {0, 1}:
+        raise ValueError("Invalid complete TRAIN context size/classes")
     output.mkdir(parents=True, exist_ok=True)
-    write_jsonl(output / "inputs.jsonl", inputs)
-    write_jsonl(output / "labels.jsonl", outcomes)
-    artifacts = {name: sha256(output / name) for name in ("inputs.jsonl", "labels.jsonl")}
-    if stage == "dev":
-        predictions = {}
-        with repo_path(config["source_predictions"]).open() as stream:
-            for line in stream:
-                row = json.loads(line)
-                if row["split"] != "dev":
-                    continue
-                if row["produced_by"] != "train_fit" or row["game_id"] in predictions:
-                    raise ValueError("Expected unique TRAIN-fit frozen DEV predictions")
-                predictions[row["game_id"]] = row
-        if set(predictions) != set(query_ids):
-            raise ValueError("Frozen boosting DEV cohort differs from TabPFN query cohort")
-        write_csv(output / "baseline_predictions.csv", [{"game_id": i, "rich_gradient_boosting": predictions[i]["p_boost"]} for i in query_ids])
-        artifacts["baseline_predictions.csv"] = sha256(output / "baseline_predictions.csv")
-    manifest = {"schema_version": 1, "created_at_utc": utc_now(), "stage": stage, "config": config,
-                "implementation_sha256": sha256(Path(__file__)),
-                "config_sha256": sha256(config_path), "feature_names": source["feature_names"],
+    manifest = {"schema_version": 2, "created_at_utc": utc_now(), "stage": stage, "config": config,
+                "implementation_sha256": sha256(Path(__file__)), "config_sha256": sha256(config_path),
+                "dataset_id": dataset.manifest["dataset_id"], "feature_names": names,
                 "baseline_config": baseline, "fit_game_ids": fit_ids, "query_game_ids": query_ids,
-                "source_manifest_path": config["source_manifest"], "source_manifest_sha256": sha256(source_path),
-                "source_sha256": frozen, "artifact_sha256": artifacts,
-                "protocol": "Frozen pregame features; labels separate; context strictly before query ET dates; TEST excluded",
+                "protocol": "Shared pregame tables; separate labels; context before query ET dates; TEST excluded",
                 "baseline_comparison": "same-context fixed first booster candidate" if stage == "train-smoke" else "preserved full-TRAIN DEV-selected booster forecasts",
-                "diagnostic_limitation": "Small TRAIN-only check demonstrates functioning inference, not generalization or gradient learning."}
+                "diagnostic_limitation": "TRAIN inference diagnostic, not generalization or gradient learning."}
     write_json(output / "manifest.json", manifest)
-    print(f"Prepared {stage}: {len(fit_ids)} context, {len(query_ids)} query, {len(source['feature_names'])} features", flush=True)
+    print(f"Prepared {stage}: {len(fit_ids)} context, {len(query_ids)} query; shared dataset {manifest['dataset_id']}", flush=True)
     return manifest
 
-
 def load_prepared(config, stage):
-    output = output_directory(config, stage)
+    dataset = shared_dataset(config)
+    dataset.verify(label_splits={"train"} if stage == "train-smoke" else {"train", "dev"})
+    output = record_directory(config, stage)
     manifest = json.loads((output / "manifest.json").read_text())
-    if manifest["config"] != config or manifest["stage"] != stage:
+    if manifest["stage"] != stage or experiment_settings(manifest["config"]) != experiment_settings(config):
         raise ValueError("Configuration/stage changed after preparation")
-    if manifest["implementation_sha256"] != sha256(Path(__file__)):
-        raise ValueError("TabPFN implementation changed after preparation")
-    verify_hashes(manifest["source_sha256"])
-    verify_hashes(manifest["artifact_sha256"], output)
-    inputs = [json.loads(line) for line in (output / "inputs.jsonl").read_text().splitlines()]
-    labels = [json.loads(line) for line in (output / "labels.jsonl").read_text().splitlines()]
+    if manifest.get("schema_version") == 1:
+        verify_imported_record(dataset, stage, "manifest.json", manifest)
+    else:
+        if manifest["dataset_id"] != dataset.manifest["dataset_id"]:
+            raise ValueError("Shared dataset identity changed")
+        if manifest["implementation_sha256"] != sha256(Path(__file__)):
+            raise ValueError("TabPFN implementation changed after preparation")
+    rows, outcomes = read_source_rows(dataset, {"train"} if stage == "train-smoke" else {"train", "dev"})
+    _, _, expected_fit, expected_query = select_cohort(
+        rows, outcomes, stage, config["smoke_games"], config["smoke_context_games"])
+    if manifest["fit_game_ids"] != expected_fit or manifest["query_game_ids"] != expected_query:
+        raise ValueError("Prepared fit/query membership or order differs from the complete fixed cohort")
+    by_id = {row["game_id"]: row for row in rows}
+    ids = manifest["fit_game_ids"] + manifest["query_game_ids"]
+    if len(ids) != len(set(ids)) or not set(ids) <= by_id.keys():
+        raise ValueError("Prepared membership missing or duplicated")
+    inputs = [by_id[gid] for gid in ids]
+    labels = [outcomes[gid] for gid in ids]
     validate_rows(inputs, labels, manifest["feature_names"], manifest["baseline_config"])
-    ids = [r["game_id"] for r in inputs]
-    if ids != manifest["fit_game_ids"] + manifest["query_game_ids"] or len(ids) != len(set(ids)):
-        raise ValueError("Prepared partitions/membership changed")
     fit_count = len(manifest["fit_game_ids"])
     if not 0 < fit_count < len(inputs) or max(r["game_date_et"] for r in inputs[:fit_count]) >= min(r["game_date_et"] for r in inputs[fit_count:]):
         raise ValueError("Prepared partitions are not strictly chronological")
@@ -282,7 +284,6 @@ def load_prepared(config, stage):
     if any(r["split"] != ("train" if stage == "train-smoke" else "dev") for r in inputs[fit_count:]):
         raise ValueError("Unexpected query split")
     return manifest, inputs, labels
-
 
 def positive_probabilities(model, x):
     classes = np.asarray(model.classes_)
@@ -396,11 +397,11 @@ def write_report(config, manifest, result):
 
 
 def fit_and_predict(config, stage):
+    if (ROOT / config.get("dataset_dir", "data/processed")).resolve() != (ROOT / "data/processed").resolve():
+        raise ValueError("Inference writes to the published shared dataset; staged datasets are validation-only")
     output = output_directory(config, stage)
     if (output / "run.json").exists():
         raise ValueError("Predictions already exist; use the validator instead of rerunning")
-    if (output / "predictions.csv").exists() and not (output / "prediction_progress.json").exists():
-        raise ValueError("Unbound prediction file exists without resumable progress")
     if stage == "dev":
         require_smoke(config)
     manifest, inputs, labels = load_prepared(config, stage)
@@ -451,26 +452,30 @@ def fit_and_predict(config, stage):
         comparator = new_model(baseline, baseline["candidates"][0]).fit(x[:count], train_y)
         p_boost = positive_probabilities(comparator, x[count:])
     else:
-        with (output / "baseline_predictions.csv").open() as stream:
-            rows = list(csv.DictReader(stream))
-        if [r["game_id"] for r in rows] != manifest["query_game_ids"]:
+        saved = {r["game_id"]: r for r in shared_dataset(config).predictions("gradient_boosting") if r["split"] == "dev"}
+        if set(saved) != set(manifest["query_game_ids"]) or any(r["produced_by"] != "train_fit" for r in saved.values()):
             raise ValueError("Frozen comparator membership changed")
-        p_boost = np.asarray([float(r["rich_gradient_boosting"]) for r in rows])
+        p_boost = np.asarray([saved[gid]["p_boost"] for gid in manifest["query_game_ids"]])
     # Query outcomes become evaluation targets only after both forecasts exist.
     query_y = np.asarray([r["home_win"] for r in labels[count:]], dtype=int)
     probabilities = {"tabpfn": p_tabpfn, "rich_gradient_boosting": p_boost}
     metrics = {name: score_predictions(query_y, p) for name, p in probabilities.items()}
     dates = [r["game_date_et"] for r in inputs[count:]]
     intervals = bootstrap_brier(query_y, probabilities, dates, config["bootstrap_replicates"], config["seed"], "rich_gradient_boosting")
-    write_csv(output / "predictions.csv", [{"game_id": row["game_id"], "game_date_et": row["game_date_et"],
-               "tabpfn": float(p_tabpfn[i]), "rich_gradient_boosting": float(p_boost[i])}
-              for i, row in enumerate(inputs[count:])])
-    result = {"schema_version": 1, "stage": stage, "status": "complete", "created_at_utc": utc_now(),
+    from nba_dataset import store_predictions
+    comparison = [{"game_id": row["game_id"], "game_date_et": row["game_date_et"],
+                   "tabpfn": float(p_tabpfn[i]), "rich_gradient_boosting": float(p_boost[i])}
+                  for i, row in enumerate(inputs[count:])]
+    for model_id, probabilities in (("tabpfn", p_tabpfn), ("tabpfn_comparator", p_boost)):
+        store_predictions(ROOT, [{**{k: row[k] for k in ("game_id", "game_date_et", "season", "split")},
+                                  "p_home_win": float(probabilities[i]), "produced_by": "train_context"}
+                                 for i, row in enumerate(inputs[count:])], model_id=model_id, stage=stage)
+    result = {"schema_version": 2, "stage": stage, "status": "complete", "created_at_utc": utc_now(),
               "execution_platform": config["compute_platform"], "runtime_seconds": previous_runtime + time.monotonic() - started,
               "attempts": progress["attempts"],
               "context_audit": progress["context_audit"],
               "manifest_sha256": sha256(output / "manifest.json"),
-              "artifact_sha256": {"predictions.csv": sha256(output / "predictions.csv")},
+              "predictions_sha256": prediction_digest(comparison),
               "model": config["model"], "model_parameters": {"random_state": config["seed"], "fit_mode": "fit_preprocessors", "n_preprocessing_jobs": 1, "memory_saving_mode": "auto", "inference_config": {"SUBSAMPLE_SAMPLES": None}},
               "versions": versions,
               "metrics": metrics, "uncertainty": intervals,
@@ -478,6 +483,7 @@ def fit_and_predict(config, stage):
                                      "difference_95_interval": intervals["difference_vs_reference"]["tabpfn"]},
               "interpretation": "TRAIN diagnostic only; not generalization evidence" if stage == "train-smoke" else "Exploratory DEV comparison; baseline settings previously selected on DEV; TEST remains excluded"}
     write_json(output / "run.json", result)
+    progress_path.unlink(missing_ok=True)
     write_report(config, manifest, result)
     print(json.dumps({"stage": stage, "metrics": metrics, "primary_comparison": result["primary_comparison"]}, indent=2), flush=True)
     return result
