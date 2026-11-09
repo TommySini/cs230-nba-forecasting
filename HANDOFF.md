@@ -3,30 +3,45 @@
 Current state for the next session. Public summary: [`README.md`](README.md).
 Everything removed in the November 2026 cleanup is at git tag `pre-cleanup`.
 
-## Status (2026-11-08)
+## Status (2026-11-09)
 
-**TabPFN comparison branch (2026-11-09).** `tabpfn-implementation` is based on
-`fixed-splits-all-seasons` at `a75d4cc`, matching the canonical frozen datasets.
-The user explicitly authorized local TabPFN compute. The separate worktree is
-`/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/tabpfn-implementation`;
-its `data` links to the canonical checkout and its `.venv` has the optional
-`requirements-tabpfn.txt` dependencies. Earlier uncommitted BAM changes remain
-untouched in the original worktree.
+**TabPFN experiments complete (2026-11-09).** Work is on `tabpfn-implementation`,
+based on the fixed datasets at `a75d4cc`. The user authorized local compute and
+three experiments: synthetic augmentation, fine-tuning, and both combined.
+Original boosting/BAM outputs and the original TabPFN run remain frozen.
 
-`scripts/run_tabpfn.py` uses the pinned synthetic-only TabPFN-2.5 checkpoint on
-Apple MPS, four estimators, all 252 frozen features, and all 13,457 TRAIN rows
-without subsampling. The 32-game TRAIN diagnostic passed (14 context / 18 later
-queries, split at an ET-date boundary). The full 1,123-game DEV comparison completed
-in 236.6 seconds: TabPFN Brier **0.207831**, boosting **0.210332**. Difference
-**-0.002500**, paired day-bootstrap 95% interval **[-0.005122, +0.000148]**: a
-modest point-estimate improvement, not a conclusive advantage. Accuracy is 66.8%
-versus 66.9%. No TEST inference or scoring was added.
-The full suite passes 348 tests with one optional Qwen-tokenizer test skipped.
-`scripts/validate_tabpfn.py` passes for both stages; all 15 frozen baseline hashes
-remain unchanged. Results are in `reports/tabpfn/findings.md` and `metrics.json`;
-per-game forecasts and manifests are in `data/processed/tabpfn/`. Original
-boosting/BAM outputs remain frozen. DEV comparison is exploratory because boosting
-settings used DEV. No compute job remains running; no AWS resources were launched.
+The original TabPFN-2.5 baseline uses all 13,457 TRAIN games and 252 features,
+four estimators on Apple MPS, and scores 1,123 DEV games: Brier **0.207831**
+(boosting **0.210332**). New experiments found **no Brier improvement**:
+
+- Synthetic-only: 1,024 generated rows added to context; Brier **0.208017**,
+  difference from original TabPFN **+0.000186**, paired 95% interval
+  **[-0.000243, +0.000606]**. Accuracy 67.05% versus 66.79% (three more correct games).
+- Fine-tuning-only: 96 actual updates across two epochs; later-TRAIN validation
+  log loss worsened (0.604215 -> 0.606617 -> 0.607731), so early stopping restored
+  pretrained weights. DEV probabilities exactly equal the original TabPFN run.
+- Combined: the same synthetic rows plus 104 updates across two epochs;
+  validation worsened (0.605741 -> 0.612362 -> 0.617062). Pretrained weights were
+  restored; DEV probabilities exactly equal synthetic-only.
+
+Protocol: generation and weight updates use 12,342 games from 2012–22;
+1,115 games from the 2023–24 TRAIN season select checkpoints. Final context
+includes every original TRAIN game. DEV is exploratory; TEST remains excluded.
+The official generator used a deterministic 1,024-game context and eight-bin
+categorical representations because its continuous regressor checkpoint could
+not be downloaded. This is a bounded binned-generation study. Fine-tuning used
+LR 1e-5, 256-row meta-batches, five-epoch cap/patience two, one estimator for
+training/validation and four for final inference. The official package warns
+that these different estimator counts with fixed preprocessing can affect
+performance; one seed and these settings do not exhaust either method.
+
+Code: `run_tabpfn.py`, generation/fine-tuning helpers, `validate_tabpfn.py`;
+settings: `config/tabpfn_adaptation.json`. All three saved-result validators pass;
+371 tests ran successfully with one optional tokenizer test skipped. Original
+baseline validation still passes against its committed source revision.
+Report: `reports/tabpfn/findings.md`; complete per-game outputs, separate synthetic
+features/labels, checkpoints and provenance: `data/processed/tabpfn/adaptation/`.
+No experiment job remains running. These methods have not replaced boosting in BAM.
 
 **Plan: BAM teacher-explanation training on AWS, TRAIN-first.** Prove learning on 16–32
 TRAIN games before touching DEV; TEST stays excluded. Design: [`docs/bam_aws_architecture.md`](docs/bam_aws_architecture.md),

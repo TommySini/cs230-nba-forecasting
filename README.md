@@ -53,16 +53,20 @@ Reports: [market](reports/polymarket/findings.md), [market at 8 h](reports/polym
 **Text: no measurable gain yet.** Three small pilots, on 14–18 test games each, found no gain
 from text ([summaries](reports/past/README.md)). The full BAM pipeline has not been trained yet.
 
-**TabPFN baseline.** The `tabpfn-implementation` branch adds a local comparison using the
-same frozen 252 pregame features as boosting. TabPFN-2.5 uses all 13,457 TRAIN games as
-context and predicts the same 1,123 DEV games. Its checkpoint is pretrained on synthetic
-data; no NBA-specific weight updates are performed. The comparison starts with a small
-TRAIN-only inference diagnostic, then reports paired DEV Brier, log loss, AUC, accuracy,
-and a day-clustered confidence interval. The local run finished in 237 seconds: DEV Brier
-**0.20783** versus boosting's **0.21033**; paired difference **-0.00250**, 95% interval
-**[-0.00512, +0.00015]**. The interval includes zero, so this is not a conclusive advantage.
-TEST is excluded. The existing boosting outputs and BAM forecasts stay frozen.
-Details: [TabPFN](reports/tabpfn/findings.md).
+**TabPFN experiments.** The `tabpfn-implementation` branch compares the same frozen
+252 features on 13,457 TRAIN and 1,123 DEV games. Original TabPFN-2.5 (fixed weights,
+four estimators) achieved DEV Brier **0.20783**, versus boosting's **0.21033**;
+the paired 95% difference interval **[-0.00512, +0.00015]** includes zero.
+
+Three local follow-ups found no Brier improvement: synthetic augmentation scored
+**0.20802**; fine-tuning retained the original weights after internal TRAIN validation
+worsened, matching **0.20783**; the combined experiment similarly retained the original
+weights and matched synthetic-only at **0.20802**. Both fine-tuning attempts made real
+gradient updates. The official synthetic tool generated 1,024 rows using TRAIN-only
+categorical bins; its continuous regressor checkpoint was unavailable. Checkpoint
+selection used the final TRAIN season, with DEV and TEST excluded from fitting.
+These are bounded exploratory results, not a rejection of every possible configuration.
+Details and limitations: [TabPFN](reports/tabpfn/findings.md).
 
 ## Data
 
@@ -148,5 +152,16 @@ an interrupted run; validate completed results instead. DEV is exploratory becau
 boosting settings were already selected using DEV. These forecasts are not wired into BAM
 unless a later model-selection decision authorizes that change. TabPFN-2.5 weights permit
 [academic research](https://huggingface.co/Prior-Labs/tabpfn_2_5/blob/6c45f3a6d0d07c6c5f62572e04a0c2929de91b8b/LICENSE.txt).
+
+The adaptation study is configured in `config/tabpfn_adaptation.json` and uses the
+same runner (`adapt-prepare`, `adapt-generate`, `adapt-fit`, `adapt-dev`, `adapt-report`
+stages; variants `synthetic`, `finetune`, `combined`). Existing outputs are immutable.
+Validate the completed study without running models:
+
+```bash
+.venv/bin/python scripts/validate_tabpfn.py --variant synthetic
+.venv/bin/python scripts/validate_tabpfn.py --variant finetune
+.venv/bin/python scripts/validate_tabpfn.py --variant combined
+```
 
 Current status and next steps: [`HANDOFF.md`](HANDOFF.md).
