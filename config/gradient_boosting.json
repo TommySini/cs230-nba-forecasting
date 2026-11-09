@@ -1,12 +1,15 @@
 {
   "seed": 230,
-  "history_path": "data/processed/seasonal/game_history.jsonl",
-  "history_config": "config/seasonal.json",
+  "histories": [
+    {"path": "data/processed/history_2012/game_history.jsonl", "config": "config/history_2012.json"},
+    {"path": "data/processed/seasonal/game_history.jsonl", "config": "config/seasonal.json"}
+  ],
+  "box_scores": "data/processed/box_scores",
   "cutoff_minutes": 60,
   "min_previous_games": 5,
-  "split_seasons": {"train": 2023, "validation": 2024, "test": 2025},
+  "min_box_score_games": 5,
+  "split_seasons": {"train": [2012, 2023], "dev": [2024, 2024], "test": [2025, 2025]},
   "selection_metric": "brier",
-  "refit_train_and_validation": true,
   "model_parameters": {
     "loss": "log_loss",
     "learning_rate": 0.05,

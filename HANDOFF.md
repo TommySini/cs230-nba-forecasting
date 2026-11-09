@@ -27,26 +27,33 @@ No real pilot fit has run.
   `data/processed/bam_budget/`): $6.77 completed estimates, $1.83 outstanding, $5 buffer,
   $186.40 available. $100 earned AWS credit confirmed.
 
-**Data is ready for the pilot.**
+**Data and baseline (fixed 2026-11-08; leave alone).**
 
-- BAM snapshot `data/processed/bam_pipeline/bam_notes_v2_20261108`: 663 games with notes,
-  2023–26, built from notes_v2 by `bam_data.py`. 80 HTML posts revised after their cutoff are
-  excluded. Boosting forecasts in it still come from the basic 18-feature model with
-  earlier-month folds.
-- Rich boosting (234 features) is the baseline to use: 0.206 vs 0.210 Brier on 2025–26.
-  It was fitted on 2023–24 (+2024–25 for the final model) and its locked results must not be
-  overwritten; a new run needs new output paths.
+- Fixed splits: TRAIN 2012–13 to 2023–24, DEV 2024–25, TEST 2025–26 (`config/gradient_boosting.json`).
+  `bam_train_contract.py` reads its TRAIN date range from the same config.
+- Box scores: `data/processed/box_scores/`, 16,810 of 16,821 games 2012–26 (2,104 repaired from
+  NBA.com; 11 missing with reasons in `failures.jsonl`). `collect_rich_stats.py` normalizes pre-2021
+  ESPN team rebounds, sends scrambled 2017–18 team stats and empty boxes to NBA.com repair, and
+  rebuilds offline from the raw cache in about 90 s. Known, left as is: 7 ESPN 2020–21 team rows
+  have offensive or defensive rebounds 1 below their player sum.
+- `run_gradient_boosting.py` is the single baseline: fit on TRAIN, settings chosen on DEV (depth 2,
+  200 trees; DEV Brier 0.2103), TEST scored once: **0.2058**. TRAIN games 2013–24 get forecasts from
+  models fitted on earlier seasons only (`produced_by: prior_seasons`); 2012–13 has none. Output:
+  `data/processed/gradient_boosting/predictions.jsonl`.
+- Market at 8 h beats boosting by about 0.010 Brier on DEV and TEST (`reports/polymarket/`).
+- BAM snapshot `data/processed/bam_pipeline/bam_notes_v2` (frozen; `bam_data.py validate` passes):
+  1,922 games with notes 2012–26, 2,064 documents (80 HTML posts revised after their cutoff
+  excluded). 1,768 have a boosting probability (TRAIN 1,456, DEV 182, TEST 130); the rest are
+  research-only (138 too early in the season, 16 in 2012–13). Summary:
+  `reports/bam_pipeline/bam_notes_v2/data_summary.json`.
 
 ## Next
 
-1. Rebuild the baseline with the rich features, fitted chronologically (prior-only folds) on
-   all available training seasons, and wire it into `bam_data.py` in place of the basic booster.
-   Box scores exist only for 2023–26; older seasons need `collect_rich_stats.py` runs first.
-2. When quota and Bedrock access arrive: qualify the teacher/reviewer on a few TRAIN games,
+1. When quota and Bedrock access arrive: qualify the teacher/reviewer on a few TRAIN games,
    generate research and reviewed gold for 16–32 TRAIN games, build the TRAIN bundle
-   (`bam_train_contract.py`) and run `bam_train_only.py` with bounded spend.
-3. DEV evaluation only after TRAIN learning is shown. The 2025–26 TEST season was already
-   inspected in earlier pilots, so treat it as exploratory; a fresh 2026–27 holdout is cleaner.
+   (`bam_train_contract.py`) and run `bam_train_only.py`.
+2. DEV evaluation only after TRAIN learning is shown. TEST (2025–26) was already inspected in
+   earlier pilots, so treat it as exploratory; a fresh 2026–27 holdout is cleaner.
 
 ## Workspace
 

@@ -136,6 +136,6 @@ TRAIN-only phase without an explicit implementation change. The old pipeline's
 Before a paid launch, integrate the new worker with qualified frozen research,
 AWS Bedrock teacher/reviewer transport, source-frozen inputs and accepted gold.
 Research/teacher API readiness, representative target quality and
-actual joint-training cost remain unqualified. The expanded dataset still
-requires source/history checks; older games do not yet have the complete richer
-234-feature history. No paid job is launched by this protocol update.
+actual joint-training cost remain unqualified. The frozen snapshot `bam_notes_v2`
+has 1,456 forecast-eligible TRAIN games with the full 252-feature history. No paid
+job is launched by this protocol update.

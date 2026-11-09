@@ -40,15 +40,15 @@ pipeline **BAM** (`scripts/bam_*.py`), after the paper's authors.
 | --- | ---: | ---: |
 | Polymarket price 1 hour before tipoff | **0.194** | **69.3%** |
 | Polymarket price 8 hours before tipoff (typical note publication) | 0.195 | 69.2% |
-| Gradient boosting, team + player box-score features (234) | 0.206 | 68.2% |
-| Gradient boosting, basic team features (18) | 0.210 | 67.3% |
+| Gradient boosting on prior-game team + player box scores (fit on 2012–24) | 0.206 | 67.5% |
 | Historical home-win rate | 0.248 | 54.8% |
 
-The richer boosting model beats the basic one by 0.004 Brier (paired 95% CI [−0.007, −0.001]).
-The market beats boosting by about 0.015 even 8 hours out; the extra 7 hours of information are
-worth only about 0.0015. That gap is the room text has to fill.
+Boosting is fit on the 12 TRAIN seasons and its settings chosen on DEV 2024–25 (DEV Brier 0.210).
+The market beats it by about 0.010 even 8 hours out (paired 95% CI [−0.016, −0.004] on TEST,
+[−0.017, −0.005] on DEV); the extra 7 hours of information are worth only about 0.0015. That gap
+is the room text has to fill.
 Reports: [market](reports/polymarket/findings.md), [market at 8 h](reports/polymarket/horizon_findings.md),
-[rich boosting](reports/rich_gradient_boosting/findings.md), [basic boosting](reports/gradient_boosting/findings.md).
+[boosting](reports/gradient_boosting/findings.md), [earlier boosting runs](reports/past/README.md).
 
 **Text: no measurable gain yet.** Three small pilots, on 14–18 test games each, found no gain
 from text ([summaries](reports/past/README.md)). The full BAM pipeline has not been trained yet.
@@ -60,10 +60,13 @@ All data is local and git-ignored, under the canonical checkout's `data/`.
 | Dataset | Coverage | Built by |
 | --- | --- | --- |
 | ESPN schedules and results | 16,829 regular-season games, 2012–13 to 2025–26 | `collect_pilot.py --stage schedules` (configs `history_2012`, `seasonal`) |
-| ESPN box scores | 3,613 games, 2023–24 to 2025–26 | `collect_rich_stats.py` |
+| ESPN box scores (NBA.com where ESPN is empty or invalid) | 16,810 of 16,821 games, 2012–13 to 2025–26 | `collect_rich_stats.py` |
 | Game notes v2 | 2,144 team documents for 1,997 games, 2012–26 | `collect_notes_v2.py` ([findings](reports/notes_v2/findings.md)) |
 | Polymarket prices and trades | 2,410 games, 2024–25 onward | `collect_polymarket.py`, `collect_polymarket_trades.py` |
-| BAM snapshot | 663 games with notes, 2023–26, pages and boosting forecasts | `bam_data.py prepare --config config/bam_snapshot.json` |
+| BAM snapshot `bam_notes_v2` | 1,922 games with notes, 2012–26 (TRAIN 1,592, DEV 193, TEST 137): numbered pages, split, boosting probability for 1,768 | `bam_data.py prepare --config config/bam_snapshot.json` |
+
+**Fixed splits** (`config/gradient_boosting.json`): TRAIN = 2012–13 to 2023–24, DEV = 2024–25,
+TEST = 2025–26. Each dataset is built once, validated, then left alone.
 
 Ground rules, enforced by validators and tests:
 
@@ -77,8 +80,8 @@ Ground rules, enforced by validators and tests:
 scripts/
   collect_pilot.py            shared download cache and time helpers; ESPN schedule collector
   collect_notes_v2.py         game notes; validate_notes_v2.py, postgame_screen.py
-  collect_rich_stats.py       box scores; rich_stats_features.py
-  run_gradient_boosting.py    basic baseline; run_rich_gradient_boosting.py (current baseline)
+  collect_rich_stats.py       box scores; box_score_features.py turns them into prior-game features
+  run_gradient_boosting.py    the baseline: fit on TRAIN, select on DEV, score TEST; validate_gradient_boosting.py
   collect_polymarket*.py      market prices and trades; evaluate_polymarket*.py
   bam_data.py                 notes_v2 + boosting -> immutable BAM snapshot
   bam_research.py             research prompts and claim checks (bam_claim_guards, bam_note_tables, game_note_tables)
@@ -105,7 +108,7 @@ uv pip install --python .venv/bin/python -r requirements-baseline.txt
 .venv/bin/python -m unittest discover -s tests
 
 .venv/bin/python scripts/validate_notes_v2.py
-.venv/bin/python scripts/validate_rich_gradient_boosting.py
+.venv/bin/python scripts/validate_gradient_boosting.py
 .venv/bin/python scripts/evaluate_polymarket_horizons.py
 .venv/bin/python scripts/bam_data.py prepare --config config/bam_snapshot.json
 ```

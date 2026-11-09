@@ -21,7 +21,7 @@ import shutil
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-SCHEMA_VERSION = "bam-inputs-v2"
+SCHEMA_VERSION = "bam-inputs-v3"
 METADATA = ("game_id", "game_date_et", "cutoff_utc", "home_abbr", "away_abbr")
 
 
@@ -129,67 +129,31 @@ def notes_v2_games(docs, schedule, root=ROOT):
     return sorted(games.values(), key=lambda r: (r["game_date_et"], r["game_id"])), bodies, excluded
 
 
-def assign_splits(rows, fit_ids, policy):
-    """Keep whole ET dates together; pre-backbone and booster-fit games train only."""
-    rows = sorted(rows, key=lambda r: (r["game_date_et"], r["game_id"]))
-    cutoff = policy["prediction_model_cutoff_date"]
-    train_only_dates = {r["game_date_et"] for r in rows
-                        if r["game_date_et"] <= cutoff or r["game_id"] in fit_ids or not r["forecast_eligible"]}
-    last_train_only = max(train_only_dates, default="")
-    minimum = policy.get("minimum_split_games", {"train": 30, "dev": 8, "test": 8})
-    explicit = policy.get("dev_start_date"), policy.get("test_start_date")
-    if any(explicit):
-        a_date, b_date = explicit
-        if not a_date or not b_date or a_date >= b_date or a_date <= max(last_train_only, cutoff):
-            raise ValueError("Invalid explicit chronological split boundaries")
-        result = [dict(r, split="train" if r["game_date_et"] < a_date else "dev" if r["game_date_et"] < b_date else "test") for r in rows]
-    else:
-        n = len(rows)
-        target = policy.get("requested_fractions", [0.75, 0.125, 0.125])
-        boundaries = [i for i in range(1, n) if rows[i - 1]["game_date_et"] != rows[i]["game_date_et"]]
-        choices = []
-        for a in boundaries:
-            if rows[a]["game_date_et"] <= max(last_train_only, cutoff):
-                continue
-            for b in boundaries:
-                counts = a, b - a, n - b
-                if b <= a or any(c < minimum[k] for c, k in zip(counts, ("train", "dev", "test"))):
-                    continue
-                choices.append((sum((c / n - f) ** 2 for c, f in zip(counts, target)), a, b))
-        if not choices:
-            raise ValueError("Insufficient chronological unseen games for dev/test; do not silently reuse training games")
-        _, a, b = min(choices)
-        result = [dict(r, split="train" if i < a else "dev" if i < b else "test") for i, r in enumerate(rows)]
-    if any(sum(r["split"] == split for r in result) < minimum[split] for split in minimum):
-        raise ValueError("Too few games for requested split minima")
-    return result
+PRODUCED_BY = {"train": "prior_seasons", "dev": "train_fit", "test": "train_fit"}
 
 
-def prior_probability_plan(targets, numeric, fit_ids, minimum=200):
-    """Pure earlier-only membership; no target outcome is consulted here."""
-    by_id = {r["game_id"]: r for r in numeric}
-    if not fit_ids or not fit_ids <= by_id.keys():
-        raise ValueError("Original booster fitting membership is missing from numeric history")
-    last_original = max(by_id[g]["game_date_et"] for g in fit_ids)
-    plans, assignments = {}, {}
-    for target in targets:
-        gid = target["game_id"]
-        if gid not in by_id:
-            assignments[gid] = {"fold": None, "reason": "baseline_warmup"}
-            continue
-        month = target["game_date_et"][:7] + "-01"
-        original = target["game_date_et"] > last_original
-        fold = "original_frozen" if original else month
-        prior = sorted(fit_ids) if original else sorted(r["game_id"] for r in numeric if r["game_date_et"] < month)
-        if len(prior) < minimum:
-            assignments[gid] = {"fold": None, "reason": "insufficient_earlier_boosting_history"}
-            continue
-        if gid in prior or max(by_id[g]["game_date_et"] for g in prior) >= target["game_date_et"]:
-            raise ValueError("Target or future game entered booster fitting")
-        plans[fold] = {"fit_game_ids": prior, "last_fit_date": max(by_id[g]["game_date_et"] for g in prior),
-                       "fit_before_date": None if original else month, "policy": "frozen_original" if original else "earlier_calendar_months_only"}
-        assignments[gid] = {"fold": fold, "reason": None}
-    return plans, assignments
+def attach_boosting(rows, history_by_id, splits, predictions, features, excluded):
+    """Season split, schedule fields and the boosting forecast of every game, from the boosting outputs.
+
+    A game is forecast-eligible iff the boosting pipeline wrote a prediction for it:
+    fitted on earlier TRAIN seasons for TRAIN, the TRAIN-fitted model for DEV and TEST.
+    """
+    for row in rows:
+        game = history_by_id[row["game_id"]]
+        if game["season"] not in splits:
+            raise ValueError(f"Season {game['season']} has no configured split")
+        split = splits[game["season"]]
+        prediction = predictions.get(row["game_id"])
+        if prediction and (prediction["split"] != split or prediction["game_date_et"] != row["game_date_et"]
+                           or prediction["produced_by"] != PRODUCED_BY[split]):
+            raise ValueError("Boosting prediction disagrees with the configured split or schedule: " + row["game_id"])
+        reason = None if prediction else (excluded[row["game_id"]]["reason"] if row["game_id"] in excluded
+                                          else "no_out_of_sample_boosting_prediction")
+        row.update(scheduled_start_utc=game["scheduled_start_utc"], season=game["season"], split=split,
+                   p_boost=prediction["p_boost"] if prediction else None, forecast_eligible=prediction is not None,
+                   boosting_produced_by=prediction["produced_by"] if prediction else None,
+                   forecast_ineligibility_reason=reason, features=features.get(row["game_id"]))
+    return rows
 
 
 def pages_with_lines(pages):
@@ -311,7 +275,7 @@ def validate_snapshot(directory):
     if [r["game_id"] for r in rows] != [r["game_id"] for r in labels] or len({r["game_id"] for r in rows}) != len(rows):
         raise ValueError("Duplicate or unaligned games")
     date_splits = defaultdict(set)
-    fit_ids = set(manifest["original_fit_game_ids"])
+    fit_ids = set(manifest["boosting_fit_game_ids"])
     for row in rows:
         date_splits[row["game_date_et"]].add(row["split"])
         if any(k in row for k in ("home_win", "home_score", "away_score", "recap", "postmortem")):
@@ -319,11 +283,15 @@ def validate_snapshot(directory):
         expected = stamp(row["scheduled_start_utc"]) - timedelta(minutes=60)
         if stamp(row["cutoff_utc"]) != expected:
             raise ValueError("Prediction cutoff differs from tipoff minus 60 minutes")
-        if row["split"] != "train" and (row["game_date_et"] <= manifest["policy"]["prediction_model_cutoff_date"] or row["game_id"] in fit_ids):
+        if row["split"] != manifest["season_splits"].get(str(row["season"])):
+            raise ValueError("Row split differs from its season's configured split")
+        if row["split"] != "train" and (row["game_date_et"] <= manifest["prediction_model_cutoff_date"] or row["game_id"] in fit_ids):
             raise ValueError("Training-only game in evaluation")
         p = row["p_boost"]
         if row["forecast_eligible"] != (p is not None) or p is not None and (not math.isfinite(p) or not 0 < p < 1):
             raise ValueError("Invalid forecast eligibility/probability")
+        if row["boosting_produced_by"] != (PRODUCED_BY[row["split"]] if p is not None else None):
+            raise ValueError("Boosting forecast does not come from the model its split requires")
         for source in row["sources"]:
             if stamp(source["archive_time"]) > stamp(row["cutoff_utc"]):
                 raise ValueError("Source archive is later than cutoff")
@@ -345,30 +313,33 @@ def validate_snapshot(directory):
 
 def prepare(config, snapshot_id=None, workers=4, root=ROOT):
     import joblib
-    from run_gradient_boosting import (FEATURE_NAMES, arrays, load_verified_history,
-                                      new_model, prepare_examples)
+    from run_gradient_boosting import load_verified_history, season_splits
     root = Path(root)
     if root.resolve() != ROOT.resolve():
-        raise ValueError("Feature verifier uses this repository root; alternate roots are unsupported")
+        raise ValueError("Schedule verifier uses this repository root; alternate roots are unsupported")
     base_path = root / config.get("baseline_config", "config/gradient_boosting.json")
     baseline = json.loads(base_path.read_text())
     if baseline["cutoff_minutes"] != 60:
         raise ValueError("BAM requires scheduled tipoff minus 60 minutes")
-    history = load_verified_history(baseline)
-    numeric, labels, _ = prepare_examples(history, baseline)
-    by_id = {r["game_id"]: r for r in numeric}
-    history_by_id = {r["game_id"]: r for r in history}
-    labels_by_id = {r["game_id"]: r for r in labels}
-    original_path = root / "data/processed/gradient_boosting/model.joblib"
-    original = joblib.load(original_path)
-    fit_ids = set(original["fit_game_ids"]) | set(original.get("selection_game_ids", []))
+    splits = season_splits(baseline)
+    history_by_id = {r["game_id"]: r for r in load_verified_history(baseline)}
+    boosting = root / "data/processed/gradient_boosting"
+    # Only boosting outputs that match their validated metrics (validate_gradient_boosting.py).
+    for name, expected in json.loads((root / "reports/gradient_boosting/metrics.json").read_text())["artifact_sha256"].items():
+        if digest((root / name).read_bytes()) != expected:
+            raise ValueError("Boosting artifact differs from reports/gradient_boosting/metrics.json: " + name)
+    predictions = {r["game_id"]: r for r in read_rows(boosting / "predictions.jsonl")}
+    features = {r["game_id"]: r["features"] for r in read_rows(boosting / "inputs.jsonl")}
+    boosting_excluded = {r["game_id"]: r for r in read_rows(boosting / "excluded.jsonl")}
+    fit_ids = set(joblib.load(boosting / "model.joblib")["final"]["fit_game_ids"])
     provenance = {}
     def freeze(path):
         path = Path(path)
         provenance[str(path.relative_to(root))] = digest(path.read_bytes())
-    for path in (base_path, original_path, root / baseline["history_path"], root / baseline["history_config"], Path(__file__),
-                 root / "scripts/run_gradient_boosting.py", root / "scripts/collect_pilot.py",
-                 root / "scripts/collect_notes_v2.py", root / config["notes_path"]):
+    for path in (base_path, *(root / s[k] for s in baseline["histories"] for k in ("path", "config")), Path(__file__),
+                 *(boosting / name for name in ("predictions.jsonl", "inputs.jsonl", "excluded.jsonl", "model.joblib")),
+                 root / "scripts/run_gradient_boosting.py", root / "scripts/box_score_features.py",
+                 root / "scripts/collect_pilot.py", root / "scripts/collect_notes_v2.py", root / config["notes_path"]):
         freeze(path)
     docs = read_rows(root / config["notes_path"])
     rows, bodies, excluded = notes_v2_games(docs, history_by_id, root)
@@ -376,32 +347,7 @@ def prepare(config, snapshot_id=None, workers=4, root=ROOT):
     for doc in docs:
         if doc["game_id"] in kept and not doc.get("modified_after_cutoff"):
             freeze(root / doc["source"]["api_raw_path" if doc["kind"] == "html_post" else "raw_path"])
-    minimum = config.get("minimum_oof_fit_games", 200)
-    # fit_game_ids describes actual final fit; selection IDs are additionally
-    # forbidden in hybrid dev/test but are not silently added to model fitting.
-    plans, assignments = prior_probability_plan(rows, numeric, set(original["fit_game_ids"]), minimum)
-    booster_parameters = config.get("boosting_parameters", {"n_estimators": 100, "max_depth": 1})
-    expected_parameters = original["model"].get_params()
-    model_parameters = {**baseline["model_parameters"], **booster_parameters, "random_state": baseline["seed"]}
-    if any(expected_parameters[k] != v for k, v in model_parameters.items()):
-        raise ValueError("OOF booster parameters differ from original frozen model")
-    for fold, plan in plans.items():
-        selected = [by_id[g] for g in plan["fit_game_ids"]]
-        x, y = arrays(selected, [labels_by_id[r["game_id"]] for r in selected])
-        model = original["model"] if fold == "original_frozen" else new_model(baseline, booster_parameters).fit(x, y)
-        targets = [row for row in rows if assignments[row["game_id"]]["fold"] == fold]
-        for row in targets:
-            row["p_boost"] = float(model.predict_proba([[by_id[row["game_id"]]["features"][n] for n in FEATURE_NAMES]])[0, 1])
-    for row in rows:
-        game = history_by_id[row["game_id"]]
-        row.update(scheduled_start_utc=game["scheduled_start_utc"], season=game["season"],
-                   p_boost=row.get("p_boost"), forecast_eligible=row.get("p_boost") is not None,
-                   boosting_fold=assignments[row["game_id"]]["fold"],
-                   forecast_ineligibility_reason=assignments[row["game_id"]]["reason"])
-        if row["game_id"] in by_id:
-            row.update(features=by_id[row["game_id"]]["features"], prior_game_ids=by_id[row["game_id"]]["prior_game_ids"])
-    policy = config.get("split_policy", config)
-    rows = assign_splits(rows, fit_ids, policy)
+    rows = attach_boosting(rows, history_by_id, splits, predictions, features, boosting_excluded)
     # Dev/test games of the earlier text pilots, whose labels and scores were already inspected.
     inspected = set(config.get("previously_inspected_game_ids", []))
     identity = {"schema_version": SCHEMA_VERSION, "config": config, "provenance_sha256": provenance,
@@ -448,19 +394,21 @@ def prepare(config, snapshot_id=None, workers=4, root=ROOT):
         for split in ("train", "dev", "test"):
             membership = {r["game_id"] for r in rows if r["split"] == split}
             write_rows(staging / ("labels_" + split + ".jsonl"), [r for r in separate_labels if r["game_id"] in membership])
-        write_json(staging / "boosting_lineage.json", plans)
         reused = sorted(r["game_id"] for r in rows if r["split"] == "test" and r["game_id"] in inspected)
         summary = {"games": len(rows), "sources": len(tasks), "excluded_documents": dict(excluded),
                    "evidence_tiers": dict(Counter(s["evidence_tier"] for r in rows for s in r["sources"])),
                    "splits": dict(Counter(r["split"] for r in rows)),
                    "forecast_eligible": dict(Counter(r["split"] for r in rows if r["forecast_eligible"])),
-                   "research_only": sum(not r["forecast_eligible"] for r in rows),
+                   "boosting_produced_by": dict(Counter(r["boosting_produced_by"] for r in rows if r["forecast_eligible"])),
+                   "research_only": dict(Counter(r["forecast_ineligibility_reason"] for r in rows if not r["forecast_eligible"])),
                    "previously_inspected_test_ids": reused,
                    "test_status": "exploratory_previously_inspected" if reused else "candidate_uninspected_requires_model_knowledge_audit",
                    "full_packet_quality": "All pages preserved; notes_v2 approval checks headers and results, not full-packet semantics."}
         artifacts = {str(p.relative_to(staging)): digest(p.read_bytes()) for p in sorted(staging.rglob("*")) if p.is_file()}
         manifest = {"schema_version": SCHEMA_VERSION, "snapshot_id": snapshot_id, "identity": identity,
-                    "policy": policy, "original_fit_game_ids": sorted(fit_ids), "artifact_sha256": artifacts, "summary": summary}
+                    "season_splits": {str(season): split for season, split in sorted(splits.items())},
+                    "prediction_model_cutoff_date": config["prediction_model_cutoff_date"],
+                    "boosting_fit_game_ids": sorted(fit_ids), "artifact_sha256": artifacts, "summary": summary}
         write_json(staging / "manifest.json", manifest)
         validate_snapshot(staging)
         # Check input files again before publishing an atomically complete snapshot.

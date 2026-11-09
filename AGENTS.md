@@ -2,10 +2,18 @@
 
 - This is Tommaso Sini and Anthony Viverito's Stanford CS230 NBA forecasting project.
 - Read `HANDOFF.md` and `README.md` before continuing.
-- **Rewrite, don't accumulate.** When code, a config, a report or a doc is
-  superseded, replace or delete it. Do not add `_v2`/dated copies next to the old
-  one or keep finished experiments' code around; git history keeps everything
-  (the tag `pre-cleanup` holds the state before the November 2026 cleanup).
+- **Rewrite, don't accumulate.** When you change how a process works (new
+  features, model, split, data source), edit the file that implements it. Keep one
+  file per job: one `run_gradient_boosting.py`, never a `run_rich_gradient_boosting.py`
+  beside it. Create new files only for genuinely new jobs, and delete whatever the
+  change makes obsolete in the same change. No `_v2`/dated copies, and no keeping
+  finished experiments' code. Git history keeps everything (the tag `pre-cleanup`
+  holds the state before the November 2026 cleanup).
+- **Fixed splits:** TRAIN = seasons 2012–13 to 2023–24, DEV = 2024–25,
+  TEST = 2025–26, defined once in `config/gradient_boosting.json`. Fit on TRAIN,
+  choose on DEV, score TEST once. Do not change the splits.
+- **Frozen datasets:** once a dataset is built and validated, leave it alone.
+  Don't recollect, re-normalize or extend it unless the user asks.
 - Use the repository's `.venv` for all Python work: `.venv/bin/python` and
   `uv pip install --python .venv/bin/python -r requirements-baseline.txt`.
   Do not install packages into system Python or the global Conda environment.
@@ -21,7 +29,7 @@
   coverage. Do not claim otherwise.
 - After collector or dataset changes, run the tests and the matching validator
   (`validate_notes_v2.py`, `validate_polymarket.py`, `validate_gradient_boosting.py`,
-  `validate_rich_gradient_boosting.py`, or `bam_data.py validate <snapshot>`).
+  or `bam_data.py validate <snapshot>`).
 
 ## AWS project context (2026-11-08 setup)
 

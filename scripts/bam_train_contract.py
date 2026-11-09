@@ -18,17 +18,15 @@ from zoneinfo import ZoneInfo
 
 import bam_research as research
 import bam_training as training
-from rich_stats_features import RICH_FEATURE_NAMES
-from run_gradient_boosting import FEATURE_NAMES as BASE_FEATURE_NAMES
+from run_gradient_boosting import CONFIG_PATH, FEATURE_NAMES
 
 
 FILES = ("inputs_train.jsonl", "outcomes_train.jsonl", "gold_train.jsonl")
-FEATURE_NAMES = BASE_FEATURE_NAMES + RICH_FEATURE_NAMES
-# The current training-first protocol uses the collected 2023–24 statistical
-# TRAIN season, not the later, broader legacy BAM split. These bounds follow
-# config/gradient_boosting.json and config/seasonal.json (history through Apr 10).
-TRAIN_DATE_MIN = "2023-10-01"
-TRAIN_DATE_MAX = "2024-04-10"
+# TRAIN seasons come from the fixed split in config/gradient_boosting.json; a season
+# starting in year Y runs from July 1 of Y to June 30 of Y + 1.
+_TRAIN_SEASONS = json.loads(CONFIG_PATH.read_text())["split_seasons"]["train"]
+TRAIN_DATE_MIN = f"{_TRAIN_SEASONS[0]}-07-01"
+TRAIN_DATE_MAX = f"{_TRAIN_SEASONS[1] + 1}-06-30"
 RESEARCH_MODEL_ID = "Qwen/Qwen2.5-14B-Instruct"
 RESEARCH_MODEL_REVISION = "cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8"
 FORBIDDEN = {"home_win", "outcome", "label", "target", "postmortem", "recap",
@@ -169,9 +167,12 @@ def _validate_ordinary_reports(row):
 def validate_pregame(row):
     _keys(row, ROW_KEYS, "pregame record")
     require(row["split"] == "train", "Only TRAIN inputs are permitted")
+    p = row["p_boost"]
+    require(isinstance(p, float) and math.isfinite(p) and 0 < p < 1,
+            "TRAIN inputs need a boosting probability (the first TRAIN season has none)")
     require(date.fromisoformat(row["game_date_et"]).isoformat() == row["game_date_et"], "Canonical game date required")
     require(TRAIN_DATE_MIN <= row["game_date_et"] <= TRAIN_DATE_MAX,
-            "Game lies outside the approved collected 2023–24 TRAIN season")
+            "Game lies outside the TRAIN seasons (config/gradient_boosting.json)")
     require(research.timestamp(row["tipoff_utc"]).astimezone(ZoneInfo("America/New_York")).date().isoformat() == row["game_date_et"],
             "Game date must agree with scheduled tipoff in America/New_York")
     game = _game(row)

@@ -86,40 +86,38 @@ class NotesV2Tests(unittest.TestCase):
         return str(path)
 
 
-class TemporalTests(unittest.TestCase):
+class BoostingTests(unittest.TestCase):
     def setUp(self):
-        self.rows = [{"game_id": str(i), "game_date_et": date, "forecast_eligible": True}
-                     for i, date in enumerate(["2024-01-01", "2024-10-01", "2025-04-01", "2025-10-01", "2025-10-01", "2026-01-01", "2026-02-01"])]
-        self.policy = {"prediction_model_cutoff_date": "2024-09-18", "dev_start_date": "2025-10-01",
-                       "test_start_date": "2026-02-01", "minimum_split_games": {"train": 1, "dev": 1, "test": 1}}
+        self.history = {f"g{i}": {"game_id": f"g{i}", "season": season, "game_date_et": date,
+                                  "scheduled_start_utc": date + "T23:00:00Z"}
+                        for i, (season, date) in enumerate([(2015, "2016-01-01"), (2023, "2024-01-01"), (2024, "2025-01-01"), (2025, "2026-01-01")])}
+        self.splits = {2015: "train", 2023: "train", 2024: "dev", 2025: "test"}
 
-    def test_old_and_booster_fit_games_train_only_whole_dates(self):
-        result = bam.assign_splits(self.rows, {"1", "2"}, self.policy)
-        self.assertEqual([r["split"] for r in result], ["train"] * 3 + ["dev"] * 3 + ["test"])
-        with self.assertRaisesRegex(ValueError, "boundaries"):
-            bam.assign_splits(self.rows, {"3"}, self.policy)
-        self.rows[-1]["forecast_eligible"] = False
-        with self.assertRaisesRegex(ValueError, "boundaries"):
-            bam.assign_splits(self.rows, set(), self.policy)
+    def rows(self):
+        return [{"game_id": g, "game_date_et": game["game_date_et"], "sources": []} for g, game in self.history.items()]
 
-    def test_automatic_split_is_chronological(self):
-        policy = {k: v for k, v in self.policy.items() if k not in ("dev_start_date", "test_start_date")}
-        result = bam.assign_splits(self.rows, {"2"}, policy)
-        self.assertEqual([r["split"] for r in result[:3]], ["train"] * 3)
-        self.assertEqual(result[3]["split"], result[4]["split"])
+    def test_split_follows_season_and_only_predicted_games_are_eligible(self):
+        predictions = {"g1": {"split": "train", "game_date_et": "2024-01-01", "p_boost": 0.6, "produced_by": "prior_seasons"},
+                       "g2": {"split": "dev", "game_date_et": "2025-01-01", "p_boost": 0.4, "produced_by": "train_fit"}}
+        excluded = {"g0": {"reason": "fewer_than_min_box_scores"}}
+        rows = bam.attach_boosting(self.rows(), self.history, self.splits, predictions, {"g2": {"x": 1.0}}, excluded)
+        self.assertEqual([r["split"] for r in rows], ["train", "train", "dev", "test"])
+        self.assertEqual([r["p_boost"] for r in rows], [None, 0.6, 0.4, None])
+        self.assertEqual([r["boosting_produced_by"] for r in rows], [None, "prior_seasons", "train_fit", None])
+        self.assertEqual(rows[0]["forecast_ineligibility_reason"], "fewer_than_min_box_scores")
+        self.assertEqual(rows[3]["forecast_ineligibility_reason"], "no_out_of_sample_boosting_prediction")
+        self.assertEqual(rows[2]["features"], {"x": 1.0})
 
-    def test_monthly_booster_membership_and_research_only_games(self):
-        numeric = [{"game_id": "jan1", "game_date_et": "2024-01-01"},
-                   {"game_id": "jan2", "game_date_et": "2024-01-02"},
-                   {"game_id": "feb", "game_date_et": "2024-02-02"},
-                   {"game_id": "future", "game_date_et": "2024-03-02"}]
-        targets = numeric + [{"game_id": "warmup", "game_date_et": "2023-10-24"}]
-        plans, selected = bam.prior_probability_plan(targets, numeric, {"jan1", "jan2", "feb"}, 2)
-        self.assertEqual(plans["2024-02-01"]["fit_game_ids"], ["jan1", "jan2"])
-        self.assertEqual(selected["feb"]["fold"], "2024-02-01")
-        self.assertEqual(selected["future"]["fold"], "original_frozen")
-        self.assertIsNone(selected["jan2"]["fold"])
-        self.assertEqual(selected["warmup"]["reason"], "baseline_warmup")
+    def test_prediction_from_another_split_or_unconfigured_season_rejected(self):
+        wrong = {"g2": {"split": "train", "game_date_et": "2025-01-01", "p_boost": 0.4, "produced_by": "prior_seasons"}}
+        with self.assertRaisesRegex(ValueError, "split"):
+            bam.attach_boosting(self.rows(), self.history, self.splits, wrong, {}, {})
+        # A DEV game must be forecast by the TRAIN-fitted model, not a TRAIN-season model.
+        wrong = {"g2": {"split": "dev", "game_date_et": "2025-01-01", "p_boost": 0.4, "produced_by": "prior_seasons"}}
+        with self.assertRaisesRegex(ValueError, "split"):
+            bam.attach_boosting(self.rows(), self.history, self.splits, wrong, {}, {})
+        with self.assertRaisesRegex(ValueError, "no configured split"):
+            bam.attach_boosting(self.rows(), self.history, {2015: "train"}, {}, {}, {})
 
 
 class SnapshotTests(unittest.TestCase):
@@ -132,15 +130,15 @@ class SnapshotTests(unittest.TestCase):
         bam.write_json(directory / "sources/a.json", {"source_sha256": sha, "pages": pages})
         (directory / "raw").mkdir()
         (directory / "raw/a.bin").write_bytes(raw)
-        row = {**{k: v for k, v in GAME.items() if k in bam.METADATA}, "split": "train",
+        row = {**{k: v for k, v in GAME.items() if k in bam.METADATA}, "split": "train", "season": 2023,
                "scheduled_start_utc": "2024-01-02T01:00:00Z", "forecast_eligible": False, "p_boost": None,
-               "sources": [{"source_id": "sha256:" + sha, "sha256": sha, "raw_path": "raw/a.bin",
+               "boosting_produced_by": None, "sources": [{"source_id": "sha256:" + sha, "sha256": sha, "raw_path": "raw/a.bin",
                             "pages_path": "sources/a.json", "pages_sha256": bam.digest((directory / "sources/a.json").read_bytes()),
                             "active_for_research": True, "archive_time": "2024-01-01T12:00:00Z"}]}
         bam.write_rows(directory / "inputs.jsonl", [row])
         bam.write_rows(directory / "labels.jsonl", [{"game_id": row["game_id"], "home_win": 1}])
-        manifest = {"snapshot_id": "test", "policy": {"prediction_model_cutoff_date": "2024-09-18"},
-                    "original_fit_game_ids": [], "summary": {"games": 1},
+        manifest = {"snapshot_id": "test", "season_splits": {"2023": "train", "2024": "dev", "2025": "test"},
+                    "prediction_model_cutoff_date": "2024-09-25", "boosting_fit_game_ids": [], "summary": {"games": 1},
                     "artifact_sha256": {str(p.relative_to(directory)): bam.digest(p.read_bytes()) for p in directory.rglob("*") if p.is_file()}}
         bam.write_json(directory / "manifest.json", manifest)
         return row
@@ -165,7 +163,7 @@ class SnapshotTests(unittest.TestCase):
                 bam.validate_snapshot(directory)
 
     def test_cutoff_and_outcome_leakage_rejected_even_with_new_artifact_hash(self):
-        for change in ({"home_win": 1}, {"cutoff_utc": "2024-01-02T00:01:00Z"}):
+        for change in ({"home_win": 1}, {"cutoff_utc": "2024-01-02T00:01:00Z"}, {"split": "dev"}):
             with self.subTest(change=change), tempfile.TemporaryDirectory() as directory:
                 row = self.fixture(directory)
                 row.update(change)

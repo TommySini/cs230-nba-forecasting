@@ -1,23 +1,25 @@
-"""Prior-date team and player box-score features for the richer boosting baseline.
+"""Prior-date team and player box-score features for the gradient-boosting baseline.
 
 Only allowlisted numeric, normalized box scores enter calculations. Canonical
-scoreboard history determines each team's actual windows, so an absent box score
-cannot silently turn the last five games into the last five *available* games.
-The target game's box score, participating players and later games are never read.
+scoreboard history determines each team's actual windows (season, last five, last
+ten earlier games), so an absent box score cannot silently turn the last five games
+into the last five *available* games. A missing or invalid prior box score reduces
+coverage instead of excluding the game: team statistics pool the window's valid
+games, explicit coverage features record the gap, and player statistics are missing
+(not zero) unless every game in the window has a valid player box score. The target
+game's box score, participating players and later games are never read.
 
 Possessions use the explicitly approximate box-score formula
 0.5 * sum_over_both_teams(FGA - OREB + TOV + 0.44 * FTA). These are not official
 NBA offensive ratings or possession counts. Current retrieval timestamps do not
 prove historical byte availability; prior ET dates provide the same conservative
-result-availability assumption as the original baseline. Explicit result-available
+result-availability assumption as the basic features. Explicit result-available
 timestamps, when supplied by a collector, additionally must precede the cutoff.
 """
 from __future__ import annotations
 
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
-import hashlib
-import json
 import math
 
 
@@ -36,13 +38,19 @@ PLAYER_STAT_METRICS = (
     "top3_offensive_involvement_share", "rotation_players_10plus_minutes_per_game",
     "consecutive_game_minutes_overlap",
 )
-PLAYER_COVERAGE_METRICS = ("player_boxscore_coverage", "player_boxscore_missing")
-PLAYER_METRICS = PLAYER_STAT_METRICS + PLAYER_COVERAGE_METRICS
-TEAM_FEATURE_NAMES = tuple(f"{side}_{window}_{name}" for side in SIDES
-                           for window, _ in WINDOWS for name in TEAM_METRICS)
-PLAYER_FEATURE_NAMES = tuple(f"{side}_{window}_{name}" for side in SIDES
-                             for window, _ in WINDOWS for name in PLAYER_METRICS)
-RICH_FEATURE_NAMES = TEAM_FEATURE_NAMES + PLAYER_FEATURE_NAMES
+PLAYER_METRICS = PLAYER_STAT_METRICS + ("player_boxscore_coverage", "player_boxscore_missing")
+TEAM_COVERAGE_METRICS = ("team_boxscore_coverage", "team_boxscore_missing")
+
+
+def _names(metrics):
+    return tuple(f"{side}_{window}_{name}" for side in SIDES for window, _ in WINDOWS for name in metrics)
+
+
+TEAM_FEATURE_NAMES = _names(TEAM_METRICS)
+PLAYER_FEATURE_NAMES = _names(PLAYER_METRICS)
+TEAM_COVERAGE_FEATURE_NAMES = _names(TEAM_COVERAGE_METRICS)
+# Coverage columns go last so the earlier columns keep the order of the 2023 rich model.
+BOX_SCORE_FEATURE_NAMES = TEAM_FEATURE_NAMES + PLAYER_FEATURE_NAMES + TEAM_COVERAGE_FEATURE_NAMES
 TEAM_REQUIRED_FIELDS = ("minutes", "fgm", "fga", "fg3m", "fg3a", "ftm", "fta",
                         "oreb", "dreb", "tov", "pts")
 PLAYER_REQUIRED_FIELDS = ("minutes", "fga", "fta", "tov")
@@ -70,7 +78,9 @@ FEATURE_DEFINITIONS = {
     "rotation_players_10plus_minutes_per_game": "Average number of players with at least ten minutes per game",
     "consecutive_game_minutes_overlap": "Mean sum of minimum individual minute shares across each consecutive pair of games in the window",
     "player_boxscore_coverage": "Fraction of actual team games in the window with complete, validated player minutes and counters",
-    "player_boxscore_missing": "1 if any actual team game in the window has an incomplete player box score; its six player statistics are missing, not zero",
+    "player_boxscore_missing": "1 if any actual team game in the window lacks a valid player box score; the six player statistics are then missing, not zero",
+    "team_boxscore_coverage": "Fraction of actual team games in the window with a valid team box score; team statistics pool only those games",
+    "team_boxscore_missing": "1 if any actual team game in the window lacks a valid team box score; all team statistics are missing if none has one",
 }
 AVAILABILITY_LIMITATION = (
     "Historical box scores were retrieved retrospectively. Earlier ET game dates are used, "
@@ -80,7 +90,7 @@ AVAILABILITY_LIMITATION = (
 
 
 class RichFeatureError(ValueError):
-    """A selected historical source cannot support the requested feature group."""
+    """A historical source cannot support the requested features."""
 
 
 def _stamp(value):
@@ -106,11 +116,6 @@ def _ratio(numerator, denominator, label):
     if denominator <= 0:
         raise RichFeatureError(f"Zero denominator: {label}")
     return numerator / denominator
-
-
-def _hash(value):
-    payload = json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
-    return hashlib.sha256(payload).hexdigest()
 
 
 def _team_stats(team, label):
@@ -200,7 +205,8 @@ def _aggregate_team(games):
 
 
 def _aggregate_players(games):
-    valid = sum(game["players"] is not None for game in games)
+    """`games` holds one entry per actual window game: None (no valid box) or a parsed record."""
+    valid = sum(game is not None and game["players"] is not None for game in games)
     coverage = {"player_boxscore_coverage": valid / len(games),
                 "player_boxscore_missing": float(valid < len(games))}
     if valid < len(games):
@@ -235,19 +241,29 @@ def _aggregate_players(games):
     }
 
 
-class RichStatsIndex:
-    """Build rich features against complete canonical prior-game membership.
+def _aggregate_window(games):
+    """Team statistics over the window's valid games, coverage, and all-or-nothing player statistics."""
+    valid = [game for game in games if game is not None]
+    team = _aggregate_team(valid) if valid else {name: float("nan") for name in TEAM_METRICS}
+    return {**team, **_aggregate_players(games),
+            "team_boxscore_coverage": len(valid) / len(games),
+            "team_boxscore_missing": float(len(valid) < len(games))}
 
-    `history` is the existing allowlisted scoreboard history. `box_records` use
-    canonical `game_id`, `season`, `game_date_et`, and `teams.home/away` with the
-    numeric fields above, a `team_abbr`, and optional normalized `players`.
-    Metadata in `provenance` is preserved only in lineage, never as a feature.
+
+class BoxScoreIndex:
+    """Build box-score features against complete canonical prior-game membership.
+
+    `history` is the verified scoreboard history. `box_records` use canonical
+    `game_id`, `season`, `game_date_et`, and `teams.home/away` with the numeric
+    fields above, a `team_abbr`, and optional normalized `players`. Provenance
+    metadata is never read.
     """
 
-    def __init__(self, history, box_records, *, min_previous_games=5, cutoff_minutes=60):
-        if min_previous_games < 2 or cutoff_minutes <= 0:
-            raise ValueError("At least two prior games and a positive cutoff are required")
-        self.min_previous_games, self.cutoff_minutes = min_previous_games, cutoff_minutes
+    def __init__(self, history, box_records, *, min_previous_games=5, min_box_score_games=5, cutoff_minutes=60):
+        if min_previous_games < 2 or min_box_score_games < 1 or cutoff_minutes <= 0:
+            raise ValueError("At least two prior games, one prior box score and a positive cutoff are required")
+        self.min_previous_games, self.min_box_score_games = min_previous_games, min_box_score_games
+        self.cutoff_minutes = cutoff_minutes
         self.history, self.records = {}, {}
         self.by_team = defaultdict(list)
         for game in history:
@@ -264,7 +280,7 @@ class RichStatsIndex:
                 raise ValueError(f"Duplicate normalized box score: {game_id}")
             self.records[game_id] = record
 
-    def _prior_record(self, canonical, team, cutoff, include_players):
+    def _prior_record(self, canonical, team, cutoff):
         game_id = canonical["game_id"]
         if game_id not in self.records:
             raise RichFeatureError(f"Missing historical box score: {game_id}")
@@ -288,142 +304,83 @@ class RichStatsIndex:
                 raise RichFeatureError(f"Box-score/canonical score mismatch: {game_id}.{side}")
         if abs(numbers["home"]["minutes"] - numbers["away"]["minutes"]) > 8:
             raise RichFeatureError(f"Opposing team minutes disagree: {game_id}")
-        supplied_durations = [value for value in (record.get("game_minutes"),
-                              teams["home"].get("game_minutes"), teams["away"].get("game_minutes"))
-                              if value is not None]
-        supplied_durations = [_number(value, f"{game_id}.game_minutes") for value in supplied_durations]
-        if len(set(supplied_durations)) > 1:
+        supplied = [value for value in (record.get("game_minutes"), teams["home"].get("game_minutes"),
+                                        teams["away"].get("game_minutes")) if value is not None]
+        supplied = [_number(value, f"{game_id}.game_minutes") for value in supplied]
+        if len(set(supplied)) > 1:
             raise RichFeatureError(f"Inconsistent game durations: {game_id}")
-        duration = supplied_durations[0] if supplied_durations else None
-        if duration is None:
-            duration = (numbers["home"]["minutes"] + numbers["away"]["minutes"]) / 10
-            duration_basis = "mean_team_player_minutes_divided_by_five"
-        else:
-            duration = _number(duration, f"{game_id}.game_minutes")
-            duration_basis = "normalized_game_minutes"
+        if supplied:
+            duration = supplied[0]
             if any(abs(value["minutes"] - 5 * duration) > 8 for value in numbers.values()):
                 raise RichFeatureError(f"Team minutes disagree with game duration: {game_id}")
+        else:
+            duration = (numbers["home"]["minutes"] + numbers["away"]["minutes"]) / 10
         if not 44 <= duration <= 120:
             raise RichFeatureError(f"Implausible game duration: {game_id}")
-        possessions = .5 * sum(v["fga"] - v["oreb"] + v["tov"] + .44 * v["fta"]
-                               for v in numbers.values())
+        possessions = .5 * sum(v["fga"] - v["oreb"] + v["tov"] + .44 * v["fta"] for v in numbers.values())
         if possessions <= 0:
             raise RichFeatureError(f"Nonpositive estimated possessions: {game_id}")
         own_side = "home" if canonical["home_abbr"] == team else "away"
         other_side = "away" if own_side == "home" else "home"
-        selected = {"game_id": game_id, "game_date_et": canonical["game_date_et"],
-                    "own": numbers[own_side], "opponent": numbers[other_side],
+        selected = {"game_id": game_id, "own": numbers[own_side], "opponent": numbers[other_side],
                     "estimated_possessions": possessions, "game_minutes": duration}
-        player_issue = None
-        if include_players:
-            try:
-                selected["players"] = _players(teams[own_side], numbers[own_side], f"{game_id}.{own_side}")
-            except (RichFeatureError, KeyError, TypeError) as exc:
-                # A missing player report must not erase known team statistics.
-                # It makes player summaries for each affected actual window
-                # unavailable, with explicit indicators for train-only imputation.
-                selected["players"] = None
-                player_issue = str(exc)
-        lineage = {"game_id": game_id, "game_date_et": canonical["game_date_et"],
-                   "team_abbr": team, "duration_basis": duration_basis,
-                   "used_numeric_sha256": _hash(selected), "provenance": record.get("provenance", {})}
-        if player_issue:
-            lineage["player_issue"] = player_issue
-        for field in ("stat_available_at_utc", "completed_at_utc"):
-            if record.get(field) is not None:
-                lineage[field] = record[field]
-        return selected, lineage
+        try:
+            selected["players"] = _players(teams[own_side], numbers[own_side], f"{game_id}.{own_side}")
+        except (RichFeatureError, KeyError, TypeError):
+            # A missing player report must not erase known team statistics. It makes
+            # player summaries for each affected actual window missing instead.
+            selected["players"] = None
+        return selected
 
-    def for_game(self, game, *, include_players=True):
-        """Return features, past-source lineage, coverage and explicit exclusions.
+    def for_game(self, game):
+        """Return features, coverage, unusable prior box scores and any exclusion reason.
 
-        Last-ten summaries use all available *actual* prior games for a team with
-        five to nine prior games, preserving the original five-game warmup.
-        Eligibility requires every canonical prior game to have a valid team
-        source. Missing player reports leave affected window statistics as NaN
-        with explicit indicators; a downstream imputer must be fitted on TRAIN
-        only (TRAIN+DEV for the predeclared final refit).
+        Last-ten summaries use all actual prior games for a team with five to nine.
+        Eligibility needs `min_previous_games` actual prior games and
+        `min_box_score_games` valid prior team box scores for each side. Other gaps
+        leave statistics missing (NaN) with coverage indicators, for an imputer
+        fitted only on the model's own training rows.
         """
         cutoff = (_stamp(game["cutoff_utc"]) if game.get("cutoff_utc")
                   else _stamp(game["scheduled_start_utc"]) - timedelta(minutes=self.cutoff_minutes))
-        result = {"game_id": game["game_id"], "eligible": False, "features": {}, "lineage": {},
-                  "coverage": {}, "reasons": [], "player_issues": [], "cutoff_utc": cutoff.isoformat(),
-                  "availability_limitation": AVAILABILITY_LIMITATION}
+        result = {"game_id": game["game_id"], "eligible": False, "features": {}, "reason": None,
+                  "reasons": [], "coverage": {}, "missing_box_scores": {}}
         side_values = {}
         for side in ("home", "away"):
             team = game[f"{side}_abbr"]
-            previous = [g for g in self.by_team[(game["season"], team)]
-                        if g["game_date_et"] < game["game_date_et"]]
-            result["coverage"][side] = {"expected_previous_games": len(previous),
-                                         "valid_previous_games": 0,
-                                         "window_games": {name: len(previous) if limit is None else min(limit, len(previous))
-                                                          for name, limit in WINDOWS}}
-            result["lineage"][side] = []
-            if len(previous) < self.min_previous_games:
-                result["reasons"].append(f"{side}: fewer than {self.min_previous_games} previous games")
-                continue
-            selected = []
+            previous = [g for g in self.by_team[(game["season"], team)] if g["game_date_et"] < game["game_date_et"]]
+            records, result["missing_box_scores"][side] = [], []
             for prior in previous:
                 try:
-                    record, lineage = self._prior_record(prior, team, cutoff, include_players)
-                    selected.append(record)
-                    result["lineage"][side].append(lineage)
-                    if lineage.get("player_issue"):
-                        result["player_issues"].append({"side": side, "game_id": prior["game_id"],
-                                                        "reason": lineage["player_issue"]})
-                except (RichFeatureError, KeyError, TypeError) as exc:
-                    result["reasons"].append(f"{side}: {prior['game_id']}: {exc}")
-            result["coverage"][side]["valid_previous_games"] = len(selected)
-            if include_players:
-                result["coverage"][side]["valid_player_games"] = sum(g["players"] is not None for g in selected)
-            if len(selected) != len(previous):
+                    records.append(self._prior_record(prior, team, cutoff))
+                except (RichFeatureError, KeyError, TypeError, AttributeError) as exc:
+                    records.append(None)
+                    result["missing_box_scores"][side].append({"game_id": prior["game_id"], "reason": str(exc)})
+            valid = [r for r in records if r is not None]
+            result["coverage"][side] = {"previous_games": len(previous), "valid_box_scores": len(valid),
+                                        "valid_player_box_scores": sum(r["players"] is not None for r in valid)}
+            if len(previous) < self.min_previous_games:
+                result["reasons"].append(f"{side}: fewer than {self.min_previous_games} previous games")
+                result["reason"] = result["reason"] or "fewer_than_min_previous_games"
                 continue
-            values = {}
+            if len(valid) < self.min_box_score_games:
+                result["reasons"].append(f"{side}: {len(valid)} valid prior box scores of {len(previous)}; "
+                                         f"need {self.min_box_score_games}")
+                result["reason"] = result["reason"] or "fewer_than_min_box_scores"
+                continue
             try:
-                for name, limit in WINDOWS:
-                    window = selected if limit is None else selected[-limit:]
-                    metrics = _aggregate_team(window)
-                    if include_players:
-                        metrics.update(_aggregate_players(window))
-                        result["coverage"][side].setdefault("window_player_games", {})[name] = sum(g["players"] is not None for g in window)
-                    values.update({f"{name}_{metric}": value for metric, value in metrics.items()})
+                side_values[side] = {f"{name}_{metric}": value for name, limit in WINDOWS
+                                     for metric, value in _aggregate_window(records if limit is None else records[-limit:]).items()}
             except RichFeatureError as exc:
                 result["reasons"].append(f"{side}: {exc}")
-                continue
-            side_values[side] = values
-        if result["reasons"] or set(side_values) != {"home", "away"}:
+                result["reason"] = result["reason"] or "invalid_window"
+        if result["reasons"]:
             return result
-        names = TEAM_FEATURE_NAMES + (PLAYER_FEATURE_NAMES if include_players else ())
         values = {f"{side}_{name}": value for side, items in side_values.items() for name, value in items.items()}
         values.update({f"difference_{name}": side_values["home"][name] - side_values["away"][name]
                        for name in side_values["home"]})
-        result["features"] = {name: values[name] for name in names}
-        if any(not math.isfinite(result["features"][name]) for name in TEAM_FEATURE_NAMES):
-            raise RichFeatureError("Non-finite assembled features")
+        result["features"] = {name: values[name] for name in BOX_SCORE_FEATURE_NAMES}
         if any(math.isinf(value) for value in result["features"].values()):
-            raise RichFeatureError("Infinite assembled player features")
+            raise RichFeatureError("Infinite assembled features")
         result["eligible"] = True
         return result
-
-
-def augment_inputs(inputs, history, box_records, *, include_players=True, min_previous_games=5,
-                   cutoff_minutes=60):
-    """Preserve original inputs/features and return augmented rows plus exclusions.
-
-    This function reads no label files and does not fit or impute anything.
-    Excluded rows retain reasons and coverage, so an evaluator can enforce a
-    matched cohort and report the exact coverage loss.
-    """
-    index = RichStatsIndex(history, box_records, min_previous_games=min_previous_games,
-                           cutoff_minutes=cutoff_minutes)
-    augmented, excluded = [], []
-    for row in inputs:
-        result = index.for_game(row, include_players=include_players)
-        if not result["eligible"]:
-            excluded.append({key: result[key] for key in ("game_id", "coverage", "reasons")})
-            continue
-        augmented.append({**row, "features": {**row.get("features", {}), **result["features"]},
-                          "rich_stats_lineage": result["lineage"], "rich_stats_coverage": result["coverage"],
-                          "rich_stats_player_issues": result["player_issues"],
-                          "rich_stats_availability_limitation": result["availability_limitation"]})
-    return augmented, excluded

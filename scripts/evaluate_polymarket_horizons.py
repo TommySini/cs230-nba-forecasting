@@ -1,8 +1,8 @@
 """Score market prices eight hours and one hour before tipoff against boosting on identical games.
 
 Only games whose price is supported by recent trading at every horizon are scored, so the
-horizons differ only in timing. Boosting predictions are the existing out-of-sample
-validation (2024-25) and test (2025-26) files.
+horizons differ only in timing. Boosting predictions are the pipeline's DEV (2024-25) and
+TEST (2025-26) forecasts, both from the TRAIN-only fit.
 """
 import argparse
 import json

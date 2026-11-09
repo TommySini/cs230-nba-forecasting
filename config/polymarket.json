@@ -12,8 +12,8 @@
   "price_fidelity_minutes": 10,
   "max_staleness_minutes": 60,
   "comparison": {
-    "test_predictions": "data/processed/gradient_boosting/test_predictions.csv",
-    "validation_predictions": "data/processed/gradient_boosting/validation_predictions.csv",
+    "boosting_predictions": "data/processed/gradient_boosting/predictions.jsonl",
+    "boosting_metrics": "reports/gradient_boosting/metrics.json",
     "seed": 230,
     "bootstrap_replicates": 2000,
     "calibration_bins": 10,

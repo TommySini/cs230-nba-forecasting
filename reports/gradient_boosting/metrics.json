@@ -1,17 +1,35 @@
 {
   "config": {
     "seed": 230,
-    "history_path": "data/processed/seasonal/game_history.jsonl",
-    "history_config": "config/seasonal.json",
+    "histories": [
+      {
+        "path": "data/processed/history_2012/game_history.jsonl",
+        "config": "config/history_2012.json"
+      },
+      {
+        "path": "data/processed/seasonal/game_history.jsonl",
+        "config": "config/seasonal.json"
+      }
+    ],
+    "box_scores": "data/processed/box_scores",
     "cutoff_minutes": 60,
     "min_previous_games": 5,
+    "min_box_score_games": 5,
     "split_seasons": {
-      "train": 2023,
-      "validation": 2024,
-      "test": 2025
+      "train": [
+        2012,
+        2023
+      ],
+      "dev": [
+        2024,
+        2024
+      ],
+      "test": [
+        2025,
+        2025
+      ]
     },
     "selection_metric": "brier",
-    "refit_train_and_validation": true,
     "model_parameters": {
       "loss": "log_loss",
       "learning_rate": 0.05,
@@ -58,31 +76,443 @@
     "difference_last_5_win_rate",
     "difference_last_5_point_differential",
     "difference_days_since_previous_game",
-    "difference_back_to_back"
+    "difference_back_to_back",
+    "home_season_estimated_offensive_rating",
+    "home_season_estimated_defensive_rating",
+    "home_season_estimated_net_rating",
+    "home_season_estimated_pace",
+    "home_season_effective_fg_pct",
+    "home_season_three_point_attempt_rate",
+    "home_season_three_point_pct",
+    "home_season_free_throw_attempt_rate",
+    "home_season_free_throw_pct",
+    "home_season_turnovers_per100_estimated_possessions",
+    "home_season_offensive_rebound_pct",
+    "home_season_defensive_rebound_pct",
+    "home_season_opponent_effective_fg_pct",
+    "home_season_opponent_three_point_attempt_rate",
+    "home_season_opponent_free_throw_attempt_rate",
+    "home_season_opponent_turnovers_per100_estimated_possessions",
+    "home_last5_estimated_offensive_rating",
+    "home_last5_estimated_defensive_rating",
+    "home_last5_estimated_net_rating",
+    "home_last5_estimated_pace",
+    "home_last5_effective_fg_pct",
+    "home_last5_three_point_attempt_rate",
+    "home_last5_three_point_pct",
+    "home_last5_free_throw_attempt_rate",
+    "home_last5_free_throw_pct",
+    "home_last5_turnovers_per100_estimated_possessions",
+    "home_last5_offensive_rebound_pct",
+    "home_last5_defensive_rebound_pct",
+    "home_last5_opponent_effective_fg_pct",
+    "home_last5_opponent_three_point_attempt_rate",
+    "home_last5_opponent_free_throw_attempt_rate",
+    "home_last5_opponent_turnovers_per100_estimated_possessions",
+    "home_last10_estimated_offensive_rating",
+    "home_last10_estimated_defensive_rating",
+    "home_last10_estimated_net_rating",
+    "home_last10_estimated_pace",
+    "home_last10_effective_fg_pct",
+    "home_last10_three_point_attempt_rate",
+    "home_last10_three_point_pct",
+    "home_last10_free_throw_attempt_rate",
+    "home_last10_free_throw_pct",
+    "home_last10_turnovers_per100_estimated_possessions",
+    "home_last10_offensive_rebound_pct",
+    "home_last10_defensive_rebound_pct",
+    "home_last10_opponent_effective_fg_pct",
+    "home_last10_opponent_three_point_attempt_rate",
+    "home_last10_opponent_free_throw_attempt_rate",
+    "home_last10_opponent_turnovers_per100_estimated_possessions",
+    "away_season_estimated_offensive_rating",
+    "away_season_estimated_defensive_rating",
+    "away_season_estimated_net_rating",
+    "away_season_estimated_pace",
+    "away_season_effective_fg_pct",
+    "away_season_three_point_attempt_rate",
+    "away_season_three_point_pct",
+    "away_season_free_throw_attempt_rate",
+    "away_season_free_throw_pct",
+    "away_season_turnovers_per100_estimated_possessions",
+    "away_season_offensive_rebound_pct",
+    "away_season_defensive_rebound_pct",
+    "away_season_opponent_effective_fg_pct",
+    "away_season_opponent_three_point_attempt_rate",
+    "away_season_opponent_free_throw_attempt_rate",
+    "away_season_opponent_turnovers_per100_estimated_possessions",
+    "away_last5_estimated_offensive_rating",
+    "away_last5_estimated_defensive_rating",
+    "away_last5_estimated_net_rating",
+    "away_last5_estimated_pace",
+    "away_last5_effective_fg_pct",
+    "away_last5_three_point_attempt_rate",
+    "away_last5_three_point_pct",
+    "away_last5_free_throw_attempt_rate",
+    "away_last5_free_throw_pct",
+    "away_last5_turnovers_per100_estimated_possessions",
+    "away_last5_offensive_rebound_pct",
+    "away_last5_defensive_rebound_pct",
+    "away_last5_opponent_effective_fg_pct",
+    "away_last5_opponent_three_point_attempt_rate",
+    "away_last5_opponent_free_throw_attempt_rate",
+    "away_last5_opponent_turnovers_per100_estimated_possessions",
+    "away_last10_estimated_offensive_rating",
+    "away_last10_estimated_defensive_rating",
+    "away_last10_estimated_net_rating",
+    "away_last10_estimated_pace",
+    "away_last10_effective_fg_pct",
+    "away_last10_three_point_attempt_rate",
+    "away_last10_three_point_pct",
+    "away_last10_free_throw_attempt_rate",
+    "away_last10_free_throw_pct",
+    "away_last10_turnovers_per100_estimated_possessions",
+    "away_last10_offensive_rebound_pct",
+    "away_last10_defensive_rebound_pct",
+    "away_last10_opponent_effective_fg_pct",
+    "away_last10_opponent_three_point_attempt_rate",
+    "away_last10_opponent_free_throw_attempt_rate",
+    "away_last10_opponent_turnovers_per100_estimated_possessions",
+    "difference_season_estimated_offensive_rating",
+    "difference_season_estimated_defensive_rating",
+    "difference_season_estimated_net_rating",
+    "difference_season_estimated_pace",
+    "difference_season_effective_fg_pct",
+    "difference_season_three_point_attempt_rate",
+    "difference_season_three_point_pct",
+    "difference_season_free_throw_attempt_rate",
+    "difference_season_free_throw_pct",
+    "difference_season_turnovers_per100_estimated_possessions",
+    "difference_season_offensive_rebound_pct",
+    "difference_season_defensive_rebound_pct",
+    "difference_season_opponent_effective_fg_pct",
+    "difference_season_opponent_three_point_attempt_rate",
+    "difference_season_opponent_free_throw_attempt_rate",
+    "difference_season_opponent_turnovers_per100_estimated_possessions",
+    "difference_last5_estimated_offensive_rating",
+    "difference_last5_estimated_defensive_rating",
+    "difference_last5_estimated_net_rating",
+    "difference_last5_estimated_pace",
+    "difference_last5_effective_fg_pct",
+    "difference_last5_three_point_attempt_rate",
+    "difference_last5_three_point_pct",
+    "difference_last5_free_throw_attempt_rate",
+    "difference_last5_free_throw_pct",
+    "difference_last5_turnovers_per100_estimated_possessions",
+    "difference_last5_offensive_rebound_pct",
+    "difference_last5_defensive_rebound_pct",
+    "difference_last5_opponent_effective_fg_pct",
+    "difference_last5_opponent_three_point_attempt_rate",
+    "difference_last5_opponent_free_throw_attempt_rate",
+    "difference_last5_opponent_turnovers_per100_estimated_possessions",
+    "difference_last10_estimated_offensive_rating",
+    "difference_last10_estimated_defensive_rating",
+    "difference_last10_estimated_net_rating",
+    "difference_last10_estimated_pace",
+    "difference_last10_effective_fg_pct",
+    "difference_last10_three_point_attempt_rate",
+    "difference_last10_three_point_pct",
+    "difference_last10_free_throw_attempt_rate",
+    "difference_last10_free_throw_pct",
+    "difference_last10_turnovers_per100_estimated_possessions",
+    "difference_last10_offensive_rebound_pct",
+    "difference_last10_defensive_rebound_pct",
+    "difference_last10_opponent_effective_fg_pct",
+    "difference_last10_opponent_three_point_attempt_rate",
+    "difference_last10_opponent_free_throw_attempt_rate",
+    "difference_last10_opponent_turnovers_per100_estimated_possessions",
+    "home_season_max_player_minutes_per_game",
+    "home_season_top5_minutes_share",
+    "home_season_minutes_concentration",
+    "home_season_top3_offensive_involvement_share",
+    "home_season_rotation_players_10plus_minutes_per_game",
+    "home_season_consecutive_game_minutes_overlap",
+    "home_season_player_boxscore_coverage",
+    "home_season_player_boxscore_missing",
+    "home_last5_max_player_minutes_per_game",
+    "home_last5_top5_minutes_share",
+    "home_last5_minutes_concentration",
+    "home_last5_top3_offensive_involvement_share",
+    "home_last5_rotation_players_10plus_minutes_per_game",
+    "home_last5_consecutive_game_minutes_overlap",
+    "home_last5_player_boxscore_coverage",
+    "home_last5_player_boxscore_missing",
+    "home_last10_max_player_minutes_per_game",
+    "home_last10_top5_minutes_share",
+    "home_last10_minutes_concentration",
+    "home_last10_top3_offensive_involvement_share",
+    "home_last10_rotation_players_10plus_minutes_per_game",
+    "home_last10_consecutive_game_minutes_overlap",
+    "home_last10_player_boxscore_coverage",
+    "home_last10_player_boxscore_missing",
+    "away_season_max_player_minutes_per_game",
+    "away_season_top5_minutes_share",
+    "away_season_minutes_concentration",
+    "away_season_top3_offensive_involvement_share",
+    "away_season_rotation_players_10plus_minutes_per_game",
+    "away_season_consecutive_game_minutes_overlap",
+    "away_season_player_boxscore_coverage",
+    "away_season_player_boxscore_missing",
+    "away_last5_max_player_minutes_per_game",
+    "away_last5_top5_minutes_share",
+    "away_last5_minutes_concentration",
+    "away_last5_top3_offensive_involvement_share",
+    "away_last5_rotation_players_10plus_minutes_per_game",
+    "away_last5_consecutive_game_minutes_overlap",
+    "away_last5_player_boxscore_coverage",
+    "away_last5_player_boxscore_missing",
+    "away_last10_max_player_minutes_per_game",
+    "away_last10_top5_minutes_share",
+    "away_last10_minutes_concentration",
+    "away_last10_top3_offensive_involvement_share",
+    "away_last10_rotation_players_10plus_minutes_per_game",
+    "away_last10_consecutive_game_minutes_overlap",
+    "away_last10_player_boxscore_coverage",
+    "away_last10_player_boxscore_missing",
+    "difference_season_max_player_minutes_per_game",
+    "difference_season_top5_minutes_share",
+    "difference_season_minutes_concentration",
+    "difference_season_top3_offensive_involvement_share",
+    "difference_season_rotation_players_10plus_minutes_per_game",
+    "difference_season_consecutive_game_minutes_overlap",
+    "difference_season_player_boxscore_coverage",
+    "difference_season_player_boxscore_missing",
+    "difference_last5_max_player_minutes_per_game",
+    "difference_last5_top5_minutes_share",
+    "difference_last5_minutes_concentration",
+    "difference_last5_top3_offensive_involvement_share",
+    "difference_last5_rotation_players_10plus_minutes_per_game",
+    "difference_last5_consecutive_game_minutes_overlap",
+    "difference_last5_player_boxscore_coverage",
+    "difference_last5_player_boxscore_missing",
+    "difference_last10_max_player_minutes_per_game",
+    "difference_last10_top5_minutes_share",
+    "difference_last10_minutes_concentration",
+    "difference_last10_top3_offensive_involvement_share",
+    "difference_last10_rotation_players_10plus_minutes_per_game",
+    "difference_last10_consecutive_game_minutes_overlap",
+    "difference_last10_player_boxscore_coverage",
+    "difference_last10_player_boxscore_missing",
+    "home_season_team_boxscore_coverage",
+    "home_season_team_boxscore_missing",
+    "home_last5_team_boxscore_coverage",
+    "home_last5_team_boxscore_missing",
+    "home_last10_team_boxscore_coverage",
+    "home_last10_team_boxscore_missing",
+    "away_season_team_boxscore_coverage",
+    "away_season_team_boxscore_missing",
+    "away_last5_team_boxscore_coverage",
+    "away_last5_team_boxscore_missing",
+    "away_last10_team_boxscore_coverage",
+    "away_last10_team_boxscore_missing",
+    "difference_season_team_boxscore_coverage",
+    "difference_season_team_boxscore_missing",
+    "difference_last5_team_boxscore_coverage",
+    "difference_last5_team_boxscore_missing",
+    "difference_last10_team_boxscore_coverage",
+    "difference_last10_team_boxscore_missing"
   ],
-  "history_games": 3621,
-  "excluded_games": 246,
-  "selected_parameters": {
-    "loss": "log_loss",
-    "learning_rate": 0.05,
-    "min_samples_leaf": 20,
-    "subsample": 1.0,
-    "n_iter_no_change": null,
-    "max_depth": 1,
-    "n_estimators": 100,
-    "random_state": 230
+  "history_games": 16821,
+  "eligible_games": 15717,
+  "excluded_games": 1104,
+  "split_games": {
+    "train": 13457,
+    "dev": 1123,
+    "test": 1137
   },
-  "validation_candidates": [
+  "coverage_by_season": {
+    "2012": {
+      "split": "train",
+      "games": 1229,
+      "box_scores": 1228,
+      "eligible": 1149,
+      "excluded": {
+        "fewer_than_min_previous_games": 80
+      },
+      "eligible_with_team_box_gaps": 65,
+      "eligible_with_player_box_gaps": 724
+    },
+    "2013": {
+      "split": "train",
+      "games": 1230,
+      "box_scores": 1229,
+      "eligible": 1153,
+      "excluded": {
+        "fewer_than_min_previous_games": 77
+      },
+      "eligible_with_team_box_gaps": 54,
+      "eligible_with_player_box_gaps": 820
+    },
+    "2014": {
+      "split": "train",
+      "games": 1230,
+      "box_scores": 1230,
+      "eligible": 1151,
+      "excluded": {
+        "fewer_than_min_previous_games": 79
+      },
+      "eligible_with_team_box_gaps": 0,
+      "eligible_with_player_box_gaps": 769
+    },
+    "2015": {
+      "split": "train",
+      "games": 1230,
+      "box_scores": 1229,
+      "eligible": 1152,
+      "excluded": {
+        "fewer_than_min_previous_games": 78
+      },
+      "eligible_with_team_box_gaps": 105,
+      "eligible_with_player_box_gaps": 614
+    },
+    "2016": {
+      "split": "train",
+      "games": 1230,
+      "box_scores": 1229,
+      "eligible": 1151,
+      "excluded": {
+        "fewer_than_min_previous_games": 79
+      },
+      "eligible_with_team_box_gaps": 103,
+      "eligible_with_player_box_gaps": 697
+    },
+    "2017": {
+      "split": "train",
+      "games": 1230,
+      "box_scores": 1224,
+      "eligible": 1150,
+      "excluded": {
+        "fewer_than_min_previous_games": 80
+      },
+      "eligible_with_team_box_gaps": 155,
+      "eligible_with_player_box_gaps": 981
+    },
+    "2018": {
+      "split": "train",
+      "games": 1230,
+      "box_scores": 1230,
+      "eligible": 1151,
+      "excluded": {
+        "fewer_than_min_previous_games": 79
+      },
+      "eligible_with_team_box_gaps": 0,
+      "eligible_with_player_box_gaps": 520
+    },
+    "2019": {
+      "split": "train",
+      "games": 1059,
+      "box_scores": 1059,
+      "eligible": 982,
+      "excluded": {
+        "fewer_than_min_previous_games": 77
+      },
+      "eligible_with_team_box_gaps": 0,
+      "eligible_with_player_box_gaps": 188
+    },
+    "2020": {
+      "split": "train",
+      "games": 1080,
+      "box_scores": 1079,
+      "eligible": 1000,
+      "excluded": {
+        "fewer_than_min_previous_games": 80
+      },
+      "eligible_with_team_box_gaps": 75,
+      "eligible_with_player_box_gaps": 387
+    },
+    "2021": {
+      "split": "train",
+      "games": 1230,
+      "box_scores": 1230,
+      "eligible": 1152,
+      "excluded": {
+        "fewer_than_min_previous_games": 78
+      },
+      "eligible_with_team_box_gaps": 0,
+      "eligible_with_player_box_gaps": 42
+    },
+    "2022": {
+      "split": "train",
+      "games": 1230,
+      "box_scores": 1230,
+      "eligible": 1151,
+      "excluded": {
+        "fewer_than_min_previous_games": 79
+      },
+      "eligible_with_team_box_gaps": 0,
+      "eligible_with_player_box_gaps": 143
+    },
+    "2023": {
+      "split": "train",
+      "games": 1196,
+      "box_scores": 1196,
+      "eligible": 1115,
+      "excluded": {
+        "fewer_than_min_previous_games": 81
+      },
+      "eligible_with_team_box_gaps": 0,
+      "eligible_with_player_box_gaps": 571
+    },
+    "2024": {
+      "split": "dev",
+      "games": 1201,
+      "box_scores": 1201,
+      "eligible": 1123,
+      "excluded": {
+        "fewer_than_min_previous_games": 78
+      },
+      "eligible_with_team_box_gaps": 0,
+      "eligible_with_player_box_gaps": 425
+    },
+    "2025": {
+      "split": "test",
+      "games": 1216,
+      "box_scores": 1216,
+      "eligible": 1137,
+      "excluded": {
+        "fewer_than_min_previous_games": 79
+      },
+      "eligible_with_team_box_gaps": 0,
+      "eligible_with_player_box_gaps": 268
+    }
+  },
+  "box_score_source": {
+    "path": "data/processed/box_scores",
+    "provider_counts": {
+      "ESPN": 14706,
+      "NBA": 2104
+    },
+    "season_counts": {
+      "2012": 1228,
+      "2013": 1229,
+      "2014": 1230,
+      "2015": 1229,
+      "2016": 1229,
+      "2017": 1224,
+      "2018": 1230,
+      "2019": 1059,
+      "2020": 1079,
+      "2021": 1230,
+      "2022": 1230,
+      "2023": 1196,
+      "2024": 1201,
+      "2025": 1216
+    },
+    "complete_team_games": 16810,
+    "complete_player_games": 16123,
+    "failed_games": 11
+  },
+  "dev_candidates": [
     {
       "candidate_index": 0,
       "max_depth": 1,
       "n_estimators": 100,
       "games": 1123,
-      "brier": 0.21686708830796197,
-      "log_loss": 0.622987553676152,
-      "roc_auc": 0.7030087474766894,
-      "accuracy": 0.649154051647373,
-      "mean_home_probability": 0.5525431184741189,
+      "brier": 0.21286024803780398,
+      "log_loss": 0.6144524086318206,
+      "roc_auc": 0.720623858502355,
+      "accuracy": 0.6571682991985752,
+      "mean_home_probability": 0.5697801716525275,
       "observed_home_win_rate": 0.5503116651825467
     },
     {
@@ -90,11 +520,11 @@
       "max_depth": 1,
       "n_estimators": 200,
       "games": 1123,
-      "brier": 0.2174197517223313,
-      "log_loss": 0.6244092438363015,
-      "roc_auc": 0.7016709923419526,
-      "accuracy": 0.6509349955476402,
-      "mean_home_probability": 0.5569854391250945,
+      "brier": 0.2106775344606293,
+      "log_loss": 0.6093457028236886,
+      "roc_auc": 0.7241180428722483,
+      "accuracy": 0.6607301869991096,
+      "mean_home_probability": 0.5630871841242517,
       "observed_home_win_rate": 0.5503116651825467
     },
     {
@@ -102,11 +532,11 @@
       "max_depth": 2,
       "n_estimators": 100,
       "games": 1123,
-      "brier": 0.21736397072784672,
-      "log_loss": 0.6248691699372494,
-      "roc_auc": 0.7025040853599924,
-      "accuracy": 0.6420302760463046,
-      "mean_home_probability": 0.5570032969282269,
+      "brier": 0.21048656989762682,
+      "log_loss": 0.6091139231418569,
+      "roc_auc": 0.7250088115607678,
+      "accuracy": 0.6634016028495102,
+      "mean_home_probability": 0.5578760695089258,
       "observed_home_win_rate": 0.5503116651825467
     },
     {
@@ -114,106 +544,348 @@
       "max_depth": 2,
       "n_estimators": 200,
       "games": 1123,
-      "brier": 0.21870238201312267,
-      "log_loss": 0.6288299803792177,
-      "roc_auc": 0.701190361754622,
-      "accuracy": 0.6447016918967052,
-      "mean_home_probability": 0.5600118276067071,
+      "brier": 0.21033159095929999,
+      "log_loss": 0.6083951196116204,
+      "roc_auc": 0.7236950879553975,
+      "accuracy": 0.6687444345503116,
+      "mean_home_probability": 0.5560818915870105,
       "observed_home_win_rate": 0.5503116651825467
     }
   ],
-  "splits": {
-    "train": {
-      "season": 2023,
-      "games": 1115,
-      "first_date": "2023-11-03",
-      "last_date": "2024-04-10"
-    },
-    "validation": {
-      "season": 2024,
-      "games": 1123,
-      "first_date": "2024-11-01",
-      "last_date": "2025-04-10"
+  "selected_candidate_index": 3,
+  "selected_parameters": {
+    "loss": "log_loss",
+    "learning_rate": 0.05,
+    "min_samples_leaf": 20,
+    "subsample": 1.0,
+    "n_iter_no_change": null,
+    "max_depth": 2,
+    "n_estimators": 200,
+    "random_state": 230
+  },
+  "train_home_win_rate": 0.573456193802482,
+  "evaluation": {
+    "dev": {
+      "metrics": {
+        "gradient_boosting": {
+          "games": 1123,
+          "brier": 0.21033159095929999,
+          "log_loss": 0.6083951196116204,
+          "roc_auc": 0.7236950879553975,
+          "accuracy": 0.6687444345503116,
+          "mean_home_probability": 0.5560818915870105,
+          "observed_home_win_rate": 0.5503116651825467
+        },
+        "historical_home_rate": {
+          "games": 1123,
+          "brier": 0.2480044055515983,
+          "log_loss": 0.6891664015526076,
+          "roc_auc": 0.5,
+          "accuracy": 0.5503116651825467,
+          "mean_home_probability": 0.5734561938024819,
+          "observed_home_win_rate": 0.5503116651825467
+        },
+        "constant_50_percent": {
+          "games": 1123,
+          "brier": 0.25,
+          "log_loss": 0.6931471805599454,
+          "roc_auc": 0.5,
+          "accuracy": 0.5503116651825467,
+          "mean_home_probability": 0.5,
+          "observed_home_win_rate": 0.5503116651825467
+        }
+      },
+      "uncertainty": {
+        "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+        "replicates": 2000,
+        "days": 152,
+        "seed": 230,
+        "reference": "historical_home_rate",
+        "brier_intervals": {
+          "gradient_boosting": [
+            0.20084574858274296,
+            0.2200654510169394
+          ],
+          "historical_home_rate": [
+            0.24384009306186857,
+            0.2520888791394748
+          ],
+          "constant_50_percent": [
+            0.25,
+            0.25
+          ]
+        },
+        "difference_vs_reference": {
+          "gradient_boosting": [
+            -0.046833936201582785,
+            -0.028653029284224064
+          ],
+          "constant_50_percent": [
+            -0.0020888791394748003,
+            0.00615990693813143
+          ]
+        },
+        "limitations": "Conditional on the fitted models; no training uncertainty or dependence across days"
+      }
     },
     "test": {
-      "season": 2025,
-      "games": 1137,
-      "first_date": "2025-10-31",
-      "last_date": "2026-04-10"
+      "metrics": {
+        "gradient_boosting": {
+          "games": 1137,
+          "brier": 0.20577718790564042,
+          "log_loss": 0.5989036717096986,
+          "roc_auc": 0.73951875,
+          "accuracy": 0.6728232189973615,
+          "mean_home_probability": 0.552673088193414,
+          "observed_home_win_rate": 0.5496921723834652
+        },
+        "historical_home_rate": {
+          "games": 1137,
+          "brier": 0.24809541671781543,
+          "log_loss": 0.6893497506539678,
+          "roc_auc": 0.5,
+          "accuracy": 0.5496921723834652,
+          "mean_home_probability": 0.5734561938024819,
+          "observed_home_win_rate": 0.5496921723834652
+        },
+        "constant_50_percent": {
+          "games": 1137,
+          "brier": 0.25,
+          "log_loss": 0.6931471805599453,
+          "roc_auc": 0.5,
+          "accuracy": 0.5496921723834652,
+          "mean_home_probability": 0.5,
+          "observed_home_win_rate": 0.5496921723834652
+        }
+      },
+      "uncertainty": {
+        "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+        "replicates": 2000,
+        "days": 154,
+        "seed": 230,
+        "reference": "historical_home_rate",
+        "brier_intervals": {
+          "gradient_boosting": [
+            0.1958437736605821,
+            0.215477946413447
+          ],
+          "historical_home_rate": [
+            0.2440892784271296,
+            0.252281103099624
+          ],
+          "constant_50_percent": [
+            0.25,
+            0.25
+          ]
+        },
+        "difference_vs_reference": {
+          "gradient_boosting": [
+            -0.05225723571617889,
+            -0.032631247332011226
+          ],
+          "constant_50_percent": [
+            -0.002281103099623985,
+            0.005910721572870389
+          ]
+        },
+        "limitations": "Conditional on the fitted models; no training uncertainty or dependence across days"
+      }
     }
   },
-  "test": {
-    "gradient_boosting": {
-      "games": 1137,
-      "brier": 0.20986811250434456,
-      "log_loss": 0.6085068113705692,
-      "roc_auc": 0.7311984375,
-      "accuracy": 0.6728232189973615,
-      "mean_home_probability": 0.5440310963062505,
-      "observed_home_win_rate": 0.5496921723834652
+  "train_forecasts": {
+    "2013": {
+      "games": 1153,
+      "brier": 0.21963254568886767,
+      "log_loss": 0.6309133984122433,
+      "roc_auc": 0.696444165651944,
+      "accuracy": 0.6496097137901128,
+      "mean_home_probability": 0.6185355682161527,
+      "observed_home_win_rate": 0.5732870771899393
     },
-    "historical_home_rate": {
-      "games": 1137,
-      "brier": 0.24754414910510625,
-      "log_loss": 0.6882275591101399,
-      "roc_auc": 0.5,
-      "accuracy": 0.5496921723834652,
-      "mean_home_probability": 0.5460232350312779,
-      "observed_home_win_rate": 0.5496921723834652
+    "2014": {
+      "games": 1151,
+      "brier": 0.20817617399605787,
+      "log_loss": 0.6048461421497592,
+      "roc_auc": 0.723586488520424,
+      "accuracy": 0.68375325803649,
+      "mean_home_probability": 0.5858285333664798,
+      "observed_home_win_rate": 0.5725456125108601
     },
-    "constant_50_percent": {
-      "games": 1137,
-      "brier": 0.25,
-      "log_loss": 0.6931471805599453,
-      "roc_auc": 0.5,
-      "accuracy": 0.5496921723834652,
-      "mean_home_probability": 0.5,
-      "observed_home_win_rate": 0.5496921723834652
+    "2015": {
+      "games": 1152,
+      "brier": 0.2090568068718174,
+      "log_loss": 0.6055407670130374,
+      "roc_auc": 0.7143981166557473,
+      "accuracy": 0.6848958333333334,
+      "mean_home_probability": 0.5819916088526588,
+      "observed_home_win_rate": 0.5980902777777778
+    },
+    "2016": {
+      "games": 1151,
+      "brier": 0.223705748426031,
+      "log_loss": 0.6383109216910344,
+      "roc_auc": 0.6716499006458023,
+      "accuracy": 0.6377063423110338,
+      "mean_home_probability": 0.5652877175497831,
+      "observed_home_win_rate": 0.582971329278888
+    },
+    "2017": {
+      "games": 1150,
+      "brier": 0.21473527273873272,
+      "log_loss": 0.6195763977334473,
+      "roc_auc": 0.6999013476286204,
+      "accuracy": 0.6495652173913044,
+      "mean_home_probability": 0.5748732797245747,
+      "observed_home_win_rate": 0.5791304347826087
+    },
+    "2018": {
+      "games": 1151,
+      "brier": 0.2143873507991235,
+      "log_loss": 0.6182805932735475,
+      "roc_auc": 0.7013772746561495,
+      "accuracy": 0.6559513466550826,
+      "mean_home_probability": 0.5581548832804032,
+      "observed_home_win_rate": 0.5899218071242398
+    },
+    "2019": {
+      "games": 982,
+      "brier": 0.22385538238710057,
+      "log_loss": 0.6389236071033694,
+      "roc_auc": 0.6840497737556561,
+      "accuracy": 0.6507128309572301,
+      "mean_home_probability": 0.5728101514493549,
+      "observed_home_win_rate": 0.5498981670061099
+    },
+    "2020": {
+      "games": 1000,
+      "brier": 0.22552537952514642,
+      "log_loss": 0.6424903620092441,
+      "roc_auc": 0.6778137229956502,
+      "accuracy": 0.632,
+      "mean_home_probability": 0.5611813723058758,
+      "observed_home_win_rate": 0.549
+    },
+    "2021": {
+      "games": 1152,
+      "brier": 0.22297894004131383,
+      "log_loss": 0.6380098766351341,
+      "roc_auc": 0.6862829167426868,
+      "accuracy": 0.6432291666666666,
+      "mean_home_probability": 0.5701705357562563,
+      "observed_home_win_rate": 0.546875
+    },
+    "2022": {
+      "games": 1151,
+      "brier": 0.22772239447576756,
+      "log_loss": 0.6466259015145808,
+      "roc_auc": 0.6506158077985801,
+      "accuracy": 0.6255430060816681,
+      "mean_home_probability": 0.5522018147528275,
+      "observed_home_win_rate": 0.579496090356212
+    },
+    "2023": {
+      "games": 1115,
+      "brier": 0.21320209926519207,
+      "log_loss": 0.6144208743642486,
+      "roc_auc": 0.7187925247210378,
+      "accuracy": 0.6421524663677131,
+      "mean_home_probability": 0.5524064917982467,
+      "observed_home_win_rate": 0.5417040358744395
+    },
+    "all": {
+      "games": 12308,
+      "brier": 0.21830705106450493,
+      "log_loss": 0.6267712156587791,
+      "roc_auc": 0.6934673600967617,
+      "accuracy": 0.6507149821254469,
+      "mean_home_probability": 0.5723217513853599,
+      "observed_home_win_rate": 0.5699545011374716
     }
   },
-  "uncertainty": {
-    "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
-    "replicates": 2000,
-    "days": 154,
-    "seed": 230,
-    "brier_intervals": {
-      "gradient_boosting": [
-        0.2007780395160948,
-        0.21901606233987275
-      ],
-      "historical_home_rate": [
-        0.24503414369132442,
-        0.2501666485587967
-      ],
-      "constant_50_percent": [
-        0.25,
-        0.25
-      ]
+  "train_games_without_forecast": 1149,
+  "test_calibration": [
+    {
+      "bin_low": 0.1,
+      "bin_high": 0.2,
+      "games": 7,
+      "mean_probability": 0.18885306983743652,
+      "observed_home_win_rate": 0.14285714285714285
     },
-    "gb_minus_home_rate_interval": [
-      -0.046523216695334636,
-      -0.028587230814362135
-    ],
-    "limitations": "Conditional on this fitted model and season; does not capture training uncertainty or serial dependence across days"
-  },
+    {
+      "bin_low": 0.2,
+      "bin_high": 0.3,
+      "games": 129,
+      "mean_probability": 0.25524084384584617,
+      "observed_home_win_rate": 0.1937984496124031
+    },
+    {
+      "bin_low": 0.3,
+      "bin_high": 0.4,
+      "games": 136,
+      "mean_probability": 0.3533113684407448,
+      "observed_home_win_rate": 0.3602941176470588
+    },
+    {
+      "bin_low": 0.4,
+      "bin_high": 0.5,
+      "games": 180,
+      "mean_probability": 0.45456367189137187,
+      "observed_home_win_rate": 0.45
+    },
+    {
+      "bin_low": 0.5,
+      "bin_high": 0.6,
+      "games": 189,
+      "mean_probability": 0.5514879358701228,
+      "observed_home_win_rate": 0.5396825396825397
+    },
+    {
+      "bin_low": 0.6,
+      "bin_high": 0.7,
+      "games": 196,
+      "mean_probability": 0.6474249054493777,
+      "observed_home_win_rate": 0.6173469387755102
+    },
+    {
+      "bin_low": 0.7,
+      "bin_high": 0.8,
+      "games": 200,
+      "mean_probability": 0.7497706070206029,
+      "observed_home_win_rate": 0.8
+    },
+    {
+      "bin_low": 0.8,
+      "bin_high": 0.9,
+      "games": 100,
+      "mean_probability": 0.8318883113089564,
+      "observed_home_win_rate": 0.86
+    }
+  ],
   "versions": {
     "numpy": "2.5.4",
     "scipy": "1.18.1",
     "scikit-learn": "1.9.1",
-    "joblib": "1.6.0",
-    "matplotlib": "3.11.2"
+    "joblib": "1.6.0"
   },
   "python_version": "3.14.6",
+  "runtime_seconds": 216.3,
   "source_sha256": {
-    "data/processed/seasonal/game_history.jsonl": "37d7535b6b7a0b8aba9795ee5d1da421fc3a509debc4ce3f533f9ac114a36f7b",
-    "config/seasonal.json": "4138d400de772030320b9dd25c5aee51cb322c5793c8deb7239e612221ccfff0",
-    "config/gradient_boosting.json": "bde7b99c6abe0c39af84115907dd4eeca71951ebb311486f2699fc36efbe4060",
+    "config/gradient_boosting.json": "bcae638c22ecb598cd486c44d91b938dc0919266f0e50afe451b0a05c98580b2",
+    "data/processed/box_scores/manifest.json": "b421d41206cf34dff672f1a51e3c72c3aef6d37c52cce9a2179d406c56ac4a44",
+    "data/processed/box_scores/games.jsonl": "25f5f1cec5a53d8f212d40c1a2e290581ebc51334774de7fa26cf0d3654485df",
+    "scripts/run_gradient_boosting.py": "87dac93b1e49e74cca1eb61a7d8ed45e16558e62d8f57ad5cd60c0507414bbc4",
+    "scripts/box_score_features.py": "ec50578bfc88b9f1d8b43c356a4cbc7d69420fea1e781a1815def4e4985eec88",
     "scripts/collect_pilot.py": "cf1c58a3aa2c2ae7a2bbd39605843ad86fdec430f2c6fe222856b9f1145a147e",
-    "scripts/run_gradient_boosting.py": "d39ba46c96317847a9b9f19527371a448acc3792cdfe1362de4a864b211c2ef1"
+    "data/processed/history_2012/game_history.jsonl": "64c11ad5eed1c70b56cc64d4d7035c5b75b7802eea16c3e69971ed3099aba38b",
+    "config/history_2012.json": "4d7e4ae65b9245bb40acd94a65e2c28a77d86ec56d2966b2b3604f747ee76461",
+    "data/processed/seasonal/game_history.jsonl": "37d7535b6b7a0b8aba9795ee5d1da421fc3a509debc4ce3f533f9ac114a36f7b",
+    "config/seasonal.json": "4138d400de772030320b9dd25c5aee51cb322c5793c8deb7239e612221ccfff0"
   },
   "artifact_sha256": {
-    "data/processed/gradient_boosting/excluded.jsonl": "c367bc14e7c147569d54d7b56aa73a8fda8feca9cea284fb15cd0487271311c2",
-    "data/processed/gradient_boosting/inputs.jsonl": "35658cc9ce33668de05c7d9ed5da4e6c0b16b81b2147dddc2d8efb7da2854067",
-    "data/processed/gradient_boosting/labels.jsonl": "6120dd4efe088f0a626d74c7cd0cfc5601c61482d79669c966458086026759fb"
+    "data/processed/gradient_boosting/inputs.jsonl": "91a1cb2b66ba93428f2c12edd58ba22cd81d3d5e5c9981dbf8c60c9476c1542c",
+    "data/processed/gradient_boosting/labels.jsonl": "1b6fcce24ecb30e8e71e0eb60669e567d126014f61acc228d32920e3b9ee1290",
+    "data/processed/gradient_boosting/excluded.jsonl": "62268ca8823569cb47a6995e8ee5ee4a3a7ddbeac72b1caa9ce2ced9fd31485e",
+    "data/processed/gradient_boosting/predictions.jsonl": "0006b01092ec4a5e25b153c547d037e116d4805a81e6e9ee7295eda8ca311adf",
+    "data/processed/gradient_boosting/model.joblib": "e494121ae1be587e6e4ffc8443e8a12ce88fe594bf397a47c6f02a780390aa35"
   }
 }

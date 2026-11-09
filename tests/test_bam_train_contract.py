@@ -117,7 +117,7 @@ class TrainContractTests(unittest.TestCase):
         row, _, gold = copy.deepcopy(self.case)
         self.assertIs(contract.validate_pregame(row), row)
         self.assertIs(contract.validate_accepted_gold(gold, row), gold)
-        self.assertEqual(len(row["statistical_features"]), 234)
+        self.assertEqual(len(row["statistical_features"]), 252)
         model_input = json.dumps(row["messages"])
         self.assertNotIn("postmortem", model_input)
         self.assertNotIn("home_win", model_input)
@@ -128,6 +128,8 @@ class TrainContractTests(unittest.TestCase):
             lambda r: r.update(home_win=1),
             lambda r: r.update(split="dev"),
             lambda r: r.update(split="test"),
+            lambda r: r.update(p_boost=None),
+            lambda r: r.update(p_boost=1.0),
             lambda r: r["pregame_sources"][0].update(raw_espn={"recap": "future"}),
             lambda r: r["pregame_sources"][0].update(archive_time="2024-01-02T23:00:01Z"),
             lambda r: r["pregame_sources"][0]["pages"][0]["lines"][0].update(news="current"),
@@ -144,9 +146,9 @@ class TrainContractTests(unittest.TestCase):
                     contract.validate_pregame(row)
 
     def test_relabelled_heldout_dates_and_other_checkpoints_rejected(self):
-        for day in ("2023-09-30", "2024-04-11", "2024-11-01", "2025-01-02", "2025-11-01"):
+        for day in ("2012-06-30", "2024-07-01", "2024-11-01", "2025-01-02", "2025-11-01"):
             row = copy.deepcopy(self.case[0]); row["game_date_et"] = day
-            with self.subTest(day=day), self.assertRaisesRegex(ValueError, "2023–24 TRAIN season"):
+            with self.subTest(day=day), self.assertRaisesRegex(ValueError, "outside the TRAIN seasons"):
                 contract.validate_pregame(row)
         row = copy.deepcopy(self.case[0]); row["game_date_et"] = "2024-01-01"
         with self.assertRaisesRegex(ValueError, "scheduled tipoff"):

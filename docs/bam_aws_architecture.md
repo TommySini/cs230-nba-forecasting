@@ -23,7 +23,7 @@ the design's original state, not the latest account check.
 
 | Component | Proposed implementation | What is trained |
 | --- | --- | --- |
-| Statistical baseline | Existing 234-feature gradient boosting, rebuilt with chronological prior-only fitting | Booster fitted on earlier games; fixed during LLM optimization |
+| Statistical baseline | 252-feature gradient boosting (`run_gradient_boosting.py`): TRAIN games forecast by models fitted on earlier TRAIN seasons, DEV/TEST by the TRAIN fit | Booster fitted on earlier games; fixed during LLM optimization |
 | Pregame researcher | Frozen, pinned Qwen2.5-14B-Instruct on EC2; three analytical roles sharing one checkpoint | No task-specific weight updates |
 | Postmortem and gold teacher | Strong reasoning-capable Claude model through Amazon Bedrock; Sonnet 4.6 is an initial qualification candidate | No weight updates |
 | Gold reviewer | A different Bedrock model, with Opus 4.6 an initial candidate; blinded to outcome/postmortem | No weight updates |
@@ -72,9 +72,8 @@ and no probability calibration. No further baseline tuning on DEV in this phase.
 Build expanding chronological folds within TRAIN; no gradients from the LLM
 update the booster. Later DEV uses a booster fitted on TRAIN and held fixed.
 
-Expanding beyond the pilot requires the remaining source/history audits and
-older-season richer-feature collection. The approximately 1,506 eligible TRAIN
-games remain a target contingent on that work, not a ready 234-feature cohort.
+Beyond the pilot, the frozen snapshot `bam_notes_v2` has 1,456 forecast-eligible
+TRAIN games with notes and the full 252-feature history (2013–14 to 2023–24).
 
 ## Prediction-time path
 

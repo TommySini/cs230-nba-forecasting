@@ -1,6 +1,5 @@
 """Score Polymarket cutoff prices against the gradient-boosting baseline on identical games."""
 import argparse
-import csv
 import json
 
 import numpy as np
@@ -10,12 +9,7 @@ from collect_pilot import ROOT, write_json
 from collect_polymarket import CONFIG_PATH, DATA_DIR, REPORT_DIR, outcome_side, read_rows
 from run_gradient_boosting import calibration_rows, score_predictions, write_csv
 
-SPLITS = {"validation": "validation_predictions", "test": "test_predictions"}
-
-
-def read_csv(path):
-    with path.open() as stream:
-        return list(csv.DictReader(stream))
+SPLITS = {"validation": "dev", "test": "test"}  # Polymarket report name -> boosting split
 
 
 def logit(p):
@@ -53,15 +47,13 @@ def paired_bootstrap(y, predictions, dates, pairs, repeats, seed):
 
 
 def joined_split(name, config, markets, games):
-    rows = read_csv(ROOT / config["comparison"][SPLITS[name]])
-    joined = []
-    for row in rows:
-        game = games[row["game_id"]]
-        if int(row["home_win"]) != int(game["home_score"] > game["away_score"]):
-            raise ValueError(f"Baseline label disagrees with history: {row['game_id']}")
-        if row["game_id"] in markets:
-            joined.append((row, markets[row["game_id"]], game))
-    return rows, joined
+    """Boosting forecasts of one split (TRAIN-only fit), outcomes from history, joined to market rows."""
+    comparison = config["comparison"]
+    home_rate = json.loads((ROOT / comparison["boosting_metrics"]).read_text())["train_home_win_rate"]
+    rows = [dict(row, gradient_boosting=row["p_boost"], historical_home_rate=home_rate,
+                 home_win=int(games[row["game_id"]]["home_score"] > games[row["game_id"]]["away_score"]))
+            for row in read_rows(ROOT / comparison["boosting_predictions"]) if row["split"] == SPLITS[name]]
+    return rows, [(row, markets[row["game_id"]], games[row["game_id"]]) for row in rows if row["game_id"] in markets]
 
 
 def main():
@@ -102,7 +94,7 @@ def main():
     stack = LogisticRegression(C=1e6, max_iter=1000).fit(features(p_val), y_val)
     stacked = stack.predict_proba(features(p_test))[:, 1]
     test_with_stack = {"polymarket_cutoff": p_test["polymarket_cutoff"], "market_plus_boosting_stack": stacked}
-    result["stack"] = {"fit_on": "validation season (boosting model trained on 2023-24 only)",
+    result["stack"] = {"fit_on": "validation season (boosting model trained on TRAIN seasons only)",
                        "coefficients": {"intercept": float(stack.intercept_[0]), "market_logit": float(stack.coef_[0][0]),
                                         "boosting_logit": float(stack.coef_[0][1])},
                        "test_metrics": score_predictions(y_test, stacked),

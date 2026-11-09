@@ -8,12 +8,12 @@ Game notes are typically published about 8 hours before tipoff, so the fair mark
 | --- | ---: | --- | ---: | ---: |
 | market_8h_before | 0.1973 | [0.1854, 0.2103] | 0.5775 | 69.9% |
 | market_1h_before | 0.1956 | [0.1839, 0.2083] | 0.5734 | 70.3% |
-| gradient_boosting | 0.2139 | [0.2049, 0.2236] | 0.6162 | 65.4% |
+| gradient_boosting | 0.2085 | [0.1984, 0.2193] | 0.6044 | 67.6% |
 
 Paired Brier differences (negative favors the first):
 
-- `market_8h_before_minus_gradient_boosting`: [-0.0238, -0.0093]
-- `market_1h_before_minus_gradient_boosting`: [-0.0255, -0.0112]
+- `market_8h_before_minus_gradient_boosting`: [-0.0172, -0.0051]
+- `market_1h_before_minus_gradient_boosting`: [-0.0188, -0.0070]
 - `market_8h_before_minus_market_1h_before`: [-0.0001, +0.0035]
 
 ## Test season 2025-26: 1125 of 1137 games
@@ -22,10 +22,10 @@ Paired Brier differences (negative favors the first):
 | --- | ---: | --- | ---: | ---: |
 | market_8h_before | 0.1952 | [0.1835, 0.2067] | 0.5715 | 69.2% |
 | market_1h_before | 0.1938 | [0.1820, 0.2052] | 0.5682 | 69.3% |
-| gradient_boosting | 0.2097 | [0.2003, 0.2190] | 0.6083 | 67.4% |
+| gradient_boosting | 0.2055 | [0.1955, 0.2153] | 0.5984 | 67.5% |
 
 Paired Brier differences (negative favors the first):
 
-- `market_8h_before_minus_gradient_boosting`: [-0.0210, -0.0083]
-- `market_1h_before_minus_gradient_boosting`: [-0.0225, -0.0096]
+- `market_8h_before_minus_gradient_boosting`: [-0.0160, -0.0044]
+- `market_1h_before_minus_gradient_boosting`: [-0.0178, -0.0055]
 - `market_8h_before_minus_market_1h_before`: [-0.0003, +0.0033]

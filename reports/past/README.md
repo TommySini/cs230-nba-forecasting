@@ -17,3 +17,7 @@ Brier, lower is better. None shows a text gain; the 14B paired CI against boosti
   reports, previews and Cleveland notes.
 - [research_quality_audit](research_quality_audit/findings.md): why the 14B research switched
   from paraphrases to verbatim quotes and code-checked tables.
+- [basic_boosting_2023](basic_boosting_2023/findings.md) and [rich_boosting_2023](rich_boosting_2023/findings.md):
+  the earlier boosting baselines (TRAIN 2023–24 only, final refit on 2023–25), 0.2099 and 0.2059
+  TEST Brier on 2025–26 with 18 basic and 234 rich features. Replaced by the single
+  `run_gradient_boosting.py` pipeline with TRAIN 2012–13 to 2023–24.

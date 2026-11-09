@@ -2,7 +2,7 @@
 
 Market-implied home-win probability at the same prediction cutoff as the boosting baseline (scheduled tipoff minus 60 minutes), scored on identical games.
 
-Held-out 2025–26 games with both forecasts: **1132** of 1137. Polymarket Brier **0.1941** (accuracy 69.3%) versus boosting **0.2097** (accuracy 67.3%). Paired Brier difference, market minus boosting: **[-0.0221, -0.0094]**; negative favors the market.
+Held-out 2025–26 games with both forecasts: **1132** of 1137. Polymarket Brier **0.1941** (accuracy 69.3%) versus boosting **0.2059** (accuracy 67.2%). Paired Brier difference, market minus boosting: **[-0.0180, -0.0055]**; negative favors the market.
 
 ## Coverage
 
@@ -20,36 +20,36 @@ Median price point is 10 minutes before the cutoff (maximum 49; limit 60). Match
 | Forecast | Brier ↓ | 95% interval | Log loss ↓ | ROC AUC ↑ | Accuracy ↑ |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | polymarket_cutoff | 0.1941 | [0.1820, 0.2056] | 0.5689 | 0.7669 | 69.3% |
-| gradient_boosting | 0.2097 | [0.2003, 0.2191] | 0.6082 | 0.7320 | 67.3% |
-| historical_home_rate | 0.2477 | [0.2452, 0.2503] | 0.6886 | 0.5000 | 54.8% |
+| gradient_boosting | 0.2059 | [0.1958, 0.2157] | 0.5993 | 0.7395 | 67.2% |
+| historical_home_rate | 0.2484 | [0.2444, 0.2525] | 0.6899 | 0.5000 | 54.8% |
 | polymarket_tipoff_reference | 0.1936 | [0.1817, 0.2050] | 0.5678 | 0.7682 | 69.7% |
 
 Paired differences (negative Brier / positive accuracy favors the first forecast):
 
-- `polymarket_cutoff_minus_gradient_boosting`: Brier [-0.0221, -0.0094]; accuracy [-0.1%, +4.2%]
-- `polymarket_cutoff_minus_historical_home_rate`: Brier [-0.0655, -0.0423]; accuracy [+10.9%, +18.2%]
+- `polymarket_cutoff_minus_gradient_boosting`: Brier [-0.0180, -0.0055]; accuracy [-0.2%, +4.3%]
+- `polymarket_cutoff_minus_historical_home_rate`: Brier [-0.0661, -0.0426]; accuracy [+10.9%, +18.2%]
 
-Markets with lifetime volume ≥ $50,000 (971 games): Polymarket Brier 0.2008, boosting 0.2144.
+Markets with lifetime volume ≥ $50,000 (971 games): Polymarket Brier 0.2008, boosting 0.2115.
 
 ## Validation season 2024–25 (1121 games, 2024-11-01 to 2025-04-10)
 
 | Forecast | Brier ↓ | 95% interval | Log loss ↓ | ROC AUC ↑ | Accuracy ↑ |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | polymarket_cutoff | 0.1990 | [0.1889, 0.2092] | 0.5814 | 0.7552 | 69.0% |
-| gradient_boosting | 0.2164 | [0.2077, 0.2246] | 0.6219 | 0.7047 | 65.0% |
-| historical_home_rate | 0.2475 | [0.2452, 0.2499] | 0.6882 | 0.5000 | 55.0% |
+| gradient_boosting | 0.2098 | [0.2005, 0.2188] | 0.6072 | 0.7255 | 67.0% |
+| historical_home_rate | 0.2480 | [0.2438, 0.2522] | 0.6891 | 0.5000 | 55.0% |
 | polymarket_tipoff_reference | 0.1987 | [0.1884, 0.2089] | 0.5808 | 0.7558 | 69.5% |
 
 Paired differences (negative Brier / positive accuracy favors the first forecast):
 
-- `polymarket_cutoff_minus_gradient_boosting`: Brier [-0.0242, -0.0103]; accuracy [+1.4%, +6.4%]
-- `polymarket_cutoff_minus_historical_home_rate`: Brier [-0.0585, -0.0386]; accuracy [+10.5%, +17.4%]
+- `polymarket_cutoff_minus_gradient_boosting`: Brier [-0.0166, -0.0049]; accuracy [-0.0%, +4.3%]
+- `polymarket_cutoff_minus_historical_home_rate`: Brier [-0.0592, -0.0385]; accuracy [+10.5%, +17.4%]
 
-Markets with lifetime volume ≥ $50,000 (1087 games): Polymarket Brier 0.2005, boosting 0.2179.
+Markets with lifetime volume ≥ $50,000 (1087 games): Polymarket Brier 0.2005, boosting 0.2119.
 
 ## Does boosting add information beyond the market?
 
-A two-feature logistic stack, logit(market) and logit(boosting), was fitted on the 2024–25 season and scored once on 2025–26. Coefficients: market 1.035, boosting -0.078, intercept -0.012. Test Brier 0.1941; paired difference versus the market alone [-0.0004, 0.0004]. An interval below zero would mean the boosting features carry information the market price lacks.
+A two-feature logistic stack, logit(market) and logit(boosting), was fitted on the 2024–25 season and scored once on 2025–26. Coefficients: market 0.990, boosting 0.001, intercept -0.018. Test Brier 0.1941; paired difference versus the market alone [-0.0002, 0.0002]. An interval below zero would mean the boosting features carry information the market price lacks.
 
 ## Protocol and limits
 
