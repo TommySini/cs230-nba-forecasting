@@ -11,7 +11,11 @@ from contextlib import contextmanager
 import csv
 from datetime import date, datetime, timedelta, timezone
 import hashlib
-import fcntl
+try:
+    import fcntl
+except ImportError:  # Windows: msvcrt byte-range lock with the same exclusive semantics
+    fcntl = None
+    import msvcrt
 import json
 import math
 import os
@@ -80,11 +84,19 @@ def _atomic_json(path, value):
 def _prediction_lock(directory):
     """Serialize the only mutable shared table and its manifest for readers/writers."""
     with (Path(directory) / PREDICTION_LOCK).open("a+b") as stream:
-        fcntl.flock(stream.fileno(), fcntl.LOCK_EX)
+        if fcntl is None:
+            stream.seek(0)
+            msvcrt.locking(stream.fileno(), msvcrt.LK_LOCK, 1)
+        else:
+            fcntl.flock(stream.fileno(), fcntl.LOCK_EX)
         try:
             yield
         finally:
-            fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
+            if fcntl is None:
+                stream.seek(0)
+                msvcrt.locking(stream.fileno(), msvcrt.LK_UNLCK, 1)
+            else:
+                fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
 
 
 def _clean_prediction_transaction(directory):
