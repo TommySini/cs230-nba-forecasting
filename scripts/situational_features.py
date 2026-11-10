@@ -12,6 +12,8 @@ Families (per team; the model gets home, away and home-minus-away columns):
              minutes, for everyone and for players who played the team's most recent game
   injury     official NBA injury report at or before the cutoff (from collect_injuries.py): players
              listed Out / Doubtful / Questionable for injury, illness or rest (G League excluded)
+  notes      the same counts read from the injury/status section of a team's own pregame game notes
+             (selected corpus: some teams and seasons; every note public at or before the cutoff)
 
 Nothing here reads the game being predicted or any later game: each ET date's features are computed
 before that date's games enter the running state. Shot-quality (xeFG%) and on/off ratings need
@@ -44,6 +46,10 @@ ARENAS = {
 BUBBLE = ((28.370, -81.550, 100, -5), date(2020, 7, 30), date(2020, 10, 15))  # 2019-20 restart, Orlando
 ALTITUDE_FEET = 4000
 INJURY_STATUSES = ("Out", "Doubtful", "Questionable")
+NOTE_HEADING = re.compile(r"(?i)injur(?:y|ies)\s*(?:/\s*status\s*)?(?:report|update|list)|status\s+report")
+NOTE_WINDOW = 900
+NOTE_STATUS = re.compile(r"(?i)\b(out|doubtful|questionable|probable|day[- ]to[- ]day|gtd)\b")
+NOTE_G_LEAGUE = re.compile(r"(?i)g[- ]league|two[- ]way|on assignment")
 INJURY_ROW = re.compile(r"\b(Out|Doubtful|Questionable|Probable|Available)\s+(Injury/Illness|G League|Not With Team|"
                         r"Personal Reasons?|Rest|Health and Safety Protocols|League Suspension|Concussion Protocol)")
 
@@ -52,7 +58,8 @@ PER_TEAM = ("ewm_net", "ewm_off", "ewm_def", "ewm_adj_net", "season_adj_net", "s
             "fatigue_score", "rematch", "rematch_prev_margin",
             "fg3_luck", "efg_luck", "opp_fg3_luck", "fg3_shrunk",
             "rotation_value", "available_value", "available_share", "rotation_minutes_missing_last", "top_player_missed_last",
-            "injury_out", "injury_doubtful", "injury_questionable", "injury_report_found")
+            "injury_out", "injury_doubtful", "injury_questionable", "injury_report_found",
+            "note_found", "note_out", "note_questionable", "note_probable")
 FAMILIES = {
     "recency": ("ewm_net", "ewm_off", "ewm_def", "ewm_adj_net", "season_adj_net", "schedule_strength"),
     "fatigue": ("games_last_4d", "games_last_7d", "miles_since_last", "miles_last_7d", "tz_shift",
@@ -61,6 +68,7 @@ FAMILIES = {
     "shooting": ("fg3_luck", "efg_luck", "opp_fg3_luck", "fg3_shrunk"),
     "lineup": ("rotation_value", "available_value", "available_share", "rotation_minutes_missing_last", "top_player_missed_last"),
     "injury": ("injury_out", "injury_doubtful", "injury_questionable", "injury_report_found"),
+    "notes": ("note_found", "note_out", "note_questionable", "note_probable"),
 }
 FEATURE_NAMES = tuple(f"{side}_{name}" for side in ("home", "away", "diff") for name in PER_TEAM)
 # Constant by construction: home teams never visit altitude; both teams share one report.
@@ -144,15 +152,30 @@ def injury_counts(row):
     return out
 
 
-def build(games, team_boxes, player_boxes, injuries=None):
+def note_counts(text):
+    """Status words in the injury/status sections of one note, skipping G League lines."""
+    counts = {"out": 0, "questionable": 0, "probable": 0}
+    for heading in NOTE_HEADING.finditer(text):
+        section = text[heading.end():heading.end() + NOTE_WINDOW]
+        for clause in re.split(r"[\n;]|(?<=[a-z)])\.\s", section):
+            if NOTE_G_LEAGUE.search(clause):
+                continue
+            for word in NOTE_STATUS.findall(clause):
+                word = word.lower()
+                counts["out" if word == "out" else "probable" if word == "probable" else "questionable"] += 1
+    return counts
+
+
+def build(games, team_boxes, player_boxes, injuries=None, notes=None):
     """game_id -> {feature: value} for every game, from earlier ET dates only.
 
     games: dicts with game_id, season, game_date_et, home_abbr, away_abbr, home_score, away_score.
     team_boxes: (game_id, side) -> team box (pts, fga, fta, fgm, fg3m, fg3a, oreb, tov).
     player_boxes: (game_id, side) -> list of player boxes (player_id, minutes, box counters).
     injuries: game_id -> collect_injuries.py row (report time already checked against the cutoff).
+    notes: game_id -> {"home"/"away": list of note texts published by that team} (public before the cutoff).
     """
-    injuries = injuries or {}
+    injuries, notes = injuries or {}, notes or {}
     log = defaultdict(list)            # (season, team) -> per-game records, chronological
     league = defaultdict(lambda: [0.0, 0.0])  # season -> [fg3m, fg3a] so far
     by_date = defaultdict(list)
@@ -174,6 +197,13 @@ def build(games, team_boxes, player_boxes, injuries=None):
                 row[f"{side}_injury_report_found"] = float(counts is not None)
                 for status in INJURY_STATUSES:
                     row[f"{side}_injury_{status.lower()}"] = float(c[status]) if c else math.nan
+            game_notes = notes.get(g["game_id"], {})
+            for side in ("home", "away"):
+                docs = game_notes.get(side, [])
+                row[f"{side}_note_found"] = float(bool(docs))
+                totals = [note_counts(t) for t in docs]
+                for key in ("out", "questionable", "probable"):
+                    row[f"{side}_note_{key}"] = float(max(c[key] for c in totals)) if totals else math.nan
             for name in PER_TEAM:
                 row[f"diff_{name}"] = row[f"home_{name}"] - row[f"away_{name}"]
             features[g["game_id"]] = row
@@ -271,8 +301,25 @@ def _record(g, day, team_boxes, player_boxes, pregame_net, log, league):
         log[g["season"], g[f"{side}_abbr"]].append(record)
 
 
-def from_dataset(dataset, injury_paths=()):
-    """Build features for every franchise game in the shared dataset, plus collect_injuries.py outputs if given."""
+def load_notes(dataset, splits):
+    """game_id -> side -> note texts for the admitted pregame notes; refuses any note public after the cutoff."""
+    from bam_data import read_snapshot_inputs
+    from collect_pilot import stamp
+    from evaluate_notes_orthogonality import page_texts
+    texts = page_texts(dataset.directory)
+    out = defaultdict(lambda: defaultdict(list))
+    for game in read_snapshot_inputs(dataset.directory, dataset.root, splits=splits):
+        for source in game["sources"]:
+            if stamp(source["archive_time"]) > stamp(game["cutoff_utc"]):
+                raise ValueError(f"Note not public before its cutoff: {game['game_id']}")
+            side = "home" if source["publisher"] == game["home_abbr"] else "away" if source["publisher"] == game["away_abbr"] else None
+            if side:
+                out[game["game_id"]][side].append(texts[source["sha256"]])
+    return out
+
+
+def from_dataset(dataset, injury_paths=(), note_splits=()):
+    """Build features for every franchise game in the shared dataset, plus injury reports and game notes if given."""
     from collect_pilot import stamp
     games = dataset.history()
     team_boxes = {(r["game_id"], r["side"]): r for r in dataset.table("team_box_scores")}
@@ -290,4 +337,5 @@ def from_dataset(dataset, injury_paths=()):
             if report and stamp(report["report_time_utc"]) > stamp(cutoff[row["game_id"]]):
                 raise ValueError(f"Injury report after cutoff: {row['game_id']}")
             injuries[row["game_id"]] = row
-    return build(games, team_boxes, player_boxes, injuries)
+    notes = load_notes(dataset, note_splits) if note_splits else {}
+    return build(games, team_boxes, player_boxes, injuries, notes)
