@@ -13,12 +13,15 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 import json
+from pathlib import Path
 import statistics
 import time
 import urllib.parse
 
-from collect_pilot import ROOT, UTC, Cache, iso, stamp, write_json, write_jsonl
-from collect_polymarket import CONFIG_PATH, DATA_DIR, OUTCOME_FIELDS, REPORT_DIR, price_at, price_points, read_rows
+from collect_pilot import ROOT, UTC, Cache, iso, stamp, write_json
+from collect_polymarket import (CONFIG_PATH, DATA_DIR, OUTCOME_FIELDS, REPORT_DIR, price_at, price_points,
+                                load_market_records, load_market_audit, write_market_tables)
+from nba_dataset import resolve_source_path
 
 TRADES = "https://data-api.polymarket.com/v2/trades?"
 
@@ -93,11 +96,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--offline", action="store_true", help="Rebuild entirely from saved trade pages")
     parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--output", type=Path, default=DATA_DIR, help="Unpublished directory containing shared market tables")
     args = parser.parse_args()
+    if (args.output / "manifest.json").exists():
+        raise ValueError("The shared dataset is frozen; collect into a new staged dataset before publishing changes")
     config = json.loads(CONFIG_PATH.read_text())
     rules = config["horizons"]
     cache = Cache(offline=args.offline, delay=0.25)
-    markets = read_rows(DATA_DIR / "market_probs.jsonl")
+    markets = load_market_records(processed_dir=args.output)
     reach = max(rules["hours_before_tipoff"]) + rules["trade_window_hours"]
     stop = lambda m: (stamp(m["scheduled_start_utc"]) - timedelta(hours=reach)).timestamp()
     work = lambda m: walk_trades(cache, m, stop(m), rules["max_pages"])
@@ -112,7 +118,7 @@ def main():
         if trades is None:
             failures.append({"game_id": market["game_id"], "pages": pages})
             continue
-        points = price_points((ROOT / market["source"]["raw_path"]).read_text())
+        points = price_points(resolve_source_path(ROOT, market["source"]["raw_path"]).read_text())
         rows.append({**{k: market[k] for k in ("game_id", "season", "game_date_et", "scheduled_start_utc", "home_abbr",
                                                 "away_abbr", "market_slug", "condition_id", "home_token_id")},
                      "trade_pages": pages,
@@ -120,7 +126,7 @@ def main():
     for row in rows:
         if OUTCOME_FIELDS.intersection(row) or any(OUTCOME_FIELDS.intersection(h) for h in row["horizons"]):
             raise ValueError("Outcome fields leaked into horizon prices")
-    write_jsonl(DATA_DIR / "horizon_prices.jsonl", rows)
+    write_market_tables(args.output, markets, load_market_audit(processed_dir=args.output), rows)
     summary = {"markets": len(markets), "walked": len(rows), "failures": failures, "rules": rules, "by_horizon": {}}
     for hours in rules["hours_before_tipoff"]:
         hs = [next(h for h in r["horizons"] if h["hours_before_tipoff"] == hours) for r in rows]

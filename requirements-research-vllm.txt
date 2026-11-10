@@ -1,7 +1,0 @@
-# GPU research worker (vLLM) on the AWS instance; never install into the Mac venv.
-vllm==0.32.0
-transformers==5.19.0
-numpy==2.4.6
-tokenizers==0.23.3
-huggingface-hub==2.4.0
-safetensors==0.8.0

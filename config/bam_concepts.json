@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "taxonomy_id": "nba_pregame_concepts_v1",
+  "scale": "Each score is the net pregame advantage for the HOME team on that aspect, from -1 (clearly favours the away team) through 0 (neutral or balanced) to +1 (clearly favours the home team). Score 0 with evidence_present=false when the supplied pregame evidence says nothing about the aspect.",
+  "candidates": [
+    {"name": "star_availability", "description": "Availability of each team's most important players (injuries, rest, suspensions, minutes limits) as stated before the cutoff."},
+    {"name": "rotation_depth", "description": "Availability and quality of bench and rotation players beyond the stars; replacement depth for absences."},
+    {"name": "lineup_continuity", "description": "Stability of starting lineups and rotations; recent lineup changes or new combinations."},
+    {"name": "returning_players", "description": "Players returning from absence (possible rust, minutes restrictions or a lift) on either side."},
+    {"name": "recent_form", "description": "Recent results and performance trend over the last several games, beyond what season averages show."},
+    {"name": "momentum_sentiment", "description": "Tone and confidence of the pregame notes: streaks, narratives, morale or turmoil as described by the publishers."},
+    {"name": "offensive_matchup", "description": "Home offense against away defense versus away offense against home defense: scoring efficiency and shot quality edges."},
+    {"name": "defensive_matchup", "description": "Defensive strengths that target the opponent's main threats (rim protection, perimeter defense, scheme fit)."},
+    {"name": "pace_style", "description": "Which team's preferred tempo and style is more likely to prevail in this matchup."},
+    {"name": "rebounding_edge", "description": "Offensive and defensive rebounding advantage and second-chance opportunities."},
+    {"name": "turnover_edge", "description": "Ball security and forcing turnovers; live-ball turnover and transition advantages."},
+    {"name": "three_point_profile", "description": "Three-point volume and accuracy edge, including reliance on high-variance shooting."},
+    {"name": "rest_advantage", "description": "Days of rest and back-to-back situations for each team."},
+    {"name": "travel_fatigue", "description": "Road-trip length, time-zone changes and travel load before this game."},
+    {"name": "schedule_congestion", "description": "Games in recent nights and upcoming schedule pressure beyond simple rest days."},
+    {"name": "head_to_head", "description": "Season series and recent meetings between these teams, including stated matchup history."},
+    {"name": "home_court_strength", "description": "Home team's home record and away team's road record relative to their overall quality."},
+    {"name": "motivation_stakes", "description": "Playoff race, seeding, tanking, rivalry, milestones or other stated motivation differences."},
+    {"name": "coaching_tactics", "description": "Coaching changes, stated tactical adjustments, or coaching matchup factors."},
+    {"name": "availability_uncertainty", "description": "Unresolved questionable or probable statuses; positive when the home team's availability picture is more certain or favourable than the away team's."},
+    {"name": "clutch_close_games", "description": "Performance in close games and late-game execution as documented before the game."},
+    {"name": "free_throw_edge", "description": "Free-throw rate and accuracy advantage; foul drawing and foul trouble tendencies."},
+    {"name": "roster_changes", "description": "Recent trades, signings, call-ups or departures that change team strength."},
+    {"name": "experience_composure", "description": "Experience, youth and composure factors explicitly raised by the notes."}
+  ],
+  "selected": [
+    "star_availability", "rotation_depth", "lineup_continuity", "returning_players", "recent_form",
+    "momentum_sentiment", "offensive_matchup", "defensive_matchup", "pace_style", "rebounding_edge",
+    "turnover_edge", "three_point_profile", "rest_advantage", "travel_fatigue", "schedule_congestion",
+    "head_to_head", "home_court_strength", "motivation_stakes", "coaching_tactics", "availability_uncertainty"
+  ],
+  "selection": {
+    "method": "prior_default",
+    "note": "Pilot default chosen before any teacher output. Re-select with bam_concepts.py select from TRAIN concept labels (decisive frequency) before any DEV use; the teacher labels every candidate so re-selection needs no new teacher calls."
+  }
+}

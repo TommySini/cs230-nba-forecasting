@@ -1,0 +1,26 @@
+{
+  "experiment_id": "tabpfn_baseline",
+  "baseline_config": "config/gradient_boosting.json",
+  "output_dir": "reports/tabpfn",
+  "report_dir": "reports/tabpfn",
+  "compute_platform": "local",
+  "seed": 230,
+  "smoke_games": 32,
+  "smoke_context_games": 16,
+  "query_batch_size": 2048,
+  "max_runtime_seconds": 28800,
+  "bootstrap_replicates": 2000,
+  "model": {
+    "package_version": "9.2.0",
+    "version": "v2.5",
+    "repository": "Prior-Labs/tabpfn_2_5",
+    "revision": "6c45f3a6d0d07c6c5f62572e04a0c2929de91b8b",
+    "filename": "tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
+    "checkpoint_path": "data/models/tabpfn/tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
+    "sha256": "2d0fbd257a5a274f2a219836d5a68e9c27224845936b4685d85dd42e2b8092aa",
+    "max_context_rows": 50000,
+    "device": "mps",
+    "n_estimators": 4
+  },
+  "dataset_dir": "data/processed"
+}

@@ -48,10 +48,16 @@ class Cache:
         self.delay = delay
 
     def get(self, url, kind, suffix):
+        from nba_dataset import remap_raw_path
         key = hashlib.sha256(url.encode()).hexdigest()[:24]
-        base = ROOT / "data/raw" / kind / key
+        # Existing sidecars keep their original bytes/paths; the resolver maps them
+        # to the source-organized cache after migration.
+        base = ROOT / remap_raw_path(f"data/raw/{kind}/{key}")
         meta_path = base.with_suffix(".meta.json")
         body_path = base.with_suffix(suffix)
+        legacy = ROOT / "data/raw" / kind / key
+        if not meta_path.exists() and legacy.with_suffix(".meta.json").exists():
+            meta_path, body_path = legacy.with_suffix(".meta.json"), legacy.with_suffix(suffix)
         if meta_path.exists():
             meta = json.loads(meta_path.read_text())
             if meta["status"] == 200 and body_path.exists():
@@ -380,7 +386,7 @@ def write_report(summary, inputs, audit, history_count, report_dir):
             lines.append(f'| {record["game_date_et"]} {record["away_abbr"]}@{record["home_abbr"]} | {note["pages"]} | [Original PDF]({note["source"]["url"]}) |')
     lines.extend(["", "These PDFs are stored separately pending matchup/content and publication-time review. PDF metadata alone is not proof of pregame public availability. No narrative candidates are approved as model inputs yet.", "",
                   "## What the files can support now", "",
-                  "The pilot provides final-outcome labels, prior-game team features, and timestamp-filtered injury text. Inputs and labels are separate JSONL files. Every injury excerpt links to raw source bytes with a checksum and retrieval metadata. This is sufficient to prototype the loader and a structured-data baseline; it does not yet establish the rich-text dataset proposed for the LLM experiment.", "",
+                  "The pilot provides final-outcome labels, prior-game team features, and timestamp-filtered injury text. Inputs and labels are separate Parquet tables. Every injury excerpt links to raw source bytes with a checksum and retrieval metadata. This is sufficient to prototype the loader and a structured-data baseline; it does not yet establish the rich-text dataset proposed for the LLM experiment.", "",
                   "## Limits and next actions", "",
                   "1. These bounded windows do not establish full-season coverage; compare the early-season and seasonal audits before expanding.",
                   "2. Expand dated team-note discovery beyond Cleveland. The unattempted teams are not counted as missing archives.",
@@ -389,27 +395,36 @@ def write_report(summary, inputs, audit, history_count, report_dir):
                   "5. Injury URL probing is bounded and may not locate the latest available report. Missing candidates would not establish absence of an archive.",
                   "6. Historical scheduled starts are retrieved retrospectively; rescheduled games need a final timing audit.",
                   "7. No paid odds, player-level box scores, teacher-generated targets, or recurring future-game capture have been added.", "",
-                  "## Reproduce and validate", "", "```bash", f'.venv/bin/python scripts/collect_pilot.py --config {summary["config_path"]} --offline',
-                  f'.venv/bin/python scripts/validate_pilot.py --config {summary["config_path"]}', ".venv/bin/python -m unittest discover -s tests -v", "```", "",
+                  "## Reproduce and validate", "", "```bash", f'.venv/bin/python scripts/collect_pilot.py --config {summary["config_path"]} --output <empty-collection-directory> --offline', ".venv/bin/python -m unittest discover -s tests -v", "```", "",
                   "See `game_audit.csv` for per-game decisions, `coverage.json` for counts, and the repository README for source and schema details.", ""])
     (report_dir / "pilot_findings.md").write_text("\n".join(lines))
 
 
 def main():
+    from nba_dataset import write_table
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--offline", action="store_true", help="Rebuild entirely from saved source responses")
     parser.add_argument("--stage", choices=("schedules", "audit"), default="audit")
     parser.add_argument("--limit", type=int, help="Audit only the first N sampled games for debugging")
     parser.add_argument("--config", default="config/pilot.json", help="Config path relative to repository root")
+    parser.add_argument("--output", required=True, type=Path, help="Empty unpublished collection directory")
     args = parser.parse_args()
     config = json.loads((ROOT / args.config).read_text())
-    processed_dir, report_dir = output_paths(config)
+    _, report_dir = output_paths(config)
+    processed_dir = args.output.resolve()
+    if processed_dir == (ROOT / "data/processed").resolve() or (processed_dir.exists() and any(processed_dir.iterdir())):
+        parser.error("Use an empty unpublished output directory; existing shared datasets are immutable")
     report_dir.mkdir(parents=True, exist_ok=True)
     cache = Cache(offline=args.offline)
     games = collect_games(cache, config)
     selected = select_sample(games, config)
-    write_jsonl(processed_dir / "game_history.jsonl", games)
-    write_jsonl(processed_dir / "sample_manifest.jsonl", selected)
+    write_table(processed_dir / "games.parquet", [
+        {k: v for k, v in game.items() if k not in ("home_score", "away_score")} for game in games])
+    write_table(processed_dir / "outcomes.parquet", [
+        {"game_id": game["game_id"], "home_score": game["home_score"], "away_score": game["away_score"],
+         "home_win": int(game["home_score"] > game["away_score"])} for game in games])
+    write_table(processed_dir / "sample_manifest.parquet", [
+        {k: v for k, v in game.items() if k not in ("home_score", "away_score")} for game in selected])
     if args.stage == "schedules":
         print(f"Saved {len(selected)} sampled games and {len(games)} historical results", flush=True)
         return
@@ -435,9 +450,9 @@ def main():
                       "injury_not_yet_submitted": injuries["not_yet_submitted"] if injuries else None,
                       "injury_attempts": attempts, "preview": preview, "team_notes": notes})
         # Checkpoint after every game; interrupted runs reuse all raw responses.
-        write_jsonl(processed_dir / "inputs.jsonl", inputs)
-        write_jsonl(processed_dir / "labels.jsonl", labels)
-        write_jsonl(processed_dir / "audit.jsonl", audit)
+        write_table(processed_dir / "pilot_inputs.parquet", inputs)
+        write_table(processed_dir / "pilot_labels.parquet", labels)
+        write_json(processed_dir / "pilot_audit.json", audit)
         print(f'[{i}/{len(selected)}] {game["game_date_et"]} {game["away_abbr"]}@{game["home_abbr"]}: injury={injuries is not None}; preview={preview["decision"]}; notes={notes["decision"]}', flush=True)
     summary = {"games": len(inputs), "seasons": dict(Counter(str(g["season"]) for g in inputs)),
                "teams": len({g[s + "_abbr"] for g in inputs for s in ("home", "away")}),

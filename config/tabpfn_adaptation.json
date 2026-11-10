@@ -1,0 +1,31 @@
+{
+  "experiment_id": "tabpfn_adaptation",
+  "output_dir": "data/processed/tabpfn/adaptation",
+  "baseline_config": "config/tabpfn.json",
+  "baseline_revision": "768163157c971beefe5a4c8f5b47ccfefc00e85a",
+  "seed": 230,
+  "device": "mps",
+  "inner_validation_season": 2023,
+  "bootstrap_replicates": 2000,
+  "generator": {
+    "context_rows": 1024,
+    "n_samples": 1024,
+    "n_estimators": 1,
+    "n_permutations": 1,
+    "temperature": 1.0,
+    "max_runtime_seconds": 3600,
+    "extension_version": "0.6.3",
+    "method": "categorical_quantile_joint",
+    "max_bins": 8
+  },
+  "finetuning": {
+    "epochs": 5,
+    "learning_rate": 1e-05,
+    "meta_batch_size": 256,
+    "n_estimators_finetune": 1,
+    "n_estimators_validation": 1,
+    "n_estimators_final": 4,
+    "early_stopping_patience": 2,
+    "max_runtime_seconds": 3600
+  }
+}

@@ -1,0 +1,556 @@
+{
+  "baseline": {
+    "schema_version": 1,
+    "stage": "dev",
+    "status": "complete",
+    "created_at_utc": "2026-11-09T05:08:56.052996+00:00",
+    "execution_platform": "local",
+    "runtime_seconds": 236.58267725002952,
+    "attempts": 1,
+    "context_audit": {
+      "submitted_rows": 13457,
+      "model_n_train_samples": 13457,
+      "subsample_samples": null,
+      "row_subsampling_applied": false
+    },
+    "manifest_sha256": "de59ce5045b43b7d1a3b952afed9169a4e60063b52dad6da7f33703f54bc237b",
+    "artifact_sha256": {
+      "predictions.csv": "36211a6c5b291dcca1531fa13ebdf69bc46bc5af220ba2749b240ee2b24c62a1"
+    },
+    "model": {
+      "package_version": "9.2.0",
+      "version": "v2.5",
+      "repository": "Prior-Labs/tabpfn_2_5",
+      "revision": "6c45f3a6d0d07c6c5f62572e04a0c2929de91b8b",
+      "filename": "tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
+      "checkpoint_path": "data/models/tabpfn/tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
+      "sha256": "2d0fbd257a5a274f2a219836d5a68e9c27224845936b4685d85dd42e2b8092aa",
+      "max_context_rows": 50000,
+      "device": "mps",
+      "n_estimators": 4
+    },
+    "model_parameters": {
+      "random_state": 230,
+      "fit_mode": "fit_preprocessors",
+      "n_preprocessing_jobs": 1,
+      "memory_saving_mode": "auto",
+      "inference_config": {
+        "SUBSAMPLE_SAMPLES": null
+      }
+    },
+    "versions": {
+      "tabpfn": "9.2.0",
+      "torch": "2.15.0",
+      "numpy": "2.5.4",
+      "scikit-learn": "1.9.1"
+    },
+    "metrics": {
+      "tabpfn": {
+        "games": 1123,
+        "brier": 0.20783111113588396,
+        "log_loss": 0.6016636581303022,
+        "roc_auc": 0.7303053606331508,
+        "accuracy": 0.667853962600178,
+        "mean_home_probability": 0.5604500965226047,
+        "observed_home_win_rate": 0.5503116651825467
+      },
+      "rich_gradient_boosting": {
+        "games": 1123,
+        "brier": 0.21033159095929999,
+        "log_loss": 0.6083951196116204,
+        "roc_auc": 0.7236950879553975,
+        "accuracy": 0.6687444345503116,
+        "mean_home_probability": 0.5560818915870105,
+        "observed_home_win_rate": 0.5503116651825467
+      }
+    },
+    "uncertainty": {
+      "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+      "replicates": 2000,
+      "days": 152,
+      "seed": 230,
+      "reference": "rich_gradient_boosting",
+      "brier_intervals": {
+        "tabpfn": [
+          0.19658357625401718,
+          0.21897676844621627
+        ],
+        "rich_gradient_boosting": [
+          0.20084574858274296,
+          0.2200654510169394
+        ]
+      },
+      "difference_vs_reference": {
+        "tabpfn": [
+          -0.005122232308643297,
+          0.00014827400709846545
+        ]
+      },
+      "limitations": "Conditional on the fitted models; no training uncertainty or dependence across days"
+    },
+    "primary_comparison": {
+      "brier_difference": -0.0025004798234160297,
+      "difference_95_interval": [
+        -0.005122232308643297,
+        0.00014827400709846545
+      ]
+    },
+    "interpretation": "Exploratory DEV comparison; baseline settings previously selected on DEV; TEST remains excluded"
+  },
+  "adaptation": {
+    "synthetic": {
+      "schema_version": 1,
+      "stage": "adapt-dev",
+      "status": "complete",
+      "variant": "synthetic",
+      "created_at_utc": "2026-11-09T20:46:31.884550+00:00",
+      "execution_platform": "local",
+      "runtime_seconds": 114.29176479099988,
+      "manifest_sha256": "7d3a27722aaa9b2580d4c3010b705ceb3d323662081702d3e9f1790c1391f647",
+      "artifact_sha256": {
+        "predictions.csv": "b094244dde38e63b01b541a54b6faedd242ad307c7541b8b4a44bd3939381928"
+      },
+      "context_audit": {
+        "original_train_rows": 13457,
+        "synthetic_rows": 1024,
+        "submitted_rows": 14481,
+        "model_n_train_samples": 14481,
+        "row_subsampling_applied": false
+      },
+      "training": null,
+      "synthetic_manifest_sha256": "4c1d434baf37e70759dc908e4efd1210ac18866ce0177356faa6c1f7d98b3a1b",
+      "model": {
+        "package_version": "9.2.0",
+        "version": "v2.5",
+        "repository": "Prior-Labs/tabpfn_2_5",
+        "revision": "6c45f3a6d0d07c6c5f62572e04a0c2929de91b8b",
+        "filename": "tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
+        "checkpoint_path": "data/models/tabpfn/tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
+        "sha256": "2d0fbd257a5a274f2a219836d5a68e9c27224845936b4685d85dd42e2b8092aa",
+        "max_context_rows": 50000,
+        "device": "mps",
+        "n_estimators": 4
+      },
+      "versions": {
+        "tabpfn": "9.2.0",
+        "tabpfn-extensions": "0.6.3",
+        "torch": "2.15.0",
+        "numpy": "2.5.4",
+        "scikit-learn": "1.9.1"
+      },
+      "metrics": {
+        "synthetic": {
+          "games": 1123,
+          "brier": 0.2080169257693178,
+          "log_loss": 0.6020819116720011,
+          "roc_auc": 0.7296196609952257,
+          "accuracy": 0.6705253784505788,
+          "mean_home_probability": 0.561086929637942,
+          "observed_home_win_rate": 0.5503116651825467
+        },
+        "tabpfn": {
+          "games": 1123,
+          "brier": 0.20783111113588396,
+          "log_loss": 0.6016636581303022,
+          "roc_auc": 0.7303053606331508,
+          "accuracy": 0.667853962600178,
+          "mean_home_probability": 0.5604500965226047,
+          "observed_home_win_rate": 0.5503116651825467
+        },
+        "rich_gradient_boosting": {
+          "games": 1123,
+          "brier": 0.21033159095929999,
+          "log_loss": 0.6083951196116204,
+          "roc_auc": 0.7236950879553975,
+          "accuracy": 0.6687444345503116,
+          "mean_home_probability": 0.5560818915870105,
+          "observed_home_win_rate": 0.5503116651825467
+        }
+      },
+      "uncertainty": {
+        "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+        "replicates": 2000,
+        "days": 152,
+        "seed": 230,
+        "reference": "tabpfn",
+        "brier_intervals": {
+          "synthetic": [
+            0.19680935450594364,
+            0.21917154284841428
+          ],
+          "tabpfn": [
+            0.19658357625401718,
+            0.21897676844621627
+          ],
+          "rich_gradient_boosting": [
+            0.20084574858274296,
+            0.2200654510169394
+          ]
+        },
+        "difference_vs_reference": {
+          "synthetic": [
+            -0.00024320762132291548,
+            0.0006063252009239696
+          ],
+          "rich_gradient_boosting": [
+            -0.00014827400709847,
+            0.005122232308643289
+          ]
+        },
+        "limitations": "Conditional on the fitted models; no training uncertainty or dependence across days"
+      },
+      "primary_comparison": {
+        "brier_difference": 0.00018581463343383953,
+        "difference_95_interval": [
+          -0.00024320762132291548,
+          0.0006063252009239696
+        ]
+      },
+      "complete_audit_path": "data/processed/tabpfn/adaptation/synthetic/run.json",
+      "complete_audit_sha256": "011051e8819cb8c91a781555d402140d5fffdb77cad780c72a79db9c70d1d370"
+    },
+    "finetune": {
+      "schema_version": 1,
+      "stage": "adapt-dev",
+      "status": "complete",
+      "variant": "finetune",
+      "created_at_utc": "2026-11-09T20:55:15.902421+00:00",
+      "execution_platform": "local",
+      "runtime_seconds": 135.1735247910001,
+      "manifest_sha256": "7d3a27722aaa9b2580d4c3010b705ceb3d323662081702d3e9f1790c1391f647",
+      "artifact_sha256": {
+        "predictions.csv": "a0900a8b31ef34c845bb10a9fabdaf1884e7c4468f697d96c984ea48730f3cbc"
+      },
+      "context_audit": {
+        "original_train_rows": 13457,
+        "synthetic_rows": 0,
+        "submitted_rows": 13457,
+        "model_n_train_samples": 13457,
+        "row_subsampling_applied": false
+      },
+      "training": {
+        "status": "complete",
+        "tool": "tabpfn.finetuning.FinetunedTabPFNClassifier",
+        "runtime_seconds": 265.3334367090001,
+        "settings": {
+          "epochs": 5,
+          "max_runtime_seconds": 3600,
+          "learning_rate": 1e-05,
+          "meta_batch_size": 256,
+          "n_estimators_finetune": 1,
+          "n_estimators_validation": 1,
+          "n_estimators_final": 4,
+          "early_stopping_patience": 2
+        },
+        "selection_metric": "log_loss",
+        "validation_scope": "later TRAIN only",
+        "gradient_rows": 12342,
+        "validation_rows": 1115,
+        "features": 252,
+        "gradient_features_sha256": "0ea13dd5acc49f3290db373df80e5227c52a1da96fa70699915a40f02f9009c3",
+        "gradient_labels_sha256": "caac80b03d80672fe23cca0d545764dc6f16e1be46c89fb421961232f6916f4e",
+        "validation_features_sha256": "aa2a8ab63fb000a0ab167d040c781dc502bad7d61e29777e4899c983bce1f727",
+        "validation_labels_sha256": "98dc853209faee4e1b84156b93120ff5d217f30388772d4f6810784a3017a4b6",
+        "optimizer_steps": 96,
+        "epochs_completed": 2,
+        "weights_changed_during_training": true,
+        "weights_before_sha256": "a203d7813329fac0cbd3ea5f5c2a9f816c38752f67719c21173409c727ee96fe",
+        "weights_after_sha256": "a203d7813329fac0cbd3ea5f5c2a9f816c38752f67719c21173409c727ee96fe",
+        "selected_pretrained_weights": true,
+        "checkpoint_path": "data/processed/tabpfn/adaptation/finetune/training/selected.ckpt",
+        "checkpoint_sha256": "646d7fe762aa78fe09c49b8dabd4aae7eb1f9f74ab5ac07e223518e03a2d7426",
+        "initial_inner_log_loss": 0.6042153239250183,
+        "best_inner_log_loss": 0.6042153239250183,
+        "evaluations": [
+          {
+            "evaluation": 0,
+            "weights_sha256": "a203d7813329fac0cbd3ea5f5c2a9f816c38752f67719c21173409c727ee96fe",
+            "primary_negative_log_loss": -0.6042153239250183,
+            "log_loss": 0.6042153239250183,
+            "roc_auc": 0.7273687484610102
+          },
+          {
+            "evaluation": 1,
+            "weights_sha256": "e6e689087dbcc6d21d9b811467ac10878e3ced20a007aba61dd2705b3b7be7da",
+            "primary_negative_log_loss": -0.6066170930862427,
+            "log_loss": 0.6066170930862427,
+            "roc_auc": 0.7248788247949094
+          },
+          {
+            "evaluation": 2,
+            "weights_sha256": "d715e5ab497cb74e872a3c5f88071266601c1dc873356f7ce6728d6110fe4af1",
+            "primary_negative_log_loss": -0.6077308058738708,
+            "log_loss": 0.6077308058738708,
+            "roc_auc": 0.7241482095877451
+          }
+        ],
+        "synthetic_rows": 0,
+        "manifest_sha256": "7d3a27722aaa9b2580d4c3010b705ceb3d323662081702d3e9f1790c1391f647",
+        "real_fit_games": 12342,
+        "validation_games": 1115
+      },
+      "synthetic_manifest_sha256": null,
+      "model": {
+        "package_version": "9.2.0",
+        "version": "v2.5",
+        "repository": "Prior-Labs/tabpfn_2_5",
+        "revision": "6c45f3a6d0d07c6c5f62572e04a0c2929de91b8b",
+        "filename": "tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
+        "checkpoint_path": "data/models/tabpfn/tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
+        "sha256": "2d0fbd257a5a274f2a219836d5a68e9c27224845936b4685d85dd42e2b8092aa",
+        "max_context_rows": 50000,
+        "device": "mps",
+        "n_estimators": 4
+      },
+      "versions": {
+        "tabpfn": "9.2.0",
+        "tabpfn-extensions": "0.6.3",
+        "torch": "2.15.0",
+        "numpy": "2.5.4",
+        "scikit-learn": "1.9.1"
+      },
+      "metrics": {
+        "finetune": {
+          "games": 1123,
+          "brier": 0.20783111113588396,
+          "log_loss": 0.6016636581303022,
+          "roc_auc": 0.7303053606331508,
+          "accuracy": 0.667853962600178,
+          "mean_home_probability": 0.5604500965226047,
+          "observed_home_win_rate": 0.5503116651825467
+        },
+        "tabpfn": {
+          "games": 1123,
+          "brier": 0.20783111113588396,
+          "log_loss": 0.6016636581303022,
+          "roc_auc": 0.7303053606331508,
+          "accuracy": 0.667853962600178,
+          "mean_home_probability": 0.5604500965226047,
+          "observed_home_win_rate": 0.5503116651825467
+        },
+        "rich_gradient_boosting": {
+          "games": 1123,
+          "brier": 0.21033159095929999,
+          "log_loss": 0.6083951196116204,
+          "roc_auc": 0.7236950879553975,
+          "accuracy": 0.6687444345503116,
+          "mean_home_probability": 0.5560818915870105,
+          "observed_home_win_rate": 0.5503116651825467
+        }
+      },
+      "uncertainty": {
+        "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+        "replicates": 2000,
+        "days": 152,
+        "seed": 230,
+        "reference": "tabpfn",
+        "brier_intervals": {
+          "finetune": [
+            0.19658357625401718,
+            0.21897676844621627
+          ],
+          "tabpfn": [
+            0.19658357625401718,
+            0.21897676844621627
+          ],
+          "rich_gradient_boosting": [
+            0.20084574858274296,
+            0.2200654510169394
+          ]
+        },
+        "difference_vs_reference": {
+          "finetune": [
+            0.0,
+            0.0
+          ],
+          "rich_gradient_boosting": [
+            -0.00014827400709847,
+            0.005122232308643289
+          ]
+        },
+        "limitations": "Conditional on the fitted models; no training uncertainty or dependence across days"
+      },
+      "primary_comparison": {
+        "brier_difference": 0.0,
+        "difference_95_interval": [
+          0.0,
+          0.0
+        ]
+      },
+      "complete_audit_path": "data/processed/tabpfn/adaptation/finetune/run.json",
+      "complete_audit_sha256": "eb6a2ee61459307c91a00f8c3adbb9d376cf6a1e0225d7f57dc929b4123bdfbc"
+    },
+    "combined": {
+      "schema_version": 1,
+      "stage": "adapt-dev",
+      "status": "complete",
+      "variant": "combined",
+      "created_at_utc": "2026-11-09T21:02:52.172435+00:00",
+      "execution_platform": "local",
+      "runtime_seconds": 134.5497631670005,
+      "manifest_sha256": "7d3a27722aaa9b2580d4c3010b705ceb3d323662081702d3e9f1790c1391f647",
+      "artifact_sha256": {
+        "predictions.csv": "d9a42c4e6e128a8d7127e47f954bde3e9a9a49ea1dacec7d23a6404f9315f86b"
+      },
+      "context_audit": {
+        "original_train_rows": 13457,
+        "synthetic_rows": 1024,
+        "submitted_rows": 14481,
+        "model_n_train_samples": 14481,
+        "row_subsampling_applied": false
+      },
+      "training": {
+        "status": "complete",
+        "tool": "tabpfn.finetuning.FinetunedTabPFNClassifier",
+        "runtime_seconds": 284.87286358300025,
+        "settings": {
+          "epochs": 5,
+          "max_runtime_seconds": 3600,
+          "learning_rate": 1e-05,
+          "meta_batch_size": 256,
+          "n_estimators_finetune": 1,
+          "n_estimators_validation": 1,
+          "n_estimators_final": 4,
+          "early_stopping_patience": 2
+        },
+        "selection_metric": "log_loss",
+        "validation_scope": "later TRAIN only",
+        "gradient_rows": 13366,
+        "validation_rows": 1115,
+        "features": 252,
+        "gradient_features_sha256": "ceb4baa9cbfa4fef16416eaf3ae4c5ac9d835e0f6f3c92904e34cf571f23530b",
+        "gradient_labels_sha256": "a1bbda0ddff12def46500e34cfe946f5203f3b95aa9b6a18a3106add4177432f",
+        "validation_features_sha256": "aa2a8ab63fb000a0ab167d040c781dc502bad7d61e29777e4899c983bce1f727",
+        "validation_labels_sha256": "98dc853209faee4e1b84156b93120ff5d217f30388772d4f6810784a3017a4b6",
+        "optimizer_steps": 104,
+        "epochs_completed": 2,
+        "weights_changed_during_training": true,
+        "weights_before_sha256": "a203d7813329fac0cbd3ea5f5c2a9f816c38752f67719c21173409c727ee96fe",
+        "weights_after_sha256": "a203d7813329fac0cbd3ea5f5c2a9f816c38752f67719c21173409c727ee96fe",
+        "selected_pretrained_weights": true,
+        "checkpoint_path": "data/processed/tabpfn/adaptation/combined/training/selected.ckpt",
+        "checkpoint_sha256": "646d7fe762aa78fe09c49b8dabd4aae7eb1f9f74ab5ac07e223518e03a2d7426",
+        "initial_inner_log_loss": 0.6057410836219788,
+        "best_inner_log_loss": 0.6057410836219788,
+        "evaluations": [
+          {
+            "evaluation": 0,
+            "weights_sha256": "a203d7813329fac0cbd3ea5f5c2a9f816c38752f67719c21173409c727ee96fe",
+            "primary_negative_log_loss": -0.6057410836219788,
+            "log_loss": 0.6057410836219788,
+            "roc_auc": 0.7261229766332733
+          },
+          {
+            "evaluation": 1,
+            "weights_sha256": "a44a40718797d449ffe8e77b062e7893c125bf2a55944ff9d5d064f47871e30b",
+            "primary_negative_log_loss": -0.6123616099357605,
+            "log_loss": 0.6123616099357605,
+            "roc_auc": 0.7209487305763274
+          },
+          {
+            "evaluation": 2,
+            "weights_sha256": "5d1531715c1444db5ab4e423f0d65306844770e1b108e4b81b1cc3e1cb025455",
+            "primary_negative_log_loss": -0.6170620322227478,
+            "log_loss": 0.6170620322227478,
+            "roc_auc": 0.7196559790567774
+          }
+        ],
+        "synthetic_rows": 1024,
+        "manifest_sha256": "7d3a27722aaa9b2580d4c3010b705ceb3d323662081702d3e9f1790c1391f647",
+        "real_fit_games": 12342,
+        "validation_games": 1115
+      },
+      "synthetic_manifest_sha256": "4c1d434baf37e70759dc908e4efd1210ac18866ce0177356faa6c1f7d98b3a1b",
+      "model": {
+        "package_version": "9.2.0",
+        "version": "v2.5",
+        "repository": "Prior-Labs/tabpfn_2_5",
+        "revision": "6c45f3a6d0d07c6c5f62572e04a0c2929de91b8b",
+        "filename": "tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
+        "checkpoint_path": "data/models/tabpfn/tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
+        "sha256": "2d0fbd257a5a274f2a219836d5a68e9c27224845936b4685d85dd42e2b8092aa",
+        "max_context_rows": 50000,
+        "device": "mps",
+        "n_estimators": 4
+      },
+      "versions": {
+        "tabpfn": "9.2.0",
+        "tabpfn-extensions": "0.6.3",
+        "torch": "2.15.0",
+        "numpy": "2.5.4",
+        "scikit-learn": "1.9.1"
+      },
+      "metrics": {
+        "combined": {
+          "games": 1123,
+          "brier": 0.2080169257693178,
+          "log_loss": 0.6020819116720011,
+          "roc_auc": 0.7296196609952257,
+          "accuracy": 0.6705253784505788,
+          "mean_home_probability": 0.561086929637942,
+          "observed_home_win_rate": 0.5503116651825467
+        },
+        "tabpfn": {
+          "games": 1123,
+          "brier": 0.20783111113588396,
+          "log_loss": 0.6016636581303022,
+          "roc_auc": 0.7303053606331508,
+          "accuracy": 0.667853962600178,
+          "mean_home_probability": 0.5604500965226047,
+          "observed_home_win_rate": 0.5503116651825467
+        },
+        "rich_gradient_boosting": {
+          "games": 1123,
+          "brier": 0.21033159095929999,
+          "log_loss": 0.6083951196116204,
+          "roc_auc": 0.7236950879553975,
+          "accuracy": 0.6687444345503116,
+          "mean_home_probability": 0.5560818915870105,
+          "observed_home_win_rate": 0.5503116651825467
+        }
+      },
+      "uncertainty": {
+        "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+        "replicates": 2000,
+        "days": 152,
+        "seed": 230,
+        "reference": "tabpfn",
+        "brier_intervals": {
+          "combined": [
+            0.19680935450594364,
+            0.21917154284841428
+          ],
+          "tabpfn": [
+            0.19658357625401718,
+            0.21897676844621627
+          ],
+          "rich_gradient_boosting": [
+            0.20084574858274296,
+            0.2200654510169394
+          ]
+        },
+        "difference_vs_reference": {
+          "combined": [
+            -0.00024320762132291548,
+            0.0006063252009239696
+          ],
+          "rich_gradient_boosting": [
+            -0.00014827400709847,
+            0.005122232308643289
+          ]
+        },
+        "limitations": "Conditional on the fitted models; no training uncertainty or dependence across days"
+      },
+      "primary_comparison": {
+        "brier_difference": 0.00018581463343383953,
+        "difference_95_interval": [
+          -0.00024320762132291548,
+          0.0006063252009239696
+        ]
+      },
+      "complete_audit_path": "data/processed/tabpfn/adaptation/combined/run.json",
+      "complete_audit_sha256": "2352a0a5f3b3d2d1f7ed6873d7a6080959dfe84fa87ef38e6f94da718d5832ee"
+    }
+  },
+  "report_scope": "Summary; complete membership and training provenance remain in the hash-bound local run artifacts."
+}

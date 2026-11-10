@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "region": "us-west-2",
+  "stack_name": "cs230-train-pilot-20261108",
+  "bucket": null,
+  "prefix": "train/pilot-20261108",
+  "ami_ssm_parameter": "/aws/service/deeplearning/ami/x86_64/base-oss-nvidia-driver-gpu-ubuntu-22.04/latest/ami-id",
+  "subnet_id": null,
+  "security_group_ids": [],
+  "jobs": {
+    "smoke": {"role": "forecaster", "instance_type": "g6e.2xlarge", "max_minutes": 60, "volume_gb": 200},
+    "research": {"role": "researcher", "instance_type": "g6e.2xlarge", "max_minutes": 240, "volume_gb": 250},
+    "train": {"role": "forecaster", "instance_type": "g6e.2xlarge", "max_minutes": 60, "volume_gb": 200}
+  },
+  "note": "bucket: DECISION NEEDED. The IAM stack restricts artifacts to its ArtifactBucketName parameter in Oregon; create that bucket (or read the parameter from the stack) and enter it here. Instance profiles are /cs230/ profiles from the stack. max_minutes arms an on-instance shutdown that terminates the instance."
+}

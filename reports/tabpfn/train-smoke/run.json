@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "stage": "train-smoke",
+  "status": "complete",
+  "created_at_utc": "2026-11-09T05:04:03.677602+00:00",
+  "execution_platform": "local",
+  "runtime_seconds": 2.473707541124895,
+  "attempts": 1,
+  "context_audit": {
+    "submitted_rows": 14,
+    "model_n_train_samples": 14,
+    "subsample_samples": null,
+    "row_subsampling_applied": false
+  },
+  "manifest_sha256": "fe93cb14c7d4997b2c18baff7cd7acab73e9ace5fb839463e5dc278f66bf7814",
+  "artifact_sha256": {
+    "predictions.csv": "1b6daad8adcd9415058d8cbcd5ddaa85642ffed41f8c706d15365c95818b8c3a"
+  },
+  "model": {
+    "package_version": "9.2.0",
+    "version": "v2.5",
+    "repository": "Prior-Labs/tabpfn_2_5",
+    "revision": "6c45f3a6d0d07c6c5f62572e04a0c2929de91b8b",
+    "filename": "tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
+    "checkpoint_path": "data/models/tabpfn/tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
+    "sha256": "2d0fbd257a5a274f2a219836d5a68e9c27224845936b4685d85dd42e2b8092aa",
+    "max_context_rows": 50000,
+    "device": "mps",
+    "n_estimators": 4
+  },
+  "model_parameters": {
+    "random_state": 230,
+    "fit_mode": "fit_preprocessors",
+    "n_preprocessing_jobs": 1,
+    "memory_saving_mode": "auto",
+    "inference_config": {
+      "SUBSAMPLE_SAMPLES": null
+    }
+  },
+  "versions": {
+    "tabpfn": "9.2.0",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "scikit-learn": "1.9.1"
+  },
+  "metrics": {
+    "tabpfn": {
+      "games": 18,
+      "brier": 0.38239223525289134,
+      "log_loss": 1.169919280114999,
+      "roc_auc": 0.5694444444444444,
+      "accuracy": 0.6111111111111112,
+      "mean_home_probability": 0.6969445322950681,
+      "observed_home_win_rate": 0.3333333333333333
+    },
+    "rich_gradient_boosting": {
+      "games": 18,
+      "brier": 0.3673469387755103,
+      "log_loss": 0.9473327245373162,
+      "roc_auc": 0.5,
+      "accuracy": 0.3333333333333333,
+      "mean_home_probability": 0.7142857142857142,
+      "observed_home_win_rate": 0.3333333333333333
+    }
+  },
+  "uncertainty": {
+    "method": "paired ET-calendar-day cluster bootstrap, percentile 95% interval",
+    "replicates": 2000,
+    "days": 3,
+    "seed": 230,
+    "reference": "rich_gradient_boosting",
+    "brier_intervals": {
+      "tabpfn": [
+        0.37885618297588763,
+        0.38524653628081396
+      ],
+      "rich_gradient_boosting": [
+        0.25306122448979596,
+        0.4566326530612244
+      ]
+    },
+    "difference_vs_reference": {
+      "tabpfn": [
+        -0.07138611678041046,
+        0.12579495848609168
+      ]
+    },
+    "limitations": "Conditional on the fitted models; no training uncertainty or dependence across days"
+  },
+  "primary_comparison": {
+    "brier_difference": 0.015045296477381065,
+    "difference_95_interval": [
+      -0.07138611678041046,
+      0.12579495848609168
+    ]
+  },
+  "interpretation": "TRAIN diagnostic only; not generalization evidence"
+}

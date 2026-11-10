@@ -5,3 +5,5 @@ __pycache__/
 .env.*
 # Local data (a directory, or a link to the main checkout's data)
 /data
+# Pilot runs: outcomes, teacher answers and bundles stay local / in S3
+/runs

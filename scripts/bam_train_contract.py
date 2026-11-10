@@ -16,12 +16,16 @@ from pathlib import Path
 import re
 from zoneinfo import ZoneInfo
 
+import bam_concepts as concepts
 import bam_research as research
 import bam_training as training
 from run_gradient_boosting import CONFIG_PATH, FEATURE_NAMES
 
 
 FILES = ("inputs_train.jsonl", "outcomes_train.jsonl", "gold_train.jsonl")
+# Schema 2 bundles add training-only teacher concept labels for the concept-bottleneck head.
+CONCEPT_FILE = "concepts_train.jsonl"
+CONCEPT_KEYS = {"game_id", "split", "concept_pool_sha256", "created_at_utc", "request", "candidate"}
 # TRAIN seasons come from the fixed split in config/gradient_boosting.json; a season
 # starting in year Y runs from July 1 of Y to June 30 of Y + 1.
 _TRAIN_SEASONS = json.loads(CONFIG_PATH.read_text())["split_seasons"]["train"]
@@ -346,15 +350,19 @@ def validate_accepted_gold(gold, row):
 
 
 def validate_manifest(manifest):
-    _keys(manifest, {"schema_version", "phase", "pilot", "game_ids", "artifacts",
-                     "snapshot_manifest_sha256", "created_at_utc"}, "TRAIN manifest")
-    require(manifest["schema_version"] == 1 and manifest["phase"] == "train_only" and type(manifest["pilot"]) is bool,
+    base = {"schema_version", "phase", "pilot", "game_ids", "artifacts", "snapshot_manifest_sha256", "created_at_utc"}
+    version = manifest.get("schema_version") if isinstance(manifest, dict) else None
+    require(version in (1, 2), "Unknown TRAIN manifest schema")
+    _keys(manifest, base | ({"concept_pool_sha256"} if version == 2 else set()), "TRAIN manifest")
+    require(manifest["phase"] == "train_only" and type(manifest["pilot"]) is bool,
             "Explicit TRAIN-only manifest required")
     ids = manifest["game_ids"]
     require(isinstance(ids, list) and ids and all(isinstance(gid, str) and gid for gid in ids) and len(ids) == len(set(ids)),
             "Distinct TRAIN game IDs required")
     require(not manifest["pilot"] or 16 <= len(ids) <= 32, "Pilot requires 16–32 TRAIN games")
-    _keys(manifest["artifacts"], set(FILES), "TRAIN artifact filename")
+    _keys(manifest["artifacts"], set(FILES) | ({CONCEPT_FILE} if version == 2 else set()), "TRAIN artifact filename")
+    if version == 2:
+        _digest(manifest["concept_pool_sha256"], "Concept pool")
     for digest in manifest["artifacts"].values():
         _digest(digest, "TRAIN artifact")
     _digest(manifest["snapshot_manifest_sha256"], "Original audited snapshot")
@@ -401,6 +409,44 @@ def load_bundle(directory, expected_manifest_sha256, *, require_all_gold=True):
         require(sha256(content) == manifest["artifacts"][name], "Frozen TRAIN artifact changed: " + name)
         rows.append([json.loads(line) for line in content.splitlines() if line.strip()])
     return validate_bundle(manifest, *rows, require_all_gold=require_all_gold)
+
+
+def validate_concept_record(record, row, gold, taxonomy):
+    """Teacher concept labels: rebuilt from the accepted gold task, citations checked against pregame lines."""
+    _keys(record, CONCEPT_KEYS, "concept label record")
+    require(record["game_id"] == row["game_id"] == gold["game_id"] and record["split"] == "train",
+            "Concept labels must match the TRAIN game and its gold")
+    require(record["concept_pool_sha256"] == concepts.pool_sha256(taxonomy), "Concept labels use a different concept pool")
+    require(research.timestamp(record["created_at_utc"]) >= research.timestamp(gold["created_at_utc"]),
+            "Concept labels must follow the accepted gold they derive from")
+    request, candidate = record["request"], record["candidate"]
+    _intact(request, "request_id"); _intact(candidate)
+    require(request == concepts.build_concept_request(gold["teacher_request"], taxonomy, max_tokens=request.get("max_tokens")),
+            "Concept task differs from the canonical task derived from accepted gold")
+    rebuilt = concepts.ingest_concept_response(request, candidate["raw_response"], _game(row), candidate["model"], taxonomy,
+                                               finish_reason=candidate["finish_reason"])
+    require(candidate == rebuilt and candidate["status"] == "mechanically_valid", "Invalid or changed concept labels")
+    return record
+
+
+def load_concepts(directory, manifest, rows, gold, taxonomy):
+    """Open the schema-2 concept file after the base bundle; returns game_id -> normalized labels."""
+    require(manifest.get("schema_version") == 2, "Concept training requires a schema-2 TRAIN bundle")
+    require(manifest["concept_pool_sha256"] == concepts.pool_sha256(taxonomy), "Bundle concept pool differs from the pinned taxonomy")
+    path = Path(directory).resolve() / CONCEPT_FILE
+    require(not path.is_symlink(), "TRAIN artifact symlinks are forbidden")
+    content = path.read_bytes()
+    require(sha256(content) == manifest["artifacts"][CONCEPT_FILE], "Frozen TRAIN artifact changed: " + CONCEPT_FILE)
+    records = [json.loads(line) for line in content.splitlines() if line.strip()]
+    by_row = {row["game_id"]: row for row in rows}
+    labels = {}
+    for record in records:
+        game_id = record.get("game_id")
+        require(game_id in by_row and game_id in gold and game_id not in labels, "Concept labels need a unique TRAIN game with accepted gold")
+        validate_concept_record(record, by_row[game_id], gold[game_id], taxonomy)
+        labels[game_id] = record["candidate"]["output"]
+    require(not manifest["pilot"] or set(labels) == set(by_row), "Every pilot game needs concept labels")
+    return labels
 
 
 def write_immutable(path, value):

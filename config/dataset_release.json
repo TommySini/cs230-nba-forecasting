@@ -1,0 +1,146 @@
+{
+  "bundles": {
+    "processed": {
+      "archives": [
+        {
+          "bytes": 521831034,
+          "files": 29,
+          "name": "nba-processed.tar.gz",
+          "sha256": "69706fb6d74b8eeed37edbaad2abed46fa5dccdccdcfeb64db1b0bc65ed864eb",
+          "unpacked_bytes": 570867250,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-processed.tar.gz"
+        }
+      ],
+      "description": "Frozen shared Parquet tables, provenance, saved boosting model and run records."
+    },
+    "raw": {
+      "archives": [
+        {
+          "bytes": 185269097,
+          "files": 14902,
+          "name": "nba-raw-001.tar.gz",
+          "sha256": "778813236c7add434cb418e9de00e3180b362e05ece2dd7252b78606f943cbd6",
+          "unpacked_bytes": 1499997106,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-001.tar.gz"
+        },
+        {
+          "bytes": 186104313,
+          "files": 8190,
+          "name": "nba-raw-002.tar.gz",
+          "sha256": "b3cb46b9c98d95a4339a6e4ea4cc1b7262d77d74abb3f381d79b415762cd6d9f",
+          "unpacked_bytes": 1499958871,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-002.tar.gz"
+        },
+        {
+          "bytes": 185896787,
+          "files": 8172,
+          "name": "nba-raw-003.tar.gz",
+          "sha256": "9037fb79f0b7a7c69b1715cbce832a789bbf3838cacabf726e7f83ac15f7be26",
+          "unpacked_bytes": 1499643785,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-003.tar.gz"
+        },
+        {
+          "bytes": 185981495,
+          "files": 8162,
+          "name": "nba-raw-004.tar.gz",
+          "sha256": "cb1cd7c9002ecc9341e73cfae8916e680821b5e1d30ab7018fcd8a598e0aa8f6",
+          "unpacked_bytes": 1499704070,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-004.tar.gz"
+        },
+        {
+          "bytes": 202700562,
+          "files": 6730,
+          "name": "nba-raw-005.tar.gz",
+          "sha256": "d604097c00c22f114a6138af9bd99916b370a6a6a1c06f6284ea2fa3d652115e",
+          "unpacked_bytes": 1499876025,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-005.tar.gz"
+        },
+        {
+          "bytes": 1112801071,
+          "files": 1519,
+          "name": "nba-raw-006.tar.gz",
+          "sha256": "2e0f329b7585ac39f30befb655fbd8890a29da6b40420d824dc79e8924cd88d0",
+          "unpacked_bytes": 1494831529,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-006.tar.gz"
+        },
+        {
+          "bytes": 1157562204,
+          "files": 1356,
+          "name": "nba-raw-007.tar.gz",
+          "sha256": "55f2f88ac822a5b2be4b8d77e56a138c349badd4e48888b06f050e674add6648",
+          "unpacked_bytes": 1495959428,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-007.tar.gz"
+        },
+        {
+          "bytes": 1176361205,
+          "files": 1313,
+          "name": "nba-raw-008.tar.gz",
+          "sha256": "515ab15a4595465a85a60d05e1660eea3ee53de2bdd7fff27aa684ef9d9908c0",
+          "unpacked_bytes": 1497308187,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-008.tar.gz"
+        },
+        {
+          "bytes": 1170639971,
+          "files": 1343,
+          "name": "nba-raw-009.tar.gz",
+          "sha256": "15ba2632d4ef8474a606f837e072f2cea7c8edede066d5d2968acb19876257d3",
+          "unpacked_bytes": 1497530790,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-009.tar.gz"
+        },
+        {
+          "bytes": 1195356768,
+          "files": 2315,
+          "name": "nba-raw-010.tar.gz",
+          "sha256": "3fc38c4221707316c900afe5b6bc95d7d80975207d229658ace4dd9999e44cbc",
+          "unpacked_bytes": 1498669511,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-010.tar.gz"
+        },
+        {
+          "bytes": 721536341,
+          "files": 7895,
+          "name": "nba-raw-011.tar.gz",
+          "sha256": "e65266871f6696220874eca2316a198c4370bb4343cff98af3e9332f55304fcb",
+          "unpacked_bytes": 1499282242,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-011.tar.gz"
+        },
+        {
+          "bytes": 212351587,
+          "files": 4098,
+          "name": "nba-raw-012.tar.gz",
+          "sha256": "feb9d50782169f7fd8040956741fe95ba024ea419cf635a9eddb47800ae2cfeb",
+          "unpacked_bytes": 1499565657,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-012.tar.gz"
+        },
+        {
+          "bytes": 211609393,
+          "files": 4116,
+          "name": "nba-raw-013.tar.gz",
+          "sha256": "6a4d0bd7075b64d09b58965493941f321a45fb959f8271b2bd72e1c7a4c4b57c",
+          "unpacked_bytes": 1499781339,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-013.tar.gz"
+        },
+        {
+          "bytes": 212323493,
+          "files": 4142,
+          "name": "nba-raw-014.tar.gz",
+          "sha256": "80d1b831bc9a0aae5d1a9522bec6e924aab069ac1eb24bdb80d1a0c02018dabc",
+          "unpacked_bytes": 1499968013,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-014.tar.gz"
+        },
+        {
+          "bytes": 28132939,
+          "files": 546,
+          "name": "nba-raw-015.tar.gz",
+          "sha256": "16669c37293478fdc9d110ff5027374d403293c88e445215c8573c9d77676721",
+          "unpacked_bytes": 199425061,
+          "url": "https://github.com/TommySini/cs230-nba-forecasting/releases/download/nba-data-4e5ba4eb0554/nba-raw-015.tar.gz"
+        }
+      ],
+      "description": "Optional original source bodies and metadata, in canonical grouped paths; required for offline source replay."
+    }
+  },
+  "dataset_id": "4e5ba4eb05544f07f2806ae47d03761bf4e701e254543145299a59f99e9474ca",
+  "release": "nba-data-4e5ba4eb0554",
+  "repository": "TommySini/cs230-nba-forecasting",
+  "schema_version": 1
+}

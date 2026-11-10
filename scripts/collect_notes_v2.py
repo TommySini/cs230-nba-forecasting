@@ -25,33 +25,101 @@ import http.client
 import io
 import json
 import re
+from pathlib import Path
+import shutil
 import time
 import unicodedata
 import urllib.error
 import urllib.request
 
-from collect_pilot import Cache, ROOT, iso, stamp, write_json, write_jsonl
+from collect_pilot import Cache, ROOT, iso, stamp, write_json
 from postgame_screen import postgame_flags
 
 CONFIG_PATH = ROOT / "config/notes_v2.json"
-DATA = ROOT / "data/processed/notes_v2"
+DATA = ROOT / "data/processed"
 REPORT = ROOT / "reports/notes_v2"
 REPLAY = re.compile(r"https://web\.archive\.org/web/(\d{14})id_/(.+)")
 DATED_NAME = re.compile(r"/(\d{6})-([a-z]{2,4})([a-z]{3})-notes\.pdf$")
 
 
 def read_rows(path):
+    path = Path(path)
+    audit = path.parent / "note_audit.json"
+    if audit.exists() and path.stem in {"candidates", "documents", "approved", "html_posts"}:
+        rows = json.loads(audit.read_text())[path.stem]
+        if path.stem == "html_posts":
+            texts = note_texts(path.parent)
+            return [{**{k: v for k, v in row.items() if k != "text_id"}, "text": texts[row["text_id"]]}
+                    for row in rows]
+        return rows
     with open(path) as handle:
         return [json.loads(line) for line in handle if line.strip()]
+
+
+def note_texts(directory=DATA):
+    from nba_dataset import read_rows as table_rows
+    return {row["text_path"]: row["text"] for row in table_rows(Path(directory) / "note_texts.parquet")}
+
+
+def note_text(document, directory=DATA, root=ROOT, texts=None):
+    if (Path(directory) / "note_texts.parquet").exists():
+        values = note_texts(directory) if texts is None else texts
+        return values[document["text_path"]]
+    return (Path(root) / document["text_path"]).read_text()
+
+
+def save_record_set(name, rows):
+    """Keep collector decisions as audit metadata, with extracted text stored once."""
+    import pyarrow as pa
+    from nba_dataset import write_table
+    path = DATA / "note_audit.json"
+    audit = json.loads(path.read_text()) if path.exists() else {}
+    if name == "html_posts":
+        texts = note_texts(DATA) if (DATA / "note_texts.parquet").exists() else {}
+        records = []
+        for post in rows:
+            text = post["text"]
+            key = "html-post:" + hashlib.sha256((post["permalink"] + text).encode()).hexdigest()
+            texts[key] = text
+            records.append({**{k: v for k, v in post.items() if k != "text"}, "text_id": key})
+        rows = records
+        write_table(DATA / "note_texts.parquet", [
+            {"text_path": key, "text": text, "sha256": hashlib.sha256(text.encode()).hexdigest()}
+            for key, text in texts.items()], schema=pa.schema([
+                ("text_path", pa.string()), ("text", pa.large_string()), ("sha256", pa.string())]))
+    audit[name] = rows
+    write_json(path, audit)
+
+
+def compact_review_texts():
+    import pyarrow as pa
+    from nba_dataset import write_table
+    temporary = DATA / ".note-extraction"
+    texts = note_texts(DATA) if (DATA / "note_texts.parquet").exists() else {}
+    for path in temporary.glob("*.txt"):
+        texts[str(path.relative_to(ROOT))] = path.read_bytes().decode("utf-8")
+    write_table(DATA / "note_texts.parquet", [
+        {"text_path": key, "text": text, "sha256": hashlib.sha256(text.encode()).hexdigest()}
+        for key, text in texts.items()], schema=pa.schema([
+            ("text_path", pa.string()), ("text", pa.large_string()), ("sha256", pa.string())]))
+    if temporary.exists():
+        shutil.rmtree(temporary)
 
 
 def utc(timestamp14):
     return datetime.strptime(timestamp14, "%Y%m%d%H%M%S").replace(tzinfo=timezone.utc)
 
 
-def load_history(config):
+def load_history(config, directory=None):
     games, teams = {}, set(config["slugs"].values())
-    for path in config["history_paths"]:
+    directory = Path(directory) if directory is not None else ROOT / config.get("dataset_path", "data/processed")
+    if (directory / "games.parquet").exists():
+        from nba_dataset import Dataset
+        return [game for game in Dataset(ROOT, processed_dir=directory).history()
+                if {game["home_abbr"], game["away_abbr"]} <= teams]
+    if not config.get("history_paths"):
+        raise FileNotFoundError("Shared game history is required before collecting notes")
+    for path in config.get("history_paths", []):
         if not (ROOT / path).exists():
             print(f"Missing history {path}; matching without it", flush=True)
             continue
@@ -95,7 +163,8 @@ def fetch_cdx(cache, config):
     """Archive listings: saved snapshots (with checksum) plus any live CDX queries."""
     rows = []
     for snapshot in config.get("cdx_snapshots", []):
-        path = ROOT / snapshot["path"]
+        from nba_dataset import resolve_source_path
+        path = resolve_source_path(ROOT, snapshot["path"])
         parsed = json.loads(path.read_text())
         source = {"path": snapshot["path"], "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
         rows += [dict(zip(parsed[0], r), cdx_source=source) for r in parsed[1:]]
@@ -201,7 +270,12 @@ def match_dated(captures, history, config):
 # ---------------------------------------------------------------- fetch
 
 def replay_path(url):
-    return ROOT / "data/raw/archive_versions" / hashlib.sha256(url.encode()).hexdigest()[:24]
+    from nba_dataset import remap_raw_path
+    relative = "data/raw/archive_versions/" + hashlib.sha256(url.encode()).hexdigest()[:24]
+    path = ROOT / remap_raw_path(relative)
+    if not path.parent.exists() and (ROOT / relative).parent.exists():
+        return ROOT / relative
+    return path
 
 
 def fetch_replay(url, config):
@@ -391,7 +465,8 @@ def header_checks(front, game, publisher, before, config):
 
 def pdf_pages(raw_path):
     from pypdf import PdfReader
-    body = (ROOT / raw_path).read_bytes()
+    from nba_dataset import resolve_source_path
+    body = resolve_source_path(ROOT, raw_path).read_bytes()
     body = gzip.decompress(body) if body.startswith(b"\x1f\x8b") else body
     if not body.startswith(b"%PDF"):
         raise ValueError("not a PDF")
@@ -416,8 +491,10 @@ def provenance(candidate, config):
     """Raw path plus the evidence that the bytes existed before the cutoff, or None."""
     cutoff = stamp(candidate["cutoff_utc"])
     if candidate["kind"] == "dated_live":
-        meta_path = ROOT / "data/raw/team_notes" / (hashlib.sha256(candidate["url"].encode()).hexdigest()[:24] + ".meta.json")
-        if not meta_path.exists():
+        from nba_dataset import resolve_source_path
+        try:
+            meta_path = resolve_source_path(ROOT, "data/raw/team_notes/" + hashlib.sha256(candidate["url"].encode()).hexdigest()[:24] + ".meta.json")
+        except FileNotFoundError:
             return None, "not_fetched"
         meta = json.loads(meta_path.read_text())
         if meta.get("status") != 200 or not meta.get("last_modified"):
@@ -451,7 +528,7 @@ def review(candidates, posts, history, config):
         source, problem = provenance(c, config)
         doc = dict(c, source=source, reasons=[problem] if problem else [])
         if source:
-            doc["text_path"] = f"data/processed/notes_v2/texts/{c['game_id'].split(':')[-1]}-{c['team']}-{source['sha256'][:12]}.txt"
+            doc["text_path"] = f"data/processed/.note-extraction/{c['game_id'].split(':')[-1]}-{c['team']}-{source['sha256'][:12]}.txt"
             jobs.append((source["raw_path"], doc["text_path"]))
         docs.append(doc)
     with ProcessPoolExecutor(max_workers=8) as pool:
@@ -481,7 +558,7 @@ def review(candidates, posts, history, config):
             continue
         cutoff = cutoff_of(game, config)
         doc.update(game_id=game["game_id"], cutoff_utc=iso(cutoff),
-                   text_path=f"data/processed/notes_v2/texts/{game['game_id'].split(':')[-1]}-{post['team']}-html.txt")
+                   text_path=f"data/processed/.note-extraction/{game['game_id'].split(':')[-1]}-{post['team']}-html.txt")
         (ROOT / doc["text_path"]).parent.mkdir(parents=True, exist_ok=True)
         (ROOT / doc["text_path"]).write_text(post["text"])
         reasons = [] if stamp(post["published_utc"]) <= cutoff else ["published_after_cutoff"]
@@ -545,6 +622,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--stage", choices=("index", "fetch", "review", "all"), default="all")
     args = parser.parse_args()
+    if (DATA / "manifest.json").exists():
+        parser.error("The shared dataset is frozen. Collect new sources into a separately reviewed staging dataset.")
     config = json.loads(CONFIG_PATH.read_text())
     history = load_history(config)
     DATA.mkdir(parents=True, exist_ok=True)
@@ -554,21 +633,25 @@ def main():
         rolling = match_rolling(rolling_versions(captures, config), history, config)
         dated, live = match_dated(captures, history, config)
         candidates = rolling + dated + live
-        write_jsonl(DATA / "candidates.jsonl", candidates)
+        save_record_set("candidates", candidates)
         print(f"{len(captures)} archive captures; {len(rolling)} rolling, {len(dated)} dated archive and "
               f"{len(live)} dated CDN candidates", flush=True)
     candidates = read_rows(DATA / "candidates.jsonl")
     if args.stage in ("fetch", "all"):
         if not fetch_all(candidates, config):
             return
-        write_jsonl(DATA / "html_posts.jsonl", fetch_html_posts(config))
+        save_record_set("html_posts", fetch_html_posts(config))
     if args.stage in ("review", "all"):
-        posts = read_rows(DATA / "html_posts.jsonl") if (DATA / "html_posts.jsonl").exists() else []
+        audit = json.loads((DATA / "note_audit.json").read_text())
+        posts = read_rows(DATA / "html_posts.jsonl") if "html_posts" in audit else []
         docs = review(candidates, posts, history, config)
         approved = choose(docs)
-        write_jsonl(DATA / "documents.jsonl", docs)
-        write_jsonl(DATA / "approved.jsonl", approved)
-        print(json.dumps(write_report(docs, approved, history), indent=1), flush=True)
+        compact_review_texts()
+        save_record_set("documents", docs)
+        save_record_set("approved", approved)
+        summary = write_report(docs, approved, history)
+        save_record_set("review_summary", summary)
+        print(json.dumps(summary, indent=1), flush=True)
 
 
 if __name__ == "__main__":

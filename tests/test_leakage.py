@@ -1,5 +1,8 @@
 """Regression checks for temporal leakage and historical-source mislabeling."""
 import copy
+import contextlib
+import io
+import json
 import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -8,6 +11,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from collect_pilot import parse_injury_pages, prior_features, preview_decision, get_injuries, stamp, sample_windows, select_sample, output_paths, collect_games
+import collect_pilot
 
 
 class LeakageTests(unittest.TestCase):
@@ -17,6 +21,43 @@ class LeakageTests(unittest.TestCase):
                      "home_team": "Boston Celtics", "away_team": "New York Knicks",
                      "home_score": 110, "away_score": 100}
         self.cutoff = stamp("2024-11-03T23:00:00Z")
+
+    def test_collection_refuses_shared_or_nonempty_output_before_fetching(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "config.json").write_text(json.dumps({"output_name": "pilot"}))
+            occupied = root / "candidate"
+            occupied.mkdir()
+            (occupied / "existing").write_bytes(b"keep")
+            for destination in (root / "data/processed", occupied):
+                with self.subTest(destination=destination), patch("collect_pilot.ROOT", root), patch(
+                    "sys.argv", ["collect_pilot.py", "--config", "config.json", "--output", str(destination)]
+                ), patch("collect_pilot.Cache") as cache, contextlib.redirect_stderr(io.StringIO()):
+                    with self.assertRaises(SystemExit) as error:
+                        collect_pilot.main()
+                    self.assertEqual(error.exception.code, 2)
+                    cache.assert_not_called()
+            self.assertEqual((occupied / "existing").read_bytes(), b"keep")
+
+    def test_schedule_collection_separates_results_from_pregame_catalog(self):
+        import pyarrow.parquet as pq
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "config.json").write_text(json.dumps({"output_name": "pilot"}))
+            destination = root / "candidate"
+            with patch("collect_pilot.ROOT", root), patch(
+                "sys.argv", ["collect_pilot.py", "--config", "config.json", "--stage", "schedules", "--output", str(destination)]
+            ), patch("collect_pilot.Cache"), patch("collect_pilot.collect_games", return_value=[self.game]), patch(
+                "collect_pilot.select_sample", return_value=[self.game]
+            ), contextlib.redirect_stdout(io.StringIO()):
+                collect_pilot.main()
+            for name in ("games", "sample_manifest"):
+                rows = pq.read_table(destination / f"{name}.parquet").to_pylist()
+                self.assertEqual(rows[0]["game_id"], self.game["game_id"])
+                self.assertNotIn("home_score", rows[0])
+                self.assertNotIn("away_score", rows[0])
+            self.assertEqual(pq.read_table(destination / "outcomes.parquet").to_pylist(), [
+                {"game_id": self.game["game_id"], "home_score": 110, "away_score": 100, "home_win": 1}])
 
     def test_future_and_target_outcomes_do_not_change_features(self):
         prior = dict(self.game, game_id="espn:1", game_date_et="2024-11-01", home_score=90, away_score=100)

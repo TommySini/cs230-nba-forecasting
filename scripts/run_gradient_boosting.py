@@ -35,7 +35,8 @@ from collect_pilot import ABBR, ROOT, Cache, collect_games, iso, prior_features,
 from collect_rich_stats import NBA_FRANCHISES
 
 CONFIG_PATH = ROOT / "config/gradient_boosting.json"
-DATA_DIR = ROOT / "data/processed/gradient_boosting"
+DATA_DIR = ROOT / "data/processed"
+MODEL_PATH = ROOT / "data/models/gradient_boosting/model.joblib"
 REPORT_DIR = ROOT / "reports/gradient_boosting"
 SPLITS = ("train", "dev", "test")
 SIDES = ("home", "away")
@@ -85,13 +86,18 @@ def load_verified_history(config):
     ESPN labels All-Star exhibitions as regular season; a saved history may already omit
     them (history_2012 does). They are dropped here in any case.
     """
+    from nba_dataset import Dataset, remap_paths
+    dataset = Dataset(ROOT, ROOT / config.get("dataset_dir", "data/processed"))
     history = []
-    for source in config["histories"]:
-        rows = read_rows(ROOT / source["path"])
+    for config_name in config["history_configs"]:
+        source_config = json.loads((ROOT / config_name).read_text())
+        seasons = [s["start_year"] for s in source_config["seasons"]]
+        rows = dataset.history(seasons=seasons)
         with redirect_stdout(io.StringIO()):
-            verified = collect_games(Cache(offline=True), json.loads((ROOT / source["config"]).read_text()))
-        if rows != verified and rows != [g for g in verified if franchise_game(g)]:
-            raise ValueError(f"{source['path']} does not match its checksum-verified schedule cache")
+            verified = collect_games(Cache(offline=True), source_config)
+        if sorted(rows, key=lambda r: r["game_id"]) != sorted(
+                [remap_paths(g) for g in verified if franchise_game(g)], key=lambda r: r["game_id"]):
+            raise ValueError(f"Shared games do not match the checksum-verified schedule cache: {config_name}")
         history += rows
     if len({game["game_id"] for game in history}) != len(history):
         raise ValueError("Duplicate historical game IDs")
@@ -99,11 +105,9 @@ def load_verified_history(config):
 
 
 def load_box_scores(config):
-    directory = ROOT / config["box_scores"]
-    manifest = json.loads((directory / "manifest.json").read_text())
-    if sha256(directory / "games.jsonl") != manifest["artifact_sha256"]["games.jsonl"]:
-        raise ValueError("Box-score records differ from their manifest")
-    return read_rows(directory / "games.jsonl"), manifest
+    from nba_dataset import Dataset
+    dataset = Dataset(ROOT, ROOT / config.get("dataset_dir", "data/processed"))
+    return dataset.box_scores(), dataset.manifest["legacy_records"]["data/processed/box_scores/manifest.json"]
 
 
 def prepare_examples(history, box_records, config):
@@ -264,10 +268,19 @@ def coverage_by_season(history, box_records, inputs, excluded, config):
 
 
 def run(config, jobs):
+    from nba_dataset import Dataset, store_predictions
+    if (ROOT / config["dataset_dir"]).resolve() != (ROOT / "data/processed").resolve():
+        raise ValueError("Training writes to the published shared dataset; staged datasets are validation-only")
+    if MODEL_PATH.exists() or (REPORT_DIR / "metrics.json").exists():
+        raise ValueError("A completed boosting run already exists; validate it instead of overwriting it")
     started = time.time()
-    history = load_verified_history(config)
+    dataset = Dataset(ROOT, ROOT / config["dataset_dir"])
+    dataset.verify()
+    history = dataset.history()
     box_records, box_manifest = load_box_scores(config)
-    inputs, labels, excluded = prepare_examples(history, box_records, config)
+    inputs = dataset.inputs()
+    labels = dataset.labels(SPLITS)
+    excluded = dataset.excluded()
     print(f"Prepared {len(inputs)} eligible games ({len(excluded)} excluded) in {time.time() - started:.0f}s", flush=True)
     x, y = arrays(inputs, labels)
     splits = np.array([r["split"] for r in inputs])
@@ -289,21 +302,20 @@ def run(config, jobs):
               "final": {"model": final, "fit_game_ids": ids[train].tolist(), "selection_game_ids": ids[splits == "dev"].tolist()},
               "prior_seasons": {season: {"model": model, "fit_game_ids": ids[train & (seasons < season)].tolist()}
                                 for season, model in prior.items()}}
-    for name, rows in (("inputs.jsonl", inputs), ("labels.jsonl", labels), ("excluded.jsonl", excluded),
-                       ("predictions.jsonl", predictions)):
-        write_jsonl(DATA_DIR / name, rows)
-    joblib.dump(bundle, DATA_DIR / "model.joblib")
+    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
+    joblib.dump(bundle, MODEL_PATH)
+    store_predictions(ROOT, [{**r, "p_home_win": r["p_boost"]} for r in predictions],
+                      model_id="gradient_boosting", stage="baseline")
     dates = np.array([r["game_date_et"] for r in inputs])
     home_rate, evaluation, train_metrics = evaluate(p, y, splits, seasons, dates, config)
     test = splits == "test"
-    box_dir = ROOT / config["box_scores"]
-    sources = [CONFIG_PATH, box_dir / "manifest.json", box_dir / "games.jsonl", *(ROOT / name for name in CODE)]
-    sources += [ROOT / s[key] for s in config["histories"] for key in ("path", "config")]
+    sources = [CONFIG_PATH, *(ROOT / name for name in CODE)]
     result = {"config": config, "feature_names": list(FEATURE_NAMES), "history_games": len(history),
               "eligible_games": len(inputs), "excluded_games": len(excluded),
               "split_games": {name: int((splits == name).sum()) for name in SPLITS},
               "coverage_by_season": coverage_by_season(history, box_records, inputs, excluded, config),
-              "box_score_source": {"path": config["box_scores"], **{k: box_manifest.get(k) for k in (
+              "dataset_id": dataset.manifest["dataset_id"],
+              "box_score_source": {"path": config["dataset_dir"], **{k: box_manifest.get(k) for k in (
                   "provider_counts", "season_counts", "complete_team_games", "complete_player_games", "failed_games")}},
               "dev_candidates": trials, "selected_candidate_index": best, "selected_parameters": settings,
               "train_home_win_rate": home_rate, "evaluation": evaluation, "train_forecasts": train_metrics,
@@ -312,7 +324,7 @@ def run(config, jobs):
               "versions": {name: version(name) for name in ("numpy", "scipy", "scikit-learn", "joblib")},
               "python_version": platform.python_version(), "runtime_seconds": round(time.time() - started, 1),
               "source_sha256": {str(path.relative_to(ROOT)): sha256(path) for path in sources},
-              "artifact_sha256": {f"data/processed/gradient_boosting/{name}": sha256(DATA_DIR / name) for name in DATA_FILES}}
+              "artifact_sha256": {str(MODEL_PATH.relative_to(ROOT)): sha256(MODEL_PATH)}}
     write_json(REPORT_DIR / "metrics.json", result)
     write_report(result)
     print(json.dumps({name: {k: round(v["brier"], 4) for k, v in e["metrics"].items()} for name, e in evaluation.items()}), flush=True)
@@ -389,9 +401,9 @@ def write_report(result):
               "- Bootstrap intervals are conditional on the fitted models.", "",
               "## Reproduce", "", "```bash", ".venv/bin/python scripts/run_gradient_boosting.py",
               ".venv/bin/python scripts/validate_gradient_boosting.py", "```", "",
-              f"Runtime {result['runtime_seconds']:.0f} s. Inputs, labels, exclusions, predictions (`p_boost`, `produced_by`) and "
-              "`model.joblib` (fit game IDs and settings) are in `data/processed/gradient_boosting/`; full metrics, hashes and "
-              "versions in `metrics.json`.", ""]
+              f"Runtime {result['runtime_seconds']:.0f} s. Shared tables and forecasts are in `data/processed/`; "
+              "the saved model is in `data/models/gradient_boosting/model.joblib`. "
+              "Full metrics, hashes and versions are in `metrics.json`.", ""]
     (REPORT_DIR / "findings.md").write_text("\n".join(lines))
 
 

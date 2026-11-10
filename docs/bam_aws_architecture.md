@@ -46,7 +46,8 @@ generating the full pilot. Keep all pregame evidence, explicit output bounds and
 one GPU worker; do not save cost through silent source truncation. Avoid setting
 up batch infrastructure for the tiny pilot until measured savings justify it.
 Current on-demand N. Virginia prices and access evidence are recorded in
-`reports/aws_setup/20261108/teacher_us_east_1_prices.json` and the setup notes.
+the historical `teacher_us_east_1_prices.json` record referenced in
+[`aws_toolkit_setup.md`](aws_toolkit_setup.md).
 
 ## Data and baseline
 
@@ -97,7 +98,9 @@ TRAIN games with notes and the full 252-feature history (2013–14 to 2023–24)
    statistical features and the compact cited research brief. It does not receive
    a postmortem, gold text, target outcome or raw source response. Its transformer
    forms a numerical representation `h` of that pregame input.
-6. A zero-initialized linear head computes `delta = w^T h + b` and returns
+6. (Superseded for the concept pilot by [`bam/concept_bottleneck.md`](bam/concept_bottleneck.md):
+   `h` feeds 20 named concept scores and an MLP with a zero-initialized output layer.)
+   A zero-initialized linear head computes `delta = w^T h + b` and returns
    `sigmoid(logit(p_boost) + delta)`. Thus the initial prediction exactly matches
    boosting. Changes are learned from outcomes, not manually assigned to claims.
 

@@ -23,7 +23,7 @@ import threading
 import time
 import unicodedata
 
-from collect_pilot import ABBR, Cache, ROOT, iso, stamp, write_json, write_jsonl
+from collect_pilot import ABBR, Cache, ROOT, iso, stamp, write_json
 
 SCHEMA_VERSION = "rich-stats-v2"
 COUNTERS = ("fgm", "fga", "fg3m", "fg3a", "ftm", "fta", "oreb", "dreb",
@@ -42,9 +42,7 @@ PLAYER_NAMES = {"PTS": "pts", "REB": "reb", "AST": "ast", "TO": "tov",
 CROSS_CHECKED = {"assists": "ast", "steals": "stl", "blocks": "blk", "turnovers": "tov", "fouls": "pf"}
 LEGACY_REBOUNDS = ("ESPN offensiveRebounds plus defensiveRebounds (player-credited, as in later ESPN "
                    "and NBA.com boxes); ESPN totalRebounds also counted team_rebounds")
-DEFAULT_OUTPUT = ROOT / "data/processed/box_scores"
-DEFAULT_HISTORIES = (ROOT / "data/processed/history_2012/game_history.jsonl",
-                     ROOT / "data/processed/seasonal/game_history.jsonl")
+DEFAULT_DATASET = ROOT / "data/processed"
 NBA_FRANCHISES = frozenset("ATL BOS BKN CHA CHI CLE DAL DEN DET GSW HOU IND LAC LAL MEM MIA MIL MIN NOP NYK OKC ORL PHI PHX POR SAC SAS TOR UTA WAS".split())
 NBA_ABBR = {"NOH": "NOP", "NOK": "NOP", "NJN": "BKN"}
 ESPN_SUMMARY = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event="
@@ -466,15 +464,16 @@ def rebuild_from_record(game, record, root=ROOT):
     root = Path(root).resolve()
 
     def verified(source):
-        path = (root / source["raw_path"]).resolve()
+        from nba_dataset import resolve_source_path, remap_paths
+        path = resolve_source_path(root, source["raw_path"]).resolve()
         if not path.is_relative_to((root / "data/raw").resolve()):
             raise ValueError("Raw source escapes data/raw")
         body = path.read_bytes()
-        meta = json.loads(path.with_suffix(".meta.json").read_text())
+        meta = remap_paths(json.loads(path.with_suffix(".meta.json").read_text()))
         if digest(body) != source["sha256"] or meta.get("status") != 200:
             raise ValueError("Raw source checksum/status mismatch")
         for key in ("sha256", "url", "retrieved_at_utc", "raw_path"):
-            if meta.get(key) != source.get(key):
+            if meta.get(key) != remap_paths(source).get(key):
                 raise ValueError("Raw source metadata differs from normalized provenance")
         return body, meta
 
@@ -534,7 +533,12 @@ class NbaGameIds:
         self.anchors, self.rank_anchors, self.found = defaultdict(dict), defaultdict(dict), {}
         self.probes, self.transport_errors = Counter(), 0
         self.blocked, self.lock = threading.Event(), threading.Lock()
-        for meta_path in sorted((Path(root or ROOT) / "data/raw/rich_stats_nba").glob("*.meta.json")):
+        from nba_dataset import resolve_source_path
+        try:
+            cached = sorted(resolve_source_path(Path(root or ROOT), "data/raw/rich_stats_nba").glob("*.meta.json"))
+        except FileNotFoundError:
+            cached = []
+        for meta_path in cached:
             url = json.loads(meta_path.read_text()).get("url", "")
             if NBA_PAGE.fullmatch(url):
                 body, meta = Cache(offline=True).get(url, "rich_stats_nba", ".html")
@@ -604,13 +608,19 @@ def display_path(path):
     return str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
 
 
-def collect(history_paths, output, *, fetch_missing=False, workers=4, delay=0.35, retries=2, limit=None):
+def collect(history, output, *, source_dataset=None, fetch_missing=False, workers=4, delay=0.35, retries=2, limit=None):
+    """Normalize explicit historical records into unpublished shared box-score tables.
+
+    The caller supplies outcome-bearing source history deliberately. Nothing is
+    written into an existing published dataset, and model features are not rebuilt.
+    """
+    from nba_dataset import write_box_tables, remap_paths
     output = Path(output)
-    histories, games = [], []
-    for path in map(Path, history_paths):
-        body = path.read_bytes()
-        histories.append({"path": display_path(path), "sha256": digest(body)})
-        games += [json.loads(line) for line in body.decode().splitlines()]
+    if output.resolve() == (ROOT / "data/processed").resolve():
+        raise ValueError("Collect into an explicit unpublished staging directory, not the shared dataset")
+    if output.exists() and any(output.iterdir()):
+        raise ValueError("Box-score output must be an empty unpublished staging directory")
+    games = list(history)
     if len({g["game_id"] for g in games}) != len(games):
         raise ValueError("Duplicate history game")
     if limit is not None:
@@ -646,7 +656,7 @@ def collect(history_paths, output, *, fetch_missing=False, workers=4, delay=0.35
             (records if record is not None else failures).append(record or failure)
             if count % 100 == 0 or count == len(games):
                 progress = dict(stage="espn", processed=count, requested=len(games), complete=len(records), failures=len(failures))
-                write_json(output / "progress.json", progress)
+                write_json(output / "box_collection_progress.json", progress)
                 print(json.dumps(progress), flush=True)
 
     # Invalid or empty ESPN boxes are replaced from NBA.com (two threads at most),
@@ -686,22 +696,20 @@ def collect(history_paths, output, *, fetch_missing=False, workers=4, delay=0.35
                 (records if record is not None else failures).append(record or failure)
                 done += 1
             progress = dict(stage="nba", processed=done, requested=len(repairable), complete=len(records), failures=len(failures))
-            write_json(output / "progress.json", progress)
+            write_json(output / "box_collection_progress.json", progress)
             print(json.dumps(progress), flush=True)
 
     records.sort(key=lambda r: (r["scheduled_start_utc"], r["game_id"]))
     failures.sort(key=lambda r: r["game_id"])
-    write_jsonl(output / "games.jsonl", records)
-    write_jsonl(output / "failures.jsonl", failures)
-    write_jsonl(output / "excluded_non_franchise.jsonl", excluded)
+    tables = write_box_tables(output, records)
     incomplete_players = [{"game_id": r["game_id"], "teams": {s: t["player_issues"] for s, t in r["teams"].items()
                            if not t["players_complete"]}} for r in records if not r["players_complete"]]
-    write_jsonl(output / "player_issues.jsonl", incomplete_players)
     repairs = [{"game_id": r["game_id"], "reason": r["provenance"]["rejected_original_reason"],
                 "replacement_source": {k: v for k, v in r["provenance"].items() if k != "identity_mapping_source"},
                 "rejected_numeric_source_retained_for_player_ids": r["provenance"]["identity_mapping_source"]}
                for r in records if r["provenance"]["provider"] == "NBA"]
-    write_jsonl(output / "source_repairs.jsonl", repairs)
+    write_json(output / "box_score_audit.json", remap_paths({"failures": failures, "excluded_non_franchise": excluded,
+                                                           "player_issues": incomplete_players, "source_repairs": repairs}))
     provider_counts = dict(Counter(r["provenance"]["provider"] for r in records))
     seasons = sorted({g["season"] for g in requested})
     count = lambda rows, season: sum(r["season"] == season for r in rows)
@@ -718,22 +726,23 @@ def collect(history_paths, output, *, fetch_missing=False, workers=4, delay=0.35
                 "season_coverage": coverage, "provider_counts": provider_counts,
                 "failure_reasons": dict(Counter(f["reason"] for f in failures)),
                 "nba_page_probes": sum(ids.probes.values()) if ids else 0,
-                "histories": histories,
+                "source_dataset": source_dataset,
                 "normalizer_sha256": digest(Path(__file__).read_bytes()),
-                "artifact_sha256": {name: digest((output / name).read_bytes()) for name in
-                                    ("games.jsonl", "failures.jsonl", "excluded_non_franchise.jsonl", "player_issues.jsonl", "source_repairs.jsonl")},
+                "tables": tables,
+                "artifact_sha256": {path.name: digest(path.read_bytes()) for path in sorted(output.iterdir())
+                                    if path.suffix in (".parquet", ".json")},
                 "normalization": "Numeric counters and historical participant IDs/minutes only. No raw ESPN, narratives, profiles, odds or current availability in outputs.",
                 "rebounds": "reb is player-credited offensive plus defensive rebounds in every record; older ESPN team rebounds are kept separately as team_rebounds where ESPN reported them.",
                 "limitation": "NBA Stats bulk access probe timed out. Sources are ESPN plus verified NBA.com historical box-score replacements for empty or invalid ESPN boxes. Ratings/possessions derived downstream are estimates, not NBA official advanced ratings. Retrospective stat correction timestamps are unknown."}
-    write_json(output / "manifest.json", manifest)
+    write_json(output / "box_collection_manifest.json", manifest)
     print(json.dumps(manifest, indent=2), flush=True)
     return records, failures, manifest
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--history", type=Path, nargs="+", default=list(DEFAULT_HISTORIES))
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--dataset", type=Path, default=DEFAULT_DATASET, help="Shared source dataset supplying verified history")
+    parser.add_argument("--output", type=Path, required=True, help="Empty unpublished directory for normalized shared tables")
     parser.add_argument("--fetch-missing", action="store_true")
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--delay", type=float, default=0.35)
@@ -742,7 +751,14 @@ def main():
     args = parser.parse_args()
     if not 1 <= args.workers <= 4 or args.delay < 0.35 or not 0 <= args.retries <= 3:
         parser.error("Use 1-4 workers, at least 0.35s delay per worker, and 0-3 retries")
-    collect(args.history, args.output, fetch_missing=args.fetch_missing, workers=args.workers,
+    from nba_dataset import Dataset
+    dataset = Dataset(ROOT, args.dataset)
+    history = dataset.history(include_non_franchise=True)
+    source = {"dataset_id": dataset.manifest["dataset_id"], "manifest_path": display_path(args.dataset / "manifest.json"),
+              "manifest_sha256": digest((args.dataset / "manifest.json").read_bytes()),
+              "tables": {name: row["sha256"] for name, row in dataset.manifest["tables"].items()
+                         if name == "games" or name.startswith("labels_")}}
+    collect(history, args.output, source_dataset=source, fetch_missing=args.fetch_missing, workers=args.workers,
             delay=args.delay, retries=args.retries, limit=args.limit)
 
 

@@ -12,8 +12,8 @@ from pathlib import Path
 import bam_research as research
 
 
-PROVIDERS = {"openai", "anthropic"}
-TARGET_STAGES = {"postmortem", "gold", "semantic_review"}
+PROVIDERS = {"openai", "anthropic", "deepseek"}  # Bedrock-served gpt-oss, Claude, DeepSeek
+TARGET_STAGES = {"postmortem", "gold", "semantic_review", "concept_labels"}
 FORBIDDEN_REVIEW_KEYS = {"training_only_postmortem", "normalized_postgame_sources", "home_win"}
 ORIGINAL_COMPARISON_MANIFEST_SHA256 = 'f39ec6410ad9281ca7235d21d8a384ce8ffe090e5f7152c5786295f5cec8c133'
 
@@ -43,6 +43,14 @@ def _encoded(value):
 def load_train_registry(snapshot):
     """Read hash-verified game inputs only; never open dev/test outcome stores."""
     snapshot = Path(snapshot)
+    if (snapshot / 'bam_manifest.json').exists():
+        from bam_data import _verify_shared_files, read_snapshot_inputs, snapshot_manifest_path
+        _verify_shared_files(snapshot)
+        rows = read_snapshot_inputs(snapshot, splits=("train",))
+        _require(len({row['game_id'] for row in rows}) == len(rows), "Duplicate shared game IDs")
+        return {'snapshot_manifest_sha256': file_hash(snapshot_manifest_path(snapshot)),
+                'games': {row['game_id']: {key: row[key] for key in ('game_id', 'game_date_et', 'cutoff_utc', 'split')}
+                          for row in rows}}
     manifest = json.loads((snapshot / 'manifest.json').read_text())
     expected = manifest['artifact_sha256']['inputs.jsonl']
     _require(file_hash(snapshot / 'inputs.jsonl') == expected, "Snapshot game inputs changed")
@@ -170,7 +178,7 @@ def validate_training_request(request, registry, *, targets=None, purpose='train
     authorization = registry.get('authorized_training_requests',{}).get(request['request_id'])
     _require(authorization is not None and authorization.get('request_sha256') == research.value_hash(request)
              and all(authorization.get(k) == request.get(k) for k in ('request_id','game_id','stage','source_hash')), "Stage payload is not authorized by the trusted request manifest")
-    if stage in ('postmortem','gold'):
+    if stage in ('postmortem','gold','concept_labels'):
         _require(request.get('model_role') == 'gold_teacher', "API target generation requires its explicit training teacher role")
     if stage == 'postmortem':
         _require(set(payload) <= {'game','instruction','normalized_postgame_sources','output_schema'} and payload.get('normalized_postgame_sources'), "Only normalized postgame evidence is allowed")
@@ -183,6 +191,11 @@ def validate_training_request(request, registry, *, targets=None, purpose='train
         modules = payload.get('forecasting_context',{}).get('researcher_outputs',[])
         _require(len(modules) == 3 and {m.get('module') for m in modules} == set(research.MODULES), "Gold must combine all three real researcher outputs")
         _require('training_only_postmortem' in payload, "Combined gold requires its separate TRAIN postmortem")
+    if stage == 'concept_labels':
+        modules = payload.get('forecasting_context',{}).get('researcher_outputs',[])
+        _require(len(modules) == 3 and {m.get('module') for m in modules} == set(research.MODULES), "Concept labels must see all three real researcher outputs")
+        _require('training_only_postmortem' in payload and payload.get('concept_definitions'), "Concept labels require the TRAIN postmortem and concept definitions")
+        _require(isinstance(request.get('concept_pool_sha256'),str) and len(request['concept_pool_sha256']) == 64, "Concept labels must bind their concept pool")
     if stage == 'semantic_review':
         target_hash = request.get('target_artifact_hash')
         target = (targets or {}).get(target_hash)
