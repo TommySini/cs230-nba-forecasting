@@ -15,6 +15,7 @@ import math
 import os
 from pathlib import Path
 import signal
+import subprocess
 import time
 import urllib.request
 
@@ -25,6 +26,8 @@ from run_gradient_boosting import (FEATURE_NAMES, bootstrap_brier, new_model,
                                    score_predictions, season_splits)
 
 CONFIG_PATH = ROOT / "config/tabpfn.json"
+BASELINE_REVISION = "768163157c971beefe5a4c8f5b47ccfefc00e85a"
+ADAPTATION_CONFIG_PATH = ROOT / "config/tabpfn_adaptation.json"
 STAGES = ("train-smoke", "dev")
 
 
@@ -60,7 +63,7 @@ def repo_path(value):
     return ROOT / path
 
 
-def verify_hashes(expected, directory=None):
+def verify_hashes(expected, directory=None, *, source_revision=None):
     for name, expected_hash in expected.items():
         if directory is None:
             path = repo_path(name)
@@ -69,6 +72,15 @@ def verify_hashes(expected, directory=None):
                 raise ValueError("Bundle artifact names must be plain filenames")
             path = directory / name
         if sha256(path) != expected_hash:
+            # Completed runs bind their original source, which remains in git.
+            # This opt-in is only for inspection; model stages use current code.
+            historical_source = (directory is None and source_revision == BASELINE_REVISION
+                                 and name in {"scripts/run_tabpfn.py", "scripts/validate_tabpfn.py",
+                                              "requirements-tabpfn.txt"})
+            if historical_source:
+                blob = subprocess.check_output(["git", "show", f"{source_revision}:{name}"], cwd=ROOT)
+                if hashlib.sha256(blob).hexdigest() == expected_hash:
+                    continue
             raise ValueError(f"Changed frozen artifact: {name}")
 
 
@@ -489,12 +501,301 @@ def fit_and_predict(config, stage):
     return result
 
 
+def adaptation_config():
+    config = json.loads(ADAPTATION_CONFIG_PATH.read_text())
+    if (config["baseline_revision"] != BASELINE_REVISION
+            or config["baseline_config"] != "config/tabpfn.json"
+            or config["output_dir"] != "data/processed/tabpfn/adaptation"
+            or config["inner_validation_season"] != 2023):
+        raise ValueError("Adaptation must use the fixed baseline and chronological TRAIN split")
+    return config
+
+
+def adaptation_arrays(manifest, inputs, labels):
+    count = len(manifest["fit_game_ids"])
+    names = manifest["feature_names"]
+    x = np.asarray([[row["features"][name] for name in names] for row in inputs], dtype=float)
+    y_train = np.asarray([row["home_win"] for row in labels[:count]], dtype=np.int64)
+    earlier = np.asarray([row["season"] < 2023 for row in inputs[:count]])
+    validation = np.asarray([row["season"] == 2023 for row in inputs[:count]])
+    if not earlier.any() or not validation.any() or not np.all(earlier | validation):
+        raise ValueError("Missing chronological inner TRAIN partitions")
+    return x[:count], y_train, x[count:], earlier, validation
+
+
+def prepare_adaptation():
+    config = adaptation_config()
+    output = repo_path(config["output_dir"])
+    if (output / "manifest.json").exists():
+        raise ValueError("Adaptation protocol already frozen; validate instead of replacing")
+    baseline = load_config(repo_path(config["baseline_config"]))
+    from validate_tabpfn import validate_run
+    validate_run(baseline, "dev")
+    manifest, inputs, labels = load_prepared(baseline, "dev")
+    count = len(manifest["fit_game_ids"])
+    adaptation_arrays(manifest, inputs, labels)
+    paths = ["scripts/run_tabpfn.py", "scripts/validate_tabpfn.py",
+             "scripts/tabpfn_synthetic.py", "scripts/tabpfn_finetuning.py",
+             "config/tabpfn_adaptation.json", "config/tabpfn.json", "requirements-tabpfn.txt",
+             "reports/tabpfn/dev/manifest.json", "reports/tabpfn/dev/run.json"]
+    protocol = {"schema_version": 1, "created_at_utc": utc_now(), "config": config,
+                "baseline_revision": BASELINE_REVISION,
+                "baseline_manifest_sha256": sha256(record_directory(baseline, "dev") / "manifest.json"),
+                "baseline_config": manifest["baseline_config"],
+                "fit_game_ids": manifest["fit_game_ids"], "query_game_ids": manifest["query_game_ids"],
+                "inner_fit_game_ids": [row["game_id"] for row in inputs[:count] if row["season"] < 2023],
+                "inner_validation_game_ids": [row["game_id"] for row in inputs[:count] if row["season"] == 2023],
+                "feature_names": manifest["feature_names"],
+                "source_sha256": {path: sha256(repo_path(path)) for path in paths},
+                "protocol": "Three prespecified exploratory DEV comparisons. Generator and weight updates use only "
+                            "2012-22 TRAIN seasons; 2023-24 TRAIN selects checkpoints. Final context uses all "
+                            "original TRAIN games. Same synthetic artifact for both augmentation arms. TEST excluded."}
+    output.mkdir(parents=True, exist_ok=True)
+    write_json(output / "manifest.json", protocol)
+    print(json.dumps({"status": "prepared", "inner_fit": len(protocol["inner_fit_game_ids"]),
+                      "inner_validation": len(protocol["inner_validation_game_ids"]),
+                      "dev": len(protocol["query_game_ids"])}), flush=True)
+    return protocol
+
+
+def load_adaptation():
+    config = adaptation_config()
+    output = repo_path(config["output_dir"])
+    protocol = json.loads((output / "manifest.json").read_text())
+    if protocol["config"] != config or protocol["baseline_revision"] != BASELINE_REVISION:
+        raise ValueError("Adaptation protocol changed")
+    verify_hashes(protocol["source_sha256"])
+    baseline = load_config(repo_path(config["baseline_config"]))
+    manifest, inputs, labels = load_prepared(baseline, "dev")
+    if protocol["baseline_manifest_sha256"] != sha256(record_directory(baseline, "dev") / "manifest.json"):
+        raise ValueError("Frozen baseline manifest changed")
+    count = len(manifest["fit_game_ids"])
+    expected = {"fit_game_ids": manifest["fit_game_ids"], "query_game_ids": manifest["query_game_ids"],
+                "feature_names": manifest["feature_names"],
+                "inner_fit_game_ids": [row["game_id"] for row in inputs[:count] if row["season"] < 2023],
+                "inner_validation_game_ids": [row["game_id"] for row in inputs[:count] if row["season"] == 2023]}
+    if any(protocol[key] != value for key, value in expected.items()):
+        raise ValueError("Adaptation partition or feature metadata changed")
+    return protocol, manifest, inputs, labels
+
+
+def adaptation_synthetic(config, names):
+    output = repo_path(config["output_dir"]) / "synthetic_data"
+    manifest = json.loads((output / "manifest.json").read_text())
+    verify_hashes(manifest["artifact_sha256"], output)
+    x = np.load(output / "features.npy", allow_pickle=False)
+    y = np.load(output / "labels.npy", allow_pickle=False)
+    if (x.shape != (config["generator"]["n_samples"], len(names)) or y.shape != (len(x),)
+            or np.isinf(x).any() or not np.isin(y, [0, 1]).all()):
+        raise ValueError("Malformed synthetic augmentation")
+    return x, y, manifest
+
+
+def run_adaptation(stage, variant):
+    protocol, manifest, inputs, labels = load_adaptation()
+    config = protocol["config"]
+    baseline = load_config(repo_path(config["baseline_config"]))
+    settings = {**baseline, **config, "model": baseline["model"]}
+    root = repo_path(config["output_dir"])
+    x_train, y_train, x_dev, earlier, validation = adaptation_arrays(manifest, inputs, labels)
+    if stage == "adapt-generate":
+        from tabpfn_synthetic import generate
+        signal.signal(signal.SIGALRM, signal.SIG_DFL)
+        signal.alarm(config["generator"]["max_runtime_seconds"] + 120)
+        try:
+            return generate(settings, x_train[earlier], y_train[earlier], manifest["feature_names"],
+                            protocol["inner_fit_game_ids"], root / "synthetic_data")
+        finally:
+            signal.alarm(0)
+    if variant not in ("synthetic", "finetune", "combined"):
+        raise ValueError("Choose --variant synthetic, finetune or combined")
+    output = root / variant
+    output.mkdir(parents=True, exist_ok=True)
+    x_fake, y_fake, synthetic_manifest = None, None, None
+    if variant != "finetune":
+        x_fake, y_fake, synthetic_manifest = adaptation_synthetic(config, manifest["feature_names"])
+        if (synthetic_manifest["input_partition_game_ids"] != protocol["inner_fit_game_ids"]
+                or not set(synthetic_manifest["source_game_ids"]).issubset(protocol["inner_fit_game_ids"])):
+            raise ValueError("Synthetic generation used forbidden source games")
+    if stage == "adapt-fit":
+        if variant == "synthetic":
+            raise ValueError("Synthetic-only has no gradient training")
+        if (output / "training.json").exists():
+            raise ValueError("Completed fine-tuning is immutable")
+        from tabpfn_finetuning import train
+        x_fit, y_fit = x_train[earlier], y_train[earlier]
+        if x_fake is not None:
+            x_fit, y_fit = np.concatenate([x_fit, x_fake]), np.concatenate([y_fit, y_fake])
+        signal.signal(signal.SIGALRM, signal.SIG_DFL)
+        signal.alarm(config["finetuning"]["max_runtime_seconds"] + 120)
+        try:
+            training = train(settings, x_fit, y_fit, x_train[validation], y_train[validation], output / "training")
+        finally:
+            signal.alarm(0)
+        training.update({"fit_game_ids": protocol["inner_fit_game_ids"],
+                         "validation_game_ids": protocol["inner_validation_game_ids"],
+                         "synthetic_rows": 0 if x_fake is None else len(x_fake),
+                         "manifest_sha256": sha256(root / "manifest.json")})
+        write_json(output / "training.json", training)
+        print(json.dumps({key: training[key] for key in ("runtime_seconds", "optimizer_steps",
+                          "epochs_completed", "initial_inner_log_loss", "best_inner_log_loss",
+                          "selected_pretrained_weights")}), flush=True)
+        return training
+    if stage != "adapt-dev":
+        raise ValueError("Unknown adaptation stage")
+    if (output / "run.json").exists():
+        raise ValueError("Completed DEV predictions are immutable; use the validator")
+    training = None
+    if variant != "synthetic":
+        training = json.loads((output / "training.json").read_text())
+        if (training["manifest_sha256"] != sha256(root / "manifest.json")
+                or training["checkpoint_sha256"] != sha256(repo_path(training["checkpoint_path"]))):
+            raise ValueError("Training protocol or selected checkpoint changed")
+    context_x, context_y = x_train, y_train
+    if x_fake is not None:
+        context_x, context_y = np.concatenate([x_train, x_fake]), np.concatenate([y_train, y_fake])
+    prediction_file = output / "prediction_progress.json"
+    started = time.monotonic()
+    binding = {"manifest_sha256": sha256(root / "manifest.json"), "variant": variant,
+               "checkpoint_sha256": training["checkpoint_sha256"] if training else baseline["model"]["sha256"],
+               "synthetic_manifest_sha256": sha256(root / "synthetic_data/manifest.json") if x_fake is not None else None}
+    if prediction_file.exists():
+        progress = json.loads(prediction_file.read_text())
+        if progress["binding"] != binding:
+            raise ValueError("Saved prediction provenance changed")
+        p = np.asarray(progress["probabilities"])
+        expected_hash = hashlib.sha256(json.dumps(progress["probabilities"], allow_nan=False).encode()).hexdigest()
+        if (progress.get("probabilities_sha256") != expected_hash or p.shape != (len(x_dev),)
+                or not np.isfinite(p).all() or np.any((p < 0) | (p > 1))):
+            raise ValueError("Saved prediction probabilities changed or are malformed")
+        audit = progress["context_audit"]
+        runtime = progress["runtime_seconds"]
+    else:
+        if training:
+            from tabpfn_finetuning import classifier_from_checkpoint
+            model = classifier_from_checkpoint(settings, repo_path(training["checkpoint_path"]))
+        else:
+            model = model_for(baseline)
+        print(f"{variant}: context {len(context_x)} x {context_x.shape[1]}; {len(x_dev)} DEV queries", flush=True)
+        signal.signal(signal.SIGALRM, signal.SIG_DFL)
+        signal.alarm(1800)
+        try:
+            model.fit(context_x, context_y)
+            if (model.n_train_samples_ != len(context_x) or model.inference_config_.SUBSAMPLE_SAMPLES is not None
+                    or model.ensemble_preprocessor_.subsample_row_indices is not None):
+                raise ValueError("Adaptation silently subsampled context")
+            p = positive_probabilities(model, x_dev)
+        finally:
+            signal.alarm(0)
+        runtime = time.monotonic() - started
+        audit = {"original_train_rows": len(x_train), "synthetic_rows": 0 if x_fake is None else len(x_fake),
+                 "submitted_rows": len(context_x), "model_n_train_samples": int(model.n_train_samples_),
+                 "row_subsampling_applied": False}
+        atomic_json(prediction_file, {"binding": binding, "probabilities": p.tolist(),
+                                     "probabilities_sha256": hashlib.sha256(json.dumps(p.tolist(), allow_nan=False).encode()).hexdigest(),
+                                     "context_audit": audit, "runtime_seconds": runtime})
+        del model
+    # Evaluation outcomes are accessed only after forecasts have been persisted.
+    y_dev = np.asarray([row["home_win"] for row in labels[len(x_train):]], dtype=int)
+    # Frozen baseline TabPFN and comparator forecasts now live in the shared predictions table.
+    original = load_comparison_rows(load_config(repo_path(config["baseline_config"])), "dev", manifest)
+    if [row["game_id"] for row in original] != manifest["query_game_ids"]:
+        raise ValueError("Frozen comparator query membership changed")
+    probabilities = {variant: p, **{name: np.asarray([float(row[name]) for row in original])
+                                  for name in ("tabpfn", "rich_gradient_boosting")}}
+    metrics = {name: score_predictions(y_dev, values) for name, values in probabilities.items()}
+    uncertainty = bootstrap_brier(y_dev, probabilities, [row["game_date_et"] for row in original],
+                                 config["bootstrap_replicates"], config["seed"], "tabpfn")
+    write_csv(output / "predictions.csv", [{"game_id": row["game_id"], "game_date_et": row["game_date_et"],
+              **{name: float(values[index]) for name, values in probabilities.items()}} for index, row in enumerate(original)])
+    result = {"schema_version": 1, "stage": stage, "status": "complete", "variant": variant,
+              "created_at_utc": utc_now(), "execution_platform": "local", "runtime_seconds": runtime,
+              "manifest_sha256": binding["manifest_sha256"],
+              "artifact_sha256": {"predictions.csv": sha256(output / "predictions.csv")},
+              "context_audit": audit, "training": training,
+              "synthetic_manifest_sha256": binding["synthetic_manifest_sha256"],
+              "model": baseline["model"], "versions": {p: version(p) for p in ("tabpfn", "tabpfn-extensions", "torch", "numpy", "scikit-learn")},
+              "metrics": metrics, "uncertainty": uncertainty,
+              "primary_comparison": {"brier_difference": metrics[variant]["brier"] - metrics["tabpfn"]["brier"],
+                                     "difference_95_interval": uncertainty["difference_vs_reference"][variant]}}
+    write_json(output / "run.json", result)
+    print(json.dumps({"variant": variant, "metrics": metrics, "primary_comparison": result["primary_comparison"]}, indent=2), flush=True)
+    return result
+
+
+def report_adaptation():
+    config = adaptation_config()
+    root = repo_path(config["output_dir"])
+    baseline = json.loads((root.parent / "dev/run.json").read_text())
+    variants = {}
+    from validate_tabpfn import validate_adaptation
+    for variant in ("synthetic", "finetune", "combined"):
+        if (root / variant / "run.json").exists():
+            validate_adaptation(variant)
+            variants[variant] = json.loads((root / variant / "run.json").read_text())
+    report = ROOT / "reports/tabpfn"
+    write_json(report / "metrics.json", {"baseline": baseline, "adaptation": variants})
+    lines = ["# TabPFN statistical experiments", "",
+             "All comparisons use the same 1,123 DEV games (2024–25) and 252 frozen pregame features. "
+             "TRAIN is 2012–24; TEST is excluded. Lower Brier/log loss is better.", "",
+             "| Model | Brier | Log loss | AUC | Accuracy | Brier difference vs frozen TabPFN (95% interval) |",
+             "| --- | ---: | ---: | ---: | ---: | --- |"]
+    for name in ("rich_gradient_boosting", "tabpfn"):
+        m = baseline["metrics"][name]
+        lines.append(f"| {name} | {m['brier']:.6f} | {m['log_loss']:.6f} | {m['roc_auc']:.4f} | {m['accuracy']:.1%} | — |")
+    for name, run in variants.items():
+        m, comparison = run["metrics"][name], run["primary_comparison"]
+        low, high = comparison["difference_95_interval"]
+        lines.append(f"| {name} | {m['brier']:.6f} | {m['log_loss']:.6f} | {m['roc_auc']:.4f} | {m['accuracy']:.1%} | "
+                     f"{comparison['brier_difference']:+.6f} [{low:+.6f}, {high:+.6f}] |")
+    lines += ["", "## Protocol", "",
+              "The original TabPFN-2.5 result used fixed pretrained weights and all 13,457 TRAIN games as context, "
+              "with four estimators on Apple MPS. Its Brier difference versus boosting was -0.002500 "
+              "(paired 95% interval [-0.005122, +0.000148]); this did not establish an advantage.", "",
+              "The adaptation study uses the official TabPFN unsupervised generation and fine-tuning tools. "
+              "Synthetic-only and combined share 1,024 generated rows, using a deterministic sample of "
+              "1,024 real 2012–22 TRAIN games as the generator context. The continuous regressor checkpoint "
+              "could not be downloaded (HuggingFace TLS timeouts; official fallback HTTP404), so the official "
+              "classifier-only joint sampler uses up to eight TRAIN-fitted quantile bins per primitive feature. "
+              "Bin medians are decoded and engineered arithmetic/missingness identities reconstructed. This is "
+              "a coarse binned generation experiment, not an evaluation of the continuous-regressor generator. "
+              "Fine-tuning uses the earlier TRAIN seasons for weight updates and "
+              "the 2023–24 TRAIN season for checkpoint selection by log loss. Final prediction context includes "
+              "all original TRAIN games, plus the same synthetic rows in augmentation arms. "
+              "Both fine-tuning arms use the same fixed training settings and budget.", "",
+              "Fine-tuning is bounded to five epochs, learning rate 1e-5, 256-row meta-batches, one estimator "
+              "during updates/inner validation, patience two, and four estimators for final prediction. "
+              "The selected checkpoint may remain the original pretrained weights if no epoch improves "
+              "inner-TRAIN log loss; per-run metadata records that explicitly.", "",
+              "Official documentation: [data generation](https://docs.priorlabs.ai/capabilities/data-generation), "
+              "[fine-tuning](https://docs.priorlabs.ai/capabilities/fine-tuning).", "",
+              "Intervals use 2,000 paired ET-calendar-day bootstrap replicates. These are exploratory, "
+              "unadjusted comparisons of three variants, conditional on the fitted models; they do not include "
+              "training/generation seed uncertainty or dependence across days. DEV had already been inspected "
+              "and used to select the booster. Synthetic rows are model-generated examples, not new observed games.", "",
+              "Frozen baseline forecasts are in the shared `predictions.parquet` (records in `reports/tabpfn/dev/`); experiment manifests, "
+              "separate synthetic features/labels, training checkpoints and per-game predictions are under "
+              "`data/processed/tabpfn/adaptation/`. Recompute scores with `validate_tabpfn.py --variant <name>`.", ""]
+    (report / "findings.md").write_text("\n".join(lines))
+    print(json.dumps({name: run["primary_comparison"] for name, run in variants.items()}, indent=2))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
-    parser.add_argument("--stage", choices=("download-model", "prepare", *STAGES), default="prepare")
+    parser.add_argument("--stage", choices=("download-model", "prepare", *STAGES,
+                                           "adapt-prepare", "adapt-generate", "adapt-fit", "adapt-dev", "adapt-report"), default="prepare")
+    parser.add_argument("--variant", choices=("synthetic", "finetune", "combined"))
     parser.add_argument("--cohort", choices=STAGES, default="train-smoke", help="Cohort for --stage prepare")
     args = parser.parse_args()
+    if args.stage.startswith("adapt-"):
+        if args.stage == "adapt-prepare":
+            prepare_adaptation()
+        elif args.stage == "adapt-report":
+            report_adaptation()
+        else:
+            run_adaptation(args.stage, args.variant)
+        return
     config = load_config(args.config)
     if args.stage == "download-model":
         download_model(config)
