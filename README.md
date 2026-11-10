@@ -66,7 +66,11 @@ Details: [TabPFN](reports/tabpfn/findings.md).
 
 ## Data
 
-All data is local and git-ignored, under the canonical checkout's `data/`.
+Data files stay out of Git. A fresh clone downloads the pinned dataset from a
+[versioned GitHub Release](https://github.com/TommySini/cs230-nba-forecasting/releases/tag/nba-data-4e5ba4eb0554)
+into its local `data/`. The checked-in `config/dataset_release.json` pins every
+archive's URL, size and SHA-256 checksum. Maintainer worktrees continue sharing
+the canonical checkout's data directory.
 
 The `data-reconstruction` branch reads one shared Parquet dataset. Start with the
 [data guide](docs/data_reconstruction.md) for the table map, feature dictionary and
@@ -96,6 +100,8 @@ Ground rules, enforced by validators and tests:
 
 ```
 scripts/
+  download_data.py           verified dataset download for new clones; optional raw source bundle
+  package_data.py            build the versioned release archives from validated data
   nba_dataset.py             shared Parquet readers, feature dictionary, migration and integrity checks
   collect_pilot.py            shared download cache and time helpers; ESPN schedule collector
   collect_notes_v2.py         game notes; validate_notes_v2.py, postgame_screen.py
@@ -120,15 +126,29 @@ infra/aws/                    IAM CloudFormation template
 
 ## Run
 
-Requires Python 3.12+ and the repo `.venv`.
+Requires Python 3.12+, macOS/Linux (or WSL), and the repo `.venv`.
 
 ```bash
 uv venv --python 3.12 .venv
 uv pip install --python .venv/bin/python -r requirements-baseline.txt
-.venv/bin/python -m unittest discover -s tests
+.venv/bin/python scripts/download_data.py
+.venv/bin/python scripts/nba_dataset.py validate
+.venv/bin/python scripts/validate_tabpfn.py --stage train-smoke
+.venv/bin/python scripts/validate_tabpfn.py --stage dev
+```
 
-.venv/bin/python scripts/validate_notes_v2.py
+The default download contains the shared Parquets, audit metadata and saved boosting
+model. It supports data inspection and validation of the saved TabPFN comparison
+without downloading neural-network weights. Matching files are reused; conflicting
+files are never overwritten. See the [data guide](docs/data_reconstruction.md) for
+bundle sizes and cache locations.
+
+Full source-level validation also needs the optional raw bundle:
+
+```bash
+.venv/bin/python scripts/download_data.py --include-raw
 .venv/bin/python scripts/validate_gradient_boosting.py
+.venv/bin/python scripts/validate_notes_v2.py
 .venv/bin/python scripts/validate_polymarket.py
 .venv/bin/python scripts/bam_data.py validate data/processed
 ```
@@ -146,6 +166,9 @@ uv pip install --python .venv/bin/python -r requirements-tabpfn.txt
 .venv/bin/python scripts/validate_tabpfn.py --stage train-smoke
 .venv/bin/python scripts/validate_tabpfn.py --stage dev
 ```
+
+The complete unit suite also exercises Torch-based BAM code. With the optional
+TabPFN dependencies installed, run `.venv/bin/python -m unittest discover -s tests`.
 
 Preparation records cohort IDs and dataset hashes without copying features or labels.
 Completed runs are protected from overwrite; repeat a model stage only to resume

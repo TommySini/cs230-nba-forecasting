@@ -4,7 +4,73 @@ The `data-reconstruction` branch implements shared Parquet tables for statistics
 notes and market observations. Model-specific copies are replaced by one dataset,
 separate saved models, and compact run records.
 
-## Current transition
+## Downloading data after a clone
+
+Install `requirements-baseline.txt` in the repo `.venv`, then run:
+
+```bash
+.venv/bin/python scripts/download_data.py
+.venv/bin/python scripts/nba_dataset.py validate
+.venv/bin/python scripts/validate_tabpfn.py --stage train-smoke
+.venv/bin/python scripts/validate_tabpfn.py --stage dev
+```
+
+The default bundle contains all shared tables, audit metadata, saved boosting model
+and required run records. The [release manifest](../config/dataset_release.json)
+pins the dataset identity and every archive's URL, byte size and SHA-256 checksum.
+Files are hosted on the versioned GitHub Release, outside Git history. No account
+or token is needed for this public release.
+
+Current release sizes (decimal units):
+
+| Bundle | Download | Installed files | Archive parts |
+| --- | ---: | ---: | ---: |
+| Processed | 0.522 GB | 0.571 GB | 1 |
+| Raw | 8.145 GB | 21.182 GB | 15 |
+
+The installer temporarily holds extracted files before publication and keeps the
+compressed cache for retries. Allow space for both during installation.
+
+Add `--include-raw` for the original sources needed by the full boosting, notes,
+Polymarket and BAM validators. Raw bodies and sidecars are installed directly in
+the grouped `data/raw/{espn,nba,notes,polymarket}` layout. Their bytes remain
+unchanged; the source resolver handles historical paths inside the sidecars.
+Neural-network checkpoints and unrelated experiments are not in either bundle.
+TabPFN inference still uses its separate `download-model` stage and dependencies.
+
+Downloads are verified before extraction. The installer rejects unsafe archive
+paths, reuses matching files, and stops on conflicts instead of overwriting them.
+Verified archives are cached under `data/.downloads/<release>/` for retries.
+`--assets-dir <directory>` installs the same verified archives offline. `--root`
+selects an isolated checkout root for testing; it is not a data-format conversion.
+
+The distribution manifest describes the grouped target layout even when raw files
+have not been downloaded. `nba_dataset.py validate` verifies the processed files;
+source-level validators require `--include-raw`. Downloaded releases do not contain
+legacy folders, and do not need the local migration/cleanup commands below.
+
+## Building a release
+
+The maintainer builds from an already validated shared dataset:
+
+```bash
+.venv/bin/python scripts/nba_dataset.py validate
+.venv/bin/python scripts/package_data.py --output data/releases/<new-release-tag> --release <new-release-tag>
+```
+
+The packager writes deterministic archives and rewrites the checked-in download
+manifest only after every source checksum passes. It packages only the published
+inventory, preserving source files and excluding unrelated work. Raw parts are
+bounded below GitHub's per-asset limit. Portable manifest copies describe the
+fresh-clone layout; the maintainer's original manifest is untouched.
+
+Commit the code and download manifest together. Upload the verified archives to a
+draft GitHub Release targeting that commit, verify uploaded asset sizes/digests,
+then publish and test the public downloader. Published release assets are fixed by
+the checked-in checksums; use a new tag and manifest for a changed dataset. A
+different release should use a separate checkout/data directory.
+
+## Current maintainer transition
 
 The shared tables are published and all installed validators pass. The 383-test
 suite passes with one optional tokenizer skip. Validation evidence and measurements
@@ -15,8 +81,9 @@ relocation and deletion of those paths are deferred. The existing source resolve
 lets this branch read canonical source references while original raw directories
 remain in place. Never remove its inputs while that job or other old readers need them.
 
-All data remains under the canonical checkout's git-ignored `data/`; worktrees link
-to it. A Git branch isolates code, not this shared directory.
+Maintainer data remains under the canonical checkout's git-ignored `data/`; local
+worktrees link to it. A Git branch isolates code, not this shared directory. Fresh
+clones receive their own data directory through the downloader.
 
 ## Where things belong
 
@@ -166,7 +233,8 @@ historical correction times remain unverified. Retrieval time is never relabeled
 as pregame publication time. Notes and market prices retain their separate archived,
 publisher and observation-time evidence.
 
-The migration commands are staged deliberately:
+The migration commands below apply to the maintainer's legacy data, not a downloaded
+release. They are staged deliberately:
 
 ```bash
 .venv/bin/python scripts/nba_dataset.py stage data/processed/.reconstruction-staging
@@ -180,6 +248,8 @@ and rollback support. Run the validators below against the installed layout befo
 `cleanup --validated`. Cleanup refuses unknown/changed files, removes only mapped
 superseded records, and preserves other work such as the live TabPFN adaptation.
 Do not use the cleanup flag as a substitute for the validation or dependency check.
+The full unit suite below also requires the optional `requirements-tabpfn.txt`
+dependencies; the source-level validators themselves need only the baseline environment.
 
 ```bash
 .venv/bin/python -m unittest discover -s tests

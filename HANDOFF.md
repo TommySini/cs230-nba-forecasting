@@ -5,6 +5,15 @@ Everything removed in the November 2026 cleanup is at git tag `pre-cleanup`.
 
 ## Status (2026-11-09)
 
+**Dataset distribution.** `download_data.py` installs the checksum-pinned processed
+release by default; `--include-raw` adds the source archive parts. `package_data.py`
+builds deterministic assets from the validated inventory without modifying source
+files. The checked-in `config/dataset_release.json` pins release
+`nba-data-4e5ba4eb0554`. Downloaded data uses the grouped raw layout directly and
+has no legacy migration folders. Packaging and downloader tests are included;
+the full suite passes 420 tests with one optional skip. Fresh-checkout and hosted
+asset checks are recorded when publication completes.
+
 **Shared Parquet migration.** `data-reconstruction` branches from the completed
 TabPFN baseline at `7681631`; its worktree is
 `/Users/tommasosini/.superset/worktrees/cs230-nba-forecasting/data-reconstruction`.
