@@ -153,6 +153,7 @@ uv pip install --python .venv/bin/python --group local
 .venv/bin/python scripts/validate_tabpfn.py --stage train-smoke
 .venv/bin/python scripts/validate_tabpfn.py --stage dev
 .venv/bin/python -m unittest discover -s tests
+```
 
 The default download contains the shared Parquets, audit metadata and saved boosting
 model. It supports data inspection and validation of the saved TabPFN comparison
