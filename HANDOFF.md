@@ -175,8 +175,11 @@ Finish data cleanup only after legacy consumers switch, as described above.
    (`bam_train_only.py --smoke`), qualify the teacher/reviewer on a few TRAIN games, generate
    research, reviewed gold and concept labels for 16–32 TRAIN games, build the schema-2 TRAIN
    bundle (`bam_train_contract.py`) and run `bam_train_only.py` with
-   `config/bam_train_only_concept_pilot.json`. Runbook and remaining gaps (Bedrock sender,
-   pilot assembler, EC2 launcher): [`docs/bam/concept_bottleneck.md`](docs/bam/concept_bottleneck.md).
+   `config/bam_train_only_concept_pilot.json`. Orchestrator (`bam_pilot.py`), Bedrock caller
+   (`bam_bedrock.py`) and EC2 launcher (`bam_aws_launch.py`) are implemented and tested on
+   synthetic data; step-by-step commands and the open decisions (research critic model,
+   Bedrock prices, artifact bucket, GPU quota, Bedrock access) are in
+   [`docs/bam/aws_pilot_runbook.md`](docs/bam/aws_pilot_runbook.md).
 2. DEV evaluation only after TRAIN learning is shown. TEST (2025–26) was already inspected in
    earlier pilots, so treat it as exploratory; a fresh 2026–27 holdout is cleaner.
 

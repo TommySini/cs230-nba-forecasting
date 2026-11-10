@@ -12,7 +12,7 @@ from pathlib import Path
 import bam_research as research
 
 
-PROVIDERS = {"openai", "anthropic"}
+PROVIDERS = {"openai", "anthropic", "deepseek"}  # Bedrock-served gpt-oss, Claude, DeepSeek
 TARGET_STAGES = {"postmortem", "gold", "semantic_review", "concept_labels"}
 FORBIDDEN_REVIEW_KEYS = {"training_only_postmortem", "normalized_postgame_sources", "home_win"}
 ORIGINAL_COMPARISON_MANIFEST_SHA256 = 'f39ec6410ad9281ca7235d21d8a384ce8ffe090e5f7152c5786295f5cec8c133'

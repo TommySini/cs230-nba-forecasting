@@ -128,6 +128,7 @@ scripts/
   bam_training.py             LoRA + probability-head model code (bam_checkpoint for resume)
   bam_train_contract.py       TRAIN bundle checks; bam_train_only.py worker; bam_aws_preflight.py
   bam_concepts.py             concept-bottleneck head, teacher concept labels, concept selection
+  bam_pilot.py                TRAIN pilot orchestration; bam_bedrock.py teacher calls; bam_aws_launch.py EC2 jobs
   bam_inference.py            vLLM batch worker; bam_budget.py spend ledger
 config/                       one config per dataset or experiment
 tests/                        unit and leakage tests

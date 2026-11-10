@@ -125,14 +125,9 @@ preflight. Use the Linux `training` dependency group.
    `learning_curve_train.json`. `head.pt`, `head_config.json` and the adapter are saved
    with hashes in `model_files.json`.
 
-## Not built yet
+## Orchestration
 
-These gaps predate the concept head and apply to the linear head too:
-
-- **Bedrock sender:** request builders and the API boundary exist, but no code submits
-  requests to Bedrock or records responses and costs (steps 3–4 teacher side).
-- **Pilot assembler:** nothing yet selects games and writes pregame rows with their full
-  provenance (booster, features, research receipts) into a bundle (steps 2 and 5).
-- **EC2 launcher:** no code launches the GPU instance, issues the admission receipt or arms
-  external termination; the worker only validates a receipt.
-- **Teacher choice:** no teacher or reviewer model has been qualified.
+The end-to-end AWS procedure (game selection, research rounds, Bedrock teacher, bundle,
+admission and launch) is in [`aws_pilot_runbook.md`](aws_pilot_runbook.md). Still undecided:
+the research critic model and current Bedrock prices; the teacher and reviewer default to
+the models the deployed IAM permits (Sonnet 4.6 and Opus 4.6).

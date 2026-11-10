@@ -46,6 +46,10 @@ training = [
     "safetensors==0.5.3",
     "numpy==2.2.5",
     "scipy==1.15.2",
+    # Imported by the TRAIN bundle contract (run_gradient_boosting, collect_pilot).
+    "joblib==1.6.0",
+    "scikit-learn==1.9.1",
+    "pypdf==6.21.4",
 ]
 # Separate Linux/CUDA research worker, Python 3.13+ with these pins.
 research = [
@@ -55,6 +59,10 @@ research = [
     "tokenizers==0.23.3",
     "huggingface-hub==2.4.0",
     "safetensors==0.8.0",
+    # bam_pilot infer imports the research/contract helpers alongside vLLM.
+    "joblib==1.6.0",
+    "scikit-learn==1.9.1",
+    "pypdf==6.21.4",
 ]
 
 # Optional CloudFormation linting tools.

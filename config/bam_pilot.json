@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "pilot_id": "concept_pilot_v1",
+  "seed": 230,
+  "season": 2023,
+  "pdf_only": true,
+  "candidate_games": 40,
+  "pilot_games": 24,
+  "max_chunk_chars": 18000,
+  "forecaster_config": "config/bam_train_only_concept_pilot.json",
+  "researcher": {
+    "model_id": "Qwen/Qwen2.5-14B-Instruct",
+    "model_revision": "cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8"
+  },
+  "research_critic": {
+    "model_id": null,
+    "model_revision": null,
+    "note": "DECISION NEEDED: a pinned open model served by vLLM, different from the researcher, with training data before DEV (2024-10). It reviews the researcher's modules without outcomes."
+  },
+  "inference": {
+    "max_model_len": 32768,
+    "max_num_seqs": 8,
+    "gpu_memory_utilization": 0.88,
+    "temperature": 0.0
+  },
+  "teacher": {
+    "api": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "context_window_tokens": 200000,
+      "max_output_tokens": 16000
+    },
+    "bedrock_model_id": "us.anthropic.claude-sonnet-4-6",
+    "region": "us-west-2",
+    "price_per_million_input_usd": null,
+    "price_per_million_output_usd": null,
+    "note": "Matches the deployed controller IAM (Sonnet 4.6 inference profile, Oregon). DECISION NEEDED: enter current Bedrock prices; qualify on a few TRAIN games first. Using gpt-oss/DeepSeek instead requires an IAM update."
+  },
+  "reviewer": {
+    "api": {
+      "provider": "anthropic",
+      "model": "claude-opus-4-6",
+      "context_window_tokens": 200000,
+      "max_output_tokens": 16000
+    },
+    "bedrock_model_id": "us.anthropic.claude-opus-4-6-v1",
+    "region": "us-west-2",
+    "price_per_million_input_usd": null,
+    "price_per_million_output_usd": null,
+    "note": "Matches the deployed controller IAM (Opus 4.6 inference profile, Oregon); reviews gold blind to the outcome. DECISION NEEDED: enter current Bedrock prices."
+  },
+  "teacher_spend_cap_usd": 40.0
+}
