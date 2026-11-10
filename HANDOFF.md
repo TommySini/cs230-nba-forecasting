@@ -9,6 +9,19 @@ current run records stay where the dataset release pins them (`reports/gradient_
 
 ## Status (2026-11-09)
 
+**Consolidated branch (`consolidated`).** One branch carries PR #5
+(`data-reconstruction`), `tabpfn-implementation`, `chore/consolidate-dependencies`,
+`report_folder_cleanup_impl` and the orthogonality evaluation, for a single merge into
+`main`. Where the refactors overlapped, the shared-dataset (PR #5) code and the
+release-pinned report paths win; the cleanup's consolidated reports and the pyproject
+dependency groups (now with `pyarrow` and a `tabpfn` group) are kept. TabPFN adaptation
+reads its frozen baseline through the shared dataset. On Linux (WSL) with the `local` and
+`tabpfn` groups, the full suite passes 453 tests (one optional skip), and
+`nba_dataset.py validate` and both `validate_tabpfn.py` stages pass on the downloaded release.
+Native Windows is unsupported by the data tooling (POSIX paths, `O_NOFOLLOW`, symlinks,
+`SIGALRM`); `nba_dataset.py` alone gained an `msvcrt` lock fallback so read-only analysis
+runs there.
+
 **Dataset distribution.** `download_data.py` installs the checksum-pinned processed
 release by default; `--include-raw` adds the source archive parts. `package_data.py`
 builds deterministic assets from the validated inventory without modifying source
