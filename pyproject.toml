@@ -28,6 +28,14 @@ local = [
     "tzdata==2026.6",
 ]
 
+# Optional: run the analysis notebooks in notebooks/ (XGBoost experiments); install together with `local`.
+notebook = [
+    "ipykernel==7.4.0",
+    "nbclient==0.11.0",
+    "nbformat==5.11.1",
+    "xgboost==3.4.1",
+]
+
 # Optional TabPFN baseline/adaptation; install together with `local`.
 # The model checkpoint is pinned separately in config/tabpfn.json.
 tabpfn = [

@@ -121,6 +121,7 @@ scripts/
   run_tabpfn.py               local TabPFN TRAIN diagnostic and DEV comparison; validate_tabpfn.py
   collect_polymarket*.py      market prices and trades; evaluate_polymarket*.py
   evaluate_*orthogonality.py  does market, note or injury text add to boosting? (collect_injuries.py)
+  situational_features.py     recency, fatigue/travel, rematch, shooting-luck, lineup and injury features
   bam_data.py                 shared notes/pages + frozen boosting -> verified BAM inputs
   bam_research.py             research prompts and claim checks (bam_claim_guards, bam_note_tables, game_note_tables)
   bam_postgame.py             outcome-side evidence for the teacher (training only)
@@ -130,6 +131,11 @@ scripts/
   bam_concepts.py             concept-bottleneck head, teacher concept labels, concept selection
   bam_pilot.py                TRAIN pilot orchestration; bam_bedrock.py teacher calls; bam_aws_launch.py EC2 jobs
   bam_inference.py            vLLM batch worker; bam_budget.py spend ledger
+notebooks/
+  gradient_boosting.ipynb     boosting baseline tests: integrity, scores, calibration, importance,
+                              DEV-only sweeps and ablations (group `notebook`)
+  injury_situational_boosting.ipynb  XGBoost (and TabPFN) with injury reports and situational
+                              features (situational_features.py); DEV only
 config/                       one config per dataset or experiment
 tests/                        unit and leakage tests
 reports/                      three research reports, a reading guide, and the run records the
