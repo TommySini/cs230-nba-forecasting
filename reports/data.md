@@ -25,9 +25,9 @@ Removing 80 document versions removes 75 games entirely; some games still have
 another eligible document. Of the 154 snapshot games without a forecast, 138
 lack sufficient earlier games and 16 belong to the first TRAIN season, for which
 no earlier-season model exists. Their notes remain available for research.
-The canonical [collection summary](../data/processed/notes_v2/review_summary.json)
-and [snapshot manifest](../data/processed/bam_pipeline/bam_notes_v2/manifest.json)
-contain the counts and provenance. No report-side copy of either is needed.
+The shared dataset's [note audit](../data/processed/note_audit.json) (collection
+`review_summary`) and [BAM manifest](../data/processed/bam_manifest.json) contain the
+counts and provenance. No report-side copy of either is needed.
 
 | Current role | Seasons | Snapshot games | Forecast-eligible games |
 | --- | --- | ---: | ---: |
@@ -49,8 +49,7 @@ team box scores exist for 16,810, including 2,104 repaired from NBA.com; 16,123
 also have complete player statistics. Eleven games remain missing with recorded
 reasons. These counts describe the cached periods, not a guarantee of every game
 in every season: the recent collection ends April 10. See the
-[box-score manifest](../data/processed/box_scores/manifest.json) and
-[failure records](../data/processed/box_scores/failures.jsonl).
+[box-score audit](../data/processed/box_score_audit.json) (`failures`, `source_repairs`).
 
 Features use earlier Eastern-calendar dates within the same season. The target
 game and other games on its date cannot enter its rolling statistics. Eligibility
