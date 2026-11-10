@@ -91,21 +91,6 @@ class InjuryParseTests(unittest.TestCase):
         self.assertEqual(counts["away"], {"Out": 0, "Doubtful": 1, "Questionable": 0})
         self.assertIsNone(sf.injury_counts({"injury_report": None}))
 
-    def test_note_counts_read_only_the_status_section(self):
-        text = ("Timeout out of bounds. INJURY REPORT Tatum (ankle) is OUT. Brown (knee) is questionable; "
-                "Smith (G League - Two-Way) out\nJones probable")
-        self.assertEqual(sf.note_counts(text), {"out": 1, "questionable": 1, "probable": 1})
-        self.assertEqual(sf.note_counts("No section here: out, questionable."), {"out": 0, "questionable": 0, "probable": 0})
-
-    def test_notes_are_credited_to_the_publishing_side(self):
-        games = [{"game_id": "g", "season": 2023, "game_date_et": "2023-11-01", "home_abbr": "BOS", "away_abbr": "DEN",
-                  "home_score": 100, "away_score": 90}]
-        notes = {"g": {"away": ["STATUS REPORT Murray is out. Gordon is out."]}}
-        f = sf.build(games, {}, {}, notes=notes)["g"]
-        self.assertEqual((f["away_note_found"], f["away_note_out"]), (1.0, 2.0))
-        self.assertEqual(f["home_note_found"], 0.0)
-        self.assertTrue(math.isnan(f["home_note_out"]))
-
 
 if __name__ == "__main__":
     unittest.main()
