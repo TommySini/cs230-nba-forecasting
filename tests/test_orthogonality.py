@@ -1,8 +1,6 @@
 """Orthogonality evaluation: joins outcomes from labels.jsonl, keeps splits apart, rejects post-cutoff text."""
-import json
 from pathlib import Path
 import sys
-import tempfile
 from types import SimpleNamespace
 import unittest
 
@@ -11,38 +9,27 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import evaluate_injury_orthogonality as injury
 import evaluate_notes_orthogonality as notes
-from evaluate_orthogonality import boosting_forecasts, day_folds, logit, sigmoid, statistics
+from evaluate_orthogonality import day_folds, join_forecasts, logit, sigmoid, statistics
 
 
-def write_jsonl(path, rows):
-    path.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
-
-
-def html_note(game_id, team, published, cutoff="2025-01-15T00:00:00Z", **extra):
-    return {"game_id": game_id, "team": team, "kind": "html_post", "tier": "site_timestamped",
-            "published_utc": published, "cutoff_utc": cutoff, "text_path": f"texts/{game_id}-{team}.txt", "source": {}, **extra}
+PREDICTIONS = [
+    {"game_id": "g1", "season": 2013, "game_date_et": "2014-01-01", "split": "train", "p_boost": 0.6, "produced_by": "prior_seasons"},
+    {"game_id": "g2", "season": 2024, "game_date_et": "2025-01-01", "split": "dev", "p_boost": 0.4, "produced_by": "train_fit"},
+    {"game_id": "g3", "season": 2025, "game_date_et": "2026-01-01", "split": "test", "p_boost": 0.7, "produced_by": "train_fit"}]
 
 
 class BoostingForecastTests(unittest.TestCase):
-    def setUp(self):
-        self.dir = Path(tempfile.mkdtemp())
-        write_jsonl(self.dir / "predictions.jsonl", [
-            {"game_id": "g1", "season": 2013, "game_date_et": "2014-01-01", "split": "train", "p_boost": 0.6, "produced_by": "prior_seasons"},
-            {"game_id": "g2", "season": 2024, "game_date_et": "2025-01-01", "split": "dev", "p_boost": 0.4, "produced_by": "train_fit"},
-            {"game_id": "g3", "season": 2025, "game_date_et": "2026-01-01", "split": "test", "p_boost": 0.7, "produced_by": "train_fit"}])
-        write_jsonl(self.dir / "labels.jsonl", [{"game_id": g, "home_win": w} for g, w in (("g1", 1), ("g2", 0), ("g3", 1))])
-
     def test_outcomes_joined_from_labels_and_splits_filtered(self):
-        forecasts = boosting_forecasts(["train", "dev"], self.dir)
+        labels = [{"game_id": "g1", "home_win": 1}, {"game_id": "g2", "home_win": 0}]
+        forecasts = join_forecasts(PREDICTIONS, labels, ["train", "dev"])
         self.assertEqual(sorted(forecasts), ["g1", "g2"])
         self.assertEqual(forecasts["g2"], {"split": "dev", "game_date_et": "2025-01-01", "home_win": 0, "p_boost": 0.4})
 
     def test_unknown_split_and_missing_label_rejected(self):
         with self.assertRaises(ValueError):
-            boosting_forecasts(["validation"], self.dir)
-        write_jsonl(self.dir / "labels.jsonl", [{"game_id": "g1", "home_win": 1}])
+            join_forecasts(PREDICTIONS, [], ["validation"])
         with self.assertRaises(ValueError):
-            boosting_forecasts(["dev"], self.dir)
+            join_forecasts(PREDICTIONS, [{"game_id": "g1", "home_win": 1}], ["dev"])
 
 
 class StatisticsTests(unittest.TestCase):
@@ -75,29 +62,24 @@ class StatisticsTests(unittest.TestCase):
 
 
 class NotesTests(unittest.TestCase):
-    def test_revised_posts_dropped_and_late_documents_rejected(self):
-        kept, dropped = notes.eligible_documents([
-            html_note("g1", "NYK", "2025-01-14T20:00:00Z"),
-            html_note("g1", "POR", "2025-01-14T20:00:00Z", modified_after_cutoff=True)])
-        self.assertEqual([d["team"] for d in kept], ["NYK"])
-        self.assertEqual(dropped["html_modified_after_cutoff"], 1)
-        with self.assertRaises(ValueError):
-            notes.eligible_documents([html_note("g1", "NYK", "2025-01-14T20:00:00Z", modified_utc="2025-01-15T01:00:00Z")])
+    FORECASTS = {"g1": {"split": "dev", "game_date_et": "2025-01-14", "home_win": 1, "p_boost": 0.55}}
 
-    def test_one_row_per_game_with_both_teams_text(self):
-        root = Path(tempfile.mkdtemp())
-        (root / "texts").mkdir()
-        docs = [html_note("g1", "NYK", "2025-01-14T20:00:00Z"), html_note("g1", "POR", "2025-01-14T21:00:00Z"),
-                html_note("g9", "NYK", "2025-01-14T20:00:00Z")]
-        for d in docs:
-            (root / d["text_path"]).write_text(f"notes from {d['team']}", encoding="utf-8")
-        write_jsonl(root / "approved.jsonl", docs)
-        forecasts = {"g1": {"split": "dev", "game_date_et": "2025-01-14", "home_win": 1, "p_boost": 0.55}}
-        rows, _ = notes.load(["dev"], root / "approved.jsonl", root, forecasts)
+    def game(self, *sources, game_id="g1"):
+        return {"game_id": game_id, "cutoff_utc": "2025-01-15T00:00:00Z",
+                "sources": [{"sha256": sha, "publisher": team, "archive_time": time} for sha, team, time in sources]}
+
+    def test_one_row_per_game_with_every_document_text(self):
+        cohort = [self.game(("a", "NYK", "2025-01-14T20:00:00Z"), ("b", "POR", "2025-01-14T21:00:00Z")),
+                  self.game(("c", "NYK", "2025-01-14T20:00:00Z"), game_id="g9")]
+        rows = notes.game_rows(cohort, self.FORECASTS, {"a": "notes from NYK", "b": "notes from POR", "c": "x"})
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["publishers"], ["NYK", "POR"])
-        self.assertIn("notes from NYK", rows[0]["text"])
-        self.assertIn("notes from POR", rows[0]["text"])
+        self.assertEqual(rows[0]["text"], "notes from NYK\n\nnotes from POR")
+        self.assertEqual((rows[0]["y"], rows[0]["base"], rows[0]["split"]), (1, 0.55, "dev"))
+
+    def test_document_public_after_cutoff_rejected(self):
+        with self.assertRaises(ValueError):
+            notes.game_rows([self.game(("a", "NYK", "2025-01-15T00:00:01Z"))], self.FORECASTS, {"a": "late"})
 
     def test_text_correlated_with_residual_is_found_and_permutation_p_small(self):
         rng = np.random.default_rng(3)

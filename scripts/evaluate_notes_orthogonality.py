@@ -1,62 +1,66 @@
 """Is game-note text orthogonal to, and informative beyond, the boosting forecast?
 
-Text -> correction: TF-IDF of each game's approved pregame notes (notes v2, every eligible
-team document for the game joined), ridge regression onto the boosting residual
-(outcome - boosting probability). The correction for each game is out-of-fold: folds are
-grouped by ET date, and the TF-IDF vocabulary and ridge penalty are fitted inside the
-training folds only. The text forecast is sigmoid(logit(boosting) + c * correction); c
-does not affect the correlations or the likelihood-ratio test. A permutation test
-(shuffling residuals across games, redoing every ridge fit) gives an honest p-value.
+Text -> correction: TF-IDF of each game's admitted pregame notes (the shared BAM cohort:
+notes.parquet, every document for the game joined, page text from note_pages.parquet),
+ridge regression onto the boosting residual (outcome - boosting probability). The
+correction for each game is out-of-fold: folds are grouped by ET date, and the TF-IDF
+vocabulary and ridge penalty are fitted inside the training folds only. The text
+forecast is sigmoid(logit(boosting) + c * correction); c does not affect the
+correlations or the likelihood-ratio test. A permutation test (shuffling residuals
+across games, redoing every ridge fit) gives an honest p-value.
 
-Documents follow the BAM snapshot's rules: HTML posts revised after the cutoff are
-dropped, and every kept document must have been public at or before the cutoff.
-Only games with an out-of-sample boosting forecast are used; TEST is excluded unless
-requested with --splits.
+The admitted corpus already drops HTML posts revised after the cutoff; every document
+is re-checked here to have been public at or before the cutoff. Only games with an
+out-of-sample boosting forecast are used; TEST is excluded unless requested with --splits.
 """
 import argparse
+from collections import defaultdict
 import json
 
 import numpy as np
+import pyarrow.parquet as pq
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import RidgeCV
 
-from bam_data import availability_time
+from bam_data import read_snapshot_inputs
 from collect_pilot import ROOT, stamp
-from evaluate_orthogonality import SPLITS, boosting_forecasts, bootstrap, day_folds, logit, read_rows, sigmoid, statistics, REPORT_DIR
+from evaluate_orthogonality import SPLITS, REPORT_DIR, bootstrap, day_folds, join_forecasts, logit, sigmoid, statistics
+from nba_dataset import Dataset
 
-NOTES = ROOT / "data/processed/notes_v2/approved.jsonl"
 SCALE = 1.0
 ALPHAS = np.logspace(-1, 3, 9)
 
 
-def eligible_documents(docs):
-    """Approved notes usable as pregame input, and counts of those dropped by reason."""
-    kept, dropped = [], {"html_modified_after_cutoff": 0}
-    for doc in docs:
-        if doc.get("modified_after_cutoff"):
-            dropped["html_modified_after_cutoff"] += 1
-            continue
-        if availability_time(doc) > stamp(doc["cutoff_utc"]):
-            raise ValueError(f"Note not shown public before its cutoff: {doc['text_path']}")
-        kept.append(doc)
-    return kept, dropped
+def page_texts(directory):
+    """source sha256 -> full text, pages in order."""
+    pages = defaultdict(list)
+    for row in pq.read_table(directory / "note_pages.parquet", columns=["source_sha256", "page", "text"]).to_pylist():
+        pages[row["source_sha256"]].append((row["page"], row["text"] or ""))
+    return {sha: "\n".join(text for _, text in sorted(rows)) for sha, rows in pages.items()}
 
 
-def load(splits, notes_path=NOTES, root=ROOT, forecasts=None):
-    """One row per game with a forecast in `splits` and at least one eligible note."""
-    forecasts = boosting_forecasts(splits) if forecasts is None else forecasts
-    docs, dropped = eligible_documents(read_rows(notes_path))
-    by_game = {}
-    for doc in sorted(docs, key=lambda d: (d["game_id"], d["team"])):
-        if doc["game_id"] in forecasts:
-            by_game.setdefault(doc["game_id"], []).append(doc)
+def game_rows(cohort, forecasts, texts):
+    """One row per game with a forecast and at least one note; rejects any note public after the cutoff."""
     rows = []
-    for game_id, game_docs in by_game.items():
-        f = forecasts[game_id]
-        rows.append({"game_id": game_id, "date": f["game_date_et"], "split": f["split"], "y": f["home_win"],
-                     "base": f["p_boost"], "publishers": [d["team"] for d in game_docs],
-                     "text": "\n\n".join((root / d["text_path"]).read_text(encoding="utf-8") for d in game_docs)})
-    return sorted(rows, key=lambda r: (r["date"], r["game_id"])), dropped
+    for game in cohort:
+        if game["game_id"] not in forecasts or not game["sources"]:
+            continue
+        for source in game["sources"]:
+            if stamp(source["archive_time"]) > stamp(game["cutoff_utc"]):
+                raise ValueError(f"Note not shown public before its cutoff: {game['game_id']} {source['sha256']}")
+        f = forecasts[game["game_id"]]
+        rows.append({"game_id": game["game_id"], "date": f["game_date_et"], "split": f["split"], "y": f["home_win"],
+                     "base": f["p_boost"], "publishers": [s["publisher"] for s in game["sources"]],
+                     "text": "\n\n".join(texts[s["sha256"]] for s in game["sources"])})
+    return sorted(rows, key=lambda r: (r["date"], r["game_id"]))
+
+
+def load(splits, root=ROOT):
+    directory = root / "data/processed"
+    dataset = Dataset(root)
+    cohort = read_snapshot_inputs(directory, root, splits=splits)
+    forecasts = join_forecasts([g for g in cohort if g["p_boost"] is not None], dataset.labels(splits), splits)
+    return game_rows(cohort, forecasts, page_texts(directory))
 
 
 def fold_matrices(texts, fold):
@@ -114,11 +118,10 @@ def main():
     parser.add_argument("--replicates", type=int, default=2000)
     parser.add_argument("--permutations", type=int, default=200)
     args = parser.parse_args()
-    rows, dropped = load(args.splits)
+    rows = load(args.splits)
     if len(rows) < 30:
         raise SystemExit(f"Only {len(rows)} games; too few")
     result = analyse(rows, args)
-    result["documents_dropped"] = dropped
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
     (REPORT_DIR / "game_notes_tfidf.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
     iv = result["intervals"]

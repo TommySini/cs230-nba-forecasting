@@ -14,8 +14,7 @@ import re
 import numpy as np
 
 from collect_pilot import ROOT, stamp
-from evaluate_orthogonality import (SPLITS, REPORT_DIR, boosting_forecasts, bootstrap, day_folds, logit, read_rows,
-                                    sigmoid, statistics)
+from evaluate_orthogonality import SPLITS, REPORT_DIR, boosting_forecasts, bootstrap, day_folds, logit, sigmoid, statistics
 
 INJURIES = ROOT / "data/processed/injury_full/injuries.jsonl"
 WEIGHTS = {"Out": 1.0, "Doubtful": 0.5, "Questionable": 0.5}
@@ -70,7 +69,8 @@ def main():
     parser.add_argument("--splits", nargs="+", default=["dev", "test"], choices=SPLITS)
     args = parser.parse_args()
     forecasts = boosting_forecasts(args.splits)
-    reports = read_rows(INJURIES)
+    with open(INJURIES, encoding="utf-8") as stream:
+        reports = [json.loads(line) for line in stream if line.strip()]
     results, pooled = {}, []
     for split in args.splits:
         rows, total = load(split, forecasts, reports)

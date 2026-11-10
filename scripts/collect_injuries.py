@@ -2,20 +2,17 @@
 
 Reuses the pilot's timestamp-checked matcher (report time must be at or before
 the game's cutoff and within 6 hours of it). Only injury reports are fetched.
-Games come from data/processed/gradient_boosting/predictions.jsonl; schedules from
-the histories listed in config/gradient_boosting.json.
+Games and cutoffs come from the shared games table; the game list from the frozen
+boosting forecasts. No outcome table is opened.
 Output: data/processed/injury_full/injuries.jsonl, one row per game, checkpointed
 so interrupted runs resume from cached raw responses.
 """
 import argparse
-import json
-from datetime import timedelta
 
-from collect_pilot import ROOT, Cache, get_injuries, iso, stamp, write_jsonl
-from evaluate_orthogonality import SPLITS, boosting_forecasts, read_rows
+from collect_pilot import ROOT, Cache, get_injuries, stamp, write_jsonl
+from nba_dataset import SPLITS, Dataset
 
 OUT = ROOT / "data/processed/injury_full"
-BOOSTING_CONFIG = ROOT / "config/gradient_boosting.json"
 
 
 def main():
@@ -24,24 +21,23 @@ def main():
     parser.add_argument("--limit", type=int)
     parser.add_argument("--offline", action="store_true")
     args = parser.parse_args()
-    config = json.loads(BOOSTING_CONFIG.read_text())
-    games = {g["game_id"]: g for source in config["histories"] for g in read_rows(ROOT / source["path"])}
-    forecasts = boosting_forecasts(args.splits)
+    dataset = Dataset()
+    games = {g["game_id"]: g for g in dataset.table("games")}
+    forecast_ids = {r["game_id"]: r["split"] for r in dataset.predictions("gradient_boosting", stage="baseline")}
     cache = Cache(offline=args.offline)
     OUT.mkdir(parents=True, exist_ok=True)
     rows = []
     for split in args.splits:
-        ids = sorted((i for i, f in forecasts.items() if f["split"] == split), key=lambda i: (games[i]["scheduled_start_utc"], i))
+        ids = sorted((i for i, s in forecast_ids.items() if s == split), key=lambda i: games[i]["schedule_index"])
         if args.limit:
             ids = ids[:args.limit]
         for i, game_id in enumerate(ids, 1):
             game = games[game_id]
-            cutoff = stamp(game["scheduled_start_utc"]) - timedelta(minutes=config["cutoff_minutes"])
-            injuries, attempts = get_injuries(cache, game, cutoff)
+            injuries, attempts = get_injuries(cache, game, stamp(game["cutoff_utc"]))
             rows.append({"game_id": game_id, "split": split, "game_date_et": game["game_date_et"],
                          "home_team": game["home_team"], "away_team": game["away_team"],
                          "home_abbr": game["home_abbr"], "away_abbr": game["away_abbr"],
-                         "cutoff_utc": iso(cutoff), "injury_report": injuries, "attempts": len(attempts)})
+                         "cutoff_utc": game["cutoff_utc"], "injury_report": injuries, "attempts": len(attempts)})
             if i % 25 == 0 or i == len(ids):
                 write_jsonl(OUT / "injuries.jsonl", rows)
                 matched = sum(r["injury_report"] is not None for r in rows)

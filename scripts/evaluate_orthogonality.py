@@ -1,10 +1,10 @@
 """Measure how much a second forecast (market, text model) adds beyond the boosting forecast.
 
 Works on any probability column for the same games as the boosting pipeline's
-out-of-sample forecasts (data/processed/gradient_boosting/predictions.jsonl, outcomes
-joined from labels.jsonl), so the same code answers "is the market redundant with
-statistics?" today and "is the text correction orthogonal to statistics?" once
-per-game text predictions exist.
+out-of-sample forecasts (shared predictions.parquet, model gradient_boosting; outcomes
+from the requested labels_<split>.parquet only), so the same code answers "is the
+market redundant with statistics?" today and "is the text correction orthogonal to
+statistics?" once per-game text predictions exist.
 
 Quantities (all with ET-calendar-day cluster bootstrap 95% intervals):
   logit_corr        correlation of the two forecasts' log-odds
@@ -24,37 +24,33 @@ from scipy.stats import chi2
 from sklearn.linear_model import LogisticRegression
 
 from collect_pilot import ROOT
+from nba_dataset import SPLITS, Dataset
 
-BOOSTING_DIR = ROOT / "data/processed/gradient_boosting"
 REPORT_DIR = ROOT / "reports/orthogonality"
-SPLITS = ("train", "dev", "test")
 KEYS = ["logit_corr", "delta_residual", "delta_coef", "explained_by_base"]
 
 
-def read_rows(path):
-    with open(path, encoding="utf-8") as stream:
-        return [json.loads(line) for line in stream if line.strip()]
-
-
-def boosting_forecasts(splits, directory=BOOSTING_DIR):
-    """game_id -> {split, game_date_et, home_win, p_boost} for the pipeline's out-of-sample forecasts.
-
-    predictions.jsonl only holds forecasts from models that never saw the game (TRAIN
-    seasons from earlier-season fits, DEV/TEST from the TRAIN fit); outcomes live in
-    labels.jsonl and are joined here, never stored with the inputs.
-    """
+def join_forecasts(predictions, labels, splits):
+    """game_id -> {split, game_date_et, home_win, p_boost}; every forecast in `splits` needs a label."""
     unknown = set(splits) - set(SPLITS)
     if unknown:
         raise ValueError(f"Unknown splits {sorted(unknown)}; expected some of {SPLITS}")
-    labels = {r["game_id"]: int(r["home_win"]) for r in read_rows(directory / "labels.jsonl")}
+    outcome = {r["game_id"]: int(r["home_win"]) for r in labels}
     forecasts = {}
-    for row in read_rows(directory / "predictions.jsonl"):
+    for row in predictions:
         if row["split"] in splits:
-            if row["game_id"] not in labels:
+            if row["game_id"] not in outcome:
                 raise ValueError(f"No outcome label for {row['game_id']}")
             forecasts[row["game_id"]] = {"split": row["split"], "game_date_et": row["game_date_et"],
-                                         "home_win": labels[row["game_id"]], "p_boost": float(row["p_boost"])}
+                                         "home_win": outcome[row["game_id"]], "p_boost": float(row["p_boost"])}
     return forecasts
+
+
+def boosting_forecasts(splits, dataset=None):
+    """The frozen boosting forecasts, all from models that never saw the game (TRAIN seasons from
+    earlier-season fits, DEV/TEST from the TRAIN fit), with outcomes from only the requested splits."""
+    dataset = Dataset() if dataset is None else dataset
+    return join_forecasts(dataset.predictions("gradient_boosting", stage="baseline"), dataset.labels(splits), splits)
 
 
 def logit(p):
@@ -125,16 +121,15 @@ def bootstrap(base, other, y, dates, repeats, seed, keys=KEYS):
 
 
 def other_forecasts(source, column):
-    """game_id -> probability, from Polymarket cutoff prices or a CSV/JSONL with game_id and `column`."""
+    """game_id -> probability: Polymarket prices at the boosting cutoff (tipoff - 60 min), or a CSV/JSONL
+    file with game_id and `column`."""
     if source == "polymarket":
-        path, column = ROOT / "data/processed/polymarket/market_probs.jsonl", "home_probability"
-    else:
-        path = ROOT / source
-    if path.suffix == ".csv":
-        with open(path, encoding="utf-8", newline="") as stream:
-            rows = list(csv.DictReader(stream))
-    else:
-        rows = read_rows(path)
+        from collect_polymarket import load_price_observations
+        return {r["game_id"]: float(r["home_probability"]) for r in load_price_observations()
+                if r["record_kind"] == "cutoff" and r["home_probability"] is not None}
+    path = ROOT / source
+    with open(path, encoding="utf-8", newline="") as stream:
+        rows = list(csv.DictReader(stream)) if path.suffix == ".csv" else [json.loads(l) for l in stream if l.strip()]
     return {r["game_id"]: float(r[column]) for r in rows}
 
 
