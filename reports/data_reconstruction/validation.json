@@ -228,5 +228,85 @@
     }
   },
   "staging_removed": true,
-  "shared_table_bytes": 527930700
+  "shared_table_bytes": 527930700,
+  "distribution": {
+    "release": "nba-data-4e5ba4eb0554",
+    "release_url": "https://github.com/TommySini/cs230-nba-forecasting/releases/tag/nba-data-4e5ba4eb0554",
+    "status": "published and verified",
+    "checked_at_utc": "2026-11-10T03:04:51.477562+00:00",
+    "source_commit": "1a67b446f9fc141dff5bd2b2cd99c7f60508b900",
+    "tests_run": 420,
+    "tests_passed": 419,
+    "tests_skipped": 1,
+    "bundles": {
+      "processed": {
+        "archives": 1,
+        "download_bytes": 521831034,
+        "installed_bytes": 570867250,
+        "files": 29
+      },
+      "raw": {
+        "archives": 15,
+        "download_bytes": 8144627226,
+        "installed_bytes": 21181501614,
+        "files": 74799
+      }
+    },
+    "isolated_checkout": {
+      "processed_only": [
+        "install",
+        "shared dataset validation",
+        "saved TabPFN TRAIN diagnostic",
+        "saved TabPFN DEV comparison"
+      ],
+      "with_raw": [
+        "install",
+        "raw inventory checksums",
+        "boosting source/model replay",
+        "notes source audit",
+        "Polymarket source audit",
+        "BAM source audit"
+      ],
+      "status": "PASS",
+      "raw_files": 74799,
+      "raw_bytes": 21181501614,
+      "pretrained_checkpoint_present": false,
+      "shared_source_directory_fallback": false,
+      "temporary_checkout_removed": true
+    },
+    "release_manifest_sha256": "1979bb4a0c61ceb2f480dac6f556dc95f9d9f87d82817430e903298189ef58ad",
+    "pull_request": "https://github.com/TommySini/cs230-nba-forecasting/pull/5",
+    "github_verification": {
+      "release_id": 439883430,
+      "assets_checked": 17,
+      "all_sizes_and_sha256_match": true,
+      "anonymous_archive_urls_checked": 16,
+      "all_anonymous_head_sizes_match": true
+    },
+    "public_clone": {
+      "commit": "1a67b446f9fc141dff5bd2b2cd99c7f60508b900",
+      "tag": "nba-data-4e5ba4eb0554",
+      "started_without_data_or_cache": true,
+      "anonymous_processed_download": "PASS",
+      "baseline_only_environment": "PASS; requirements-baseline.txt installed in a fresh .venv; torch and tabpfn absent",
+      "shared_validation": "PASS",
+      "saved_tabpfn_train_smoke": "PASS",
+      "saved_tabpfn_dev": "PASS",
+      "temporary_checkout_removed": true
+    },
+    "validation_log_sha256": {
+      "checkout-processed": "bbfb65670a340b74743870aae27f3caa46737278ef52d33512e0eac89d87bcdc",
+      "checkout-tabpfn-smoke": "cde53590a06bb6fb669ffa31070a3145b21b6f1065c708fab18839bf5304adcb",
+      "checkout-tabpfn-dev": "541630db77c43c40cc23ed381a83a70b171e227534d11dfb33816e6f3acb7b2e",
+      "checkout-boosting": "4ca3c60fa7dd19099e07f45b239b02b2db347d5160fba90f5f9be81530b0d6c0",
+      "checkout-notes": "af3de4b4d8ef13da3ee4756c4984d3f7dc8c778986c300ffa388887dd46fd68d",
+      "checkout-market": "acea1eee84163f4d01855df7fcadc1f5aa6fcaab3ac634d15960279db23a4868",
+      "checkout-bam": "9a47809f5e0501162b49bcbbab0cb5b489e61d9bf76a5bdb00f54225d34df00b",
+      "checkout-raw-inventory": "0e2b6d61a00ac29dfaddceab0a8e0270a8ef751b9c1ccf441f3d09ce82c6ce71",
+      "public-download": "e22af020e812564a8aa840a3a5f4ec48af074c344009dd77da47b17149bb89a2",
+      "baseline-shared": "bbfb65670a340b74743870aae27f3caa46737278ef52d33512e0eac89d87bcdc",
+      "baseline-tabpfn-smoke": "cde53590a06bb6fb669ffa31070a3145b21b6f1065c708fab18839bf5304adcb",
+      "baseline-tabpfn-dev": "541630db77c43c40cc23ed381a83a70b171e227534d11dfb33816e6f3acb7b2e"
+    }
+  }
 }

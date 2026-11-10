@@ -11,8 +11,14 @@ builds deterministic assets from the validated inventory without modifying sourc
 files. The checked-in `config/dataset_release.json` pins release
 `nba-data-4e5ba4eb0554`. Downloaded data uses the grouped raw layout directly and
 has no legacy migration folders. Packaging and downloader tests are included;
-the full suite passes 420 tests with one optional skip. Fresh-checkout and hosted
-asset checks are recorded when publication completes.
+the full suite passes 420 tests with one optional skip. An isolated checkout
+passes processed-only checks, all source-level validators, and checksums for all
+74,799 raw files. The [public prerelease](https://github.com/TommySini/cs230-nba-forecasting/releases/tag/nba-data-4e5ba4eb0554)
+is published: all 17 hosted asset digests and 16 anonymous archive URLs passed.
+A fresh public clone downloads and validates with baseline-only dependencies.
+Evidence is in `reports/data_reconstruction/validation.json`; temporary checkouts
+and their caches were removed. [PR #5](https://github.com/TommySini/cs230-nba-forecasting/pull/5)
+contains this work and overlaps the separate TabPFN, dependency and reports PRs.
 
 **Shared Parquet migration.** `data-reconstruction` branches from the completed
 TabPFN baseline at `7681631`; its worktree is

@@ -76,8 +76,9 @@ The `data-reconstruction` branch reads one shared Parquet dataset. Start with th
 [data guide](docs/data_reconstruction.md) for the table map, feature dictionary and
 a real game traced back to its sources. Features, outcomes and predictions have
 separate tables; original downloads remain in raw, saved models in `data/models/`,
-and run records in `reports/`. Legacy folders remain temporarily because another
-active worktree still reads them; raw regrouping and deletion are deferred.
+and run records in `reports/`. Fresh downloads use this layout directly. In the
+maintainer workspace, legacy folders remain temporarily because other worktrees
+still read them; local raw regrouping and deletion are deferred.
 
 | Dataset | Coverage | Built by |
 | --- | --- | --- |

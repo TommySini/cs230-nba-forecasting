@@ -72,8 +72,9 @@ different release should use a separate checkout/data directory.
 
 ## Current maintainer transition
 
-The shared tables are published and all installed validators pass. The 383-test
-suite passes with one optional tokenizer skip. Validation evidence and measurements
+The shared tables are published and all installed validators pass. The migration
+recorded 383 tests with one optional tokenizer skip; release verification extends
+the suite to 420 tests and checks an isolated checkout. Evidence and measurements
 are in [`reports/data_reconstruction/validation.json`](../reports/data_reconstruction/validation.json).
 The temporary conversion directory has been removed.
 A separate TabPFN adaptation worktree references the original baseline paths, so raw
