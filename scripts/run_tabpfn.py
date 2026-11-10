@@ -536,7 +536,7 @@ def prepare_adaptation():
     adaptation_arrays(manifest, inputs, labels)
     paths = ["scripts/run_tabpfn.py", "scripts/validate_tabpfn.py",
              "scripts/tabpfn_synthetic.py", "scripts/tabpfn_finetuning.py",
-             "config/tabpfn_adaptation.json", "config/tabpfn.json", "requirements-tabpfn.txt",
+             "config/tabpfn_adaptation.json", "config/tabpfn.json", "pyproject.toml",
              "reports/tabpfn/dev/manifest.json", "reports/tabpfn/dev/run.json"]
     protocol = {"schema_version": 1, "created_at_utc": utc_now(), "config": config,
                 "baseline_revision": BASELINE_REVISION,

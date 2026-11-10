@@ -4,7 +4,7 @@ Implemented in `scripts/bam_training.py`. This is an executable training and eva
 
 ## Runtime and checkpoint
 
-The worker imports only Python standard-library modules until a numerical or GPU function is called. Local boundary tests use the project `.venv`. CUDA workers use a dedicated Python 3.12 environment and `requirements-bam-training.txt`, separately from the existing MLX/vLLM environments. Never install these dependencies into system Python or the local MLX environment.
+The worker imports only Python standard-library modules until a numerical or GPU function is called. Local boundary tests use the project `.venv`. CUDA workers use a dedicated Python 3.12 environment and the `training` group in `pyproject.toml` (`uv pip install --python .venv/bin/python --group training` from the repository root), separately from the existing MLX/vLLM environments. Never install these dependencies into system Python or the local MLX environment.
 
 Load the official Hugging Face model using `model_id` and an immutable 40-character `model_revision`; the original MLX four-bit checkpoint is not silently reused or relabeled. The configured `minimum_eval_date` applies to every heldout research and forecast input. Pinning a historical checkpoint and date is a protocol safeguard, not proof of absence of memorization. Research and forecast adapters start independently from this same base. Research weights are never loaded into the frozen reader or forecasting adapter.
 

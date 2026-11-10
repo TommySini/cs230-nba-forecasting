@@ -156,6 +156,8 @@ Finish data cleanup only after legacy consumers switch, as described above.
 - Canonical checkout: `/Users/tommasosini/Desktop/Repos/cs230-nba-forecasting` (all data lives
   in its `data/`; other worktrees link `data` there).
 - Use `.venv/bin/python`. The Codex worktree's `.venv` has the full ML stack (torch, transformers).
+- Dependency pins live in `pyproject.toml`: `local`, `training`, `research`, and `validation`
+  groups. Local setup: `uv pip install --python .venv/bin/python --group local`.
 - GitHub: https://github.com/TommySini/cs230-nba-forecasting. Local `main` may be ahead.
 
 ## Rules that never change

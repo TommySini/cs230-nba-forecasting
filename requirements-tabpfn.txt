@@ -1,6 +1,0 @@
-# Optional TabPFN baseline; install into this worktree's .venv.
-# The model checkpoint is pinned separately in config/tabpfn.json.
--r requirements-baseline.txt
-tabpfn==9.2.0
-torch==2.15.0
-tabpfn-extensions==0.6.3

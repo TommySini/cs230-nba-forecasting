@@ -6,7 +6,7 @@ separate saved models, and compact run records.
 
 ## Downloading data after a clone
 
-Install `requirements-baseline.txt` in the repo `.venv`, then run:
+Install the `local` dependency group from `pyproject.toml` into the repo `.venv`, then run:
 
 ```bash
 .venv/bin/python scripts/download_data.py
@@ -191,7 +191,7 @@ prior player workload does not establish a current lineup.
 Parquet is a binary table format: inspect it through a dataframe, SQL tool or table
 viewer. The feature dictionary supplies the human-readable meanings.
 
-Use this branch's `.venv`; dependencies are pinned in `requirements-baseline.txt`.
+Use this branch's `.venv`; dependencies are pinned in `pyproject.toml` (`local` group).
 To inspect a few columns without loading the audit history:
 
 ```python
@@ -249,8 +249,7 @@ and rollback support. Run the validators below against the installed layout befo
 `cleanup --validated`. Cleanup refuses unknown/changed files, removes only mapped
 superseded records, and preserves other work such as the live TabPFN adaptation.
 Do not use the cleanup flag as a substitute for the validation or dependency check.
-The full unit suite below also requires the optional `requirements-tabpfn.txt`
-dependencies; the source-level validators themselves need only the baseline environment.
+The full unit suite below also requires the optional `tabpfn` dependency group; the source-level validators themselves need only the baseline environment.
 
 ```bash
 .venv/bin/python -m unittest discover -s tests
