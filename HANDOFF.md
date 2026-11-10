@@ -1,7 +1,11 @@
 # CS230 NBA forecasting — handoff
 
 Current state for the next session. Public summary: [`README.md`](README.md).
-Everything removed in the November 2026 cleanup is at git tag `pre-cleanup`.
+Retired experiment code is at git tag `pre-cleanup`. Reports consolidated during
+the folder cleanup remain in Git at `67596558a188014803724bd60a158ce6f205ec3e`.
+Read [`reports/README.md`](reports/README.md) for the three maintained reports;
+current run records stay where the dataset release pins them (`reports/gradient_boosting/`,
+`reports/polymarket/`, `reports/tabpfn/`); archived pilot metrics live in `results/`.
 
 ## Status (2026-11-09)
 
@@ -100,7 +104,7 @@ No experiment job remains running. These methods have not replaced boosting in B
 **Plan: BAM teacher-explanation training on AWS, TRAIN-first.** Prove learning on 16–32
 TRAIN games before touching DEV; TEST stays excluded. Design: [`docs/bam_aws_architecture.md`](docs/bam_aws_architecture.md),
 [`docs/bam_training_first.md`](docs/bam_training_first.md). Account details and evidence:
-[`docs/aws_toolkit_setup.md`](docs/aws_toolkit_setup.md), `reports/aws_setup/20261108/`.
+[`docs/aws_toolkit_setup.md`](docs/aws_toolkit_setup.md), the historical evidence references in that document.
 No real pilot fit has run.
 
 **Blocked on AWS compute and model access.**
@@ -133,13 +137,13 @@ No real pilot fit has run.
   200 trees; DEV Brier 0.2103), TEST scored once: **0.2058**. TRAIN games 2013–24 get forecasts from
   models fitted on earlier seasons only (`produced_by: prior_seasons`); 2012–13 has none. Output:
   `data/processed/predictions.parquet`, filtered to `model_id=gradient_boosting`.
-- Market at 8 h beats boosting by about 0.010 Brier on DEV and TEST (`reports/polymarket/`).
+- Market at 8 h beats boosting by about 0.010 Brier on DEV and TEST ([baseline report](reports/baselines.md); records in `reports/polymarket/`).
 - BAM cohort in shared `notes.parquet`, `note_pages.parquet`, `bam_manifest.json`
   (`bam_data.py validate data/processed` passes):
   1,922 games with notes 2012–26, 2,064 documents (80 HTML posts revised after their cutoff
   excluded). 1,768 have a boosting probability (TRAIN 1,456, DEV 182, TEST 130); the rest are
   research-only (138 too early in the season, 16 in 2012–13). Summary:
-  `reports/bam_pipeline/bam_notes_v2/data_summary.json`.
+  `summary` in `data/processed/bam_pipeline/bam_notes_v2/manifest.json`.
 
 ## Next
 

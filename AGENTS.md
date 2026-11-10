@@ -9,6 +9,14 @@
   change makes obsolete in the same change. No `_v2`/dated copies, and no keeping
   finished experiments' code. Git history keeps everything (the tag `pre-cleanup`
   holds the state before the November 2026 cleanup).
+- **Reports stay lean:** `reports/` contains three maintained research reports and
+  a reading guide, plus the run records the dataset release pins by path
+  (`reports/gradient_boosting/`, `reports/polymarket/`, `reports/tabpfn/`; never move
+  them without a new data release). Archived metrics belong in `results/`; dataset manifests and
+  collector diagnostics stay with their data. Keep supporting files only when
+  active code needs them or they preserve essential unique results. Update the
+  owning report, delete superseded prose/copies, and cite Git history for retired
+  investigations. Collectors and evaluators must not write report narratives.
 - **Fixed splits:** TRAIN = seasons 2012–13 to 2023–24, DEV = 2024–25,
   TEST = 2025–26, defined once in `config/gradient_boosting.json`. Fit on TRAIN,
   choose on DEV, score TEST once. Do not change the splits.

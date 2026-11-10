@@ -46,7 +46,8 @@ generating the full pilot. Keep all pregame evidence, explicit output bounds and
 one GPU worker; do not save cost through silent source truncation. Avoid setting
 up batch infrastructure for the tiny pilot until measured savings justify it.
 Current on-demand N. Virginia prices and access evidence are recorded in
-`reports/aws_setup/20261108/teacher_us_east_1_prices.json` and the setup notes.
+the historical `teacher_us_east_1_prices.json` record referenced in
+[`aws_toolkit_setup.md`](aws_toolkit_setup.md).
 
 ## Data and baseline
 

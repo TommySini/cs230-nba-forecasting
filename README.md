@@ -34,24 +34,30 @@ pipeline **BAM** (`scripts/bam_*.py`), after the paper's authors.
 
 ## Results so far
 
-**Statistics and the market.** 2025–26 regular season (lower Brier is better):
+Statistics predict better than a constant home-win rate, and the market predicts
+better than statistics. On the **same 1,132 TEST games** in 2025–26:
 
-| Forecast | Brier | Accuracy |
+| Forecast | Brier (lower is better) | Accuracy |
 | --- | ---: | ---: |
-| Polymarket price 1 hour before tipoff | **0.194** | **69.3%** |
-| Polymarket price 8 hours before tipoff (typical note publication) | 0.195 | 69.2% |
-| Gradient boosting on prior-game team + player box scores (fit on 2012–24) | 0.206 | 67.5% |
-| Historical home-win rate | 0.248 | 54.8% |
+| Polymarket price 1 hour before tipoff | **0.1941** | **69.3%** |
+| Gradient boosting on prior-game statistics | 0.2059 | 67.2% |
+| TRAIN home-win rate | 0.2484 | 54.8% |
 
-Boosting is fit on the 12 TRAIN seasons and its settings chosen on DEV 2024–25 (DEV Brier 0.210).
-The market beats it by about 0.010 even 8 hours out (paired 95% CI [−0.016, −0.004] on TEST,
-[−0.017, −0.005] on DEV); the extra 7 hours of information are worth only about 0.0015. That gap
-is the room text has to fill.
-Reports: [market](reports/polymarket/findings.md), [market at 8 h](reports/polymarket/horizon_findings.md),
-[boosting](reports/gradient_boosting/findings.md), [earlier boosting runs](reports/past/README.md).
+The market-minus-boosting paired 95% Brier interval is [−0.0180, −0.0055].
+On a separate 1,125-game cohort with usable prices at both horizons, the market
+still beats boosting eight hours before tipoff: 0.1952 versus 0.2055.
+The full statistical baseline scores 0.2058 on 1,137 games. Different cohorts
+explain the slightly different baseline scores.
 
-**Text: no measurable gain yet.** Three small pilots, on 14–18 test games each, found no gain
-from text ([summaries](reports/past/README.md)). The full BAM pipeline has not been trained yet.
+Three text pilots, each with only 14–18 test games, found no demonstrated gain.
+The full BAM forecaster has not been trained. The 2025–26 season was previously
+inspected, so these are exploratory backtests.
+
+Read the reports for the methods, exact populations and limitations:
+
+- [Data coverage and provenance](reports/data.md)
+- [Statistical and market baselines](reports/baselines.md)
+- [Text experiments and lessons](reports/text_experiments.md)
 
 **TabPFN experiments.** The `tabpfn-implementation` branch compares the same frozen
 252 features on 13,457 TRAIN and 1,123 DEV games. Original TabPFN-2.5 (fixed weights,
@@ -88,7 +94,7 @@ still read them; local raw regrouping and deletion are deferred.
 | --- | --- | --- |
 | ESPN schedules and results | 16,829 source rows, including 16,821 NBA franchise games, 2012–13 to 2025–26 | `collect_pilot.py --stage schedules` (configs `history_2012`, `seasonal`) |
 | ESPN box scores (NBA.com where ESPN is empty or invalid) | 16,810 of 16,821 games, 2012–13 to 2025–26 | `collect_rich_stats.py` |
-| Game notes v2 | 2,144 team documents for 1,997 games, 2012–26 | `collect_notes_v2.py` ([findings](reports/notes_v2/findings.md)) |
+| Game notes v2 | 2,144 team documents for 1,997 games, 2012–26 | `collect_notes_v2.py` ([findings](reports/data.md)) |
 | Polymarket prices and trades | 2,410 games, 2024–25 onward | `collect_polymarket.py`, `collect_polymarket_trades.py` |
 | BAM notes cohort | 1,922 games with notes, 2012–26 (TRAIN 1,592, DEV 193, TEST 137): numbered pages, split, boosting probability for 1,768 | `bam_data.py validate data/processed` |
 
@@ -124,13 +130,15 @@ scripts/
   bam_inference.py            vLLM batch worker; bam_budget.py spend ledger
 config/                       one config per dataset or experiment
 tests/                        unit and leakage tests
-reports/                      current findings; reports/past/ for finished pilots
+reports/                      three research reports, a reading guide, and the run records the
+                              dataset release pins (gradient_boosting/, polymarket/, tabpfn/)
+results/                      archived metrics of finished text pilots
 docs/                         proposal, AWS plan (bam_aws_architecture, bam_training_first,
                               aws_toolkit_setup), BAM design notes in docs/bam/
 infra/aws/                    IAM CloudFormation template
 ```
 
-## Run
+## Verify the existing datasets and results
 
 Requires Python 3.12+, macOS/Linux (or WSL), and the repo `.venv`. Run commands from the
 repository root. All dependency pins live in [`pyproject.toml`](pyproject.toml).
