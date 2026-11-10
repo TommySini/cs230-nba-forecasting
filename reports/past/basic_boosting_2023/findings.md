@@ -56,7 +56,7 @@ The test season has now been examined for this baseline. Future model comparison
 ## Reproduce
 
 ```bash
-uv pip install --python .venv/bin/python -r requirements-baseline.txt
+uv pip install --python .venv/bin/python --group local
 .venv/bin/python scripts/run_gradient_boosting.py
 .venv/bin/python scripts/validate_gradient_boosting.py
 .venv/bin/python -m unittest discover -s tests -v

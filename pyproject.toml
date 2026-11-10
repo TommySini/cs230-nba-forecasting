@@ -1,0 +1,66 @@
+[project]
+name = "cs230-nba-forecasting"
+version = "0.1.0"
+requires-python = ">=3.12"
+
+[dependency-groups]
+# Local collection, validation, analysis, and the statistical baseline.
+local = [
+    "pypdf==6.21.4",
+    "fonttools==4.68.0",
+    "cloudpickle==3.1.2",
+    "contourpy==1.4.0",
+    "cycler==0.12.1",
+    "joblib==1.6.0",
+    "kiwisolver==1.5.1",
+    "matplotlib==3.11.2",
+    "narwhals==2.28.0",
+    "numpy==2.5.4",
+    "packaging==26.3",
+    "pillow==13.0.0",
+    "pyparsing==3.3.3",
+    "python-dateutil==3.0.0",
+    "scikit-learn==1.9.1",
+    "scipy==1.18.1",
+    "six==1.17.0",
+    "threadpoolctl==3.7.0",
+    "tzdata==2026.6",
+]
+
+# Linux/CUDA training worker, Python 3.12; never install on the Mac.
+training = [
+    "torch==2.6.0",
+    "transformers==4.51.3",
+    "peft==0.15.2",
+    "accelerate==1.6.0",
+    "bitsandbytes==0.45.5",
+    "safetensors==0.5.3",
+    "numpy==2.2.5",
+    "scipy==1.15.2",
+]
+# Separate Linux/CUDA research worker, Python 3.13+ with these pins.
+research = [
+    "vllm==0.32.0",
+    "transformers==5.19.0",
+    "numpy==2.4.6",
+    "tokenizers==0.23.3",
+    "huggingface-hub==2.4.0",
+    "safetensors==0.8.0",
+]
+
+# Optional CloudFormation linting tools.
+validation = ["cfn-lint==1.60.0"]
+
+[tool.uv]
+package = false
+default-groups = ["local"]
+# These environments pin incompatible versions and must be installed separately.
+conflicts = [
+    [{ group = "local" }, { group = "training" }],
+    [{ group = "local" }, { group = "research" }],
+    [{ group = "training" }, { group = "research" }],
+]
+
+[tool.uv.dependency-groups]
+training = { requires-python = "==3.12.*" }
+research = { requires-python = ">=3.13" }

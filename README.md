@@ -100,11 +100,12 @@ infra/aws/                    IAM CloudFormation template
 
 ## Run
 
-Requires Python 3.12+ and the repo `.venv`.
+Requires Python 3.12+ and the repo `.venv`. Run commands from the repository root.
+All dependency pins live in [`pyproject.toml`](pyproject.toml).
 
 ```bash
 uv venv --python 3.12 .venv
-uv pip install --python .venv/bin/python -r requirements-baseline.txt
+uv pip install --python .venv/bin/python --group local
 .venv/bin/python -m unittest discover -s tests
 
 .venv/bin/python scripts/validate_notes_v2.py
@@ -113,7 +114,21 @@ uv pip install --python .venv/bin/python -r requirements-baseline.txt
 .venv/bin/python scripts/bam_data.py prepare --config config/bam_snapshot.json
 ```
 
-GPU workers install `requirements-bam-training.txt` (training) or `requirements-research-vllm.txt`
-(research generation) on the AWS instance, not on the Mac.
+Select the dependency group for the environment:
+
+| Group | Purpose | Install into that environment's `.venv` |
+| --- | --- | --- |
+| `local` | Collection, data validation, analysis, and statistical baseline | `uv pip install --python .venv/bin/python --group local` |
+| `training` | GPU training worker | `uv pip install --python .venv/bin/python --group training` |
+| `research` | GPU research generation with vLLM | `uv pip install --python .venv/bin/python --group research` |
+| `validation` | Optional CloudFormation linting | `uv pip install --python .venv/bin/python --group validation` |
+
+GPU workers use separate environments on Linux/CUDA instances: Python 3.12 for `training`
+and Python 3.13 for `research`. The research pins require Python 3.13+ because vLLM's
+`mistral-common` dependency requires NumPy below 2.4 on older Python, conflicting with
+the pinned NumPy 2.4.6. Do not install GPU groups into the Mac `.venv`.
+The `local`, `training`, and `research` groups pin
+incompatible package versions. Install only one of those groups per environment;
+`validation` can be added when needed. The install commands resolve only the selected group.
 
 Current status and next steps: [`HANDOFF.md`](HANDOFF.md).
