@@ -900,6 +900,9 @@ def train_forecaster(run_dir, config):
     uses_explanations=(options.get('train_lora',True) and
                       float(options.get('explanation_loss_weight',options.get('explanation_weight',0.)))>0)
     specification['forecast_explanations_sha256']=(file_hash(root/'forecast_explanations_train.jsonl') if uses_explanations else None)
+    import bam_concepts as concepts
+    if options.get('train_lora',True) and concepts.head_spec(config)['type'] == 'concept_bottleneck':
+        specification['forecast_concepts_sha256'] = file_hash(root/'forecast_concepts_train.jsonl')
     _lock(root/'forecast',specification)
     if (root/'evaluation_started.json').exists():
         raise ValueError('Test evaluation started; no fitting or reselection permitted')
@@ -962,11 +965,64 @@ def _verify_selected_candidate(root, candidate):
             raise ValueError('Saved dev-selected candidate changed')
 
 
+def _build_forecast_head(config, hidden_size, device):
+    """Zero-residual head of the configured type (linear, or concept bottleneck from config['forecast']['head'])."""
+    import torch
+    import bam_concepts as concepts
+    spec = concepts.head_spec(config)
+    if spec['type'] == 'linear':
+        head = torch.nn.Linear(hidden_size, 1, device=device, dtype=torch.float32)
+        torch.nn.init.zeros_(head.weight); torch.nn.init.zeros_(head.bias)
+        return head
+    taxonomy = concepts.spec_taxonomy(spec)
+    torch.manual_seed(config.get('seed', 230))
+    return concepts.build_head(hidden_size, len(taxonomy['selected']), mlp_hidden=spec['mlp_hidden'],
+                               dropout=spec['dropout'], device=device)
+
+
+def _head_probability(head, hidden, p_boost):
+    """sigmoid(delta + logit p_boost) plus concept scores/evidence logits (None for the linear head)."""
+    import torch
+    import bam_concepts as concepts
+    delta, scores, mentions = concepts.head_forward(head, hidden, math.log(p_boost) - math.log1p(-p_boost))
+    return torch.sigmoid(delta + math.log(p_boost) - math.log1p(-p_boost)), scores, mentions
+
+
+def _forecast_concept_targets(root, config, train_labels):
+    """TRAIN-only concept targets from forecast_concepts_train.jsonl, or None for the linear head."""
+    import bam_concepts as concepts
+    spec = concepts.head_spec(config)
+    weight = float(config.get('forecast', {}).get('concept_loss_weight', 0.))
+    if spec['type'] == 'linear':
+        if weight:
+            raise ValueError('concept_loss_weight requires the concept_bottleneck head')
+        return None, 0.
+    if not math.isfinite(weight) or weight <= 0:
+        raise ValueError('The concept head requires a positive forecast.concept_loss_weight')
+    taxonomy = concepts.spec_taxonomy(spec)
+    targets = {}
+    for item in read_rows(Path(root) / 'forecast_concepts_train.jsonl'):
+        game_id = item.get('game_id')
+        if (set(item) != {'game_id', 'split', 'concept_pool_sha256', 'labels'} or item['split'] != 'train'
+                or game_id not in train_labels or game_id in targets):
+            raise ValueError('Concept labels must be unique, TRAIN-only and aligned with TRAIN outcomes')
+        if item['concept_pool_sha256'] != concepts.pool_sha256(taxonomy):
+            raise ValueError('Concept labels use a different concept pool')
+        targets[game_id] = concepts.concept_targets(concepts.validate_normalized_labels(item['labels'], taxonomy), taxonomy)
+    if not targets:
+        raise ValueError('The concept head needs TRAIN concept labels')
+    return targets, weight
+
+
 def _forecast_steps(root, config, rows, train_labels, dev_labels, model, tokenizer, head, *, stop_after_steps=None):
     """Same weighted objective/optimizer; free the prefix graph before CE forward."""
     import torch
     import bam_checkpoint
+    import bam_concepts as concepts
     root = Path(root); options = config.get('forecast', {})
+    concept_targets, concept_weight = _forecast_concept_targets(root, config, train_labels)
+    if (concept_targets is not None) != concepts.is_concept_head(head):
+        raise ValueError('Configured head type differs from the supplied head')
     tokens = [prompt_tokens(tokenizer, r['messages'], options.get('max_seq_length', 8192)) for r in rows]
     training = [i for i, r in enumerate(rows) if r['split'] == 'train']
     development = [i for i, r in enumerate(rows) if r['split'] == 'dev']
@@ -993,12 +1049,16 @@ def _forecast_steps(root, config, rows, train_labels, dev_labels, model, tokeniz
     identity.update(train_labels_sha256=value_hash(train_labels), dev_labels_sha256=value_hash(dev_labels),
                     validation_rows_sha256=value_hash([rows[i] for i in development]),
                     explanations_sha256=value_hash(explanations))
+    if concept_targets is not None:
+        identity.update(head_type='concept_bottleneck', concepts_sha256=value_hash(concept_targets))
     zero = {'name': 'zero_correction', 'epoch': 0,
             'dev': metrics([rows[i]['p_boost'] for i in development], [dev_labels[rows[i]['game_id']] for i in development])}
     rng = random.Random(config.get('seed', 230)); checkpoint_root = root / 'forecast_resume/checkpoints'
     resumed = bam_checkpoint.restore_checkpoint(checkpoint_root, identity=identity, adapter_state=_joint_state(model, head),
         optimizer=optimizer, named_parameters=named, shuffle_rng=rng, apply_adapter=lambda state: _apply_joint_state(model, head, state))
     cursor = resumed['cursor'] if resumed else None
+    if cursor is None and not concepts.residual_is_zero(head):
+        raise ValueError('The initial residual probability head must be exactly zero')
     best = cursor['best'] if cursor else dict(zero); _verify_selected_candidate(root, best)
     history = list(cursor['history']) if cursor else []; global_step = cursor['global_step'] if cursor else 0
     starting_epoch = cursor['epoch'] if cursor else 0; saved_step = global_step if cursor else -1
@@ -1019,12 +1079,18 @@ def _forecast_steps(root, config, rows, train_labels, dev_labels, model, tokeniz
             group = order[start:start + accumulation]; optimizer.zero_grad(set_to_none=True)
             for position in group:
                 index = training[position]; row = rows[index]
-                probability = torch.sigmoid(head(_prefix_hidden(model, tokens[index])).squeeze() + math.log(row['p_boost']) - math.log1p(-row['p_boost']))
+                probability, scores, mentions = _head_probability(head, _prefix_hidden(model, tokens[index]), row['p_boost'])
                 brier = brier_weight * (probability-train_labels[row['game_id']])**2
                 if not torch.isfinite(brier): raise ValueError('Nonfinite forecast Brier loss')
-                (brier / len(group)).backward()
+                loss = brier / len(group)
+                if concept_targets is not None and row['game_id'] in concept_targets:
+                    part = concepts.concept_loss(scores, mentions, *concept_targets[row['game_id']])[0]
+                    if not torch.isfinite(part): raise ValueError('Nonfinite forecast concept loss')
+                    loss = loss + concept_weight * part / len(group)
+                    total += concept_weight * part.detach().float().item()
+                loss.backward()
                 total += brier.detach().float().item()
-                del brier, probability
+                del brier, probability, loss, scores, mentions
                 if explanation_weight:
                     item = encoded[index]; ids = torch.tensor([item['input_ids']], device=device)
                     with torch.autocast('cuda', dtype=torch.bfloat16, enabled=device.type == 'cuda'):
@@ -1051,7 +1117,7 @@ def _forecast_steps(root, config, rows, train_labels, dev_labels, model, tokeniz
             candidate = saved['record']['candidate']; _verify_selected_candidate(root, candidate)
         else:
             with torch.inference_mode():
-                probabilities = [torch.sigmoid(head(_prefix_hidden(model, tokens[i])).squeeze() + math.log(rows[i]['p_boost']) - math.log1p(-rows[i]['p_boost'])).item() for i in development]
+                probabilities = [_head_probability(head, _prefix_hidden(model, tokens[i]), rows[i]['p_boost'])[0].item() for i in development]
             candidate = {'name': 'forecast_lora', 'epoch': epoch + 1,
                          'dev': metrics(probabilities, [dev_labels[rows[i]['game_id']] for i in development])}
             if candidate['dev']['brier'] < best['dev']['brier']:
@@ -1073,15 +1139,17 @@ def _forecast_steps(root, config, rows, train_labels, dev_labels, model, tokeniz
         shutil.copytree(selected / 'adapter', root / 'forecast/adapter', dirs_exist_ok=True)
         shutil.copyfile(selected / 'head.pt', root / 'forecast/head.pt')
     return {**best, 'candidates': [zero] + history, 'optimizer_steps': global_step,
-            'loss': 'actual-outcome Brier plus optional completion-only CE; separate backward passes before unchanged clip/step',
+            'head_type': 'concept_bottleneck' if concept_targets is not None else 'linear',
+            'loss': 'actual-outcome Brier plus optional completion-only CE' + (
+                ' plus TRAIN concept loss on the pregame pass' if concept_targets is not None else '') +
+                    '; separate backward passes before unchanged clip/step',
             'head_input': 'last pregame prefix token; explanation evaluated in separate pass'}
 
 
 def _fit_forecast_lora(root,config,rows,train_labels,dev_labels):
     import torch
     model,tokenizer = _load_model(config,training=True,stage='forecast')
-    head = torch.nn.Linear(model.config.hidden_size,1,device='cuda',dtype=torch.float32)
-    torch.nn.init.zeros_(head.weight); torch.nn.init.zeros_(head.bias)
+    head = _build_forecast_head(config, model.config.hidden_size, 'cuda')
     result = _forecast_steps(root,config,rows,train_labels,dev_labels,model,tokenizer,head)
     del model,head
     _release(None)
@@ -1137,15 +1205,14 @@ def evaluate(run_dir,config):
         else:
             import torch
             model,tokenizer = _load_model(config,adapter=root/'forecast/adapter')
-            head = torch.nn.Linear(model.config.hidden_size,1,device='cuda',dtype=torch.float32)
+            head = _build_forecast_head(config, model.config.hidden_size, 'cuda')
             head.load_state_dict(torch.load(root/'forecast/head.pt',map_location='cuda',weights_only=True))
             head.eval()
             predictions = []
             with torch.inference_mode():
                 for row in test:
                     ids = prompt_tokens(tokenizer,row['messages'],config.get('forecast',{}).get('max_seq_length',8192))
-                    predictions.append(torch.sigmoid(head(_prefix_hidden(model,ids)).squeeze()+
-                         math.log(row['p_boost'])-math.log1p(-row['p_boost'])).item())
+                    predictions.append(_head_probability(head,_prefix_hidden(model,ids),row['p_boost'])[0].item())
             forecasts['forecast_lora'] = predictions
             del model,head
             _release(None)

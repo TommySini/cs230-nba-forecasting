@@ -215,6 +215,31 @@ def ingest_concept_response(request, response, game, model, taxonomy, *, finish_
     return artifact
 
 
+def validate_normalized_labels(labels, taxonomy):
+    """Structure of already-validated labels (as ingest_concept_response outputs them)."""
+    _require(isinstance(labels, list) and [item.get("name") if isinstance(item, dict) else None for item in labels]
+             == candidate_names(taxonomy), "Labels must list every candidate concept in taxonomy order")
+    for item in labels:
+        _require(set(item) == set(ITEM_SCHEMA), "Unexpected/missing normalized concept label fields")
+        _require(type(item["score"]) is float and math.isfinite(item["score"]) and -1 <= item["score"] <= 1,
+                 "Concept score must be a float in [-1, 1]")
+        _require(type(item["evidence_present"]) is bool and type(item["decisive"]) is bool, "Concept flags must be booleans")
+        _require(item["evidence_present"] or (item["score"] == 0 and item["citations"] == []),
+                 "Concepts without pregame evidence take score 0 and no citations")
+    return labels
+
+
+def forecast_label_rows(records, taxonomy):
+    """Export contract-validated bundle records to the DEV pipeline's forecast_concepts_train.jsonl rows."""
+    rows = []
+    for record in records:
+        _require(record["split"] == "train" and record["candidate"]["status"] == "mechanically_valid",
+                 "Only mechanically valid TRAIN concept labels are exported")
+        rows.append({"game_id": record["game_id"], "split": "train", "concept_pool_sha256": pool_sha256(taxonomy),
+                     "labels": validate_normalized_labels(record["candidate"]["output"], taxonomy)})
+    return rows
+
+
 def concept_targets(labels, taxonomy):
     """(scores, evidence flags) in selected-concept order, as floats."""
     by_name = {item["name"]: item for item in labels}

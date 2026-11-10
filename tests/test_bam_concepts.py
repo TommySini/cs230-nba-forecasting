@@ -330,5 +330,95 @@ class ConceptHeadTrainingTests(unittest.TestCase):
         self.assertEqual(options["concept_weight"], 1.0)
 
 
+@unittest.skipIf(torch is None, "torch is installed with the training/tabpfn dependency groups")
+class DevLoopConceptTests(unittest.TestCase):
+    """bam_training's TRAIN-fit / DEV-select forecaster loop with the concept head."""
+
+    def setUp(self):
+        import test_bam_training as fixture
+        # Use the fixture's own module copy: its setUp patches that object.
+        self.bam, self.fixture = fixture.bam, fixture
+        fixture.OptimizerResumeIntegration.setUp(self)  # tiny model, toy tokenizer, adapter/prefix patches
+        self.config = copy.deepcopy(self.config)
+        self.config["forecast"]["concept_loss_weight"] = .5
+        self.config["forecast"]["head"] = {"type": "concept_bottleneck", "taxonomy_path": "config/bam_concepts.json",
+                                           "taxonomy_sha256": concepts.taxonomy_sha256(TAXONOMY), "mlp_hidden": [8, 4], "dropout": .1}
+
+    def new(self, seed=23):
+        torch.manual_seed(seed)
+        model = self.Model()
+        return model, self.bam._build_forecast_head(self.config, 4, "cpu")
+
+    def labels_for(self, game_id, score):
+        names = concepts.candidate_names(TAXONOMY)
+        items = [label(n) for n in names]
+        items[names.index("star_availability")] = label("star_availability", score, True, True)
+        for item in items:
+            item["score"] = float(item["score"])
+        return {"game_id": game_id, "split": "train", "concept_pool_sha256": concepts.pool_sha256(TAXONOMY), "labels": items}
+
+    def write_fixture(self, root, labels=None):
+        rows = [self.fixture.forecast(str(i), "2024-01-01", "train", p=.2) for i in range(3)] + [
+            self.fixture.forecast("d", "2024-02-01", "dev", p=.2)]
+        self.bam.write_rows(root / "forecast_explanations_train.jsonl", [
+            {"game_id": str(i), "review_status": "accepted", "explanation": "Synthetic source summary."} for i in range(3)])
+        self.bam.write_rows(root / "forecast_concepts_train.jsonl",
+                            labels if labels is not None else [self.labels_for(str(i), .5 - .4 * i) for i in range(3)])
+        return rows, {str(i): 1 for i in range(3)}, {"d": 1}
+
+    def test_concept_head_trains_selects_on_dev_and_resumes_exactly(self):
+        with tempfile.TemporaryDirectory() as directory:
+            full, partial = Path(directory) / "full", Path(directory) / "resume"
+            rows, labels, dev = self.write_fixture(full); self.write_fixture(partial)
+            model, head = self.new()
+            self.assertTrue(concepts.residual_is_zero(head))
+            complete = self.bam._forecast_steps(full, self.config, rows, labels, dev, model, self.tokenizer, head)
+            self.assertEqual(complete["head_type"], "concept_bottleneck")
+            self.assertIn("concept loss", complete["loss"])
+            self.assertEqual(complete["candidates"][0]["name"], "zero_correction")
+            self.assertFalse(concepts.residual_is_zero(head))
+            expected = copy.deepcopy(self.bam._joint_state(model, head))
+            model, head = self.new()
+            with self.assertRaisesRegex(RuntimeError, "checkpointed"):
+                self.bam._forecast_steps(partial, self.config, rows, labels, dev, model, self.tokenizer, head, stop_after_steps=3)
+            model, head = self.new(99)
+            self.assertEqual(complete, self.bam._forecast_steps(partial, self.config, rows, labels, dev, model, self.tokenizer, head))
+            for key, value in expected.items():
+                self.assertTrue(torch.equal(value, self.bam._joint_state(model, head)[key]), key)
+
+    def test_concept_labels_are_train_only_and_pool_bound(self):
+        dev_label = self.labels_for("d", .3)
+        wrong_pool = dict(self.labels_for("0", .3), concept_pool_sha256="0" * 64)
+        unordered = self.labels_for("0", .3); unordered["labels"] = list(reversed(unordered["labels"]))
+        for bad in ([dev_label], [wrong_pool], [unordered], [self.labels_for("0", .3)] * 2, []):
+            with tempfile.TemporaryDirectory() as directory, self.subTest(bad=str(bad)[:60]):
+                rows, labels, dev = self.write_fixture(Path(directory), labels=bad)
+                model, head = self.new()
+                with self.assertRaises(ValueError):
+                    self.bam._forecast_steps(Path(directory), self.config, rows, labels, dev, model, self.tokenizer, head)
+
+    def test_head_type_and_concept_weight_must_match_config(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); rows, labels, dev = self.write_fixture(root)
+            model, head = self.new()
+            linear = torch.nn.Linear(4, 1); torch.nn.init.zeros_(linear.weight); torch.nn.init.zeros_(linear.bias)
+            with self.assertRaisesRegex(ValueError, "head"):
+                self.bam._forecast_steps(root, self.config, rows, labels, dev, model, self.tokenizer, linear)
+            linear_config = copy.deepcopy(self.config); linear_config["forecast"].pop("head")
+            with self.assertRaisesRegex(ValueError, "concept_loss_weight"):
+                self.bam._forecast_steps(root, linear_config, rows, labels, dev, model, self.tokenizer, linear)
+            nonzero = self.new()[1]; torch.nn.init.ones_(nonzero.residual.weight)
+            other = root / "other"; self.write_fixture(other)
+            with self.assertRaisesRegex(ValueError, "exactly zero"):
+                self.bam._forecast_steps(other, self.config, rows, labels, dev, model, self.tokenizer, nonzero)
+
+    def test_export_from_bundle_records_feeds_the_dev_pipeline(self):
+        row, _, gold = contract_fixture.fixture_case()
+        record = concept_record(row, gold)
+        exported = concepts.forecast_label_rows([record], TAXONOMY)
+        self.assertEqual(set(exported[0]), {"game_id", "split", "concept_pool_sha256", "labels"})
+        self.assertEqual(concepts.validate_normalized_labels(exported[0]["labels"], TAXONOMY), record["candidate"]["output"])
+
+
 if __name__ == "__main__":
     unittest.main()

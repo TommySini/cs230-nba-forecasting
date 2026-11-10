@@ -75,6 +75,18 @@ down 30%, both head and adapters updated, and a nonzero Brier-only adapter gradi
 step 1 (`brier_probe_adapter_gradient_norm`, measured on one game per step). This is a
 proof that the system can learn, not a generalization claim.
 
+## DEV phase (after the TRAIN pilot proves learning)
+
+`bam_training.py --stage forecast-train` (fit on TRAIN, choose the epoch by DEV Brier) and
+`--stage evaluate` (score TEST once) use the same head. Set `forecast.head` to the concept
+spec above and `forecast.concept_loss_weight` (> 0) in that config, and place
+`forecast_concepts_train.jsonl` in the run directory beside
+`forecast_explanations_train.jsonl`. Produce it from contract-validated bundle records with
+`bam_concepts.forecast_label_rows`; the run lock pins its hash. Concept labels are TRAIN only.
+DEV and TEST games are scored on Brier with no concept targets, and evaluation rebuilds the
+configured head before loading `head.pt`. With the default linear head, both stages behave
+exactly as before.
+
 ## Running it on AWS
 
 Prerequisites outside the code: EC2 GPU quota (planned `g6e.2xlarge`, one L40S 48 GB),
@@ -123,6 +135,4 @@ These gaps predate the concept head and apply to the linear head too:
   provenance (booster, features, research receipts) into a bundle (steps 2 and 5).
 - **EC2 launcher:** no code launches the GPU instance, issues the admission receipt or arms
   external termination; the worker only validates a receipt.
-- **DEV phase:** `bam_training.py`'s DEV forecaster loop still uses the linear head. Port it
-  to `bam_concepts.head_forward` before any DEV evaluation.
 - **Teacher choice:** no teacher or reviewer model has been qualified.
