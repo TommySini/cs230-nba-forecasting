@@ -22,6 +22,15 @@ Native Windows is unsupported by the data tooling (POSIX paths, `O_NOFOLLOW`, sy
 `SIGALRM`); `nba_dataset.py` alone gained an `msvcrt` lock fallback so read-only analysis
 runs there.
 
+**Concept-bottleneck head (2026-11-09).** The forecaster head can now be a concept
+bottleneck: the pregame hidden state maps to 20 named concept scores (net home advantage,
+`config/bam_concepts.json`) plus evidence flags, and an MLP on logit(p_boost) and the
+concepts outputs the residual (zero-initialized, so it starts at boosting). TRAIN-only
+teacher concept labels derive from the accepted gold task and must cite pregame lines;
+bundles carry them as schema 2. Synthetic tests cover labels, contract, joint training,
+resume and a GPU smoke mode; nothing has run on the real model or NBA data. See
+[`docs/bam/concept_bottleneck.md`](docs/bam/concept_bottleneck.md).
+
 **Dataset distribution.** `download_data.py` installs the checksum-pinned processed
 release by default; `--include-raw` adds the source archive parts. `package_data.py`
 builds deterministic assets from the validated inventory without modifying source
@@ -162,9 +171,12 @@ No real pilot fit has run.
 
 Finish data cleanup only after legacy consumers switch, as described above.
 
-1. When quota and Bedrock access arrive: qualify the teacher/reviewer on a few TRAIN games,
-   generate research and reviewed gold for 16–32 TRAIN games, build the TRAIN bundle
-   (`bam_train_contract.py`) and run `bam_train_only.py`.
+1. When quota and Bedrock access arrive: run the synthetic GPU smoke of the concept head
+   (`bam_train_only.py --smoke`), qualify the teacher/reviewer on a few TRAIN games, generate
+   research, reviewed gold and concept labels for 16–32 TRAIN games, build the schema-2 TRAIN
+   bundle (`bam_train_contract.py`) and run `bam_train_only.py` with
+   `config/bam_train_only_concept_pilot.json`. Runbook and remaining gaps (Bedrock sender,
+   pilot assembler, EC2 launcher): [`docs/bam/concept_bottleneck.md`](docs/bam/concept_bottleneck.md).
 2. DEV evaluation only after TRAIN learning is shown. TEST (2025–26) was already inspected in
    earlier pilots, so treat it as exploratory; a fresh 2026–27 holdout is cleaner.
 

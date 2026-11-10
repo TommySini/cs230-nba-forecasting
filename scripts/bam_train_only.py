@@ -17,6 +17,7 @@ import random
 import time
 
 import bam_checkpoint as checkpoint
+import bam_concepts as concepts
 import bam_training as common
 from bam_aws_preflight import is_commercial_region
 
@@ -47,6 +48,15 @@ def validate_config(config):
             raise ValueError('Pin the TRAIN learning criterion before fitting: ' + key)
     if config.get('forecast', {}).get('lora_rank') != 8:
         raise ValueError('TRAIN pilot requires the approved rank-8 forecaster adapters')
+    if concepts.head_spec(config)['type'] == 'concept_bottleneck':
+        value = options.get('concept_weight')
+        if not isinstance(value, (float, int)) or isinstance(value, bool) or not math.isfinite(value) or value <= 0:
+            raise ValueError('Explicit finite positive TRAIN-only setting required: concept_weight')
+        value = options.get('minimum_relative_concept_reduction')
+        if not isinstance(value, (float, int)) or isinstance(value, bool) or not 0 < value < 1:
+            raise ValueError('Pin the TRAIN learning criterion before fitting: minimum_relative_concept_reduction')
+    elif {'concept_weight', 'minimum_relative_concept_reduction'} & options.keys():
+        raise ValueError('Concept settings require the concept_bottleneck head')
     return options
 
 
@@ -71,10 +81,16 @@ def prefix_hidden(model, token_ids, device):
     return torch.nn.functional.normalize(hidden, dim=0)
 
 
-def _probability(model, head, tokens, p_boost):
+def _forward(model, head, tokens, p_boost):
+    """Probability plus concept scores/evidence logits (None for the linear head)."""
     import torch
-    return torch.sigmoid(head(prefix_hidden(model, tokens, head.weight.device)).squeeze()
-                         + math.log(p_boost) - math.log1p(-p_boost))
+    prior = math.log(p_boost) - math.log1p(-p_boost)
+    delta, scores, mentions = concepts.head_forward(head, prefix_hidden(model, tokens, concepts.head_device(head)), prior)
+    return torch.sigmoid(delta + prior), scores, mentions
+
+
+def _probability(model, head, tokens, p_boost):
+    return _forward(model, head, tokens, p_boost)[0]
 
 
 def _completion_loss(model, item, device):
@@ -99,33 +115,55 @@ def _gradient_norm(parameters):
     return math.sqrt(total)
 
 
-def train_metrics(model, head, rows, labels, tokens, encoded, weight, deadline):
+def train_metrics(model, head, rows, labels, tokens, encoded, weight, deadline, *,
+                  concept_targets=None, concept_weight=0.):
     """Inference-mode metrics on exactly the supplied TRAIN cohort."""
     import torch
     model.eval(); head.eval()
     probabilities, brier, ce = [], 0., 0.
+    concept = {'loss': 0., 'mse': 0., 'bce': 0., 'agree': 0, 'signed': 0}
     with torch.inference_mode():
         for i, row in enumerate(rows):
             _check_deadline(deadline)
-            value = _probability(model, head, tokens[i], row['p_boost']).item()
+            probability, scores, mentions = _forward(model, head, tokens[i], row['p_boost'])
+            value = probability.item()
             if not math.isfinite(value):
                 raise ValueError('Nonfinite TRAIN probability')
             probabilities.append(value)
             brier += (value - labels[row['game_id']]) ** 2 / len(rows)
+            if concept_targets is not None and i in concept_targets:
+                target_scores, present = concept_targets[i]
+                total, mse, bce = concepts.concept_loss(scores, mentions, target_scores, present)
+                for key, part in (('loss', total), ('mse', mse), ('bce', bce)):
+                    concept[key] += part.item() / len(concept_targets)
+                for predicted, target, flag in zip(scores.tolist(), target_scores, present):
+                    if flag and target != 0:
+                        concept['signed'] += 1
+                        concept['agree'] += (predicted > 0) == (target > 0)
         for item in encoded.values():
             _check_deadline(deadline)
-            ce += _completion_loss(model, item, head.weight.device).float().item() / len(encoded)
-    return {'brier': brier, 'gold_completion_ce': ce if encoded else None,
-            'weighted_total': brier + weight * ce, 'outcome_examples': len(rows),
-            'gold_examples': len(encoded), 'probabilities': probabilities}
+            ce += _completion_loss(model, item, concepts.head_device(head)).float().item() / len(encoded)
+    result = {'brier': brier, 'gold_completion_ce': ce if encoded else None,
+              'weighted_total': brier + weight * ce, 'outcome_examples': len(rows),
+              'gold_examples': len(encoded), 'probabilities': probabilities}
+    if concept_targets is not None:
+        result.update(concept_loss=concept['loss'], concept_score_mse=concept['mse'], concept_evidence_bce=concept['bce'],
+                      concept_sign_agreement=concept['agree'] / concept['signed'] if concept['signed'] else None,
+                      concept_examples=len(concept_targets),
+                      weighted_total=result['weighted_total'] + concept_weight * concept['loss'])
+    return result
 
 
-def joint_update(model, head, optimizer, rows, labels, tokens, encoded, order, *, weight, gradient_clip, deadline):
-    """One exact mean_N(Brier) + lambda mean_M(per-example CE) update.
+def joint_update(model, head, optimizer, rows, labels, tokens, encoded, order, *, weight, gradient_clip, deadline,
+                 concept_targets=None, concept_weight=0.):
+    """One exact mean_N(Brier) + lambda mean_M(per-example CE) [+ mu mean_C(concept loss)] update.
 
     A complete cohort is the accumulation group. Sparse gold never changes the
     outcome denominator, and outcomes without gold never dilute the gold term.
     Separate backward passes release the prefix graph before gold is supplied.
+    With the concept head, each pregame forward also carries its concept loss
+    (normalized over the C labelled games), and a Brier-only adapter gradient
+    probe on the first game shows whether the outcome objective reaches the LLM.
     """
     import torch
     if sorted(order) != list(range(len(rows))) or not rows:
@@ -134,27 +172,38 @@ def joint_update(model, head, optimizer, rows, labels, tokens, encoded, order, *
     head_parameters = list(head.parameters())
     before_adapters = [p.detach().clone() for p in adapters]
     before_head = [p.detach().clone() for p in head_parameters]
+    concept_mode = concept_targets is not None
     model.train(); head.train(); optimizer.zero_grad(set_to_none=True)
-    brier_sum, ce_sum = 0., 0.
+    brier_sum, ce_sum, concept_sum, probe = 0., 0., 0., None
     try:
         # Complete the probability objective before any teacher-forced forward.
         for index in order:
             _check_deadline(deadline)
             row = rows[index]
-            probability = _probability(model, head, tokens[index], row['p_boost'])
+            probability, scores, mentions = _forward(model, head, tokens[index], row['p_boost'])
             brier = (probability - labels[row['game_id']]).square()
             if not torch.isfinite(brier):
                 raise ValueError('Nonfinite TRAIN Brier loss')
-            (brier / len(rows)).backward()
+            loss = brier / len(rows)
+            if concept_mode and index in concept_targets:
+                part = concepts.concept_loss(scores, mentions, *concept_targets[index])[0]
+                if not torch.isfinite(part):
+                    raise ValueError('Nonfinite TRAIN concept loss')
+                loss = loss + concept_weight * part / len(concept_targets)
+                concept_sum += part.detach().float().item() / len(concept_targets)
+            if concept_mode and probe is None:
+                grads = torch.autograd.grad(brier, adapters, retain_graph=True, allow_unused=True)
+                probe = math.sqrt(sum(g.detach().float().square().sum().item() for g in grads if g is not None))
+            loss.backward()
             brier_sum += brier.detach().float().item() / len(rows)
-            del probability, brier
+            del probability, brier, loss, scores, mentions
         brier_adapter_norm = _gradient_norm(adapters)
         brier_head_norm = _gradient_norm(head_parameters)
         for index in order:
             if index not in encoded:
                 continue
             _check_deadline(deadline)
-            ce = _completion_loss(model, encoded[index], head.weight.device)
+            ce = _completion_loss(model, encoded[index], concepts.head_device(head))
             (weight * ce / len(encoded)).backward()
             ce_sum += ce.detach().float().item() / len(encoded)
             del ce
@@ -167,12 +216,19 @@ def joint_update(model, head, optimizer, rows, labels, tokens, encoded, order, *
             raise ValueError('Nonfinite TRAIN parameter after optimizer update')
     finally:
         optimizer.zero_grad(set_to_none=True)
-    return {'brier': brier_sum, 'gold_completion_ce': ce_sum if encoded else None,
-            'weighted_total': brier_sum + weight * ce_sum,
-            'brier_adapter_gradient_norm': brier_adapter_norm, 'brier_head_gradient_norm': brier_head_norm,
-            'joint_adapter_gradient_norm': joint_adapter_norm, 'joint_head_gradient_norm': joint_head_norm,
-            'adapter_updated': any(not torch.equal(p.detach(), old) for p, old in zip(adapters, before_adapters)),
-            'head_updated': any(not torch.equal(p.detach(), old) for p, old in zip(head_parameters, before_head))}
+    result = {'brier': brier_sum, 'gold_completion_ce': ce_sum if encoded else None,
+              'weighted_total': brier_sum + weight * ce_sum,
+              'brier_adapter_gradient_norm': brier_adapter_norm, 'brier_head_gradient_norm': brier_head_norm,
+              'joint_adapter_gradient_norm': joint_adapter_norm, 'joint_head_gradient_norm': joint_head_norm,
+              'adapter_updated': any(not torch.equal(p.detach(), old) for p, old in zip(adapters, before_adapters)),
+              'head_updated': any(not torch.equal(p.detach(), old) for p, old in zip(head_parameters, before_head))}
+    if concept_mode:
+        # The prefix pass mixes Brier and concept gradients; name its norms accordingly.
+        result['prefix_adapter_gradient_norm'] = result.pop('brier_adapter_gradient_norm')
+        result['prefix_head_gradient_norm'] = result.pop('brier_head_gradient_norm')
+        result.update(concept_loss=concept_sum, brier_probe_adapter_gradient_norm=probe,
+                      weighted_total=result['weighted_total'] + concept_weight * concept_sum)
+    return result
 
 
 def _validate_core_inputs(rows, labels, gold):
@@ -195,6 +251,21 @@ def _validate_core_inputs(rows, labels, gold):
             raise ValueError('TRAIN explanations require accepted, aligned gold')
 
 
+def _validate_concepts(rows, gold, concept_targets, head):
+    if (concept_targets is not None) != concepts.is_concept_head(head):
+        raise ValueError('Concept targets require the concept-bottleneck head and vice versa')
+    if concept_targets is None:
+        return
+    ids = {row['game_id'] for row in rows}
+    if not concept_targets or not set(concept_targets) <= ids or not set(concept_targets) <= set(gold):
+        raise ValueError('Concept targets need TRAIN games with accepted gold')
+    for scores, present in concept_targets.values():
+        if (len(scores) != head.concept_count or len(present) != head.concept_count
+                or any(not isinstance(v, float) or not -1 <= v <= 1 for v in scores)
+                or any(v not in (0., 1.) for v in present)):
+            raise ValueError('Concept targets must match the head width with scores in [-1, 1] and 0/1 evidence')
+
+
 def _learning_progress(baseline, last_metrics, history, options):
     step = len(history)
     latest_measured_step = max((item['step'] for item in history if 'inference_train' in item), default=0)
@@ -203,18 +274,24 @@ def _learning_progress(baseline, last_metrics, history, options):
     ce_reduction = 1 - last_metrics['gold_completion_ce'] / baseline_ce if baseline_ce else 0.
     updates_verified = bool(history) and any(x['optimization']['head_updated'] for x in history) and any(
         x['optimization']['adapter_updated'] for x in history)
-    brier_adapter_verified = any(x['optimization']['brier_adapter_gradient_norm'] > 0 for x in history[1:])
+    brier_adapter_verified = any((x['optimization'].get('brier_adapter_gradient_norm')
+                                  or x['optimization'].get('brier_probe_adapter_gradient_norm') or 0) > 0 for x in history[1:])
     proved = (latest_measured_step == step and step > 1 and updates_verified and brier_adapter_verified
               and brier_reduction >= options['minimum_relative_brier_reduction']
               and ce_reduction >= options['minimum_relative_ce_reduction'])
-    return {'last_measured_step': latest_measured_step, 'relative_brier_reduction': brier_reduction,
-            'relative_ce_reduction': ce_reduction, 'head_and_adapters_updated': updates_verified,
-            'brier_gradient_reached_adapters_after_zero_head': brier_adapter_verified,
-            'learning_criterion_met': proved}
+    result = {'last_measured_step': latest_measured_step, 'relative_brier_reduction': brier_reduction,
+              'relative_ce_reduction': ce_reduction, 'head_and_adapters_updated': updates_verified,
+              'brier_gradient_reached_adapters_after_zero_head': brier_adapter_verified}
+    if 'concept_loss' in baseline:
+        concept_reduction = 1 - last_metrics['concept_loss'] / baseline['concept_loss'] if baseline['concept_loss'] else 0.
+        proved = proved and concept_reduction >= options['minimum_relative_concept_reduction']
+        result['relative_concept_reduction'] = concept_reduction
+    result['learning_criterion_met'] = proved
+    return result
 
 
 def train_steps(root, config, rows, labels, gold, model, tokenizer, head, *,
-                manifest_sha256, deadline=None, stop_after_steps=None):
+                manifest_sha256, deadline=None, stop_after_steps=None, concepts_by_game=None):
     """Joint fitting core; public train_bundle additionally verifies source receipts.
 
     The synthetic tests inject a tiny model. Production only constructs the
@@ -223,6 +300,12 @@ def train_steps(root, config, rows, labels, gold, model, tokenizer, head, *,
     import torch
     options = validate_config(config)
     _validate_core_inputs(rows, labels, gold)
+    _validate_concepts(rows, gold, concepts_by_game, head)
+    if (concepts.head_spec(config)['type'] == 'concept_bottleneck') != (concepts_by_game is not None):
+        raise ValueError('Configured head type differs from the supplied head')
+    concept_weight = options.get('concept_weight', 0.)
+    concept_targets = None if concepts_by_game is None else {
+        i: concepts_by_game[row['game_id']] for i, row in enumerate(rows) if row['game_id'] in concepts_by_game}
     deadline = deadline if deadline is not None else time.monotonic() + options['max_runtime_seconds']
     root = Path(root)
     tokens = [common.prompt_tokens(tokenizer, row['messages'], options['max_seq_length']) for row in rows]
@@ -242,6 +325,8 @@ def train_steps(root, config, rows, labels, gold, model, tokenizer, head, *,
     identity.update(worker_sha256=common.file_hash(__file__), helper_sha256=common.file_hash(common.__file__),
                     manifest_sha256=manifest_sha256, outcomes_sha256=common.value_hash(labels),
                     gold_sha256=common.value_hash(gold), phase='train_only')
+    if concepts_by_game is not None:
+        identity.update(head_type='concept_bottleneck', concepts_sha256=common.value_hash(concepts_by_game))
     rng = random.Random(config.get('seed', 230))
     checkpoint_root = root / 'checkpoints'
     resumed = checkpoint.restore_checkpoint(checkpoint_root, identity=identity,
@@ -252,9 +337,10 @@ def train_steps(root, config, rows, labels, gold, model, tokenizer, head, *,
     history = list(cursor['history']) if cursor else []
     baseline = cursor['baseline'] if cursor else None
     if baseline is None:
-        if any(torch.count_nonzero(p.detach()).item() for p in head.parameters()):
+        if not concepts.residual_is_zero(head):
             raise ValueError('The initial residual probability head must be exactly zero')
-        baseline = train_metrics(model, head, rows, labels, tokens, encoded, options['explanation_weight'], deadline)
+        baseline = train_metrics(model, head, rows, labels, tokens, encoded, options['explanation_weight'], deadline,
+                                 concept_targets=concept_targets, concept_weight=concept_weight)
         if any(abs(value - row['p_boost']) > 1e-6 for value, row in zip(baseline['probabilities'], rows)):
             raise ValueError('Zero head failed to reproduce the prior boosting forecast')
         baseline['zero_head_equivalence_verified'] = True
@@ -269,7 +355,8 @@ def train_steps(root, config, rows, labels, gold, model, tokenizer, head, *,
         order = list(range(len(rows))); rng.shuffle(order)
         try:
             update = joint_update(model, head, optimizer, rows, labels, tokens, encoded, order,
-                                  weight=options['explanation_weight'], gradient_clip=options['gradient_clip'], deadline=deadline)
+                                  weight=options['explanation_weight'], gradient_clip=options['gradient_clip'], deadline=deadline,
+                                  concept_targets=concept_targets, concept_weight=concept_weight)
         except RuntimeLimit:
             status = 'runtime_limit'
             break
@@ -277,7 +364,8 @@ def train_steps(root, config, rows, labels, gold, model, tokenizer, head, *,
         record = {'step': step, 'optimization': update}
         if step % options['evaluate_every_steps'] == 0 or step == max_steps:
             try:
-                last_metrics = train_metrics(model, head, rows, labels, tokens, encoded, options['explanation_weight'], deadline)
+                last_metrics = train_metrics(model, head, rows, labels, tokens, encoded, options['explanation_weight'], deadline,
+                                             concept_targets=concept_targets, concept_weight=concept_weight)
                 record['inference_train'] = last_metrics
             except RuntimeLimit:
                 status = 'runtime_limit'
@@ -302,7 +390,9 @@ def train_steps(root, config, rows, labels, gold, model, tokenizer, head, *,
               'manifest_sha256': manifest_sha256, 'identity_sha256': common.value_hash(identity),
               'baseline': baseline, 'last_inference_train': last_metrics,
               **progress, 'generalization_claim': False,
-              'objective': 'mean_N(Brier) + explanation_weight * mean_M(per-example gold CE)',
+              'objective': 'mean_N(Brier) + explanation_weight * mean_M(per-example gold CE)' + (
+                  ' + concept_weight * mean_C(masked concept MSE + evidence BCE)' if concept_targets is not None else ''),
+              'head_type': concepts.head_spec(config)['type'],
               'probability_input': 'pregame prefix only', 'checkpoint_root': 'checkpoints'}
     common.write_json(root / 'result_train.json', result)
     return result
@@ -363,6 +453,13 @@ def train_bundle(bundle, expected_manifest_sha256, config, output, admission, pr
     manifest, rows, outcomes, gold = load_bundle(bundle, expected_manifest_sha256, require_all_gold=True)
     if not manifest.get('pilot') or not 16 <= len(rows) <= 32:
         raise ValueError('The first execution must be a 16–32-game reviewed-gold pilot')
+    spec = concepts.head_spec(config)
+    taxonomy, concept_targets = None, None
+    if spec['type'] == 'concept_bottleneck':
+        from bam_train_contract import load_concepts
+        taxonomy = concepts.spec_taxonomy(spec)
+        labels = load_concepts(bundle, manifest, rows, gold, taxonomy)
+        concept_targets = {game_id: concepts.concept_targets(value, taxonomy) for game_id, value in labels.items()}
     output = Path(output)
     request = {'manifest_sha256': expected_manifest_sha256, 'config': config, 'admission': receipt}
     common._lock(output, request)
@@ -377,35 +474,155 @@ def train_bundle(bundle, expected_manifest_sha256, config, output, admission, pr
     import torch
     model, tokenizer = common._load_model(config, training=True, stage='forecast')
     _check_deadline(deadline)
-    head = torch.nn.Linear(model.config.hidden_size, 1, device='cuda', dtype=torch.float32)
-    torch.nn.init.zeros_(head.weight); torch.nn.init.zeros_(head.bias)
+    if taxonomy is None:
+        head = torch.nn.Linear(model.config.hidden_size, 1, device='cuda', dtype=torch.float32)
+        torch.nn.init.zeros_(head.weight); torch.nn.init.zeros_(head.bias)
+    else:
+        torch.manual_seed(config.get('seed', 230))
+        head = concepts.build_head(model.config.hidden_size, len(taxonomy['selected']), mlp_hidden=spec['mlp_hidden'],
+                                   dropout=spec['dropout'], device='cuda')
     try:
         result = train_steps(output, config, rows, {key: value['home_win'] for key, value in outcomes.items()},
-                             gold, model, tokenizer, head, manifest_sha256=expected_manifest_sha256, deadline=deadline)
+                             gold, model, tokenizer, head, manifest_sha256=expected_manifest_sha256, deadline=deadline,
+                             concepts_by_game=concept_targets)
         model.save_pretrained(output / 'adapter', safe_serialization=True)
         tokenizer.save_pretrained(output / 'adapter')
         torch.save(head.state_dict(), output / 'head.pt')
+        common.write_json(output / 'head_config.json', {'spec': spec, 'hidden_size': model.config.hidden_size,
+                          'selected_concepts': taxonomy['selected'] if taxonomy else None})
         common.write_json(output / 'model_files.json', {
             str(path.relative_to(output)): common.file_hash(path)
-            for path in sorted((output / 'adapter').rglob('*')) if path.is_file()} | {'head.pt': common.file_hash(output / 'head.pt')})
+            for path in sorted((output / 'adapter').rglob('*')) if path.is_file()} | {
+            name: common.file_hash(output / name) for name in ('head.pt', 'head_config.json')})
         return result
     finally:
         del model, head
         common._release(None)
 
 
+SMOKE_SENTENCE = 'Synthetic note line: a listed rotation player is questionable and minutes remain uncertain. '
+
+
+def _sized_text(tokenizer, messages, index, prefix, target, *, generation_prompt):
+    """Fill message `index` with repeated synthetic text to about `target` tokens."""
+    def length(count):
+        trial = [dict(m) for m in messages]
+        trial[index]['content'] = prefix + SMOKE_SENTENCE * count
+        return len(common.chat_token_ids(tokenizer, trial, generation_prompt=generation_prompt)), trial
+    base, _ = length(0)
+    per = max(1., (length(20)[0] - base) / 20)
+    count = max(0, int((target - base) / per))
+    while count > 0 and length(count)[0] > target:
+        count -= 1
+    return length(count)[1]
+
+
+def synthetic_cohort(tokenizer, *, games, max_length, prompt_fraction, concept_count):
+    """Representative-length synthetic TRAIN rows, gold and concept targets; never NBA data."""
+    rows, labels, gold, targets = [], {}, {}, {}
+    for i in range(games):
+        game_id = f'synthetic-{i}'
+        messages = _sized_text(tokenizer, [{'role': 'system', 'content': 'Synthetic GPU smoke test; no real game.'},
+                                           {'role': 'user', 'content': ''}], 1, f'Synthetic game {i}. ',
+                               int(max_length * prompt_fraction), generation_prompt=True)
+        prompt = len(common.chat_token_ids(tokenizer, messages, generation_prompt=True))
+        completion = _sized_text(tokenizer, messages + [{'role': 'assistant', 'content': ''}], 2, 'Synthetic explanation. ',
+                                 int(max_length * .95), generation_prompt=False)
+        rows.append({'game_id': game_id, 'split': 'train', 'p_boost': .3 + .4 * i / max(1, games - 1), 'messages': messages})
+        labels[game_id] = i % 2
+        gold[game_id] = {'game_id': game_id, 'split': 'train', 'review_status': 'accepted',
+                         'explanation': completion[2]['content'], 'prompt_tokens': prompt}
+        if concept_count:
+            scores = [round(math.sin(i + 1 + k), 3) for k in range(concept_count)]
+            targets[game_id] = ([float(v) for v in scores], [float((i + k) % 3 != 0) for k in range(concept_count)])
+    return rows, labels, gold, (targets or None)
+
+
+def smoke(config, output, *, games=3, steps=2, prompt_fraction=.8):
+    """Synthetic CUDA run of the configured head at representative sequence length.
+
+    Measures peak GPU memory and wall time on the real pinned model before any paid
+    teacher calls or admitted pilot. Synthetic only: no NBA data, no performance claim.
+    """
+    import torch
+    options = validate_config(config)
+    if not 1 <= games <= 8 or not 1 <= steps <= 8 or not .1 <= prompt_fraction <= .9:
+        raise ValueError('Smoke run is bounded: 1-8 games, 1-8 steps, prompt fraction 0.1-0.9')
+    spec = concepts.head_spec(config)
+    taxonomy = concepts.spec_taxonomy(spec) if spec['type'] == 'concept_bottleneck' else None
+    smoke_config = json.loads(json.dumps(config))
+    smoke_config['train_only'].update(max_optimizer_steps=steps, evaluate_every_steps=steps)
+    output = Path(output)
+    common._lock(output / 'smoke', {'config': smoke_config, 'games': games, 'prompt_fraction': prompt_fraction})
+    started = time.monotonic()
+    model, tokenizer = common._load_model(config, training=True, stage='forecast')
+    loaded = time.monotonic()
+    rows, labels, gold, targets = synthetic_cohort(tokenizer, games=games, max_length=options['max_seq_length'],
+                                                   prompt_fraction=prompt_fraction,
+                                                   concept_count=len(taxonomy['selected']) if taxonomy else 0)
+    lengths = [gold[row['game_id']].pop('prompt_tokens') for row in rows]
+    device = next(p for p in model.parameters() if p.requires_grad).device
+    cuda = device.type == 'cuda'
+    if taxonomy is None:
+        head = torch.nn.Linear(model.config.hidden_size, 1, device=device, dtype=torch.float32)
+        torch.nn.init.zeros_(head.weight); torch.nn.init.zeros_(head.bias)
+    else:
+        torch.manual_seed(config.get('seed', 230))
+        head = concepts.build_head(model.config.hidden_size, len(taxonomy['selected']), mlp_hidden=spec['mlp_hidden'],
+                                   dropout=spec['dropout'], device=device)
+    if cuda:
+        torch.cuda.reset_peak_memory_stats()
+    try:
+        result = train_steps(output / 'smoke', smoke_config, rows, labels, gold, model, tokenizer, head,
+                             manifest_sha256='0' * 64, deadline=time.monotonic() + options['max_runtime_seconds'],
+                             concepts_by_game=targets)
+        trained = time.monotonic()
+        # Each optimizer step: one pregame forward/backward and one gold forward/backward per game;
+        # plus baseline and final inference passes. The per-game-step figure is an approximation.
+        passes = games * (2 * steps + 2 * 2)
+        properties = torch.cuda.get_device_properties(0) if cuda else None
+        summary = {'synthetic_only': True, 'nba_performance_claim': False, 'head_type': spec['type'],
+                   'games': games, 'optimizer_steps': result['optimizer_steps'], 'status': result['status'],
+                   'prompt_tokens': lengths, 'max_seq_length': options['max_seq_length'],
+                   'gpu': properties.name if cuda else None, 'gpu_total_bytes': properties.total_memory if cuda else None,
+                   'peak_allocated_bytes': torch.cuda.max_memory_allocated() if cuda else None,
+                   'peak_reserved_bytes': torch.cuda.max_memory_reserved() if cuda else None,
+                   'model_load_seconds': round(loaded - started, 1), 'training_seconds': round(trained - loaded, 1),
+                   'approx_seconds_per_game_pass': round((trained - loaded) / passes, 2),
+                   'zero_head_equivalence_verified': result['baseline']['zero_head_equivalence_verified'],
+                   'head_and_adapters_updated': result['head_and_adapters_updated'], 'model': common._model_config(config)}
+        summary['projected_pilot_seconds_per_step_32_games'] = round(summary['approx_seconds_per_game_pass'] * 32 * 2, 1)
+        common.write_json(output / 'smoke' / 'smoke_result.json', summary)
+        return summary
+    finally:
+        del model, head
+        if cuda:
+            common._release(None)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--bundle', required=True)
-    parser.add_argument('--manifest-sha256', required=True)
     parser.add_argument('--config', required=True)
     parser.add_argument('--output', required=True)
-    parser.add_argument('--admission', required=True)
-    parser.add_argument('--preflight-report', required=True)
-    parser.add_argument('--job-id', required=True)
+    parser.add_argument('--smoke', action='store_true',
+                        help='Synthetic CUDA check of the configured head at representative length; needs no bundle')
+    parser.add_argument('--smoke-games', type=int, default=3)
+    parser.add_argument('--smoke-steps', type=int, default=2)
+    parser.add_argument('--smoke-prompt-fraction', type=float, default=.8)
+    for name in ('--bundle', '--manifest-sha256', '--admission', '--preflight-report', '--job-id'):
+        parser.add_argument(name)
     args = parser.parse_args()
-    result = train_bundle(args.bundle, args.manifest_sha256, json.loads(Path(args.config).read_text()),
-                          args.output, args.admission, args.preflight_report, args.job_id)
+    config = json.loads(Path(args.config).read_text())
+    if args.smoke:
+        result = smoke(config, args.output, games=args.smoke_games, steps=args.smoke_steps,
+                       prompt_fraction=args.smoke_prompt_fraction)
+    else:
+        missing = [name for name in ('bundle', 'manifest_sha256', 'admission', 'preflight_report', 'job_id')
+                   if getattr(args, name) is None]
+        if missing:
+            parser.error('A pilot run requires --' + ', --'.join(m.replace('_', '-') for m in missing))
+        result = train_bundle(args.bundle, args.manifest_sha256, config, args.output,
+                              args.admission, args.preflight_report, args.job_id)
     print(json.dumps(result, sort_keys=True))
 
 

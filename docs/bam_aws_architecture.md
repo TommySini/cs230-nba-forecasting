@@ -98,7 +98,9 @@ TRAIN games with notes and the full 252-feature history (2013–14 to 2023–24)
    statistical features and the compact cited research brief. It does not receive
    a postmortem, gold text, target outcome or raw source response. Its transformer
    forms a numerical representation `h` of that pregame input.
-6. A zero-initialized linear head computes `delta = w^T h + b` and returns
+6. (Superseded for the concept pilot by [`bam/concept_bottleneck.md`](bam/concept_bottleneck.md):
+   `h` feeds 20 named concept scores and an MLP with a zero-initialized output layer.)
+   A zero-initialized linear head computes `delta = w^T h + b` and returns
    `sigmoid(logit(p_boost) + delta)`. Thus the initial prediction exactly matches
    boosting. Changes are learned from outcomes, not manually assigned to claims.
 
