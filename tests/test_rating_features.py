@@ -60,6 +60,30 @@ class RatingTests(unittest.TestCase):
             self.assertGreater(sum(p * m for p, m in zip(pred, margin)), 0, key)
 
 
+    def test_stints_separate_teammates_and_stay_causal(self):
+        rng = random.Random(1)
+        games, minutes, stints = [], {}, {}
+        for d in range(260):                      # BOS is +12 per 48 minutes with star s on the court and -12 with b
+            gid = f"p{d}"
+            home = d % 2 == 0
+            on, off = round(9 + rng.gauss(0, 3)), round(-3 + rng.gauss(0, 2))
+            bos, den = [f"x{i}" for i in range(4)], tuple(f"d{i}" for i in range(5))
+            side, other, sign = ("home", "away", 1) if home else ("away", "home", -1)
+            lineup = lambda player: (tuple(bos + [player]), den) if home else (den, tuple(bos + [player]))
+            stints[gid] = [(2160.0, sign * on, *lineup("s")), (720.0, sign * off, *lineup("b"))]
+            minutes[gid, side] = {"s": 36.0, "b": 12.0, **{x: 48.0 for x in bos}}
+            minutes[gid, other] = {x: 48.0 for x in den}
+            games.append({"game_id": gid, "season": 2023, "game_date_et": (date(2023, 10, 1) + timedelta(days=d)).isoformat(),
+                          "home_abbr": "BOS" if home else "DEN", "away_abbr": "DEN" if home else "BOS",
+                          f"{side}_score": 100 + on + off, f"{other}_score": 100})
+        apm = rf.Apm(games, minutes, ridge=1.0, stints=stints)
+        ratings, _ = apm.at(date(2024, 6, 12))
+        self.assertGreater(ratings["s"], ratings["b"] + 3)      # on/off information reaches the ratings
+        plain, _ = rf.Apm(games, minutes, ridge=1.0).at(date(2024, 6, 12))
+        self.assertLess(abs(plain["s"] - plain["b"]), abs(ratings["s"] - ratings["b"]))
+        self.assertEqual(apm.at(date(2023, 10, 5))[0], {})      # nothing fitted before enough earlier games exist
+
+
 class InjuryMatchTests(unittest.TestCase):
     names = {"1": {"first": "Jayson", "last": "Tatum"}, "2": {"first": "Jaylen", "last": "Brown"},
              "3": {"first": "Jaren", "last": "Jackson Jr."}, "4": {"first": "Nikola", "last": "Jokić"}}

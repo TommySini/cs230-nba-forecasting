@@ -10,8 +10,12 @@
             injury    the full rotation minus players listed Out or Doubtful on the official injury
                       report (Questionable counts fully: chosen on TRAIN); missing where no report was matched
           Remaining minutes are rescaled to 240, so a missing star's minutes go to his teammates.
-          With a box-score prior (default), each player's rating is c * (his decayed game score per
-          minute, shrunk by BOX_SHRINK_MINUTES and centred) plus a ridge correction; c is fitted jointly.
+          With a box-score prior (default), each player's rating is a weighted sum of his decayed
+          per-minute box statistics (shrunk by BOX_SHRINK_MINUTES and centred) plus a ridge
+          correction. The weights are fitted jointly on game margins ("learned": one weight per
+          statistic in BOX_STATS plus a minutes-per-game role term) or fixed to game score.
+          With `stints` (stint_features.py) the regression runs on lineup stints instead of whole
+          games, which separates teammates: the standard regularized adjusted plus-minus.
 
 Ratings for a game use only games on earlier dates (refits happen before the refit date's games);
 the injury report is the one collected at or before the game's cutoff.
@@ -23,15 +27,18 @@ import re
 import unicodedata
 
 import numpy as np
-from scipy.sparse import csr_matrix, hstack
+from scipy.sparse import csr_matrix, hstack, identity, vstack
 from scipy.sparse.linalg import lsqr
 
 ELO_K, ELO_HOME, ELO_CARRY, ELO_MEAN = 20.0, 100.0, 0.75, 1505.0
 HALF_LIFE_DAYS = 365.0
 REFIT_DAYS = 7
-RIDGE = 15.0
+RIDGE = 40.0
 ROTATION_GAMES = 10
 BOX_SHRINK_MINUTES = 100.0
+STINT_MIN_SECONDS = 30.0
+WINDOW_HALF_LIVES = 4
+BOX_STATS = ("pts", "fga", "fta", "fg3m", "fg3a", "oreb", "dreb", "ast", "stl", "blk", "tov", "pf")
 STATUS_WEIGHT = {"Out": 0.0, "Doubtful": 0.0, "Questionable": 1.0, "Probable": 1.0, "Available": 1.0}
 SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "v"}
 NAME_ROW = re.compile(r"([A-Z][\w'.\-]*(?: [A-Z][\w'.\-]*)*), ([A-Z][\w'.\-]*(?: [A-Z][\w'.\-]*)?) "
@@ -126,34 +133,72 @@ def elo_features(games):
 
 
 class Apm:
-    """Rolling ridge ratings; `at(day)` returns (ratings dict, home-court) fitted on games before `day`."""
+    """Rolling ridge ratings; `at(day)` returns (player ratings, home-court) fitted on games before `day`.
 
-    def __init__(self, games, minutes, ridge=RIDGE, half_life=HALF_LIFE_DAYS, refit_days=REFIT_DAYS, box=None):
+    Without stints there is one equation per game: home margin = sum over players of minutes/48 * rating
+    (home positive, away negative) + home court. With `stints` (game_id -> [(seconds, home margin change,
+    home five, away five)]) each distinct ten-player lineup in a game gives one equation: margin = time
+    share * (sum of home ratings - sum of away ratings + home court), scaled so every equation has equal
+    noise. Games without stints keep the single game equation.
+    The ridge penalty shrinks ratings toward zero, or with `carry` toward the previous refit's ratings: a
+    random-walk prior, so a player's rating moves only as far as a week of new evidence justifies.
+    """
+
+    def __init__(self, games, minutes, ridge=RIDGE, half_life=HALF_LIFE_DAYS, refit_days=REFIT_DAYS, box=None, stints=None,
+                 carry=False):
+        stints = stints or {}
+        self.carry = carry
         rows = [g for g in games if (g["game_id"], "home") in minutes and (g["game_id"], "away") in minutes]
         self.players = sorted({p for g in rows for side in ("home", "away") for p in minutes[g["game_id"], side]})
         index = {p: i for i, p in enumerate(self.players)}
-        data, cols, ptr = [], [], [0]
+        n = len(self.players)
+        data, cols, ptr, y, days = [], [], [0], [], []
         for g in rows:
+            day = _day(g["game_date_et"]).toordinal()
+            mins = {side: minutes[g["game_id"], side] for side in ("home", "away")}
+            lineups = stints.get(g["game_id"])
+            if lineups:
+                merged = defaultdict(lambda: [0.0, 0.0])        # same ten players within the game -> one equation
+                for seconds, margin, home, away in lineups:
+                    key = (tuple(sorted(home)), tuple(sorted(away)))
+                    merged[key][0] += seconds; merged[key][1] += margin
+                for (home, away), (seconds, margin) in merged.items():
+                    if seconds <= 0 or any(q not in index for q in home + away):
+                        continue
+                    share = math.sqrt(max(seconds, STINT_MIN_SECONDS) / 2880.0)   # variance of margin grows with time
+                    for q in home:
+                        data.append(share); cols.append(index[q])
+                    for q in away:
+                        data.append(-share); cols.append(index[q])
+                    data.append(share); cols.append(n)
+                    ptr.append(len(data)); y.append(margin / share * (seconds / max(seconds, STINT_MIN_SECONDS))); days.append(day)
+                continue
             for side, sign in (("home", 1.0), ("away", -1.0)):
-                for p, m in minutes[g["game_id"], side].items():
-                    data.append(sign * m / 48.0); cols.append(index[p])
-            data.append(1.0); cols.append(len(self.players))        # home-court term
-            ptr.append(len(data))
-        self.x = csr_matrix((data, cols, ptr), shape=(len(rows), len(self.players) + 1))
-        self.y = np.array([g["home_score"] - g["away_score"] for g in rows], float)
-        self.days = np.array([_day(g["game_date_et"]).toordinal() for g in rows])
+                for p_, m in mins[side].items():
+                    data.append(sign * m / 48.0); cols.append(index[p_])
+            data.append(1.0); cols.append(n)                        # home-court term
+            ptr.append(len(data)); y.append(float(g["home_score"] - g["away_score"])); days.append(day)
+        self.x = csr_matrix((data, cols, ptr), shape=(len(y), n + 1))
+        self.y = np.array(y, float)
+        self.days = np.array(days)
         self.ridge, self.half_life, self.refit_days = ridge, half_life, refit_days
-        self._fits = {}
+        self.window = WINDOW_HALF_LIVES * half_life if stints else None   # bound the work for fine-grained rows
+        self._fits, self._last = {}, None
         self.box = None
         if box:
-            pg = [(r, index[p], m, box[g["game_id"], side].get(p, 0.0)) for r, g in enumerate(rows)
-                  for side in ("home", "away") for p, m in minutes[g["game_id"], side].items() if (g["game_id"], side) in box]
-            self.box = tuple(np.array(c) for c in zip(*pg))   # row, player, minutes, game score
+            pg = [(_day(g["game_date_et"]).toordinal(), index[p_], m, box[g["game_id"], side][p_]) for g in rows
+                  for side in ("home", "away") for p_, m in minutes[g["game_id"], side].items()
+                  if p_ in box.get((g["game_id"], side), ())]
+            d_, p_, m_, v_ = zip(*pg)
+            # day, player, minutes, per-game stat values (one column per prior statistic)
+            self.box = (np.array(d_), np.array(p_), np.array(m_), np.atleast_2d(np.array(v_, float).T).T)
 
     def at(self, day):
         anchor = day.toordinal() - (day.toordinal() % self.refit_days)
         if anchor not in self._fits:
             mask = self.days < anchor
+            if self.window:
+                mask &= self.days >= anchor - self.window
             if mask.sum() < 200:
                 self._fits[anchor] = ({}, 0.0)
             else:
@@ -161,30 +206,40 @@ class Apm:
                 w = np.sqrt(decay)
                 x = self.x[mask]
                 prior = None
-                if self.box is not None:
-                    rows, players, mins, score = self.box
-                    keep = self.days[rows] < anchor
-                    pw = 0.5 ** ((anchor - self.days[rows[keep]]) / self.half_life)
-                    n = len(self.players)
-                    m_sum = np.bincount(players[keep], pw * mins[keep], n)
-                    s_sum = np.bincount(players[keep], pw * score[keep], n)
-                    league = s_sum.sum() / max(m_sum.sum(), 1e-9)
-                    prior = (s_sum + BOX_SHRINK_MINUTES * league) / (m_sum + BOX_SHRINK_MINUTES) - league
-                    z = x[:, :n] @ prior                       # minutes-weighted prior strength per game
-                    x = hstack([x, csr_matrix(z[:, None])]).tocsr()   # columns: players, home court, prior scale
-                beta = lsqr(x.multiply(w[:, None]).tocsr(), self.y[mask] * w, damp=math.sqrt(self.ridge))[0]
                 n = len(self.players)
-                ratings = beta[:n] + (beta[n + 1] * prior if prior is not None else 0.0)
+                if self.box is not None:
+                    box_days, players, mins, score = self.box
+                    keep = box_days < anchor
+                    pw = 0.5 ** ((anchor - box_days[keep]) / self.half_life)
+                    m_sum = np.bincount(players[keep], pw * mins[keep], n)
+                    columns = []
+                    for k in range(score.shape[1]):             # shrunk, centred, unit-scale rate per statistic
+                        s_sum = np.bincount(players[keep], pw * score[keep, k], n)
+                        league = s_sum.sum() / max(m_sum.sum(), 1e-9)
+                        rate = (s_sum + BOX_SHRINK_MINUTES * league) / (m_sum + BOX_SHRINK_MINUTES) - league
+                        columns.append(rate / (rate[m_sum > 0].std() or 1.0))
+                    prior = np.column_stack(columns)
+                    z = x[:, :n] @ prior                       # minutes-weighted prior strength per equation and statistic
+                    x = hstack([x, csr_matrix(z)]).tocsr()     # columns: players, home court, prior weights
+                # The ridge penalty is written as extra rows so its target is explicit: zero, or with `carry`
+                # the previous refit's solution (ratings then change smoothly from week to week).
+                width = x.shape[1]
+                anchor_at = self._last if self.carry and self._last is not None else np.zeros(width)
+                system = vstack([x.multiply(w[:, None]), math.sqrt(self.ridge) * identity(width)]).tocsr()
+                target = np.concatenate([self.y[mask] * w, math.sqrt(self.ridge) * anchor_at])
+                beta = lsqr(system, target, x0=self._last)[0]
+                self._last = beta
+                ratings = beta[:n] + (prior @ beta[n + 1:] if prior is not None else 0.0)
                 self._fits[anchor] = (dict(zip(self.players, ratings)), float(beta[n]))
         return self._fits[anchor]
 
 
-def build(games, minutes, injuries=None, names=None, ridge=RIDGE, box=None):
+def build(games, minutes, injuries=None, names=None, ridge=RIDGE, box=None, stints=None, carry=False):
     """game_id -> {feature: value}. minutes: (game_id, side) -> {player_id: minutes};
     box: (game_id, side) -> {player_id: game score} for the box-score prior (None: pure plus-minus)."""
     injuries, names = injuries or {}, names or {}
     elo = elo_features(games)
-    apm = Apm(games, minutes, ridge=ridge, half_life=HALF_LIFE_DAYS, box=box)
+    apm = Apm(games, minutes, ridge=ridge, half_life=HALF_LIFE_DAYS, box=box, stints=stints, carry=carry)
     log = defaultdict(list)                     # (season, team) -> [(day, {player: minutes})]
     by_date = defaultdict(list)
     for g in games:
@@ -248,7 +303,8 @@ def _team_strength(side, recent, ratings, segments, names):
     return out
 
 
-def from_dataset(dataset, injury_paths=(), names_path=None, ridge=RIDGE, box_prior=True):
+def from_dataset(dataset, injury_paths=(), names_path=None, ridge=RIDGE, box_prior="learned", stints=None, carry=False):
+    """box_prior: "learned" (per-statistic weights), "game_score" (fixed formula) or None (pure plus-minus)."""
     import json
     from collect_pilot import stamp
     games = dataset.history()
@@ -257,9 +313,14 @@ def from_dataset(dataset, injury_paths=(), names_path=None, ridge=RIDGE, box_pri
     for r in dataset.table("player_box_scores"):
         if r["game_id"] in complete and r.get("minutes"):
             minutes[r["game_id"], r["side"]][r["player_id"]] = float(r["minutes"])
-            if all(r.get(k) is not None for k in ("pts", "fga", "fgm", "fta", "ftm", "oreb", "dreb", "stl", "ast", "blk", "pf", "tov")):
-                box[r["game_id"], r["side"]][r["player_id"]] = (r["pts"] + 0.4 * r["fgm"] - 0.7 * r["fga"] - 0.4 * (r["fta"] - r["ftm"])
-                    + 0.7 * r["oreb"] + 0.3 * r["dreb"] + r["stl"] + 0.7 * r["ast"] + 0.7 * r["blk"] - 0.4 * r["pf"] - r["tov"])
+            if all(r.get(k) is not None for k in ("pts", "fga", "fgm", "fg3m", "fg3a", "fta", "ftm", "oreb", "dreb", "stl", "ast", "blk", "pf", "tov")):
+                if box_prior == "learned":
+                    m = float(r["minutes"])
+                    value = tuple(float(r[k]) for k in BOX_STATS) + (m * m / 36.0,)   # last: minutes-per-game role
+                else:
+                    value = (r["pts"] + 0.4 * r["fgm"] - 0.7 * r["fga"] - 0.4 * (r["fta"] - r["ftm"]) + 0.7 * r["oreb"]
+                             + 0.3 * r["dreb"] + r["stl"] + 0.7 * r["ast"] + 0.7 * r["blk"] - 0.4 * r["pf"] - r["tov"],)
+                box[r["game_id"], r["side"]][r["player_id"]] = value
     cutoff = {g["game_id"]: g["cutoff_utc"] for g in dataset.table("games")}
     injuries = {}
     for path in injury_paths:
@@ -270,4 +331,4 @@ def from_dataset(dataset, injury_paths=(), names_path=None, ridge=RIDGE, box_pri
                 raise ValueError(f"Injury report after cutoff: {row['game_id']}")
             injuries[row["game_id"]] = row
     names = json.loads(names_path.read_text()) if names_path and names_path.exists() else {}
-    return build(games, dict(minutes), injuries, names, ridge=ridge, box=dict(box) if box_prior else None)
+    return build(games, dict(minutes), injuries, names, ridge=ridge, box=dict(box) if box_prior else None, stints=stints, carry=carry)

@@ -123,6 +123,8 @@ scripts/
   evaluate_*orthogonality.py  does market, note or injury text add to boosting? (collect_injuries.py)
   situational_features.py     recency, fatigue/travel, rematch, shooting-luck, lineup and injury features
   rating_features.py          Elo, adjusted plus-minus and injury-adjusted lineup ratings (collect_player_names.py)
+  stint_features.py           lineup stints from play-by-play for stint-level ratings; validated against collect_plus_minus.py
+  run_rating_ensemble.py      statistics-only ensemble (XGBoost + lean logistic + TabPFN) vs Polymarket on DEV
   note_features.py            game notes -> sentiment, lexicon, numbers, status, topics, text score (no LLM)
   bam_data.py                 shared notes/pages + frozen boosting -> verified BAM inputs
   bam_research.py             research prompts and claim checks (bam_claim_guards, bam_note_tables, game_note_tables)
